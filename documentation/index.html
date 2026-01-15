@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UndertaleMakerX - 引擎简介</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="fontawesome/css/all.min.css">
+</head>
+<body>
+    <!-- 移动端顶部导航 -->
+    <header class="mobile-header">
+        <h1 class="logo">Undertale<span>MakerX</span></h1>
+        <div class="mobile-badges">
+            <a href="https://godotengine.org/" target="_blank" rel="noopener noreferrer" class="badge"><i class="fa-solid fa-gamepad"></i> Godot 引擎</a>
+            <a href="https://space.bilibili.com/481430814" target="_blank" rel="noopener noreferrer" class="badge"><i class="fa-brands fa-bilibili"></i> B站主页</a>
+        </div>
+    </header>
+
+    <!-- 主布局容器 -->
+    <div class="main-container">
+        <!-- 左侧侧边栏 -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2 class="sidebar-logo">Undertale<span>MakerX</span></h2>
+                <div class="sidebar-badges">
+                    <a href="https://github.com/Yanxiyimengya/UndertaleMakerX/stargazers" rel="noopener noreferrer" target="_blank" class="sidebar-badge"><i class="fa-solid fa-star"></i> Stars</a>
+                    <a href="https://github.com/Yanxiyimengya/UndertaleMakerX/issues" rel="noopener noreferrer" target="_blank" class="sidebar-badge"><i class="fa-solid fa-bug"></i> Issues</a>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <!-- 多页面导航 -->
+                    <li class="nav-item">
+                        <div class="parent-nav" id="introParentNav">
+                            <div class="parent-nav-content">
+                                <i class="fa-solid fa-home"></i>
+                                <span>引擎简介</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right collapse-icon rotated" id="collapseIcon"></i>
+                        </div>
+                        <ul class="child-nav-list expanded" id="childNavList">
+                            <li><a href="#quickstart" class="child-nav-link"><i class="fa-solid fa-rocket"></i> 快速入门</a></li>
+                            <li><a href="#modes" class="child-nav-link"><i class="fa-solid fa-wrench"></i> 开发模式</a></li>
+                            <li><a href="#export" class="child-nav-link"><i class="fa-solid fa-box"></i> 跨平台导出</a></li>
+                            <li><a href="#license" class="child-nav-link"><i class="fa-solid fa-file-contract"></i> 许可证</a></li>
+                            <li><a href="#notes" class="child-nav-link"><i class="fa-solid fa-triangle-exclamation"></i> 注意事项</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="https://space.bilibili.com/481430814" rel="noopener noreferrer" target="_blank" class="author-link"><i class="fa-brands fa-bilibili"></i> 作者B站</a>
+                <p class="copyright">© 2026 UndertaleMakerX</p>
+            </div>
+        </aside>
+
+        <!-- 右侧内容区 -->
+        <main class="content-area">
+            <!-- 引擎简介 -->
+            <section class="content-module" id="intro">
+                <h2 class="module-title"><i class="fa-solid fa-home"></i> 引擎简介</h2>
+                <div class="module-content">
+                    <p>一个高度灵活、跨平台的同人游戏引擎，用于创建类似《Undertale》风格的游戏，基于 Godot 引擎构建。突破传统 UT 同人游戏工具的限制，UndertaleMakerX 支持零代码快速开发和 JavaScript 脚本扩展，可一键导出为独立可执行文件（Windows/macOS/Linux）和移动包（APK），使创作者能够从简单的 UT 风格战斗到复杂的自定义游戏逻辑构建一切。</p>
+                </div>
+            </section>
+
+            <!-- 快速入门 -->
+            <section class="content-module" id="quickstart">
+                <h2 class="module-title"><i class="fa-solid fa-rocket"></i> 快速入门</h2>
+                <div class="module-content">
+                    <h3 class="sub-title">环境要求</h3>
+                    <ul>
+                        <li>操作系统：Windows 10+/macOS 11+/Linux（Ubuntu 20.04+）</li>
+                        <li>移动端导出：Android Studio（用于 APK 打包）</li>
+                    </ul>
+
+                    <h3 class="sub-title">安装步骤</h3>
+                    <ul>
+                        <li>从 <a href="https://github.com/Yanxiyimengya/UndertaleMakerX/releases" target="_blank" class="link">Releases 页面</a> 下载最新版本软件包</li>
+                        <li>解压软件包（无需安装，绿色软件）</li>
+                        <li>运行 <code>UndertaleMakerX.exe</code> (Windows) / <code>UndertaleMakerX.app</code> (macOS) / <code>UndertaleMakerX.x86_64</code> (Linux)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 开发模式 -->
+            <section class="content-module" id="modes">
+                <h2 class="module-title"><i class="fa-solid fa-wrench"></i> 开发模式</h2>
+                <div class="module-content">
+                    <p class="module-desc">UndertaleMakerX 支持两种开发模式，以适应从初学者到高级开发者的所有技能水平的创作者。</p>
+
+                    <h3 class="sub-title">🧩 无代码模式（适合初学者）</h3>
+                    <ul>
+                        <li>通过配置文件修改游戏逻辑</li>
+                        <li>一键预览和导出，无需编程基础</li>
+                        <li>通过极简操作完美还原经典 Undertale 战斗体验</li>
+                    </ul>
+
+                    <h3 class="sub-title">📜 JavaScript 脚本模式（适用于高级开发者）</h3>
+                    <ul>
+                        <li>基于 JavaScript 互操作性，支持自定义复杂逻辑</li>
+                        <li>暴露完整引擎底层 API，打破“仅限原版 UT 对战”的限制</li>
+                        <li>自定义战斗规则、角色 AI、游戏机制，甚至非 UT 风格的玩法</li>
+                        <li>支持导入自定义脚本和第三方库，具有无限的扩展可能性</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 跨平台导出 -->
+            <section class="content-module" id="export">
+                <h2 class="module-title"><i class="fa-solid fa-box"></i> 跨平台导出</h2>
+                <div class="module-content">
+                    <p class="module-desc">一键导出到多个平台，生成的文件是独立的，无需额外的运行时环境：</p>
+
+                    <ul>
+                        <li>桌面平台：Windows (EXE)、macOS (APP)、Linux (x86_64/AppImage)</li>
+                        <li>移动平台：Android (APK)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 许可证 -->
+            <section class="content-module" id="license">
+                <h2 class="module-title"><i class="fa-solid fa-file-contract"></i> 许可证</h2>
+                <div class="module-content">
+                    <ul>
+                        <li>本项目根据 MIT 许可证授权 - 详细内容请参阅 <a href="https://github.com/Yanxiyimengya/UndertaleMakerX/blob/main/LICENSE" target="_blank" class="link">LICENSE 文件</a>。</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 注意事项 -->
+            <section class="content-module" id="notes">
+                <h2 class="module-title"><i class="fa-solid fa-triangle-exclamation"></i> 注意事项</h2>
+                <div class="module-content">
+                    <ul>
+                        <li>UndertaleMakerX 是一个非商业性质的同人制作工具，仅用于学习和交流目的</li>
+                        <li>请勿使用本工具制作违反原版 Undertale 作者指导原则的内容</li>
+                        <li>所有与 Undertale 相关的知识产权均归 Toby Fox 所有</li>
+                    </ul>
+                </div>
+            </section>
+
+            <footer class="desktop-footer">
+                <p>Undertale © Toby Fox | 基于 Godot 引擎构建</p>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 20,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // 折叠/展开子菜单
+        const parentNav = document.getElementById('introParentNav');
+        const collapseIcon = document.getElementById('collapseIcon');
+        const childNavList = document.getElementById('childNavList');
+        let isExpanded = true;
+
+        parentNav.addEventListener('click', function(e) {
+            e.preventDefault();
+            isExpanded = !isExpanded;
+            if (isExpanded) {
+                childNavList.classList.add('expanded');
+                collapseIcon.classList.add('rotated');
+            } else {
+                childNavList.classList.remove('expanded');
+                collapseIcon.classList.remove('rotated');
+            }
+        });
+
+        // 导航高亮 + 自动展开
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('.content-module');
+            const childNavLinks = document.querySelectorAll('.child-nav-link');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            let currentSection = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= (sectionTop - 100)) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+            
+            // 重置高亮
+            navLinks.forEach(link => link.classList.remove('active'));
+            childNavLinks.forEach(link => link.classList.remove('active'));
+            
+            // 高亮当前子导航
+            childNavLinks.forEach(link => {
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.classList.add('active');
+                    if (!isExpanded) {
+                        isExpanded = true;
+                        childNavList.classList.add('expanded');
+                        collapseIcon.classList.add('rotated');
+                    }
+                }
+            });
+
+            // 多页面导航高亮
+            const currentUrl = window.location.href;
+            navLinks.forEach(link => {
+                if (currentUrl.includes(link.getAttribute('href')) && !link.getAttribute('href').startsWith('#')) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

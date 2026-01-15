@@ -1,0 +1,133 @@
+[gd_scene load_steps=19 format=3 uid="uid://o3ubysucd5hn"]
+
+[ext_resource type="Script" uid="uid://bicdg5gxj4cwq" path="res://scripts/battle/EncounterBattle.cs" id="1_a5x5v"]
+[ext_resource type="Texture2D" uid="uid://cpt8lkhth2ikc" path="res://assets/textures/ui/battle_screen/bg/spr_battlebg_0.png" id="2_4xtxd"]
+[ext_resource type="Script" uid="uid://cctn2p527r38" path="res://scripts/utils/state_machine/StateMachine.cs" id="2_62htl"]
+[ext_resource type="Script" uid="uid://c0ouwp06q4136" path="res://scripts/battle/state/BattlePlayerTurnState.cs" id="3_18p8v"]
+[ext_resource type="PackedScene" uid="uid://bsu68i8btkpis" path="res://scenes/encounter_battle/battle_arena/battle_arena.tscn" id="3_62htl"]
+[ext_resource type="PackedScene" uid="uid://cee05uq5s87yp" path="res://scenes/encounter_battle/ui/status_bar/battle_status_bar.tscn" id="4_18p8v"]
+[ext_resource type="AudioStream" uid="uid://coq8miphysprd" path="res://assets/audio/sfx/snd_select.wav" id="4_53d75"]
+[ext_resource type="Script" uid="uid://cde1ky5vok3oy" path="res://scripts/battle/state/BattleDialogTurnState.cs" id="4_wxkx7"]
+[ext_resource type="AudioStream" uid="uid://bqarl4v1658o" path="res://assets/audio/sfx/snd_squeak.wav" id="5_e7ctv"]
+[ext_resource type="PackedScene" uid="uid://cfmmgpj17a2fc" path="res://scenes/encounter_battle/ui/button/battle_screen_button.tscn" id="5_wxkx7"]
+[ext_resource type="Texture2D" uid="uid://7t5wbkpk50fu" path="res://assets/textures/ui/battle_screen/spr_actbt_center_0.png" id="6_53d75"]
+[ext_resource type="Texture2D" uid="uid://p8a3d1ppm0r" path="res://assets/textures/ui/battle_screen/spr_actbt_center_1.png" id="7_e7ctv"]
+[ext_resource type="Texture2D" uid="uid://dtxtjdaxf7g27" path="res://assets/textures/ui/battle_screen/spr_itembt_0.png" id="8_taqgn"]
+[ext_resource type="Script" uid="uid://dvjw442ehnwon" path="res://scripts/battle/BattleScreenButtonManager.cs" id="8_wxkx7"]
+[ext_resource type="Texture2D" uid="uid://dj7bbitqv4f76" path="res://assets/textures/ui/battle_screen/spr_itembt_1.png" id="9_oxe8y"]
+[ext_resource type="Texture2D" uid="uid://d37kqqs16srem" path="res://assets/textures/ui/battle_screen/spr_sparebt_0.png" id="10_66xs5"]
+[ext_resource type="Texture2D" uid="uid://k11abgt7uggw" path="res://assets/textures/ui/battle_screen/spr_sparebt_1.png" id="11_17tmt"]
+[ext_resource type="PackedScene" uid="uid://fg7a0q46v718" path="res://scenes/encounter_battle/battle_player_soul/battle_player_soul.tscn" id="12_2xdie"]
+
+[node name="EncounterBattle" type="Node" node_paths=PackedStringArray("soul", "mainArena", "battleStateMachine")]
+script = ExtResource("1_a5x5v")
+soul = NodePath("Players/BattlePlayerSoul")
+mainArena = NodePath("Arenas/BattleArenaMain")
+battleStateMachine = NodePath("BattleStateMachine")
+
+[node name="BattleStateMachine" type="Node" parent="."]
+script = ExtResource("2_62htl")
+metadata/_custom_type_script = "uid://cctn2p527r38"
+
+[node name="BattlePlayerTurnState" type="Node" parent="BattleStateMachine" node_paths=PackedStringArray("battlePlayerSoul", "battleButtonManager")]
+script = ExtResource("3_18p8v")
+SndSelect = ExtResource("4_53d75")
+SndSqueak = ExtResource("5_e7ctv")
+battlePlayerSoul = NodePath("../../Players/BattlePlayerSoul")
+battleButtonManager = NodePath("../../UIsLayer/BattleScreenButtonManager")
+metadata/_custom_type_script = "uid://c0ouwp06q4136"
+
+[node name="BattleDialogTurnState" type="Node" parent="BattleStateMachine"]
+script = ExtResource("4_wxkx7")
+metadata/_custom_type_script = "uid://cde1ky5vok3oy"
+
+[node name="BackgroundLayer" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackgroundColorRect" type="ColorRect" parent="BackgroundLayer"]
+z_index = -1000
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="TextureRect" type="TextureRect" parent="BackgroundLayer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackgroundSprite" type="Sprite2D" parent="BackgroundLayer"]
+visible = false
+position = Vector2(320, 127)
+texture = ExtResource("2_4xtxd")
+
+[node name="Arenas" type="Node2D" parent="."]
+
+[node name="BattleArenaMain" parent="Arenas" instance=ExtResource("3_62htl")]
+position = Vector2(320, 320)
+Size = Vector2(566, 130)
+
+[node name="UIsLayer" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BattleStatusBar" parent="UIsLayer" instance=ExtResource("4_18p8v")]
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_top = 412.0
+offset_bottom = 412.0
+grow_horizontal = 1
+grow_vertical = 1
+PlayerLv = 1
+
+[node name="BattleScreenButtonManager" type="Control" parent="UIsLayer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("8_wxkx7")
+
+[node name="FightButton" parent="UIsLayer/BattleScreenButtonManager" instance=ExtResource("5_wxkx7")]
+position = Vector2(87, 453)
+
+[node name="ActButton" parent="UIsLayer/BattleScreenButtonManager" instance=ExtResource("5_wxkx7")]
+position = Vector2(240, 453)
+buttonTexture = ExtResource("6_53d75")
+buttonPressedTexture = ExtResource("7_e7ctv")
+
+[node name="ItemButton" parent="UIsLayer/BattleScreenButtonManager" instance=ExtResource("5_wxkx7")]
+position = Vector2(400, 453)
+buttonTexture = ExtResource("8_taqgn")
+buttonPressedTexture = ExtResource("9_oxe8y")
+
+[node name="MercyButton" parent="UIsLayer/BattleScreenButtonManager" instance=ExtResource("5_wxkx7")]
+position = Vector2(555, 453)
+buttonTexture = ExtResource("10_66xs5")
+buttonPressedTexture = ExtResource("11_17tmt")
+
+[node name="Players" type="Node2D" parent="."]
+
+[node name="BattlePlayerSoul" parent="Players" instance=ExtResource("12_2xdie")]
+visible = false
+
+[node name="Enemys" type="Node2D" parent="."]
+position = Vector2(320, 240)
