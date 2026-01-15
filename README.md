@@ -18,6 +18,8 @@ UndertaleMakerX 的设计初衷是降低 Undertale 风格游戏的制作门槛�
 - **UT原生还原**：内置的Undertale战斗系统、美术风格与音视觉资源的适配支持
 - **高度可扩展**：模块化架构设计，支持自定义资源包、脚本扩展与社区内容贡献
 
+<img width="644" height="527" alt="image" src="https://github.com/user-attachments/assets/bb3d78e0-eb04-449f-a4e2-00c4d12191ee" />
+
 ## 🛠️ 规划功能（开发中）
 ### 双开发模式
 - **零代码可视化模式**（优先开发）
