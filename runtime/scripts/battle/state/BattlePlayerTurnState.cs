@@ -36,7 +36,6 @@ public partial class BattlePlayerTurnState : StateNode
 		{
 			battlePlayerSoul.GlobalPosition = btn.GetSoulPosition();
 		}
-
 	}
 
 	public void SetSelect(int select)

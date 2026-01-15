@@ -25,7 +25,6 @@ public partial class StateMachine : Node
 			TryGetState(value, out StateNode nextState);
 			if (nextState != null)
 			{
-				
 				TryGetState(value, out StateNode currentStateNode);
 				currentStateNode.Enabled = true;
 				nextState._EnterState();
