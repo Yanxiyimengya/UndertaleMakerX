@@ -1,0 +1,8 @@
+[gd_resource type="FontVariation" load_steps=3 format=3 uid="uid://csugi6v670vhq"]
+
+[ext_resource type="FontFile" uid="uid://3221lj0w143w" path="res://assets/fonts/Determination Mono.otf" id="1_afs0a"]
+[ext_resource type="FontFile" uid="uid://bn6wautbcglmx" path="res://assets/fonts/FZXS12.ttf" id="2_l8cde"]
+
+[resource]
+fallbacks = Array[Font]([ExtResource("2_l8cde")])
+base_font = ExtResource("1_afs0a")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://o3ubysucd5hn"]
+[gd_scene load_steps=21 format=3 uid="uid://o3ubysucd5hn"]
 
 [ext_resource type="Script" uid="uid://bicdg5gxj4cwq" path="res://scripts/battle/EncounterBattle.cs" id="1_a5x5v"]
 [ext_resource type="Texture2D" uid="uid://cpt8lkhth2ikc" path="res://assets/textures/ui/battle_screen/bg/spr_battlebg_0.png" id="2_4xtxd"]
@@ -19,11 +19,7 @@
 [ext_resource type="Texture2D" uid="uid://k11abgt7uggw" path="res://assets/textures/ui/battle_screen/spr_sparebt_1.png" id="11_17tmt"]
 [ext_resource type="PackedScene" uid="uid://fg7a0q46v718" path="res://scenes/encounter_battle/battle_player_soul/battle_player_soul.tscn" id="12_2xdie"]
 [ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="19_taqgn"]
-[ext_resource type="AudioStream" uid="uid://dmtjjdohc4f7u" path="res://assets/audio/sfx/SND_TXT2.wav" id="20_oxe8y"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_oxe8y"]
-line_spacing = 0.0
-font_color = Color(1, 0, 0, 1)
+[ext_resource type="FontFile" uid="uid://bn6wautbcglmx" path="res://assets/fonts/FZXS12.ttf" id="20_oxe8y"]
 
 [node name="EncounterBattle" type="Node" node_paths=PackedStringArray("soul", "mainArena", "battleStateMachine")]
 script = ExtResource("1_a5x5v")
@@ -35,12 +31,13 @@ battleStateMachine = NodePath("BattleStateMachine")
 script = ExtResource("2_62htl")
 metadata/_custom_type_script = "uid://cctn2p527r38"
 
-[node name="BattlePlayerTurnState" type="Node" parent="BattleStateMachine" node_paths=PackedStringArray("battlePlayerSoul", "battleButtonManager")]
+[node name="BattlePlayerTurnState" type="Node" parent="BattleStateMachine" node_paths=PackedStringArray("battlePlayerSoul", "battleButtonManager", "encounterTextTyper")]
 script = ExtResource("3_18p8v")
 SndSelect = ExtResource("4_53d75")
 SndSqueak = ExtResource("5_e7ctv")
 battlePlayerSoul = NodePath("../../Players/BattlePlayerSoul")
 battleButtonManager = NodePath("../../UILayer/BattleScreenButtonManager")
+encounterTextTyper = NodePath("../../UILayer/EncounterTextTyper")
 metadata/_custom_type_script = "uid://c0ouwp06q4136"
 
 [node name="BattleDialogTurnState" type="Node" parent="BattleStateMachine"]
@@ -117,6 +114,20 @@ position = Vector2(555, 453)
 buttonTexture = ExtResource("10_66xs5")
 buttonPressedTexture = ExtResource("11_17tmt")
 
+[node name="EncounterTextTyper" type="Control" parent="UILayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 55.0
+offset_top = 270.0
+offset_right = 588.0
+offset_bottom = 374.0
+script = ExtResource("19_taqgn")
+TyperSpeed = 0.05
+TyperFont = ExtResource("20_oxe8y")
+FontSize = 24
+LineSpace = 12
+metadata/_custom_type_script = "uid://dmq4qew4auuss"
+
 [node name="Players" type="Node2D" parent="."]
 
 [node name="BattlePlayerSoul" parent="Players" instance=ExtResource("12_2xdie")]
@@ -124,35 +135,3 @@ visible = false
 
 [node name="Enemys" type="Node2D" parent="."]
 position = Vector2(320, 240)
-
-[node name="Label" type="Label" parent="."]
-offset_left = 108.0
-offset_top = 137.0
-offset_right = 249.0
-offset_bottom = 253.0
-text = "ABCDEFghi
-ABCDEFghi
-ABCDEFghi
-ABCDEFghi"
-label_settings = SubResource("LabelSettings_oxe8y")
-
-[node name="TextTyper" type="Control" parent="Label"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = -112.0
-offset_right = 121.0
-offset_bottom = 10.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("19_taqgn")
-Text = "[color #ff0000]ABCDEFEFABCDEFABCDEFAB[color #00ff00]CDEFABCDEFABCDEFA[color #0000ff]BCDEFABCDEFAB[wait 1]CDEFABCDEFABC[color #ffffff]DEFABCDEFABCDABCDEFghi   a asdghi   a asd asdasdsad
-ABCDEFghi   ghi   a asd asdasdsad
-ABCDEFghi       ghi   a asd asdasdsad
-ABCDEFghi           ghi   a asd asdasdsad"
-TyperSpeed = 0.05
-Voice = ExtResource("20_oxe8y")
-AutoStart = true
-metadata/_custom_type_script = "uid://dmq4qew4auuss"

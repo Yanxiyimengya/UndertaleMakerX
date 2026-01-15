@@ -13,7 +13,9 @@ public partial class BattlePlayerTurnState : StateNode
 	BattlePlayerSoul battlePlayerSoul;
 	[Export]
 	BattleScreenButtonManager battleButtonManager;
-	
+	[Export]
+	TextTyper encounterTextTyper;
+
 	private int actionSelect = -1;
 
 	public override void _Process(double delta)
@@ -50,6 +52,9 @@ public partial class BattlePlayerTurnState : StateNode
 		battlePlayerSoul.Movable = false;
 		battlePlayerSoul.EnableCollision = false;
 		battlePlayerSoul.Show();
+
+		encounterTextTyper.Restart("* UndertaleMakerX by Yanxiyimtng.\n* Having fun! :)"); // TODO
+
 	}
 
 	public override void _ExitState()

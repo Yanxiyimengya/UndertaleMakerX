@@ -26,6 +26,8 @@ public partial class TextTyper : Control
 	[Export]
 	public int FontSize = 16;
 	[Export]
+	public int LineSpace = 3;
+	[Export]
 	public AudioStream Voice = null;
 
 	[Export]
@@ -34,7 +36,7 @@ public partial class TextTyper : Control
 		get => _typing;
 		set
 		{
-			if (value && !_typing)
+			if (Engine.IsEditorHint() && value && !_typing)
 			{
 				Restart(Text);
 			}
@@ -169,7 +171,8 @@ public partial class TextTyper : Control
 
 	private void _NewLine()
 	{
-		_typerCursorPosition = new Vector2(0.0F, _typerCursorPosition.Y + (float)_typerFont.GetHeight(FontSize));
+		_typerCursorPosition = new Vector2(0.0F, 
+			_typerCursorPosition.Y + (float)_typerFont.GetHeight(FontSize) + LineSpace);
 	}
 
 	private void _Step(long @char)
@@ -182,12 +185,23 @@ public partial class TextTyper : Control
 	private void _GetCharAttribute(long @char, out Vector2 glyphAdvance)
 	{
 		glyphAdvance = Vector2.Zero;
-		Rid typerFontRid = TyperFont.GetRids()[0];
-		if (typerFontRid.IsValid)
+		if (TyperFont is FontVariation font)
+		{
+			glyphAdvance += new Vector2(0F, font.SpacingGlyph);
+			if (@char == ' ')
+			{
+				glyphAdvance += new Vector2(0F, font.SpacingSpace);
+			}
+		}
+		foreach (Rid rid in TyperFont.GetRids())
 		{
 			TextServer ts = TextServerManager.GetPrimaryInterface();
-			long glyphIndex = ts.FontGetGlyphIndex(typerFontRid, FontSize, @char, 0);
-			glyphAdvance = ts.FontGetGlyphAdvance(typerFontRid, FontSize, glyphIndex);
+			if (ts.FontHasChar(rid, @char))
+			{
+				long glyphIndex = ts.FontGetGlyphIndex(rid, FontSize, @char, 0);
+				glyphAdvance += ts.FontGetGlyphAdvance(rid, FontSize, glyphIndex);
+				return;
+			}
 		}
 	}
 
@@ -214,21 +228,6 @@ public partial class TextTyper : Control
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	public void Restart(string text)
 	{
 		foreach (Rid id in _canvasItemList)
@@ -243,6 +242,7 @@ public partial class TextTyper : Control
 		_typerProcessTimer = 0.0;
 		_typerWaitTimer = 0.0;
 		_typerCursorPosition = Vector2.Zero;
+		Typing = true;
 	}
 
 }

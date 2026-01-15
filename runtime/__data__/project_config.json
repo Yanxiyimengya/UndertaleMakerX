@@ -12,7 +12,7 @@
 		"boderless" : false,
 	},
 	"boot_splash" : {
-		"enabled" : true,
+		"enabled" : false,
 		"display_text" : "UNDERTALE MAKER\nX",
 		"speed_scale" : 1.0,
 		"background_color" : "#101020"
