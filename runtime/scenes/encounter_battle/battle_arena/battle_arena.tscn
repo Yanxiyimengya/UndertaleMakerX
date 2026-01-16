@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://bsu68i8btkpis"]
 
-[ext_resource type="Script" uid="uid://dfpvoslrrkl03" path="res://scripts/battle/arena/BattleArena.cs" id="1_v7nk7"]
+[ext_resource type="Script" uid="uid://dfpvoslrrkl03" path="res://scripts/scenes/encounter_battle/arena/BattleArena.cs" id="1_v7nk7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v7nk7"]
 size = Vector2(5, 150)

@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://cee05uq5s87yp"]
 
-[ext_resource type="Script" uid="uid://cf8pn8loy34yx" path="res://scripts/battle/ui/status_bar/BattleStatusBar.cs" id="1_htd3h"]
+[ext_resource type="Script" uid="uid://cf8pn8loy34yx" path="res://scripts/scenes/encounter_battle/ui/status_bar/BattleStatusBar.cs" id="1_htd3h"]
 [ext_resource type="FontFile" uid="uid://byqksst50cd7e" path="res://assets/fonts/Mars Needs Cunnilingus.ttf" id="2_vudbu"]
 [ext_resource type="Texture2D" uid="uid://cgfehv4ixi1c1" path="res://assets/textures/ui/battle_screen/spr_hpname_0.png" id="3_vudbu"]
 

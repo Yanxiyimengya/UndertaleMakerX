@@ -4,6 +4,9 @@ using System;
 [GlobalClass]
 public abstract partial class StateNode : Node
 {
+	[Signal]
+	public delegate void RequestSwitchStateEventHandler(string stateName);
+
 	[Export]
 	public bool Enabled
 	{
@@ -40,4 +43,8 @@ public abstract partial class StateNode : Node
 	// 退出自身状态的回调方法
 	public abstract void _ExitState();
 
+    public virtual bool _CanEnterState()
+    {
+        return true;
+    }
 }

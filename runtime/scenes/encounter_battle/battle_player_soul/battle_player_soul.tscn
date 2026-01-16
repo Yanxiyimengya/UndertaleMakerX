@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://fg7a0q46v718"]
 
 [ext_resource type="Texture2D" uid="uid://ddf5w0nj7k3qg" path="res://assets/textures/ui/soul/spr_soul_battle_0.png" id="1_1vawn"]
-[ext_resource type="Script" uid="uid://creftm2k8k0aw" path="res://scripts/battle/battle_player_soul/BattlePlayerSoul.cs" id="1_4pjqo"]
+[ext_resource type="Script" uid="uid://creftm2k8k0aw" path="res://scripts/scenes/encounter_battle/battle_player_soul/BattlePlayerSoul.cs" id="1_4pjqo"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4pjqo"]
 radius = 8.062258

@@ -1,60 +1,112 @@
 using Godot;
-using Godot.Collections;
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using System.Transactions;
 
 [GlobalClass]
-[Tool]
 public partial class StateMachine : Node
 {
 	[Export]
-	public int CurrentStateIndex
+	public string CurrentStateName
 	{
-		get => _currentStateIndex;
+		get => currentStateName;
 		set
 		{
-			TryGetState(_currentStateIndex, out StateNode prevStateNode);
-			if (prevStateNode != null)
+			if (stateNodes.TryGetValue(currentStateName, out StateNode prevStateNode) && prevStateNode != null)
 			{
 				prevStateNode._ExitState();
 				prevStateNode.Enabled = false;
 			}
-
-			TryGetState(value, out StateNode nextState);
-			if (nextState != null)
+			if (stateNodes.TryGetValue(value, out StateNode nextStateNode) && nextStateNode != null)
 			{
-				TryGetState(value, out StateNode currentStateNode);
-				currentStateNode.Enabled = true;
-				nextState._EnterState();
+				nextStateNode.Enabled = true;
+				nextStateNode._EnterState();
+				currentStateName = value;
 			}
-			_currentStateIndex = value;
 
+			else if (string.IsNullOrEmpty(value))
+			{
+				currentStateName = string.Empty;
+			}
 		}
 	}
 
-	private List<StateNode> stateNodes = new List<StateNode>();
-	private int _currentStateIndex = -1;
-	
+	private Dictionary<string, StateNode> stateNodes = new Dictionary<string, StateNode>();
+	private string currentStateName = string.Empty;
+
 	public override void _Ready()
 	{
 		base._Ready();
-		foreach (Node childNode in this.GetChildren())
+
+		ChildEnteredTree += OnChildEnteredTree;
+		ChildExitingTree += OnChildExitingTree;
+
+		foreach (Node childNode in GetChildren())
 		{
-			if (! (childNode is StateNode)) continue;
-			stateNodes.Add((StateNode)childNode);
+			AddStateNodeIfValid(childNode);
 		}
-		CurrentStateIndex = CurrentStateIndex;
-	}
-	public bool TryGetState(int idx, out StateNode state)
-	{
-		state = null;
-		if (idx >= 0 && idx < stateNodes.Count)
+
+		if (!string.IsNullOrEmpty(CurrentStateName))
 		{
-			state = stateNodes[idx];
-			return true;
+			CurrentStateName = CurrentStateName;
+		}
+	}
+	private void OnChildEnteredTree(Node child)
+	{
+		AddStateNodeIfValid(child);
+	}
+	private void OnChildExitingTree(Node child)
+	{
+		if (child is StateNode stateNode)
+		{
+			string stateName = stateNode.Name;
+			if (stateName == currentStateName)
+			{
+				stateNode._ExitState();
+				stateNode.Enabled = false;
+				currentStateName = string.Empty;
+			}
+			if (stateNodes.ContainsKey(stateName))
+			{
+				stateNodes.Remove(stateName);
+			}
+		}
+	}
+
+	private void AddStateNodeIfValid(Node node)
+	{
+		if (node is StateNode stateNode && !stateNodes.ContainsKey(stateNode.Name))
+		{
+			stateNodes.Add(stateNode.Name, stateNode);
+			stateNode.Enabled = false;
+			stateNode.Connect(
+				StateNode.SignalName.RequestSwitchState,
+				Callable.From((string stateName) => SwitchToState(stateName))
+			);
+		}
+	}
+	public bool SwitchToState(string stateName)
+	{
+		if (stateNodes.ContainsKey(stateName))
+		{
+			if (stateNodes.TryGetValue(stateName, out StateNode nextStateNode) && nextStateNode != null)
+			{
+				if (nextStateNode._CanEnterState())
+				{
+					CurrentStateName = stateName;
+					return true;
+				}
+			}
 		}
 		return false;
+	}
+	public bool HasState(string stateName)
+	{
+		return stateNodes.ContainsKey(stateName);
+	}
+	public override void _ExitTree()
+	{
+		base._ExitTree();
+		ChildEnteredTree -= OnChildEnteredTree;
+		ChildExitingTree -= OnChildExitingTree;
 	}
 }

@@ -2,15 +2,10 @@ using Godot;
 using Godot.Collections;
 using System;
 
-public partial class UTMXRuntimeProjectConfig : Godot.Node
+// 引擎配置文件读取类
+public partial class UTMXRuntimeProjectConfig : UTMXSingleton<UTMXRuntimeProjectConfig>
 {
-    public static UTMXRuntimeProjectConfig Instance { get; private set; }
     public Dictionary<string, Variant> FlatConfigDict { get; private set; } = new Dictionary<string, Variant>();
-
-    static UTMXRuntimeProjectConfig()
-    {
-        Instance = new UTMXRuntimeProjectConfig();
-    }
 
     public Variant TryGetDefault(string key, Variant defValue = default)
     {
@@ -47,7 +42,6 @@ public partial class UTMXRuntimeProjectConfig : Godot.Node
 
     public void LoadConfiguration(string configFilePath)
     {
-        // 加载前清空旧配置
         FlatConfigDict.Clear();
 
         if (!FileAccess.FileExists(configFilePath)) return;
@@ -64,7 +58,6 @@ public partial class UTMXRuntimeProjectConfig : Godot.Node
 
             if (configVariant.As<Dictionary>() is not Dictionary rootDict) return;
 
-            // 递归遍历根字典，生成扁平路径键值对
             TraverseDict(rootDict, "");
         }
         catch (Exception)

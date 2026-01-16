@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://cfmmgpj17a2fc"]
 
-[ext_resource type="Script" uid="uid://cl3y7vfo5y3u2" path="res://scripts/battle/ui/button/BattleScreenButton.cs" id="1_1qig5"]
+[ext_resource type="Script" uid="uid://cl3y7vfo5y3u2" path="res://scripts/scenes/encounter_battle/ui/button/BattleScreenButton.cs" id="1_1qig5"]
 [ext_resource type="Texture2D" uid="uid://bohbdo5br0crs" path="res://assets/textures/ui/battle_screen/spr_fightbt_0.png" id="2_qrya7"]
 [ext_resource type="Texture2D" uid="uid://bihb0g5igw6wn" path="res://assets/textures/ui/battle_screen/spr_fightbt_1.png" id="3_2vs1s"]
 
@@ -15,4 +15,4 @@ soulMarker = NodePath("SoulMarker2D")
 texture = ExtResource("2_qrya7")
 
 [node name="SoulMarker2D" type="Marker2D" parent="."]
-position = Vector2(-38, 0)
+position = Vector2(-39, 0)
