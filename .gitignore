@@ -23,3 +23,4 @@ mono_crash.*.json
 
 # 导出内容
 export/
+/android/

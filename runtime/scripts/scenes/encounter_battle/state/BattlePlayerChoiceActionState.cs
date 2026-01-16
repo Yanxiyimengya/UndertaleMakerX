@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 
 [GlobalClass]
-public partial class BattlePlayerSelectActionState : StateNode
+public partial class BattlePlayerChoiceActionState : StateNode
 {
 	[Export]
-	AudioStream SndSelect;
+	AudioStream SndChoice;
 	[Export]
 	AudioStream SndSqueak;
 	
@@ -17,8 +17,8 @@ public partial class BattlePlayerSelectActionState : StateNode
 	[Export]
 	BattleMenuManager BattleMenuManager;
 
-	private int actionSelect = 0;
-	private int prevActionSelect = -1;
+	private int actionChoice = 0;
+	private int prevActionChoice = -1;
 	private Dictionary<int, string> actionButtonMapping = new Dictionary<int, string>
 	{
 		{ 0 , "FightButton"},
@@ -28,9 +28,9 @@ public partial class BattlePlayerSelectActionState : StateNode
 	}; // 按钮映射表
 	private Dictionary<int, string> actionMenuMapping = new Dictionary<int, string>
 	{
-		{ 0 , "BattlePlayerSelectEnemyState"},
-		{ 1 , "BattlePlayerSelectEnemyState"},
-		{ 2 , "BattlePlayerSelectItemState"},
+		{ 0 , "BattlePlayerChoiceEnemyState"},
+		{ 1 , "BattlePlayerChoiceEnemyState"},
+		{ 2 , "BattlePlayerChoiceItemState"},
 		{ 3 , "MercyButton"},
 	}; // 菜单行为映射表
 
@@ -38,35 +38,35 @@ public partial class BattlePlayerSelectActionState : StateNode
 	{
 		if (Input.IsActionJustPressed("left"))
 		{
-			actionSelect -= 1;
+			actionChoice -= 1;
 			GlobalStreamPlayer.Instance.PlaySound(SndSqueak);
-			if (actionSelect < 0) actionSelect = BattleButtonManager.GetButtonCount() - 1;
+			if (actionChoice < 0) actionChoice = BattleButtonManager.GetButtonCount() - 1;
 		}
 		else if (Input.IsActionJustPressed("right"))
 		{
-			actionSelect += 1;
+			actionChoice += 1;
 			GlobalStreamPlayer.Instance.PlaySound(SndSqueak);
-			if (actionSelect >= BattleButtonManager.GetButtonCount()) actionSelect = 0;
+			if (actionChoice >= BattleButtonManager.GetButtonCount()) actionChoice = 0;
 		}
 		else if (Input.IsActionJustPressed("confirm"))
 		{
-			if (actionMenuMapping.TryGetValue(actionSelect, out string state))
+			if (actionMenuMapping.TryGetValue(actionChoice, out string state))
 			{
 				EmitSignal(SignalName.RequestSwitchState, [state]);
 			}
 
-			GlobalStreamPlayer.Instance.PlaySound(SndSelect);
+			GlobalStreamPlayer.Instance.PlaySound(SndChoice);
 		}
 
-		if (actionSelect != prevActionSelect) { 
-			SetSelect(actionSelect);
-			prevActionSelect = actionSelect;
+		if (actionChoice != prevActionChoice) { 
+			SetChoice(actionChoice);
+			prevActionChoice = actionChoice;
 		}
 	}
 
-	public void SetSelect(int select)
+	public void SetChoice(int Choice)
 	{
-		if (actionButtonMapping.TryGetValue(actionSelect, out string btnId))
+		if (actionButtonMapping.TryGetValue(actionChoice, out string btnId))
 		{
 			if (BattlePlayerSoul != null)
 			{
@@ -82,7 +82,7 @@ public partial class BattlePlayerSelectActionState : StateNode
 	public override void _EnterState()
 	{
 		BattleMenuManager.OpenMenu("EncounterTextMenu");
-		SetSelect(actionSelect);
+		SetChoice(actionChoice);
 		BattlePlayerSoul.Movable = false;
 		BattlePlayerSoul.EnableCollision = false;
 		BattlePlayerSoul.Show();
@@ -90,7 +90,7 @@ public partial class BattlePlayerSelectActionState : StateNode
 
 	public override void _ExitState()
 	{
-		if (actionButtonMapping.TryGetValue(actionSelect, out string btnId))
+		if (actionButtonMapping.TryGetValue(actionChoice, out string btnId))
 		{
 			BattleButtonManager.ReleaseButton(btnId);
 		}

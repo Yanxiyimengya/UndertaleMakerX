@@ -15,11 +15,21 @@ public partial class EncounterTextMenu : BaseEncounterMenu
 	{
 		encounterTextTyper.TyperFont = DefaultFont;
 		encounterTextTyper.Voice = DefaultVoice;
-		if (GetTree().CurrentScene is EncounterBattle enc) 
+		encounterTextTyper.Instant = false;
+        if (GetTree().CurrentScene is EncounterBattle enc) 
 			encounterTextTyper.Start(enc.EncounterText);
 	}
 	public override void UIHidden()
-	{
-		encounterTextTyper.Start("");
+    {
+        encounterTextTyper.Start("");
 	}
+
+    public override void _Process(double delta)
+    {
+
+        if (Input.IsActionJustPressed("cancel"))
+        {
+			encounterTextTyper.Instant = true;
+        }
+    }
 }

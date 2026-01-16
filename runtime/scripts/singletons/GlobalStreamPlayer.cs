@@ -2,8 +2,10 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class GlobalStreamPlayer : UTMXSingleton<GlobalStreamPlayer>
+public partial class GlobalStreamPlayer : Node
 {
+
+	public static GlobalStreamPlayer Instance;
 	private AudioStreamPlayer soundPlayer = null;
 	private Dictionary<string, AudioStreamPlayer> bgmPlayers = new Dictionary<string, AudioStreamPlayer>();
 	private Queue<AudioStreamPlayer> bgmPlayersPool = new Queue<AudioStreamPlayer>();
@@ -15,15 +17,15 @@ public partial class GlobalStreamPlayer : UTMXSingleton<GlobalStreamPlayer>
 	}
 	public override void _EnterTree()
 	{
+		Instance = this;
 		base._EnterTree();
 		AddChild(soundPlayer);
-
-    }
+	}
 
 	public void PlaySound(AudioStream stream)
 	{
 		if (!soundPlayer.Playing) soundPlayer.Play();
-        if (soundPlayer.GetStreamPlayback() is AudioStreamPlaybackPolyphonic playback)
+		if (soundPlayer.GetStreamPlayback() is AudioStreamPlaybackPolyphonic playback)
 		{
 			playback.PlayStream(stream);
 		}

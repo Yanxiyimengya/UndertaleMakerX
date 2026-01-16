@@ -1,9 +1,10 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 using static Godot.WebSocketPeer;
 
 [GlobalClass]
-public partial class BattlePlayerSelectEnemyState : StateNode
+public partial class BattlePlayerChoiceEnemyState : StateNode
 {
 	[Export]
 	BattleMenuManager BattleMenuManager;
@@ -12,13 +13,13 @@ public partial class BattlePlayerSelectEnemyState : StateNode
 	{
 		if (Input.IsActionJustPressed("cancel"))
 		{
-			EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerSelectActionState"]);
+			EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerChoiceActionState"]);
 		}
 	}
 
 	public override void _EnterState()
 	{
-		BattleMenuManager.OpenMenu("EncounterEnemySelectMenu");
+		BattleMenuManager.OpenMenu("EncounterEnemyChoiceMenu");
 	}
 
 	public override void _ExitState()

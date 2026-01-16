@@ -2,7 +2,6 @@ using Godot;
 using System;
 using System.Text.RegularExpressions;
 
-[Tool]
 [GlobalClass]
 public partial class BattleStatusBar : Control
 {

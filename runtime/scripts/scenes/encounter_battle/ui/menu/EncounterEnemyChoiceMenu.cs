@@ -1,8 +1,10 @@
 using Godot;
 using System;
 
-public partial class EncounterEnemySelectMenu : BaseEncounterMenu
+public partial class EncounterEnemyChoiceMenu : BaseEncounterMenu
 {
+	[Export]
+	UndertaleStyleScrollBar scrollBar;
 	public override void UIVisible()
 	{
 		

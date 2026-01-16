@@ -4,6 +4,6 @@
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup>
-    <ActiveDebugProfile>Attach to Godot Editor</ActiveDebugProfile>
+    <ActiveDebugProfile>配置文件 1</ActiveDebugProfile>
   </PropertyGroup>
 </Project>
