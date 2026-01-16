@@ -5,14 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-internal partial class UTMXResourceLoader : Node
+internal partial class UTMXResourceLoader : UTMXSingleton<UTMXResourceLoader>
 {
-
-    private static readonly Lazy<UTMXResourceLoader> _instance =
-        new Lazy<UTMXResourceLoader>(() => new UTMXResourceLoader());
-    private UTMXResourceLoader() { }
-    public static UTMXResourceLoader Instance => _instance.Value;
-
     public static Resource Load(string resPath)
     {
         if (resPath.StartsWith("res://"))

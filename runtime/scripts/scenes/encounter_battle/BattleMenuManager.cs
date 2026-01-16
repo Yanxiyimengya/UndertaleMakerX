@@ -17,11 +17,10 @@ public partial class BattleMenuManager : TabContainer
 		}
 	}
 
-	public async void OpenMenu(string menuName)
+	public void OpenMenu(string menuName)
 	{
 		if (menuList.TryGetValue(prevMenuName, out BaseEncounterMenu prevMenu))
 		{
-			await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 			prevMenu.Visible = false;
 			prevMenu.UIHidden();
 		}

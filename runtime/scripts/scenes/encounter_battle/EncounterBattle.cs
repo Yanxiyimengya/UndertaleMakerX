@@ -41,9 +41,4 @@ public partial class EncounterBattle : Node
 	public override void _Process(double delta)
 	{
 	}
-
-	public BattlePlayerSoul GetPlayerSoul()
-	{
-		return PlayerSoul;
-	}
 }

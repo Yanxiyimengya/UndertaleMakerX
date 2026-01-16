@@ -5,8 +5,8 @@
 		"max_fps" : 60
 	},
 	"window" : {
-		"width": 1280,
-		"height": 720,
+		"width": 640,
+		"height": 480,
 		"resizable": true,
 		"fullscreen": false,
 		"boderless" : false,
