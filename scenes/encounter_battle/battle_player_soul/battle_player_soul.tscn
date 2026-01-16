@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://fg7a0q46v718"]
+
+[ext_resource type="Texture2D" uid="uid://ddf5w0nj7k3qg" path="res://assets/textures/ui/soul/spr_soul_battle_0.png" id="1_1vawn"]
+[ext_resource type="Script" uid="uid://creftm2k8k0aw" path="res://scripts/scenes/encounter_battle/battle_player_soul/BattlePlayerSoul.cs" id="1_4pjqo"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4pjqo"]
+radius = 8.062258
+
+[node name="BattlePlayerSoul" type="CharacterBody2D"]
+modulate = Color(1, 0, 0, 1)
+script = ExtResource("1_4pjqo")
+
+[node name="SprSoulBattle0" type="Sprite2D" parent="."]
+texture = ExtResource("1_1vawn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_4pjqo")

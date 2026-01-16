@@ -1,0 +1,53 @@
+using System;
+using System.Collections.Generic;
+using Godot;
+
+// 用于管理本地玩家数据
+public partial class PlayerDataManager : Node
+{
+
+	private static readonly Lazy<PlayerDataManager> _instance =
+		new Lazy<PlayerDataManager>(() => new PlayerDataManager());
+	private PlayerDataManager() { }
+	public static PlayerDataManager Instance => _instance.Value;
+
+
+	public string PlayerName = "FRISK";
+	public int PlayerLv = 1;
+	public float PlayerHp = 20F;
+	public float PlayerMaxHp = 20F;
+
+	public List<BaseItem> Items = new List<BaseItem>()
+	{
+		new BaseItem(),
+		new BaseItem(),
+		new BaseItem(),
+		new BaseItem(),
+		new BaseItem(),
+		new BaseItem(),
+	};
+
+	public int GetItemCount()
+	{
+		return Items.Count;
+	}
+
+	public bool TryGetItem(int slot, out BaseItem item)
+	{
+		item = null;
+		if (slot > -1 && slot < Items.Count)
+		{
+			item = Items[slot];
+			return true;
+		}
+		return false;
+	}
+
+	public void AddItem(BaseItem item)
+	{
+		if (item != null)
+		{
+			Items.Add(item);
+		}
+	}
+}

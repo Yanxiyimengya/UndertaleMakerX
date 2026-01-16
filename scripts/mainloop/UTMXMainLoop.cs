@@ -1,0 +1,112 @@
+using Godot;
+using System;
+
+[GlobalClass]
+public partial class UTMXMainLoop : SceneTree
+{
+	private Godot.Collections.Dictionary<string, string> _cmdArgs = new Godot.Collections.Dictionary<string, string>();
+	
+	public UTMXMainLoop() {
+		// 加载资源包
+		var datapackLoader = DatapackLoader.GetDatapackLoader(OS.GetName());
+		datapackLoader.LoadPack();
+
+		// 加载资源包配置项
+		UTMXRuntimeProjectConfig.Instance.LoadConfiguration($"{EngineProperties.DATAPACK_RESOURCE_PATH}/project_config.json");
+
+	}
+	public override void _Initialize()
+	{
+		_cmdArgs = ParseCmdlineArgs();
+		InitializeWindow();
+
+		Engine.MaxFps = UTMXRuntimeProjectConfig.Instance.TryGetDefault("application/max_fps",
+			ProjectSettings.GetSetting("application/run/max_fps")).AsInt32();
+
+	}
+
+	public override bool _Process(double delta)
+	{
+		return false;
+	}
+
+	public override void _Finalize()
+	{
+	}
+
+
+	private Godot.Collections.Dictionary<string, string> ParseCmdlineArgs()
+	{
+
+		var arguments = new Godot.Collections.Dictionary<string, string>();
+		string[] cmdLineArgs = OS.GetCmdlineArgs();
+		foreach (string arg in cmdLineArgs)
+		{
+			string cleanArg = arg.StartsWith("--") ? arg.Substring(2) : arg;
+
+			if (cleanArg.Contains("="))
+			{
+				string[] keyValue = cleanArg.Split('=', 2);
+				string key = keyValue[0].Trim();
+				string value = keyValue.Length > 1 ? keyValue[1].Trim() : string.Empty;
+				if (!arguments.ContainsKey(key))
+				{
+					arguments[key] = value;
+				}
+			}
+			else
+			{
+				string key = cleanArg.Trim();
+				if (!string.IsNullOrEmpty(key) && !arguments.ContainsKey(key))
+				{
+					arguments[key] = string.Empty;
+				}
+			}
+		}
+		return arguments;
+	}
+
+	private void InitializeWindow()
+	{
+		Vector2I windowSize = new Vector2I(
+			UTMXRuntimeProjectConfig.Instance.TryGetDefault("window/width",
+				ProjectSettings.GetSetting("display/window/size/viewport_width")).AsInt32(),
+			UTMXRuntimeProjectConfig.Instance.TryGetDefault("window/height",
+				ProjectSettings.GetSetting("display/window/size/viewport_height")).AsInt32());
+
+		bool resizable = UTMXRuntimeProjectConfig.Instance.TryGetDefault<bool>(
+			"window/resizable",
+			(bool)ProjectSettings.GetSetting("display/window/size/resizable")
+			);
+		bool fullscreen = UTMXRuntimeProjectConfig.Instance.TryGetDefault<bool>(
+			"window/fullscreen",
+			(ProjectSettings.GetSetting("display/window/size/mode").AsInt32() == (uint)DisplayServer.WindowMode.Fullscreen)
+			);
+		bool boderless = UTMXRuntimeProjectConfig.Instance.TryGetDefault<bool>(
+			"window/boderless",
+			(ProjectSettings.GetSetting("display/window/size/borderless").AsBool())
+			);
+
+		string appName = UTMXRuntimeProjectConfig.Instance.TryGetDefault("application/name",
+				ProjectSettings.GetSetting("application/config/name")).AsString();
+
+		Root.Connect(Window.SignalName.Ready, Callable.From(delegate() {
+			int currentScreen = DisplayServer.WindowGetCurrentScreen();
+			Rect2I screenRect = DisplayServer.ScreenGetUsableRect(currentScreen);
+			Vector2I centerPosition = screenRect.Position + (screenRect.Size - windowSize) / 2;
+			Root.Size = windowSize;
+			Root.Position = centerPosition;
+			Root.Borderless = boderless;
+
+			Root.Unresizable = !resizable;
+			if (! string.IsNullOrEmpty(appName)) 
+				Root.Title = appName;
+			if (fullscreen) 
+				Root.Mode = Window.ModeEnum.Fullscreen;
+		}), (int)GodotObject.ConnectFlags.OneShot);
+		ProjectSettings.SetSetting("application/config/name", appName);
+		ProjectSettings.SetSetting("display/window/size/viewport_width", windowSize.X);
+		ProjectSettings.SetSetting("display/window/size/viewport_height", windowSize.Y);
+
+	}
+}

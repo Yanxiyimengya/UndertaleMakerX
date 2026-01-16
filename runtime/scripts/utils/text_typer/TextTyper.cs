@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -54,6 +55,8 @@ public partial class TextTyper : Control
 	public int LineSpace = 3;
 	[Export]
 	public bool Autowarp = false;
+	[Export]
+	public Array<TextTyperEffectModifier> EffectModifiers = [];
 
 	private int _typerProgress = 0;
 	private bool _typing = false;
@@ -76,6 +79,7 @@ public partial class TextTyper : Control
 
 	public override void _Draw()
 	{
+		Clean();
 		if (Engine.IsEditorHint())
 		{
 			while (!_End())
@@ -117,6 +121,22 @@ public partial class TextTyper : Control
 
 	public override void _Process(double delta)
 	{
+		if (Input.IsKeyPressed(Key.H))
+		{
+			foreach (Rid id in _canvasItemList)
+			{
+				if (id.IsValid)
+					RenderingServer.FreeRid(id);
+			}
+			_canvasItemList.Clear();
+			foreach (Rid id in _canvasItemPoolList)
+			{
+				if (id.IsValid)
+					RenderingServer.FreeRid(id);
+			}
+			_canvasItemPoolList.Clear();
+		}
+
 		if (!_typing || !IsInstanceValid(this) || !IsInsideTree())
 			return;
 
@@ -179,15 +199,20 @@ public partial class TextTyper : Control
 			else
 			{
 				_PrintChar(c);
-				if (Voice != null && !Instant && !Engine.IsEditorHint() && IsInstanceValid(GlobalStreamPlayer.Instance))
+				if (!Instant)
 				{
-					GlobalStreamPlayer.Instance.PlaySound(Voice);
+					if (Voice != null && !Engine.IsEditorHint())
+					{
+						GlobalStreamPlayer.Instance.PlaySound(Voice);
+					}
+					break;
 				}
-				if (!Instant) break;
+				
 			}
 		}
 	}
 
+	// 打印一个字符
 	private void _PrintChar(long @char)
 	{
 		if (!IsInstanceValid(this) || !IsInsideTree() || _typerFont == null)
@@ -245,12 +270,14 @@ public partial class TextTyper : Control
 		_Step(@char);
 	}
 
+	// 换行
 	private void _NewLine()
 	{
 		_typerCursorPosition = new Vector2(0.0F,
 			_typerCursorPosition.Y + (float)_typerFont.GetHeight(FontSize) + LineSpace);
 	}
 
+	// 挪动光标 & 更新大小
 	private void _Step(long @char)
 	{
 		if (_typerFont == null)
@@ -261,6 +288,7 @@ public partial class TextTyper : Control
 		CustomMinimumSize = _typerCursorPosition + new Vector2(charAdvance.X, (float)_typerFont.GetHeight(FontSize));
 	}
 
+	// 获取字符属性（glyphAdvance前进值）
 	private void _GetCharAttribute(long @char, out Vector2 glyphAdvance)
 	{
 		glyphAdvance = Vector2.Zero;
@@ -288,11 +316,13 @@ public partial class TextTyper : Control
 		}
 	}
 
+	// 判断打字机是否结束
 	private bool _End()
 	{
 		return _typerProgress >= Text.Length;
 	}
 
+	// 处理标签命令
 	private void _ProcessCmd(string[] cmd)
 	{
 		if (cmd == null || cmd.Length == 0)
@@ -341,30 +371,33 @@ public partial class TextTyper : Control
 		}
 	}
 
+	// 回收字符 重置已输出列表
+	public void Clean()
+	{
+		foreach (Rid id in _canvasItemList)
+		{
+			RenderingServer.CanvasItemSetVisible(id, false);
+			_canvasItemPoolList.Enqueue(id);
+		}
+		_canvasItemList.Clear();
+	}
+
+	// 开始打字
 	public void Start(string text)
 	{
-		if (!IsInstanceValid(this) || !IsInsideTree() || string.IsNullOrEmpty(text))
+		if (!IsInstanceValid(this) || !IsInsideTree())
 		{
 			_typing = false;
 			return;
 		}
-		foreach (Rid id in _canvasItemList)
-		{
-			if (id.IsValid)
-			{
-				RenderingServer.CanvasItemSetVisible(id, false);
-				_canvasItemPoolList.Enqueue(id);
-			}
-		}
-		_canvasItemList.Clear();
 
 		Text = text;
 		ResetData();
-
 		_typing = true;
 		_finished = false;
 	}
 
+	// 重置数据
 	public void ResetData()
 	{
 		_typerProgress = 0;
