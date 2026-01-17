@@ -1,0 +1,71 @@
+using Godot;
+using System;
+using System.Threading.Tasks;
+
+[GlobalClass]
+public partial class BattlePlayerActMenuState : StateNode
+{
+	[Export]
+	public AudioStream SndSelect;
+	[Export]
+	public AudioStream SndSqueak;
+
+	[Export]
+	public BattleMenuManager MenuManager;
+	[Export]
+	public EncounterActChoiceEnemyMenu encounterActChoiceEnemyMenu;
+	
+	public int EnemyChoice = 0;
+	private EncounterBattle _encounterBattle;
+
+	public override void _Ready()
+	{
+		_encounterBattle = GetTree().CurrentScene as EncounterBattle;
+	}
+
+	public override void _Process(double delta)
+	{
+		if (Input.IsActionJustPressed("up"))
+		{
+			int newChoice = EnemyChoice - 1;
+			if (newChoice != EnemyChoice)
+			{
+				EnemyChoice = Math.Max(0, newChoice);
+				GlobalStreamPlayer.Instance.PlaySound(SndSqueak);
+				encounterActChoiceEnemyMenu.SetChoice(EnemyChoice);
+			}
+		}
+		else if (Input.IsActionJustPressed("down"))
+		{
+			if (_encounterBattle != null && _encounterBattle.Enemys.Count > 0)
+			{
+				int newChoice = EnemyChoice + 1;
+				if (newChoice != EnemyChoice)
+				{
+					EnemyChoice = Math.Min(newChoice, _encounterBattle.Enemys.Count - 1);
+					GlobalStreamPlayer.Instance.PlaySound(SndSqueak);
+					encounterActChoiceEnemyMenu.SetChoice(EnemyChoice);
+				}
+			}
+		}
+
+		if (Input.IsActionJustPressed("cancel"))
+		{
+			EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerChoiceActionState"]);
+		}
+	}
+
+	public override async void _EnterState()
+	{
+		if (MenuManager != null)
+		{
+			await MenuManager.OpenMenu("EncounterActChoiceEnemyMenu");
+		}
+		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+		encounterActChoiceEnemyMenu.SetChoice(EnemyChoice);
+	}
+
+	public override void _ExitState()
+	{
+	}
+}

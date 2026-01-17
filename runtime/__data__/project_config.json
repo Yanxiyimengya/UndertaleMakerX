@@ -5,14 +5,14 @@
 		"max_fps" : 60
 	},
 	"window" : {
-		"width": 1280,
-		"height": 720,
+		"width": 640,
+		"height": 480,
 		"resizable": true,
 		"fullscreen": false,
 		"boderless" : false,
 	},
 	"boot_splash" : {
-		"enabled" : true,
+		"enabled" : false,
 		"display_text" : "UNDERTALE MAKER\nX",
 		"speed_scale" : 1.0,
 		"background_color" : "#101020"

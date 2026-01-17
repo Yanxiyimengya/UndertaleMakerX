@@ -1,8 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://dbstu48ru7vek"]
+[gd_scene load_steps=4 format=3 uid="uid://dbstu48ru7vek"]
 
 [ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="1_5bhgw"]
-[ext_resource type="Script" uid="uid://dhxcu0155hike" path="res://scripts/utils/text_typer/TextTyperEffectModifier.cs" id="2_i1yiq"]
-[ext_resource type="Script" uid="uid://d15o6wmeykoa4" path="res://scripts/utils/text_typer/modifier/TextTyperShakeEffectModifier.cs" id="3_h0nm7"]
+[ext_resource type="FontVariation" uid="uid://csugi6v670vhq" path="res://assets/fonts/D/MainFont.tres" id="2_i1yiq"]
 
 [sub_resource type="GDScript" id="GDScript_5bhgw"]
 script/source = "extends Node;
@@ -15,33 +14,27 @@ func _ready() -> void:
 	pass;
 "
 
-[sub_resource type="Resource" id="Resource_gopo6"]
-script = ExtResource("3_h0nm7")
-metadata/_custom_type_script = "uid://d15o6wmeykoa4"
-
 [node name="TEST" type="Node"]
 script = SubResource("GDScript_5bhgw")
-
-[node name="TextTyper" type="Control" parent="."]
-custom_minimum_size = Vector2(169.71875, 23)
-layout_mode = 3
-anchors_preset = 0
-offset_left = 132.0
-offset_top = 95.0
-offset_right = 182.64063
-offset_bottom = 118.0
-script = ExtResource("1_5bhgw")
-Text = "TOTOTOTOTOTOTOT
-TOTOTOTOTOTOTOT
-TOTOTOTOTOTOTOT
-TOTOTOTOTOTOTOT"
-AutoStart = true
-TyperSpeed = 1.0
-EffectModifiers = Array[ExtResource("2_i1yiq")]([SubResource("Resource_gopo6")])
-metadata/_custom_type_script = "uid://dmq4qew4auuss"
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+
+[node name="TextTyper" type="RichTextLabel" parent="."]
+offset_left = 29.0
+offset_top = 25.0
+offset_right = 387.0
+offset_bottom = 495.0
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+script = ExtResource("1_5bhgw")
+TyperText = "1[shake]2[]你[][]"
+TyperSpeed = 2.0
+TyperSize = 24
+TyperFont = ExtResource("2_i1yiq")
+metadata/_custom_type_script = "uid://dmq4qew4auuss"

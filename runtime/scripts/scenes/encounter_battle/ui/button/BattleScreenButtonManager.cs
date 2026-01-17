@@ -40,14 +40,6 @@ public partial class BattleScreenButtonManager : Node
 		}
 	}
 
-
-	public Vector2 GetSoulPositionOnButton(string id)
-	{
-		if (GetButton(id, out BattleScreenButton btn))
-			return btn.GetSoulPosition();
-		return Vector2.Zero;
-	}
-
 	public bool GetButton(string id, out BattleScreenButton button) {
 
 		if (buttonList.TryGetValue(id, out button))

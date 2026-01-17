@@ -7,7 +7,7 @@ public partial class BattleMenuManager : TabContainer
 	
 	private Dictionary<string, BaseEncounterMenu> menuList = new Dictionary<string, BaseEncounterMenu>();
 	private String prevMenuName = "";
-	
+
 	public override void _Ready()
 	{
 		foreach (Node childNode in this.GetChildren())
@@ -17,11 +17,12 @@ public partial class BattleMenuManager : TabContainer
 		}
 	}
 
-	public async void OpenMenu(string menuName)
+	public async System.Threading.Tasks.Task OpenMenu(string menuName)
 	{
+		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+		Visible = true;
 		if (menuList.TryGetValue(prevMenuName, out BaseEncounterMenu prevMenu))
 		{
-			await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 			prevMenu.Visible = false;
 			prevMenu.UIHidden();
 		}

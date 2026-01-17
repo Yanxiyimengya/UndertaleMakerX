@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class EncounterBattle : Node
 {
@@ -23,6 +24,16 @@ public partial class EncounterBattle : Node
 	}
 
 	public string EncounterText = "";
+	public List<BaseEnemy> Enemys = [
+		new BaseEnemy(),
+		new BaseEnemy(),
+		new BaseEnemy(),
+		new BaseEnemy(),
+		new BaseEnemy(),
+		new BaseEnemy(),
+		new BaseEnemy(),
+
+		];
 	private EncounterConfiguration encounterConfig = null;
 	
 	enum BattleTurn

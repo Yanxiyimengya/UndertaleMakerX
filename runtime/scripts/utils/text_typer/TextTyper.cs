@@ -1,353 +1,250 @@
 using Godot;
-using Godot.Collections;
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using System.Linq;
+using System.Text;
 
-[GlobalClass]
 [Tool]
-public partial class TextTyper : Control
+[GlobalClass]
+public partial class TextTyper : Godot.RichTextLabel
 {
 	[Export(PropertyHint.MultilineText)]
-	public string Text = "";
-
-	[ExportGroup("Typer")]
+	public string TyperText = "";
 	[Export]
-	public bool Typing
+	public double TyperSpeed = 0.05;
+	[Export]
+	public int TyperSize
 	{
-		get => _typing;
+		get => _typerSize;
 		set
 		{
-			if (_typing != value)
-			{
-				_typing = value;
-				if (value && _End() && IsInstanceValid(this) && IsInsideTree())
-				{
-					Start(Text);
-				}
-			}
+			_typerSize = value;
+			PushFontSize(value);
 		}
 	}
 	[Export]
-	public bool AutoStart = false;
+	public Color TyperColor
+	{
+		get => _typerColor;
+		set
+		{
+			_typerColor = value;
+			PushColor(value);
+		}
+	}
 	[Export]
-	public bool Instant = false;
-	[Export]
-	public double TyperSpeed = 0.1;
-	[Export]
-	public AudioStream Voice = null;
-
-	[ExportGroup("Text")]
-	[Export]
-	public Godot.Font TyperFont
+	public Font TyperFont
 	{
 		get => _typerFont;
 		set
 		{
 			_typerFont = value;
+			if (value != null)
+				PushFont(value, TyperSize);
 		}
 	}
 	[Export]
-	public Color FontColor = Colors.White;
-	[Export]
-	public int FontSize = 16;
-	[Export]
-	public int LineSpace = 3;
-	[Export]
-	public bool Autowarp = false;
-	[Export]
-	public Array<TextTyperEffectModifier> EffectModifiers = [];
+	public bool Instant = false;
 
+	[Export]
+	public AudioStream Voice = null;
+
+	private double _typerTimer = 0.0;
+	private int _typerSize = 16;
+	private double _typerWattingTimer = 0.0;
 	private int _typerProgress = 0;
-	private bool _typing = false;
-	private bool _finished = false;
-	private double _typerProcessTimer = 0.0;
-	private double _typerWaitTimer = 0.0;
-	private Vector2 _typerCursorPosition = new Vector2();
-	private Godot.Font _typerFont = ThemeDB.FallbackFont;
-	private List<Rid> _canvasItemList = new List<Rid>();
-	private Queue<Rid> _canvasItemPoolList = new Queue<Rid>();
+	private Font _typerFont = ThemeDB.FallbackFont;
+	private Color _typerColor = Colors.White;
 
-	public override void _Ready()
+	public TextTyper()
 	{
-		if (!Engine.IsEditorHint()) { 
-			if (AutoStart && IsInstanceValid(this) && IsInsideTree()) { 
-				Start(Text);
-			}
-		}
-	}
-
-	public override void _Draw()
-	{
-		Clean();
-		if (Engine.IsEditorHint())
-		{
-			while (!_End())
-			{
-				_ProcessChar();
-			}
-		}
-		else
-		{
-			if (_finished || _typing)
-			{
-				int processed = _typerProgress;
-				ResetData();
-				_finished = false;
-				_typing = true;
-				for (int i = 0; i < processed; i ++)
-				{
-					_ProcessChar();
-				}
-			}
-		}
-	}
-
-	public override void _ExitTree()
-	{
-		foreach (Rid id in _canvasItemList)
-		{
-			if (id.IsValid)
-				RenderingServer.FreeRid(id);
-		}
-		_canvasItemList.Clear();
-		foreach (Rid id in _canvasItemPoolList)
-		{
-			if (id.IsValid)
-				RenderingServer.FreeRid(id);
-		}
-		_canvasItemPoolList.Clear();
+		BbcodeEnabled = true;
+		FitContent = true;
+		ScrollActive = false;
+		AutowrapMode = TextServer.AutowrapMode.Off;
 	}
 
 	public override void _Process(double delta)
 	{
-		if (Input.IsKeyPressed(Key.H))
+		if (_typerWattingTimer > 0.0)
 		{
-			foreach (Rid id in _canvasItemList)
-			{
-				if (id.IsValid)
-					RenderingServer.FreeRid(id);
-			}
-			_canvasItemList.Clear();
-			foreach (Rid id in _canvasItemPoolList)
-			{
-				if (id.IsValid)
-					RenderingServer.FreeRid(id);
-			}
-			_canvasItemPoolList.Clear();
-		}
-
-		if (!_typing || !IsInstanceValid(this) || !IsInsideTree())
-			return;
-
-		if (_End())
-		{
-			_typing = false;
-			_finished = true;
-			return;
-		}
-
-		if (_typerWaitTimer > 0.0)
-		{
-			_typerWaitTimer -= delta;
+			_typerWattingTimer -= delta;
 		}
 		else
 		{
-			if (_typerProcessTimer > 0.0)
+			if (_typerTimer > 0.0)
 			{
-				_typerProcessTimer -= delta;
+				_typerTimer -= delta;
 			}
 			else
 			{
-				_typerProcessTimer = TyperSpeed;
-				_ProcessChar();
+				_typerTimer = TyperSpeed;
+				_ProcessText();
 			}
 		}
 	}
 
-	private void _ProcessChar()
+	private void _ProcessText()
 	{
-		while (!_End())
+		while (!_IsEnd())
 		{
-			char c = Text[_typerProgress];
+			char c = TyperText[_typerProgress];
 			_typerProgress += 1;
 			while (c == '[')
 			{
-				int locate = Text.FindN("]", _typerProgress + 1);
+				int locate = TyperText.FindN("]", _typerProgress);
 				if (locate != -1)
 				{
-					string content = Text.Substring(_typerProgress, locate - _typerProgress);
-					string[] contentElements = content.Split(' ');
+					string content = TyperText.Substring(_typerProgress, locate - _typerProgress);
+					if (!string.IsNullOrEmpty(content))
+					{
+						if (_ParseBBCodeTag(content, out string cmdName, out Dictionary<string, string> directParameters))
+						{
+							if (!_ProcessCmd(cmdName, directParameters))
+							{
+								AppendText($"[{content}]");
+							}
+						}
+					}
 					_typerProgress = locate + 1;
-					_ProcessCmd(contentElements);
 				}
-				if (_End()) return;
-				c = Text[_typerProgress];
+				if (_IsEnd()) return;
+				c = TyperText[_typerProgress];
 				_typerProgress += 1;
 			}
-			
-			if (c == ' ' || c == '\t')
+			AddText(c.ToString());
+			if (!Instant)
 			{
-				_Step(c);
-				continue;
-			}
-			else if (c == '\r' || c == '\n')
-			{
-				_NewLine();
-				continue;
-			}
-			else
-			{
-				_PrintChar(c);
-				if (!Instant)
+				if (Voice != null && !Engine.IsEditorHint())
 				{
-					if (Voice != null && !Engine.IsEditorHint())
-					{
-						GlobalStreamPlayer.Instance.PlaySound(Voice);
-					}
-					break;
+					GlobalStreamPlayer.Instance.PlaySound(Voice);
 				}
-				
-			}
-		}
-	}
-
-	// 打印一个字符
-	private void _PrintChar(long @char)
-	{
-		if (!IsInstanceValid(this) || !IsInsideTree() || _typerFont == null)
-			return;
-
-		double _typerFontHeight = _typerFont.GetHeight(FontSize);
-		_GetCharAttribute(@char, out Vector2 charAdvance);
-
-		if (Autowarp && GetRect().Size.X > 0 && (_typerCursorPosition.X + charAdvance.X) >= GetRect().Size.X)
-			_NewLine();
-
-		double asc = _typerFont.GetAscent(FontSize);
-		if (asc > _typerFontHeight)
-		{
-			double diff = _typerFontHeight - asc;
-			asc += diff / 2;
-		}
-
-		Transform2D trans = Transform2D.Identity.Translated(_typerCursorPosition + new Vector2(0.0F, (float)asc));
-
-		Rid canvasItemRid = new Rid();
-		bool requireCreateNew = true;
-
-		while (_canvasItemPoolList.Count > 0)
-		{
-			if (!_canvasItemPoolList.TryDequeue(out canvasItemRid))
-				break;
-			if (canvasItemRid.IsValid)
-			{
-				RenderingServer.CanvasItemSetParent(canvasItemRid, GetCanvasItem());
-				RenderingServer.CanvasItemSetVisible(canvasItemRid, true);
-				requireCreateNew = false;
 				break;
 			}
 		}
+	}
+	private bool _ParseBBCodeTag(string content, out string cmdName, out Dictionary<string, string> directParameters)
+	{
+		cmdName = string.Empty;
+		directParameters = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-		if (requireCreateNew)
+		var tokens = new List<string>();
+		bool inQuotes = false;
+		StringBuilder currentToken = new StringBuilder();
+
+		for (int i = 0; i < content.Length; i++)
 		{
-			Rid parentCanvasItem = GetCanvasItem();
-			if (parentCanvasItem.IsValid)
+			char c = content[i];
+			if (c == '"')
 			{
-				canvasItemRid = RenderingServer.CanvasItemCreate();
-				RenderingServer.CanvasItemSetParent(canvasItemRid, parentCanvasItem);
+				inQuotes = !inQuotes;
+				continue;
+			}
+			if (c == ' ' && !inQuotes)
+			{
+				if (currentToken.Length > 0)
+				{
+					tokens.Add(currentToken.ToString());
+					currentToken.Clear();
+				}
+				continue;
+			}
+			currentToken.Append(c);
+		}
+
+		if (currentToken.Length > 0)
+		{
+			tokens.Add(currentToken.ToString());
+		}
+
+		if (tokens.Count == 0)
+			return false;
+
+		string firstToken = tokens[0];
+
+		if (firstToken.Contains('='))
+		{
+			var parts = SplitToken(firstToken);
+			if (parts.Length == 2)
+			{
+				string paramName = parts[0].Trim();
+				string paramValue = parts[1].Trim();
+				cmdName = paramName;
+				directParameters["value"] = paramValue;
+				return true;
 			}
 		}
-
-		if (canvasItemRid.IsValid)
+		else
 		{
-			_canvasItemList.Add(canvasItemRid);
-			RenderingServer.CanvasItemClear(canvasItemRid);
-			RenderingServer.CanvasItemSetTransform(canvasItemRid, trans);
-			_typerFont.DrawChar(canvasItemRid, Vector2.Zero, @char, FontSize, FontColor);
-		}
-
-		_Step(@char);
-	}
-
-	// 换行
-	private void _NewLine()
-	{
-		_typerCursorPosition = new Vector2(0.0F,
-			_typerCursorPosition.Y + (float)_typerFont.GetHeight(FontSize) + LineSpace);
-	}
-
-	// 挪动光标 & 更新大小
-	private void _Step(long @char)
-	{
-		if (_typerFont == null)
-			return;
-
-		_GetCharAttribute(@char, out Vector2 charAdvance);
-		_typerCursorPosition = _typerCursorPosition + new Vector2(charAdvance.X, 0.0F);
-		CustomMinimumSize = _typerCursorPosition + new Vector2(charAdvance.X, (float)_typerFont.GetHeight(FontSize));
-	}
-
-	// 获取字符属性（glyphAdvance前进值）
-	private void _GetCharAttribute(long @char, out Vector2 glyphAdvance)
-	{
-		glyphAdvance = Vector2.Zero;
-		if (_typerFont == null)
-			return;
-
-		if (_typerFont is FontVariation font)
-		{
-			glyphAdvance += new Vector2(font.SpacingGlyph, 0F);
-			if (@char == ' ')
+			cmdName = firstToken;
+			for (int i = 1; i < tokens.Count; i++)
 			{
-				glyphAdvance += new Vector2(font.SpacingSpace, 0F);
-			}
-		}
+				string token = tokens[i];
 
-		foreach (Rid rid in _typerFont.GetRids())
+				if (token.Contains('='))
+				{
+					var parts = SplitToken(token);
+					if (parts.Length >= 2)
+					{
+						string paramName = parts[0].Trim();
+						string paramValue = string.Join("=", parts.Skip(1)).Trim();
+
+						directParameters[paramName] = paramValue;
+					}
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
+	private string[] SplitToken(string token)
+	{
+		int equalsIndex = token.IndexOf('=');
+		if (equalsIndex > 0)
 		{
-			TextServer ts = TextServerManager.GetPrimaryInterface();
-			if (ts != null && ts.FontHasChar(rid, @char))
+			return new string[]
 			{
-				long glyphIndex = ts.FontGetGlyphIndex(rid, FontSize, @char, 0);
-				glyphAdvance += ts.FontGetGlyphAdvance(rid, FontSize, glyphIndex);
-				return;
-			}
+			token.Substring(0, equalsIndex),
+			token.Substring(equalsIndex + 1)
+			};
 		}
+		return new string[] { token };
 	}
 
-	// 判断打字机是否结束
-	private bool _End()
+	private bool _ProcessCmd(string cmd, Dictionary<string, string> args)
 	{
-		return _typerProgress >= Text.Length;
-	}
-
-	// 处理标签命令
-	private void _ProcessCmd(string[] cmd)
-	{
-		if (cmd == null || cmd.Length == 0)
-			return;
-
-		switch (cmd[0])
+		switch (cmd)
 		{
 			case "wait":
-				if (cmd.Length >= 2 && float.TryParse(cmd[1], out float waitTime))
+				if (args.TryGetValue("time", out string waitTime) && float.TryParse(waitTime, out float time))
 				{
-					_typerWaitTimer = waitTime;
+					_typerWattingTimer = time;
 				}
 				break;
 
-			case "color":
-				if (cmd.Length >= 2)
+			case "size":
+				if (args.TryGetValue("value", out string sizeValue) && float.TryParse(sizeValue, out float fntSize))
 				{
-					FontColor = Color.FromString(cmd[1], FontColor);
+					TyperSize = (int)fntSize;
+				}
+				break;
+
+			case "font":
+				if (args.TryGetValue("value", out string fontPath) || args.Count > 0)
+				{
+					Font fnt = UTMXResourceLoader.Load(fontPath) as Font;
+					if (fnt != null)
+					{
+						PushFont(fnt);
+					}
 				}
 				break;
 
 			case "instant":
-				if (cmd.Length > 1 && bool.TryParse(cmd[1], out bool _cmd1))
+				if (args.TryGetValue("value", out string instantValue) && bool.TryParse(instantValue, out bool _ins))
 				{
-					Instant = _cmd1;
+					Instant = _ins;
 				}
 				else
 				{
@@ -355,56 +252,82 @@ public partial class TextTyper : Control
 				}
 				break;
 
-			case "font":
-				if (cmd.Length > 1)
+			case "img":
+				if (args.TryGetValue("path", out string imgPath) && !string.IsNullOrEmpty(imgPath))
 				{
-					Font fnt = (Font)UTMXResourceLoader.Load(cmd[1]);
-					if (fnt != null)
+					Texture2D texture = UTMXResourceLoader.Load(imgPath) as Texture2D;
+					if (texture != null)
 					{
-						TyperFont = fnt;
+						int width = 0, height = 0;
+						Color col = Colors.White;
+						if (args.TryGetValue("width", out string argWidth))
+						{
+							int.TryParse(argWidth, out width);
+						}
+						if (args.TryGetValue("height", out string argHeight))
+						{
+							int.TryParse(argHeight, out height);
+						}
+						if (args.TryGetValue("color", out string argColor))
+						{
+							col = Color.FromString(argColor, col);
+						}
+						AddImage(texture, width, height, col);
 					}
 				}
 				break;
 
-			default:
+
+			// INLINE COMMANDS
+			case "voice":
+				if (Instant) return true;
+				if (args.TryGetValue("value", out string voicePath) && !string.IsNullOrEmpty(voicePath))
+				{
+					AudioStream voiceStream = UTMXResourceLoader.Load(voicePath) as AudioStream;
+					if (voiceStream != null)
+					{
+						Voice = voiceStream;
+					}
+				}
 				break;
+
+			case "sound":
+				if (Instant) return true;
+				if (args.TryGetValue("value", out string soundPath) && !string.IsNullOrEmpty(soundPath))
+				{
+					AudioStream voidStream = UTMXResourceLoader.Load(soundPath) as AudioStream;
+					if (voidStream != null)
+					{
+						GlobalStreamPlayer.Instance.PlaySound(voidStream);
+					}
+				}
+				break;
+			default:
+				return false;
 		}
+		return true;
 	}
 
-	// 回收字符 重置已输出列表
-	public void Clean()
+	private bool _IsEnd()
 	{
-		foreach (Rid id in _canvasItemList)
-		{
-			RenderingServer.CanvasItemSetVisible(id, false);
-			_canvasItemPoolList.Enqueue(id);
-		}
-		_canvasItemList.Clear();
+		return _typerProgress >= TyperText.Length;
 	}
-
-	// 开始打字
 	public void Start(string text)
 	{
-		if (!IsInstanceValid(this) || !IsInsideTree())
-		{
-			_typing = false;
-			return;
-		}
-
-		Text = text;
+		Clear();
 		ResetData();
-		_typing = true;
-		_finished = false;
+		TyperText = text;
 	}
 
 	// 重置数据
 	public void ResetData()
 	{
 		_typerProgress = 0;
-		_typerProcessTimer = 0.0;
-		_typerWaitTimer = 0.0;
-		_typerCursorPosition = Vector2.Zero;
-		CustomMinimumSize = Vector2.Zero;
-		FontColor = Colors.White;
+		_typerTimer = 0.0;
+		_typerWattingTimer = 0.0;
+		TyperFont = TyperFont;
+		TyperSize = TyperSize;
+		TyperColor = TyperColor;
 	}
+
 }

@@ -8,50 +8,50 @@ public partial class UndertaleStyleScrollBar : Control
 	[Export]
 	public int Count
 	{
-		get => count;
+		get => _count;
 		set
 		{
-			count = Math.Max(0, value); // 防止负数
+			_count = Math.Max(0, value);
 			QueueRedraw();
 		}
 	}
 	[Export]
-	public int CurrentIndex // 修正拼写错误：CurrnetIndex → CurrentIndex
+	public int CurrentIndex
 	{
-		get => currentIndex;
+		get => _currentIndex;
 		set
 		{
-			currentIndex = Math.Clamp(value, 0, Count - 1); // 边界保护
+			_currentIndex = Math.Clamp(value, 0, Math.Max(0, Count - 1));
 			QueueRedraw();
 		}
 	}
 	[Export]
 	public Vector2 PointSize
 	{
-		get => pointSize;
+		get => _pointSize;
 		set
 		{
-			pointSize = value;
+			_pointSize = value;
 			QueueRedraw();
 		}
 	}
 	[Export]
 	public Vector2 PointFocusSize
 	{
-		get => pointFocusSize;
+		get => _pointFocusSize;
 		set
 		{
-			pointFocusSize = value;
+			_pointFocusSize = value;
 			QueueRedraw();
 		}
 	}
 	[Export]
 	public float Spacing
 	{
-		get => spacing;
+		get => _spacing;
 		set
 		{
-			spacing = value;
+			_spacing = value;
 			QueueRedraw();
 		}
 	}
@@ -62,102 +62,101 @@ public partial class UndertaleStyleScrollBar : Control
 	[Export]
 	public Texture2D ArrowTexture;
 
-	private int count = 0;
-	private int currentIndex = 0;
-	private Vector2 pointSize = new Vector2(4 , 4);
-	public Vector2 pointFocusSize = new Vector2(10, 10);
-	private float spacing = 6;
-	private bool inTop = false;
-	private bool inBottom = false;
-	private Rid topArrow;
-	private Rid bottomArrow;
-	private double arrowAnimTimer = 0.0;
-	private double arrowAnimOffset = 0.0;
-	private Tween tween;
+	private int _count = 0;
+	private int _currentIndex = 0;
+	private Vector2 _pointSize = new Vector2(4, 4);
+	public Vector2 _pointFocusSize = new Vector2(10, 10);
+	private float _spacing = 6;
+	private bool _inTop = false;
+	private bool _inBottom = false;
+	private Rid _topArrow;
+	private Rid _bottomArrow;
+	private double _arrowAnimTimer = 0.0;
+	private double _arrowAnimOffset = 0.0;
+	private Tween _tween;
 
 	public override void _EnterTree()
 	{
-		topArrow = RenderingServer.CanvasItemCreate();
-		RenderingServer.CanvasItemSetParent(topArrow, GetCanvasItem());
-		bottomArrow = RenderingServer.CanvasItemCreate();
-		RenderingServer.CanvasItemSetParent(bottomArrow, GetCanvasItem());
+		_topArrow = RenderingServer.CanvasItemCreate();
+		RenderingServer.CanvasItemSetParent(_topArrow, GetCanvasItem());
+		_bottomArrow = RenderingServer.CanvasItemCreate();
+		RenderingServer.CanvasItemSetParent(_bottomArrow, GetCanvasItem());
 
 		if (ArrowTexture != null)
 		{
-			RenderingServer.CanvasItemAddTextureRect(topArrow, new Rect2(-ArrowTexture.GetSize() / 2, ArrowTexture.GetSize()), ArrowTexture.GetRid());
-			RenderingServer.CanvasItemAddTextureRect(bottomArrow, new Rect2(-ArrowTexture.GetSize() / 2, ArrowTexture.GetSize()), ArrowTexture.GetRid());
+			RenderingServer.CanvasItemAddTextureRect(_topArrow, new Rect2(-ArrowTexture.GetSize() / 2, ArrowTexture.GetSize()), ArrowTexture.GetRid());
+			RenderingServer.CanvasItemAddTextureRect(_bottomArrow, new Rect2(-ArrowTexture.GetSize() / 2, ArrowTexture.GetSize()), ArrowTexture.GetRid());
 		}
 	}
 
 	public override void _ExitTree()
 	{
-		if (topArrow.IsValid)
-			RenderingServer.FreeRid(topArrow);
-		if (bottomArrow.IsValid)
-			RenderingServer.FreeRid(bottomArrow);
+		if (_topArrow.IsValid)
+			RenderingServer.FreeRid(_topArrow);
+		if (_bottomArrow.IsValid)
+			RenderingServer.FreeRid(_bottomArrow);
 	}
 
 	public override void _Process(double delta)
 	{
-		base._Process(delta);
-		inTop = currentIndex <= 0;
-		inBottom = currentIndex >= Math.Max(0, Count - PageSize);
+		_inTop = _inTop ? (_currentIndex < PageSize) : (_currentIndex == 0);
+		_inBottom = _inBottom ? (_currentIndex >= Count - PageSize) : (_currentIndex == Count - 1);
 
 		if (Count > PageSize && ArrowTexture != null)
 		{
 			float halfCount = Count / 2.0f;
-			float totalPointHeight = pointSize.Y * Count;
+			float totalPointHeight = _pointSize.Y * Count;
 			float totalSpacing = Spacing * (Count - 1);
 			float centerOffset = (totalPointHeight + totalSpacing) / 2;
 
-			float topY = -centerOffset + pointSize.Y / 2 + Spacing / 2 - (float)arrowAnimOffset;
-			RenderingServer.CanvasItemSetVisible(topArrow, !inTop);
-			RenderingServer.CanvasItemSetTransform(topArrow,
+			float topY = -centerOffset + _pointSize.Y / 2 + Spacing / 2 - (float)_arrowAnimOffset;
+			RenderingServer.CanvasItemSetVisible(_topArrow, !_inTop);
+			RenderingServer.CanvasItemSetTransform(_topArrow,
 				Transform2D.Identity.Translated(new Vector2(0F, topY - 10)));
 
-			float bottomY = centerOffset - pointSize.Y / 2 - Spacing / 2 + (float)arrowAnimOffset;
-			RenderingServer.CanvasItemSetVisible(bottomArrow, !inBottom);
-			RenderingServer.CanvasItemSetTransform(bottomArrow,
+			float bottomY = centerOffset - _pointSize.Y / 2 - Spacing / 2 + (float)_arrowAnimOffset;
+			RenderingServer.CanvasItemSetVisible(_bottomArrow, !_inBottom);
+			RenderingServer.CanvasItemSetTransform(_bottomArrow,
 				Transform2D.Identity.Scaled(new Vector2(1F, -1F)).Translated(new Vector2(0F, bottomY + 10)));
 
-			if (arrowAnimTimer > 0)
+			if (_arrowAnimTimer > 0)
 			{
-				arrowAnimTimer -= delta;
+				_arrowAnimTimer -= delta;
 			}
 			else
 			{
-				arrowAnimTimer = 1.0F;
-				if (tween != null && tween.IsRunning())
+				_arrowAnimTimer = 1.0F;
+				if (_tween != null && _tween.IsRunning())
 				{
-					tween.Kill();
+					_tween.Kill();
 				}
-				tween = GetTree().CreateTween();
-				tween.TweenProperty(this, "arrowAnimOffset", 5, 0.42).From(0.0);
+				_tween = GetTree().CreateTween();
+				_tween.TweenProperty(this, "_arrowAnimOffset", 5, 0.42).From(0.0);
 			}
 		}
 		else
 		{
-			if (topArrow.IsValid)
-				RenderingServer.CanvasItemSetVisible(topArrow, false);
-			if (bottomArrow.IsValid)
-				RenderingServer.CanvasItemSetVisible(bottomArrow, false);
+			if (_topArrow.IsValid)
+				RenderingServer.CanvasItemSetVisible(_topArrow, false);
+			if (_bottomArrow.IsValid)
+				RenderingServer.CanvasItemSetVisible(_bottomArrow, false);
 		}
 	}
 
 	public override void _Draw()
 	{
-		float totalHeight = (pointSize.Y * Count) + (Spacing * (Count - 1));
-		float startY = -totalHeight / 2 + pointSize.Y / 2;
+		float totalHeight = (_pointSize.Y * Count) + (Spacing * (Count - 1));
+		float startY = -totalHeight / 2 + _pointSize.Y / 2;
 
 		for (int i = 0; i < Count; i++)
 		{
-			Vector2 size = pointSize;
-			if (i == currentIndex)
+			Vector2 size = _pointSize;
+			if (i == _currentIndex)
 			{
-				size = PointFocusSize;
+				size = _pointFocusSize;
 			}
 
-			float yPos = startY + (pointSize.Y + Spacing) * i;
+			float yPos = startY + (_pointSize.Y + Spacing) * i;
 			DrawRect(new Rect2(
 				new Vector2(-size.X / 2, yPos - size.Y / 2),
 				size

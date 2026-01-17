@@ -34,9 +34,9 @@ public partial class BattleScreenButton : Node2D
 		Pressed = false;
 	}
 
-	public Vector2 GetSoulPosition()
+	public Transform2D GetSoulTransform()
 	{
-		return soulMarker.GlobalPosition;
+		return soulMarker.GlobalTransform;
 	}
 
 }

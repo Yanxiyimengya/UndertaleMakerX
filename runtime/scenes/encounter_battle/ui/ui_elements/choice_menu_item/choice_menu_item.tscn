@@ -1,0 +1,65 @@
+[gd_scene load_steps=6 format=3 uid="uid://calfrmbvcuuks"]
+
+[ext_resource type="Script" uid="uid://b6ur6lbelpbj0" path="res://scripts/scenes/encounter_battle/ui/menu/ui_elements/choice_menu_item/EncounterChoiceMenuItem.cs" id="1_6jsmc"]
+[ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="1_jr0et"]
+[ext_resource type="FontFile" uid="uid://bn6wautbcglmx" path="res://assets/fonts/FZXS12.ttf" id="3_kqo6q"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vdmq1"]
+bg_color = Color(1, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q4xod"]
+bg_color = Color(0, 1, 0, 1)
+
+[node name="EncounterChoiceMenuItem" type="HBoxContainer" node_paths=PackedStringArray("DisplayTextTyper", "ValueProgressBarMarginContainer", "ValueProgressBar", "soulMarker")]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -12.5
+offset_bottom = 12.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 8
+script = ExtResource("1_6jsmc")
+DisplayTextTyper = NodePath("TextTyper")
+ValueProgressBarMarginContainer = NodePath("ProgressBarMarginContainer")
+ValueProgressBar = NodePath("ProgressBarMarginContainer/ProgressBar")
+soulMarker = NodePath("SoulPositionMarker2D")
+
+[node name="TextTyper" type="RichTextLabel" parent="."]
+clip_contents = false
+custom_minimum_size = Vector2(126, 25)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+focus_mode = 0
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+script = ExtResource("1_jr0et")
+TyperText = "* "
+TyperSize = 24
+TyperFont = ExtResource("3_kqo6q")
+Instant = true
+metadata/_custom_type_script = "uid://dmq4qew4auuss"
+
+[node name="ProgressBarMarginContainer" type="MarginContainer" parent="."]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 3
+
+[node name="ProgressBar" type="ProgressBar" parent="ProgressBarMarginContainer"]
+custom_minimum_size = Vector2(101, 17)
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 4
+theme_override_styles/background = SubResource("StyleBoxFlat_vdmq1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_q4xod")
+value = 100.0
+show_percentage = false
+
+[node name="SoulPositionMarker2D" type="Marker2D" parent="."]
+position = Vector2(-28, 13)

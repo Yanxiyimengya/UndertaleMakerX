@@ -21,7 +21,12 @@ public partial class PlayerDataManager : Node
 	{
 		new BaseItem(),
 		new BaseItem(),
-	};
+        new BaseItem(),
+        new BaseItem(),
+        new BaseItem(),
+        new BaseItem(),
+        new BaseItem(),
+    };
 
 	public int GetItemCount()
 	{

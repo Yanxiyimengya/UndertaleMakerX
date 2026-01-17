@@ -2,48 +2,48 @@ using Godot;
 using System;
 
 [GlobalClass]
-public partial class BattlePlayerChoiceItemState : StateNode
+public partial class BattlePlayerItemMenuState : StateNode
 {
 	[Export]
-	AudioStream SndChoice;
+	AudioStream SndSelect;
 	[Export]
 	AudioStream SndSqueak;
 	
 	[Export]
-	BattleMenuManager BattleMenuManager;
+	BattleMenuManager MenuManager;
 	[Export]
-	EncounterItemChoiceMenu encounterItemChoiceMenu;
+	EncounterItemMenu ItemChoiceMenu;
 
-	public int itemChoice = 0;
+	public int ItemChoice = 0;
 	
 	public override void _Process(double delta)
 	{
 		if (Input.IsActionJustPressed("up"))
 		{
-			itemChoice -= 1;
-			if (itemChoice < 0)
+			ItemChoice -= 1;
+			if (ItemChoice < 0)
 			{
-				itemChoice = 0;
+				ItemChoice = 0;
 			}
 			else 
 			{
 				GlobalStreamPlayer.Instance.PlaySound(SndSqueak);
 			}
-			encounterItemChoiceMenu.SetChoice(itemChoice);
+			ItemChoiceMenu.SetChoice(ItemChoice);
 
 		}
 		else if (Input.IsActionJustPressed("down"))
 		{
-			itemChoice += 1;
-			if (itemChoice >= PlayerDataManager.Instance.GetItemCount())
+			ItemChoice += 1;
+			if (ItemChoice >= PlayerDataManager.Instance.GetItemCount())
 			{
-				itemChoice = PlayerDataManager.Instance.GetItemCount() - 1;
+				ItemChoice = PlayerDataManager.Instance.GetItemCount() - 1;
 			}
 			else
 			{
 				GlobalStreamPlayer.Instance.PlaySound(SndSqueak);
 			}
-			encounterItemChoiceMenu.SetChoice(itemChoice);
+			ItemChoiceMenu.SetChoice(ItemChoice);
 		}
 		else if (Input.IsActionJustPressed("cancel"))
 		{
@@ -51,9 +51,13 @@ public partial class BattlePlayerChoiceItemState : StateNode
 		}
 	}
 
-	public override void _EnterState()
+	public override async void _EnterState()
 	{
-		BattleMenuManager.OpenMenu("EncounterItemChoiceMenu");
+		await MenuManager.OpenMenu("EncounterItemMenu");
+		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+		ItemChoiceMenu.SetChoice(ItemChoice);
+
+
 	}
 
 	public override void _ExitState()

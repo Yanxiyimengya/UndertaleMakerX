@@ -8,30 +8,30 @@ public partial class StateMachine : Node
 	[Export]
 	public string CurrentStateName
 	{
-		get => currentStateName;
+		get => _currentStateName;
 		set
 		{
-			if (stateNodes.TryGetValue(currentStateName, out StateNode prevStateNode) && prevStateNode != null)
+			if (_stateNodes.TryGetValue(_currentStateName, out StateNode prevStateNode) && prevStateNode != null)
 			{
 				prevStateNode._ExitState();
 				prevStateNode.Enabled = false;
 			}
-			if (stateNodes.TryGetValue(value, out StateNode nextStateNode) && nextStateNode != null)
+			if (_stateNodes.TryGetValue(value, out StateNode nextStateNode) && nextStateNode != null)
 			{
 				nextStateNode.Enabled = true;
 				nextStateNode._EnterState();
-				currentStateName = value;
+				_currentStateName = value;
 			}
 
 			else if (string.IsNullOrEmpty(value))
 			{
-				currentStateName = string.Empty;
+				_currentStateName = string.Empty;
 			}
 		}
 	}
 
-	private Dictionary<string, StateNode> stateNodes = new Dictionary<string, StateNode>();
-	private string currentStateName = string.Empty;
+	private Dictionary<string, StateNode> _stateNodes = new Dictionary<string, StateNode>();
+	private string _currentStateName = string.Empty;
 
 	public override void _Ready()
 	{
@@ -59,24 +59,24 @@ public partial class StateMachine : Node
 		if (child is StateNode stateNode)
 		{
 			string stateName = stateNode.Name;
-			if (stateName == currentStateName)
+			if (stateName == _currentStateName)
 			{
 				stateNode._ExitState();
 				stateNode.Enabled = false;
-				currentStateName = string.Empty;
+				_currentStateName = string.Empty;
 			}
-			if (stateNodes.ContainsKey(stateName))
+			if (_stateNodes.ContainsKey(stateName))
 			{
-				stateNodes.Remove(stateName);
+				_stateNodes.Remove(stateName);
 			}
 		}
 	}
 
 	private void AddStateNodeIfValid(Node node)
 	{
-		if (node is StateNode stateNode && !stateNodes.ContainsKey(stateNode.Name))
+		if (node is StateNode stateNode && !_stateNodes.ContainsKey(stateNode.Name))
 		{
-			stateNodes.Add(stateNode.Name, stateNode);
+			_stateNodes.Add(stateNode.Name, stateNode);
 			stateNode.Enabled = false;
 			stateNode.Connect(
 				StateNode.SignalName.RequestSwitchState,
@@ -86,9 +86,9 @@ public partial class StateMachine : Node
 	}
 	public bool SwitchToState(string stateName)
 	{
-		if (stateNodes.ContainsKey(stateName))
+		if (_stateNodes.ContainsKey(stateName))
 		{
-			if (stateNodes.TryGetValue(stateName, out StateNode nextStateNode) && nextStateNode != null)
+			if (_stateNodes.TryGetValue(stateName, out StateNode nextStateNode) && nextStateNode != null)
 			{
 				if (nextStateNode._CanEnterState())
 				{
@@ -101,7 +101,7 @@ public partial class StateMachine : Node
 	}
 	public bool HasState(string stateName)
 	{
-		return stateNodes.ContainsKey(stateName);
+		return _stateNodes.ContainsKey(stateName);
 	}
 	public override void _ExitTree()
 	{
