@@ -8,4 +8,6 @@ public partial class EncounterConfiguration : Resource
 	public string DefaultEncounterText = "";
 	[Export]
 	public string EncounterBattleFirstState = "";
+    [Export]
+    public bool CanFree = true;
 }

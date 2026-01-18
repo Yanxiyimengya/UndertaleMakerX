@@ -1,16 +1,31 @@
 using Godot;
 using System;
 
-public partial class EncounterMercyMenu : EncounterChoiceMenu
+public partial class EncounterMercyMenu : EncounterChoiceListMenu
 {
+	
+	
 	public override void UIVisible()
 	{
-		ClearItem();
-		foreach (BaseItem item in PlayerDataManager.Instance.Items)
+		if (GetTree().CurrentScene is EncounterBattle enc)
 		{
-			AddItem(item.DisplayName, 1, 1);
+			ClearItem();
+			bool allowSpare = false;
+			bool canSpare = false;
+			foreach (BaseEnemy enemy in enc.Enemys)
+			{
+				if (enemy.AllowSpare)
+				{
+					allowSpare |= enemy.AllowSpare;
+					canSpare |= enemy.CanSpare;
+				}
+			}
+			if (allowSpare)
+				AddItem("SPARE", $"{(canSpare ? "[color yellow]" : "")}Spare");
+			if (enc.CanFree) 
+				AddItem("FREE", "Free");
+			ScrollBarSetVisible(false);
 		}
-		HpBarSetVisible(false);
 	}
 	public override void UIHidden()
 	{

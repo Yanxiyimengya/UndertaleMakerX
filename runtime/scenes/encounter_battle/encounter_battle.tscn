@@ -86,11 +86,12 @@ MenuManager = NodePath("../../UILayer/BattleMenuManager")
 ItemChoiceMenu = NodePath("../../UILayer/BattleMenuManager/EncounterItemMenu")
 metadata/_custom_type_script = "uid://dc27u6sxv148b"
 
-[node name="BattlePlayerMercyMenuState" type="Node" parent="BattleStateMachine" node_paths=PackedStringArray("MenuManager")]
+[node name="BattlePlayerMercyMenuState" type="Node" parent="BattleStateMachine" node_paths=PackedStringArray("MenuManager", "MercyChoiceMenu")]
 script = ExtResource("10_du4b0")
 SndSelect = ExtResource("4_53d75")
 SndSqueak = ExtResource("5_e7ctv")
 MenuManager = NodePath("../../UILayer/BattleMenuManager")
+MercyChoiceMenu = NodePath("../../UILayer/BattleMenuManager/EncounterMercyMenu")
 metadata/_custom_type_script = "uid://b2mvblo5kl3xc"
 
 [node name="BattleDialogTurnState" type="Node" parent="BattleStateMachine"]
@@ -156,12 +157,11 @@ offset_left = 37.0
 offset_top = 255.0
 offset_right = 602.0
 offset_bottom = 385.0
-current_tab = 4
+current_tab = 0
 tabs_visible = false
 script = ExtResource("13_13wr6")
 
 [node name="EncounterTextMenu" type="Control" parent="UILayer/BattleMenuManager" node_paths=PackedStringArray("encounterTextTyper")]
-visible = false
 layout_mode = 2
 script = ExtResource("13_nakc4")
 encounterTextTyper = NodePath("EncounterTextTyper")
@@ -193,7 +193,6 @@ metadata/_custom_type_script = "uid://dmq4qew4auuss"
 visible = false
 layout_mode = 2
 script = ExtResource("19_vdmq1")
-ScrollBarVisible = true
 metadata/_tab_index = 1
 
 [node name="EncounterActChoiceEnemyMenu" parent="UILayer/BattleMenuManager" instance=ExtResource("24_noyau")]
@@ -207,7 +206,8 @@ layout_mode = 2
 script = ExtResource("23_0mx1x")
 metadata/_tab_index = 3
 
-[node name="EncounterMercyChoiceEnemyMenu" parent="UILayer/BattleMenuManager" instance=ExtResource("24_noyau")]
+[node name="EncounterMercyMenu" parent="UILayer/BattleMenuManager" instance=ExtResource("24_noyau")]
+visible = false
 layout_mode = 2
 script = ExtResource("26_noyau")
 metadata/_tab_index = 4

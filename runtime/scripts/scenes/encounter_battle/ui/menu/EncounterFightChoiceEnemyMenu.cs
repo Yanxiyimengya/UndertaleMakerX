@@ -2,16 +2,18 @@ using Godot;
 using System;
 using System.Threading.Tasks;
 
-public partial class EncounterFightChoiceEnemyMenu : EncounterChoiceMenu
+public partial class EncounterFightChoiceEnemyMenu : EncounterChoiceListMenu
 {
 	public override void UIVisible()
 	{
 		if (GetTree().CurrentScene is EncounterBattle enc)
 		{
 			ClearItem();
-			foreach (BaseEnemy enemy in enc.Enemys)
+			for (int i = 0; i < enc.Enemys.Count; i++)
 			{
-				AddItem(enemy.DisplayName, enemy.MaxHp, enemy.Hp);
+				BaseEnemy enemy = enc.Enemys[i];
+				AddItem(i, enemy.DisplayName, enemy.MaxHp, enemy.Hp);
+				//TEMP
 			}
 		}
 		HpBarSetVisible(true);

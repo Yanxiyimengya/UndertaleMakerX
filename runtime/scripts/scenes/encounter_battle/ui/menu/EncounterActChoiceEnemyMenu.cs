@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Threading.Tasks;
 
-public partial class EncounterActChoiceEnemyMenu : EncounterChoiceMenu
+public partial class EncounterActChoiceEnemyMenu : EncounterChoiceListMenu
 {
 	public override void UIVisible()
 	{
@@ -10,7 +10,8 @@ public partial class EncounterActChoiceEnemyMenu : EncounterChoiceMenu
 		{
 			ClearItem();
 			foreach (BaseEnemy enemy in enc.Enemys) {
-				AddItem(enemy.DisplayName, enemy.MaxHp, enemy.Hp);
+				AddItem(enemy.DisplayName, enemy.DisplayName, enemy.MaxHp, enemy.Hp);
+				// TEMP
 			}
 		}
 	}

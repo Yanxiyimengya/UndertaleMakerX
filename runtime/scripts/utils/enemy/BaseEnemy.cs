@@ -11,9 +11,9 @@ public partial class BaseEnemy : Node2D
 	public float Def = 0.0F;
 	public float Hp = 100.0F;
 	public float MaxHp = 100.0F;
-	public bool CanSpare = false;
+    public bool AllowSpare = true;
+    public bool CanSpare = false;
 
 	public Array<string> Actions = [];
-
 	
 }

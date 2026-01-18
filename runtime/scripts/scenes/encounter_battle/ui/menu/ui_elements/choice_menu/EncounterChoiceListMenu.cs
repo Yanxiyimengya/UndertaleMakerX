@@ -4,32 +4,35 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 [GlobalClass]
-public partial class EncounterChoiceMenu : BaseEncounterMenu
+public partial class EncounterChoiceListMenu : BaseEncounterMenu
 {
-	private partial class ChoiceItem : RefCounted
+	public partial class ChoiceItem : RefCounted
 	{
-		public string ItemName;
-		public float MaxValue;
-		public float Value;
-		public ChoiceItem(string name, float maxValue = 1, float value = 1) {
-			ItemName = name;
-			MaxValue = maxValue;
-			Value = value;
+		public object ItemId;
+		public string ItemDisplayName;
+		public float MaxValue = 1;
+		public float Value = 1;
+		public ChoiceItem(object id) {
+			ItemId = id;
 		}
-	}
 
-	[Export]
-	public bool ScrollBarVisible
-	{
-		get => UtScrollBar.Visible;
-		set
+		public ChoiceItem SetValue(float v)
 		{
-			if (UtScrollBar != null)
-			{
-				UtScrollBar.Visible = value;
-			}
+			Value = v;
+			return this;
+		}
+		public ChoiceItem SetMaxValue(float v)
+		{
+			MaxValue = v;
+			return this;
+		}
+		public ChoiceItem SetDisplayName(string displayName)
+		{
+			ItemDisplayName = displayName;
+			return this;
 		}
 	}
+	
 	[Export]
 	public UndertaleStyleScrollBar UtScrollBar;
 	[Export]
@@ -41,9 +44,10 @@ public partial class EncounterChoiceMenu : BaseEncounterMenu
 
 	public override void UIVisible() { }
 	public override void UIHidden() { }
-	public void AddItem(string name, float maxValue, float value)
+
+	public void AddItem(object itemId, string displayName, float value = 1,float maxValue = 1)
 	{ 
-		_items.Add(new ChoiceItem(name, maxValue, value));
+		_items.Add(new ChoiceItem(itemId).SetDisplayName(displayName).SetValue(value).SetMaxValue(maxValue));
 		UtScrollBar.Count = _items.Count;
 	}
 	public void RemoveItem(int i)
@@ -53,6 +57,11 @@ public partial class EncounterChoiceMenu : BaseEncounterMenu
 			_items.RemoveAt(i);
 			UtScrollBar.Count = _items.Count;
 		}
+	}
+
+	public object GetChoicedItemId()
+	{
+		return _items[_currentChoice].ItemId;
 	}
 
 	public void ClearItem()
@@ -68,9 +77,17 @@ public partial class EncounterChoiceMenu : BaseEncounterMenu
 			item.ProgressVisible = v;
 		}
 	}
+	public void ScrollBarSetVisible(bool v)
+	{
+		UtScrollBar.Visible = v;
+	}
 
 	public void SetChoice(int Choice)
-	{
+	{ 
+		if (Choice >= MenuItem.Count)
+		{
+			return;
+		}
 		_firstIndex = Math.Max(_firstIndex, Choice - 2);
 		_firstIndex = Math.Min(Choice, _firstIndex);
 		UtScrollBar.CurrentIndex = Choice;
@@ -87,10 +104,9 @@ public partial class EncounterChoiceMenu : BaseEncounterMenu
 					continue;
 				}
 
-
 				ChoiceItem choiceItem = _items[slot];
 				emi.Visible = true;
-				emi.Text = choiceItem.ItemName;
+				emi.Text = choiceItem.ItemDisplayName;
 				if (emi.ProgressVisible)
 				{
 					emi.ProgressMaxValue = choiceItem.MaxValue;

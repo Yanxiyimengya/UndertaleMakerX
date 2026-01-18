@@ -58,10 +58,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 
 	public override async void _EnterState()
 	{
-		if (MenuManager != null)
-		{
-			await MenuManager.OpenMenu("EncounterFightChoiceEnemyMenu");
-		}
+		await MenuManager.OpenMenu("EncounterFightChoiceEnemyMenu");
 		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 		encounterFightChoiceEnemyMenu.SetChoice(EnemyChoice);
 	}

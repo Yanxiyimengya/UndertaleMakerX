@@ -10,8 +10,10 @@ public partial class BattlePlayerMercyMenuState : StateNode
 	AudioStream SndSqueak;
 	[Export]
 	BattleMenuManager MenuManager;
+	[Export]
+	EncounterMercyMenu MercyChoiceMenu;
 
-	public int MercyChoice;
+	public int MercyChoice = 0;
 
 	public override void _Process(double delta)
 	{
@@ -52,7 +54,7 @@ public partial class BattlePlayerMercyMenuState : StateNode
 	{
 		await MenuManager.OpenMenu("EncounterMercyMenu");
 		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
-		//MercyChoiceMenu.SetChoice(MercyChoice);
+		MercyChoiceMenu.SetChoice(MercyChoice);
 	}
 	public override void _ExitState()
 	{

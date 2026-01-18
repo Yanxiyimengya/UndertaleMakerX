@@ -56,8 +56,6 @@ public partial class BattlePlayerItemMenuState : StateNode
 		await MenuManager.OpenMenu("EncounterItemMenu");
 		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 		ItemChoiceMenu.SetChoice(ItemChoice);
-
-
 	}
 
 	public override void _ExitState()

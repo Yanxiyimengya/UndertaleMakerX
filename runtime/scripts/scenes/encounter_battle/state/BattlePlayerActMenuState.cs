@@ -13,7 +13,7 @@ public partial class BattlePlayerActMenuState : StateNode
 	[Export]
 	public BattleMenuManager MenuManager;
 	[Export]
-	public EncounterChoiceMenu encounterActChoiceEnemyMenu;
+	public EncounterActChoiceEnemyMenu encounterActChoiceEnemyMenu;
 	
 	public int EnemyChoice = 0;
 	private EncounterBattle _encounterBattle;
@@ -57,10 +57,7 @@ public partial class BattlePlayerActMenuState : StateNode
 
 	public override async void _EnterState()
 	{
-		if (MenuManager != null)
-		{
-			await MenuManager.OpenMenu("EncounterActChoiceEnemyMenu");
-		}
+		await MenuManager.OpenMenu("EncounterActChoiceEnemyMenu");
 		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 		encounterActChoiceEnemyMenu.SetChoice(EnemyChoice);
 	}

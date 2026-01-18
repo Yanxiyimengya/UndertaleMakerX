@@ -19,6 +19,7 @@ public partial class EncounterBattle : Node
 		set
 		{
 			encounterConfig = value;
+			CanFree = encounterConfig.CanFree;
 			EncounterText = encounterConfig.DefaultEncounterText;
 		}
 	}
@@ -34,6 +35,8 @@ public partial class EncounterBattle : Node
 		new BaseEnemy(),
 
 		];
+	public bool CanFree;
+	
 	private EncounterConfiguration encounterConfig = null;
 	
 	enum BattleTurn
