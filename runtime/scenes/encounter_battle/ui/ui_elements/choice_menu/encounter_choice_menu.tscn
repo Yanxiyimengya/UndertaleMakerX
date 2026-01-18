@@ -1,0 +1,41 @@
+[gd_scene load_steps=5 format=3 uid="uid://b4s2vi1x468nj"]
+
+[ext_resource type="Script" uid="uid://bg6w2s2t627iw" path="res://scripts/scenes/encounter_battle/ui/menu/ui_elements/choice_menu/EncounterChoiceMenu.cs" id="1_rkn8y"]
+[ext_resource type="PackedScene" uid="uid://calfrmbvcuuks" path="res://scenes/encounter_battle/ui/ui_elements/choice_menu/choice_menu_item/choice_menu_item.tscn" id="2_0mb7v"]
+[ext_resource type="Script" uid="uid://bmcveadv3wtob" path="res://scripts/utils/undertale_style_scroll_bar/UndertaleStyleScrollBar.cs" id="3_umpvh"]
+[ext_resource type="Texture2D" uid="uid://dhmijhp1c1kup" path="res://assets/textures/ui/spr_scroll_arrow.png" id="4_mh2ls"]
+
+[node name="EncounterChoiceMenu" type="Control" node_paths=PackedStringArray("UtScrollBar", "MenuItem")]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_rkn8y")
+UtScrollBar = NodePath("UndertaleStyleScrollBar")
+MenuItem = [NodePath("VBoxContainer/EnemyChoiceMenuItem1"), NodePath("VBoxContainer/EnemyChoiceMenuItem2"), NodePath("VBoxContainer/EnemyChoiceMenuItem3")]
+metadata/_tab_index = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 63.0
+offset_top = 19.0
+offset_right = 563.0
+offset_bottom = 130.0
+theme_override_constants/separation = 8
+
+[node name="EnemyChoiceMenuItem1" parent="VBoxContainer" instance=ExtResource("2_0mb7v")]
+layout_mode = 2
+
+[node name="EnemyChoiceMenuItem2" parent="VBoxContainer" instance=ExtResource("2_0mb7v")]
+layout_mode = 2
+
+[node name="EnemyChoiceMenuItem3" parent="VBoxContainer" instance=ExtResource("2_0mb7v")]
+layout_mode = 2
+
+[node name="UndertaleStyleScrollBar" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 539.0
+offset_top = 65.0
+offset_right = 539.0
+offset_bottom = 68.0
+script = ExtResource("3_umpvh")
+ArrowTexture = ExtResource("4_mh2ls")
+metadata/_custom_type_script = "uid://bmcveadv3wtob"

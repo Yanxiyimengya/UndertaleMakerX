@@ -5,5 +5,5 @@ using System;
 public abstract partial class BaseEncounterMenu : Control
 {
 	public abstract void UIVisible();
-    public abstract void UIHidden();
+	public abstract void UIHidden();
 }

@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://calfrmbvcuuks"]
 
-[ext_resource type="Script" uid="uid://b6ur6lbelpbj0" path="res://scripts/scenes/encounter_battle/ui/menu/ui_elements/choice_menu_item/EncounterChoiceMenuItem.cs" id="1_6jsmc"]
+[ext_resource type="Script" uid="uid://b6ur6lbelpbj0" path="res://scripts/scenes/encounter_battle/ui/menu/ui_elements/choice_menu/choice_menu_item/EncounterChoiceMenuItem.cs" id="1_6jsmc"]
 [ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="1_jr0et"]
 [ext_resource type="FontFile" uid="uid://bn6wautbcglmx" path="res://assets/fonts/FZXS12.ttf" id="3_kqo6q"]
 

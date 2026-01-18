@@ -13,7 +13,7 @@ public partial class BattlePlayerActMenuState : StateNode
 	[Export]
 	public BattleMenuManager MenuManager;
 	[Export]
-	public EncounterActChoiceEnemyMenu encounterActChoiceEnemyMenu;
+	public EncounterChoiceMenu encounterActChoiceEnemyMenu;
 	
 	public int EnemyChoice = 0;
 	private EncounterBattle _encounterBattle;
