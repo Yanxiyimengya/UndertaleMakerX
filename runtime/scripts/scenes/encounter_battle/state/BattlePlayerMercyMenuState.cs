@@ -28,25 +28,43 @@ public partial class BattlePlayerMercyMenuState : StateNode
 			{
 				GlobalStreamPlayer.Instance.PlaySound(SndSqueak);
 			}
-			//ItemChoiceMenu.SetChoice(MercyChoice);
-
+			MercyChoiceMenu.SetChoice(MercyChoice);
 		}
 		else if (Input.IsActionJustPressed("down"))
 		{
 			MercyChoice += 1;
-			if (MercyChoice >= PlayerDataManager.Instance.GetItemCount())
+			if (MercyChoice >= MercyChoiceMenu.GetItemCount())
 			{
-				MercyChoice = PlayerDataManager.Instance.GetItemCount() - 1;
+				MercyChoice = MercyChoiceMenu.GetItemCount() - 1;
 			}
 			else
 			{
 				GlobalStreamPlayer.Instance.PlaySound(SndSqueak);
 			}
-			//ItemChoiceMenu.SetChoice(MercyChoice);
+			MercyChoiceMenu.SetChoice(MercyChoice);
 		}
 		else if (Input.IsActionJustPressed("cancel"))
 		{
 			EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerChoiceActionState"]);
+		}
+		else if (Input.IsActionJustPressed("confirm"))
+		{
+			string choiced = (string)MercyChoiceMenu.GetChoicedItemId();
+
+			if (choiced == "SPARE")
+			{
+				if (GetTree().CurrentScene is EncounterBattle enc)
+				{
+					foreach (BaseEnemy enemy in enc.Enemys)
+					{
+						if (enemy.AllowSpare && enemy.CanSpare)
+						{
+							enemy.OnSpare();
+						}
+					}
+				}
+			}
+			EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerDialogState"]);
 		}
 	}
 	

@@ -15,8 +15,6 @@ public partial class EncounterTextMenu : BaseEncounterMenu
 
 	public override void UIVisible()
 	{
-		if (GetTree().CurrentScene is EncounterBattle enc) 
-			ShowEncounterText(enc.EncounterText);
 	}
 	public override void UIHidden()
 	{
@@ -41,4 +39,10 @@ public partial class EncounterTextMenu : BaseEncounterMenu
 		if (GetTree().CurrentScene is EncounterBattle enc) 
 			encounterTextTyper.Start(text);
 	}
+
+	public bool TextTyperFinished()
+	{
+		return encounterTextTyper.IsFinished();
+	}
+
 }

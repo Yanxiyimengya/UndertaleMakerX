@@ -1,0 +1,61 @@
+[gd_scene load_steps=10 format=3 uid="uid://buf56qyfu4560"]
+
+[ext_resource type="Texture2D" uid="uid://ntyrfjwuxajv" path="res://assets/textures/ui/battle_screen/spr_slice_o_0-Sheet.png" id="1_eyuth"]
+[ext_resource type="Script" uid="uid://b7jpaxj7a6loa" path="res://scripts/scenes/encounter_battle/ui/menu/ui_elements/attack_animation/BattleAttackAnimationKnife0.cs" id="1_xw6ss"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xw6ss"]
+atlas = ExtResource("1_eyuth")
+region = Rect2(0, 0, 27, 112)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cmfg3"]
+atlas = ExtResource("1_eyuth")
+region = Rect2(28, 0, 27, 112)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c787r"]
+atlas = ExtResource("1_eyuth")
+region = Rect2(56, 0, 27, 112)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w77lr"]
+atlas = ExtResource("1_eyuth")
+region = Rect2(84, 0, 27, 112)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b6bu8"]
+atlas = ExtResource("1_eyuth")
+region = Rect2(112, 0, 27, 112)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m7w00"]
+atlas = ExtResource("1_eyuth")
+region = Rect2(140, 0, 27, 112)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_yxhie"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xw6ss")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cmfg3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c787r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w77lr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b6bu8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m7w00")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[node name="BattleAttackAnimationKnife0" type="Node2D"]
+script = ExtResource("1_xw6ss")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_yxhie")
+frame_progress = 0.6511302

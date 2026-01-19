@@ -1,0 +1,43 @@
+[gd_scene load_steps=6 format=3 uid="uid://dtiq2nxayrrbj"]
+
+[ext_resource type="Script" uid="uid://cntl7iwsigu0l" path="res://scripts/scenes/encounter_battle/ui/menu/ui_elements/EncounterAttackGaugeBarMenu.cs" id="1_e7ue4"]
+[ext_resource type="Texture2D" uid="uid://mf2nicdg8lxb" path="res://assets/textures/ui/battle_screen/target.png" id="2_3fq5m"]
+[ext_resource type="Texture2D" uid="uid://dgu7t07ektkbt" path="res://assets/textures/ui/battle_screen/spr_targetchoice_0.png" id="3_cu0cx"]
+[ext_resource type="Texture2D" uid="uid://cthd1gq8lintd" path="res://assets/textures/ui/battle_screen/spr_targetchoice_1.png" id="4_4pk48"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_oiyx4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_cu0cx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_4pk48")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
+[node name="EncounterAttackGaugeBarMenu" type="Control" node_paths=PackedStringArray("TargetSprite2D", "TargetChoiceBar")]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -75.0
+offset_bottom = -350.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_e7ue4")
+TargetSprite2D = NodePath("TargetSprite2D")
+TargetChoiceBar = NodePath("TargetChoiceBar")
+
+[node name="TargetSprite2D" type="Sprite2D" parent="."]
+position = Vector2(282.5, 65)
+texture = ExtResource("2_3fq5m")
+
+[node name="TargetChoiceBar" type="AnimatedSprite2D" parent="."]
+position = Vector2(8, 64)
+sprite_frames = SubResource("SpriteFrames_oiyx4")
+frame_progress = 0.16184284

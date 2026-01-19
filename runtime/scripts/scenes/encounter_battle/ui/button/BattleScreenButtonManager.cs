@@ -20,7 +20,15 @@ public partial class BattleScreenButtonManager : Node
 		}
 	}
 
-	public void ReleaseButton(string id)
+    public void ReleaseAllButton()
+    {
+        foreach (KeyValuePair<string, BattleScreenButton> pair in buttonList)
+        {
+            pair.Value.Pressed = false;
+        }
+    }
+
+    public void ReleaseButton(string id)
 	{
 		if (GetButton(id, out BattleScreenButton btn))
 		{
@@ -45,9 +53,14 @@ public partial class BattleScreenButtonManager : Node
 		if (buttonList.TryGetValue(id, out button))
 			return true;
 		return false;
-	}
+    }
 
-	public int GetButtonCount()
+    public string GetPrevButtonId()
+    {
+		return _prevButtonId;
+    }
+
+    public int GetButtonCount()
 	{
 		return buttonList.Count;
 	}

@@ -49,6 +49,12 @@ public partial class BattlePlayerItemMenuState : StateNode
 		{
 			EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerChoiceActionState"]);
 		}
+		else if (Input.IsActionJustPressed("confirm"))
+		{
+			int itemChoiced = (int)ItemChoiceMenu.GetChoicedItemId();
+			PlayerDataManager.Instance.UseItem(itemChoiced);
+			EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerDialogState"]);
+		}
 	}
 
 	public override async void _EnterState()

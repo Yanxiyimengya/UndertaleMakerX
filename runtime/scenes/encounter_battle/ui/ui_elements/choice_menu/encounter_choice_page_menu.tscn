@@ -1,0 +1,70 @@
+[gd_scene load_steps=5 format=3 uid="uid://chb46puy2x813"]
+
+[ext_resource type="Script" uid="uid://dshp7kc1e02l6" path="res://scripts/scenes/encounter_battle/ui/menu/ui_elements/EncounterChoicePageMenu.cs" id="1_brxe0"]
+[ext_resource type="PackedScene" uid="uid://calfrmbvcuuks" path="res://scenes/encounter_battle/ui/ui_elements/choice_menu/choice_menu_item/choice_menu_item.tscn" id="2_brxe0"]
+[ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="5_juvwh"]
+[ext_resource type="FontFile" uid="uid://bn6wautbcglmx" path="res://assets/fonts/FZXS12.ttf" id="6_vggi8"]
+
+[node name="EncounterChoicePageMenu" type="Control" node_paths=PackedStringArray("PageTextTyper", "MenuItems")]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_brxe0")
+PageTextTyper = NodePath("VBoxContainer/MarginContainer/PageTextTyper")
+MenuItems = [NodePath("VBoxContainer/VBoxContainer/Line1/EnemyChoiceMenuItem1"), NodePath("VBoxContainer/VBoxContainer/Line1/EnemyChoiceMenuItem2"), NodePath("VBoxContainer/VBoxContainer/Line2/EnemyChoiceMenuItem4"), NodePath("VBoxContainer/VBoxContainer/Line2/EnemyChoiceMenuItem3")]
+metadata/_tab_index = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 63.0
+offset_top = 19.0
+offset_right = 571.0
+offset_bottom = 193.0
+theme_override_constants/separation = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Line1" type="HBoxContainer" parent="VBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 139
+
+[node name="EnemyChoiceMenuItem1" parent="VBoxContainer/VBoxContainer/Line1" instance=ExtResource("2_brxe0")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EnemyChoiceMenuItem2" parent="VBoxContainer/VBoxContainer/Line1" instance=ExtResource("2_brxe0")]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Line2" type="HBoxContainer" parent="VBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 139
+
+[node name="EnemyChoiceMenuItem4" parent="VBoxContainer/VBoxContainer/Line2" instance=ExtResource("2_brxe0")]
+layout_mode = 2
+
+[node name="EnemyChoiceMenuItem3" parent="VBoxContainer/VBoxContainer/Line2" instance=ExtResource("2_brxe0")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 263
+theme_override_constants/margin_top = -6
+
+[node name="PageTextTyper" type="RichTextLabel" parent="VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+script = ExtResource("5_juvwh")
+TyperText = "PAGE"
+TyperSize = 24
+TyperFont = ExtResource("6_vggi8")
+Instant = true
+metadata/_custom_type_script = "uid://dmq4qew4auuss"

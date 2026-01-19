@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 public partial class BattleMenuManager : TabContainer
 {
-	
 	private Dictionary<string, BaseEncounterMenu> menuList = new Dictionary<string, BaseEncounterMenu>();
 	private String prevMenuName = "";
 
 	public override void _Ready()
 	{
+		Visible = false;
 		foreach (Node childNode in this.GetChildren())
 		{
 			if (!(childNode is BaseEncounterMenu menu)) continue;

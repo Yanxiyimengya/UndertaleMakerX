@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 [GlobalClass]
 public partial class StateMachine : Node
@@ -84,7 +85,7 @@ public partial class StateMachine : Node
 			);
 		}
 	}
-	public bool SwitchToState(string stateName)
+	public async void SwitchToState(string stateName)
 	{
 		if (_stateNodes.ContainsKey(stateName))
 		{
@@ -92,12 +93,11 @@ public partial class StateMachine : Node
 			{
 				if (nextStateNode._CanEnterState())
 				{
+					await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 					CurrentStateName = stateName;
-					return true;
 				}
 			}
 		}
-		return false;
 	}
 	public bool HasState(string stateName)
 	{

@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://d0q7av0w3c7gt"]
+
+[ext_resource type="FontFile" uid="uid://dks40d20ernd2" path="res://assets/fonts/Hachicro.ttf" id="1_ewr1v"]
+[ext_resource type="Script" uid="uid://c70yccichye13" path="res://scripts/scenes/encounter_battle/ui/menu/ui_elements/battle_damage_text/BattleDamageText.cs" id="1_mvfbq"]
+[ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="2_pxun5"]
+
+[node name="BattleDamageText" type="Node2D" node_paths=PackedStringArray("DamageTextTyper")]
+script = ExtResource("1_mvfbq")
+DamageTextTyper = NodePath("RichTextLabel")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+offset_left = -211.0
+offset_top = -119.0
+offset_right = 211.0
+offset_bottom = -1.0
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 2
+script = ExtResource("2_pxun5")
+TyperText = "MISS"
+TyperSize = 32
+TyperFont = ExtResource("1_ewr1v")
+Instant = true
+metadata/_custom_type_script = "uid://dmq4qew4auuss"

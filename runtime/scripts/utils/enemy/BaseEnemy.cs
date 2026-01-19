@@ -7,13 +7,24 @@ public partial class BaseEnemy : Node2D
 {
 	public string DisplayName = "ENEMY";
 
-	public float Atk = 0.0F;
-	public float Def = 0.0F;
+	public float Attack = 0.0F;
+	public float Defence = 0.0F;
 	public float Hp = 100.0F;
 	public float MaxHp = 100.0F;
-    public bool AllowSpare = true;
-    public bool CanSpare = false;
+	public bool AllowSpare = true;
+	public bool CanSpare = true;
+    public string MissText = "MISS";
 
-	public Array<string> Actions = [];
-	
+    public Array<string> Actions = ["CHECK"];
+    public virtual void OnSpare()
+    {
+    }
+
+    public virtual void HandleAction(string action)
+    {
+    }
+    public virtual void HandleAttack(bool missed)
+    {
+    }
+
 }

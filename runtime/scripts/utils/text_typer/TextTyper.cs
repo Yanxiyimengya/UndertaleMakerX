@@ -55,6 +55,7 @@ public partial class TextTyper : Godot.RichTextLabel
 	private int _typerProgress = 0;
 	private Font _typerFont = ThemeDB.FallbackFont;
 	private Color _typerColor = Colors.White;
+	private object _waitForKeyAction = null;
 
 	public TextTyper()
 	{
@@ -66,27 +67,34 @@ public partial class TextTyper : Godot.RichTextLabel
 
 	public override void _Process(double delta)
 	{
-		if (_typerWattingTimer > 0.0)
+		if (!_CanRunning())
 		{
-			_typerWattingTimer -= delta;
+			if (_waitForKeyAction != null)
+			{
+				if (_waitForKeyAction is string actString && Input.IsActionPressed(actString) ||
+					_waitForKeyAction is Key actKey && Input.IsKeyPressed(actKey)
+					)
+					_waitForKeyAction = null;
+			}
 		}
 		else
 		{
-			if (_typerTimer > 0.0)
-			{
-				_typerTimer -= delta;
-			}
+			if (_typerWattingTimer > 0.0) _typerWattingTimer -= delta;
 			else
 			{
-				_typerTimer = TyperSpeed;
-				_ProcessText();
+				if (_typerTimer > 0.0)_typerTimer -= delta;
+				else
+				{
+					_typerTimer = TyperSpeed;
+					_ProcessText();
+				}
 			}
 		}
 	}
 
 	private void _ProcessText()
 	{
-		while (!_IsEnd())
+		while (_CanRunning())
 		{
 			char c = TyperText[_typerProgress];
 			_typerProgress += 1;
@@ -108,10 +116,18 @@ public partial class TextTyper : Godot.RichTextLabel
 					}
 					_typerProgress = locate + 1;
 				}
-				if (_IsEnd()) return;
+				if (!_CanRunning()) return;
 				c = TyperText[_typerProgress];
 				_typerProgress += 1;
 			}
+
+			while (c == '\r' || c == '\n')
+			{
+				c = TyperText[_typerProgress];
+				_typerProgress += 1;
+				Newline();
+			}
+
 			AddText(c.ToString());
 			if (!Instant)
 			{
@@ -157,8 +173,7 @@ public partial class TextTyper : Godot.RichTextLabel
 			tokens.Add(currentToken.ToString());
 		}
 
-		if (tokens.Count == 0)
-			return false;
+		if (tokens.Count == 0) return false;
 
 		string firstToken = tokens[0];
 
@@ -216,10 +231,42 @@ public partial class TextTyper : Godot.RichTextLabel
 	{
 		switch (cmd)
 		{
+			case "waitfor":
+				if (args.TryGetValue("value", out string keyValue))
+				{
+					if (string.IsNullOrEmpty(keyValue)) break;
+					if (InputMap.HasAction(keyValue))
+					{
+						_waitForKeyAction = keyValue;
+					}
+					else
+					{
+						Key key = OS.FindKeycodeFromString(keyValue);
+						if (key != Key.None) {
+							_waitForKeyAction = key;
+						}
+					}
+				}
+				break;
+
 			case "wait":
-				if (args.TryGetValue("time", out string waitTime) && float.TryParse(waitTime, out float time))
+				if (args.TryGetValue("value", out string waitTime) && float.TryParse(waitTime, out float time))
 				{
 					_typerWattingTimer = time;
+				}
+				break;
+
+			case "blend":
+				if (args.TryGetValue("value", out string blendColor))
+				{
+					Modulate = Color.FromString(blendColor, Modulate);
+				}
+				break;
+
+			case "speed":
+				if (args.TryGetValue("value", out string spdValue) && float.TryParse(spdValue, out float spd))
+				{
+					TyperSpeed = (float)spd;
 				}
 				break;
 
@@ -250,6 +297,13 @@ public partial class TextTyper : Godot.RichTextLabel
 				{
 					Instant = !Instant;
 				}
+				break;
+
+			case "clear":
+				Clear();
+				TyperColor = TyperColor;
+				TyperFont = TyperFont;
+				TyperSize = TyperSize;
 				break;
 
 			case "img":
@@ -283,6 +337,11 @@ public partial class TextTyper : Godot.RichTextLabel
 				if (Instant) return true;
 				if (args.TryGetValue("value", out string voicePath) && !string.IsNullOrEmpty(voicePath))
 				{
+					if (voicePath == "null")
+					{
+						Voice = null;
+						break;
+					}
 					AudioStream voiceStream = UTMXResourceLoader.Load(voicePath) as AudioStream;
 					if (voiceStream != null)
 					{
@@ -308,9 +367,9 @@ public partial class TextTyper : Godot.RichTextLabel
 		return true;
 	}
 
-	private bool _IsEnd()
+	private bool _CanRunning()
 	{
-		return _typerProgress >= TyperText.Length;
+		return (_waitForKeyAction == null) && (!IsFinished());
 	}
 	public void Start(string text)
 	{
@@ -319,6 +378,10 @@ public partial class TextTyper : Godot.RichTextLabel
 		TyperText = text;
 	}
 
+	public new bool IsFinished()
+	{
+		return _typerProgress >= TyperText.Length;
+	}
 	// 重置数据
 	public void ResetData()
 	{

@@ -13,7 +13,9 @@ public partial class BattlePlayerChoiceActionState : StateNode
 	[Export]
 	BattleScreenButtonManager BattleButtonManager;
 	[Export]
-	BattleMenuManager BattleMenuManager;
+	EncounterTextMenu TextMenu;
+	[Export]
+	BattleMenuManager MenuManager;
 
 	public int ActionChoice = 0;
 	private Dictionary<int, string> actionButtonMapping = new Dictionary<int, string>
@@ -75,11 +77,12 @@ public partial class BattlePlayerChoiceActionState : StateNode
 
 	public override async void _EnterState()
 	{
-		await BattleMenuManager.OpenMenu("EncounterTextMenu");
+		await MenuManager.OpenMenu("EncounterTextMenu");
 		SetChoice(ActionChoice);
 		
 		if (GetTree().CurrentScene is EncounterBattle enc)
 		{
+			TextMenu.ShowEncounterText(enc.EncounterText);
 			BattlePlayerSoul soul = enc.GetPlayerSoul();
 			soul.Movable = false;
 			soul.EnableCollision = false;
@@ -89,10 +92,6 @@ public partial class BattlePlayerChoiceActionState : StateNode
 
 	public override void _ExitState()
 	{
-		if (TryGetActionButtonMapping(ActionChoice, out string btnId))
-		{
-			BattleButtonManager.ReleaseButton(btnId);
-		}
 	}
 
 	public bool TryGetActionButtonMapping(int ind,out string state)

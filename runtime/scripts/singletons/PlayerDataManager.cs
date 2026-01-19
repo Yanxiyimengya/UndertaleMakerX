@@ -11,13 +11,14 @@ public partial class PlayerDataManager : Node
 	private PlayerDataManager() { }
 	public static PlayerDataManager Instance => _instance.Value;
 
-
 	public string PlayerName = "FRISK";
 	public int PlayerLv = 1;
 	public float PlayerHp = 20F;
 	public float PlayerMaxHp = 20F;
+    public float PlayerAttack = 0F;
+    public float PlayerDefence = 0F;
 
-	public List<BaseItem> Items = new List<BaseItem>()
+    public List<BaseItem> Items = new List<BaseItem>()
 	{
 		new BaseItem(),
 		new BaseItem(),
@@ -27,6 +28,7 @@ public partial class PlayerDataManager : Node
         new BaseItem(),
         new BaseItem(),
     };
+	public BaseWeapon Weapon = null;
 
 	public int GetItemCount()
 	{
@@ -42,9 +44,15 @@ public partial class PlayerDataManager : Node
 			return true;
 		}
 		return false;
-	}
+    }
+    public void UseItem(int slot)
+    {
+        BaseItem item = Items[slot];
+        item.Slot = slot;
+        item.OnUseSelected();
+    }
 
-	public void AddItem(BaseItem item)
+    public void AddItem(BaseItem item)
 	{
 		if (item != null)
 		{

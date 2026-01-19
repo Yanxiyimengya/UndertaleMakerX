@@ -19,3 +19,8 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+offset_right = 216.0
+offset_bottom = 145.0
+text = "sadjsuaidhjsadsfdsfagfgfdgfdhgsadjsuaidhjsadsfdsfagfgfdgfdhgsadjsuaidhjsadsfdsfagfgfdgfdhgsadjsuaidhjsadsfdsfagfgfdgfdhgsadjsuaidhjsadsfdsfagfgfdgfdhgsadjsuaidhjsadsfdsfagfgfdgfdhg"

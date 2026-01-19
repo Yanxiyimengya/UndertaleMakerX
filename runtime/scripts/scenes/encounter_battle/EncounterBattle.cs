@@ -13,6 +13,8 @@ public partial class EncounterBattle : Node
 	[Export]
 	BattleStatusBar StatusBar;
 	[Export]
+	Node2D EnemysNode;
+	[Export]
 	EncounterConfiguration Config
 	{
 		get => encounterConfig;
@@ -38,24 +40,20 @@ public partial class EncounterBattle : Node
 	public bool CanFree;
 	
 	private EncounterConfiguration encounterConfig = null;
-	
-	enum BattleTurn
+
+
+	public override void _EnterTree()
 	{
-		Player = 0,
-		Dialog = 1,
-		Enemy = 2,
-		Unknown = 10,
-	};
-	
+		foreach (BaseEnemy enemy in Enemys)
+		{
+			EnemysNode.AddChild(enemy);
+		}	
+	}
+
 	public override void _Ready()
 	{
-		BattleStateMachine.SwitchToState(encounterConfig.EncounterBattleFirstState);;
+		BattleStateMachine.SwitchToState(encounterConfig.EncounterBattleFirstState);
 	}
-
-	public override void _Process(double delta)
-	{
-	}
-
 	public BattlePlayerSoul GetPlayerSoul()
 	{
 		return PlayerSoul;
