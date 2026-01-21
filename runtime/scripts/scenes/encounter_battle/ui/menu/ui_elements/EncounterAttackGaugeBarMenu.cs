@@ -32,12 +32,11 @@ public partial class EncounterAttackGaugeBarMenu : BaseEncounterMenu
 		_tween?.Kill();
 		_tween = CreateTween();
 		float startX = TargetSprite2D.Position.X + (_dir * 320);
-		float endX = TargetSprite2D.Position.X - (_dir * 320);
-		_tween.TweenProperty(TargetChoiceBar, "position:x", endX, 1.5F).From(startX);
-		_tween.TweenCallback(Callable.From(async () =>
+		float endX = TargetSprite2D.Position.X - (_dir * 310);
+		_tween.TweenProperty(TargetChoiceBar, "position:x", endX, 1.7F).From(startX);
+		_tween.TweenCallback(Callable.From(() =>
 		{
 			EmitSignal(SignalName.Hitted, [true, -1]);
-			await End();
 		}));
 	}
 
@@ -59,8 +58,8 @@ public partial class EncounterAttackGaugeBarMenu : BaseEncounterMenu
 		_tween?.Kill();
 		_tween = CreateTween();
 		_tween.SetParallel();
-		_tween.TweenProperty(TargetSprite2D, "scale:x", 0.0F, 0.3F).From(1.0F);
-		_tween.TweenProperty(TargetSprite2D, "modulate:a", 0.0F, 0.3F).From(1.0F);
+		_tween.TweenProperty(TargetSprite2D, "scale:x", 0.0F, 0.4F).From(1.0F);
+		_tween.TweenProperty(TargetSprite2D, "modulate:a", 0.0F, 0.4F).From(1.0F);
 		_tween.Chain();
 		await ToSignal(_tween, Tween.SignalName.Finished);
 	}

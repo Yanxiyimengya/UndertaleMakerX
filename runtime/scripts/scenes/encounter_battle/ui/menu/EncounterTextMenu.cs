@@ -23,11 +23,6 @@ public partial class EncounterTextMenu : BaseEncounterMenu
 
 	public override void _Process(double delta)
 	{
-
-		if (Input.IsActionJustPressed("cancel"))
-		{
-			encounterTextTyper.Instant = true;
-		}
 	}
 	
 	public void ShowEncounterText(string text) 

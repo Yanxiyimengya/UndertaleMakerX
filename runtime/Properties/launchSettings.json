@@ -1,17 +1,17 @@
 {
   "profiles": {
-    "UTMX-Runtime": {
-      "commandName": "Project",
-      "commandLineArgs": "--path . --",
-      "workingDirectory": ".",
-      "nativeDebugging": true
-    },
-    "配置文件 1": {
-      "commandName": "Executable",
-      "executablePath": "C:\\Users\\guosh\\Desktop\\桌面放不下的\\Godot_v4.5.1-stable_mono_win64\\Godot_v4.5.1-stable_mono_win64.exe",
-      "commandLineArgs": "--path . --verbose",
-      "workingDirectory": ".",
-      "nativeDebugging": true
-    }
+	"UTMX-Runtime": {
+	  "commandName": "Project",
+	  "commandLineArgs": "--path . --",
+	  "workingDirectory": ".",
+	  "nativeDebugging": true
+	},
+	"配置文件 1": {
+	  "commandName": "Executable",
+	  "executablePath": "C:\\Users\\guosh\\Desktop\\桌面放不下的\\Godot_v4.5.1-stable_mono_win64\\Godot_v4.5.1-stable_mono_win64.exe",
+	  "commandLineArgs": "--path . --verbose",
+	  "workingDirectory": ".",
+	  "nativeDebugging": true
+	}
   }
 }

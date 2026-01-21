@@ -1,15 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://dbstu48ru7vek"]
+[gd_scene load_steps=4 format=3 uid="uid://dbstu48ru7vek"]
+
+[ext_resource type="FontFile" uid="uid://e0isplnd10cj" path="res://__data__/built-in-resources/fonts/UndertaleDialogue.ttf" id="1_5bhgw"]
 
 [sub_resource type="GDScript" id="GDScript_5bhgw"]
 script/source = "extends Node;
-@onready var text_typer: TextTyper = $TextTyper
-@onready var control: Control = $Control
-
-func _ready() -> void:
-	await get_tree().create_timer(0.4).timeout
-	text_typer.reparent(control);
-	pass;
 "
+
+[sub_resource type="LabelSettings" id="LabelSettings_i1yiq"]
+font = ExtResource("1_5bhgw")
+font_size = 14
 
 [node name="TEST" type="Node"]
 script = SubResource("GDScript_5bhgw")
@@ -20,7 +19,9 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="RichTextLabel" type="RichTextLabel" parent="."]
-offset_right = 216.0
-offset_bottom = 145.0
-text = "sadjsuaidhjsadsfdsfagfgfdgfdhgsadjsuaidhjsadsfdsfagfgfdgfdhgsadjsuaidhjsadsfdsfagfgfdgfdhgsadjsuaidhjsadsfdsfagfgfdgfdhgsadjsuaidhjsadsfdsfagfgfdgfdhgsadjsuaidhjsadsfdsfagfgfdgfdhg"
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "The quick brown fox jumps over the lazy dog
+看到那颗心了吗那是你的灵魂所在LV"
+label_settings = SubResource("LabelSettings_i1yiq")

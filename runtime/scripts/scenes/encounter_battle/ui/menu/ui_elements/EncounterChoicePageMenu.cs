@@ -20,7 +20,7 @@ public partial class EncounterChoicePageMenu : EncounterChoiceMenu
 		}
 	}
 
-	public override void SetChoice(int choice)
+	public async override void SetChoice(int choice)
 	{
 		if (choice >= _items.Count)
 		{
@@ -57,13 +57,17 @@ public partial class EncounterChoicePageMenu : EncounterChoiceMenu
 					menuItem.ProgressMaxValue = choiceItem.MaxValue;
 					menuItem.ProgressValue = choiceItem.Value;
 				}
-
-				if (choice == slot)
-				{
-					BattlePlayerSoul soul = enc.GetPlayerSoul();
-					soul.GlobalTransform = menuItem.GetSoulTransform();
-				}
 			}
-		}
+
+			
+            await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+            int soulSelectIndex = choice - (page * MenuItems.Count);
+            if (soulSelectIndex < 3)
+            {
+				var menuItem = MenuItems[soulSelectIndex];
+                BattlePlayerSoul soul = enc.GetPlayerSoul();
+                soul.GlobalTransform = menuItem.GetSoulTransform();
+            }
+        }
 	}
 }

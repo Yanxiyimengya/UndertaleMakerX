@@ -1,52 +1,61 @@
-[gd_scene load_steps=38 format=3 uid="uid://o3ubysucd5hn"]
+[gd_scene load_steps=43 format=3 uid="uid://o3ubysucd5hn"]
 
 [ext_resource type="Script" uid="uid://bicdg5gxj4cwq" path="res://scripts/scenes/encounter_battle/EncounterBattle.cs" id="1_a5x5v"]
-[ext_resource type="Texture2D" uid="uid://cpt8lkhth2ikc" path="res://assets/textures/ui/battle_screen/bg/spr_battlebg_0.png" id="2_4xtxd"]
+[ext_resource type="Texture2D" uid="uid://cpt8lkhth2ikc" path="res://__data__/built-in-resources/textures/ui/battle_screen/bg/spr_battlebg_0.png" id="2_4xtxd"]
 [ext_resource type="Script" uid="uid://5vy313u34hfc" path="res://scripts/utils/encounter/EncounterConfiguration.cs" id="2_13wr6"]
 [ext_resource type="Script" uid="uid://cctn2p527r38" path="res://scripts/utils/state_machine/StateMachine.cs" id="2_62htl"]
+[ext_resource type="PackedScene" uid="uid://buf56qyfu4560" path="res://scenes/encounter_battle/ui/ui_elements/attack_animation/battle_attack_animation_knife_0.tscn" id="2_aoui3"]
+[ext_resource type="Script" uid="uid://dilvjq0nqq1w6" path="res://scripts/utils/Item/BaseWeapon.cs" id="3_1x56u"]
 [ext_resource type="Script" uid="uid://c0ouwp06q4136" path="res://scripts/scenes/encounter_battle/state/BattlePlayerChoiceActionState.cs" id="3_18p8v"]
 [ext_resource type="PackedScene" uid="uid://bsu68i8btkpis" path="res://scenes/encounter_battle/battle_arena/battle_arena.tscn" id="3_62htl"]
 [ext_resource type="PackedScene" uid="uid://cee05uq5s87yp" path="res://scenes/encounter_battle/ui/status_bar/battle_status_bar.tscn" id="4_18p8v"]
-[ext_resource type="AudioStream" uid="uid://coq8miphysprd" path="res://assets/audio/sfx/snd_select.wav" id="4_53d75"]
-[ext_resource type="AudioStream" uid="uid://bqarl4v1658o" path="res://assets/audio/sfx/snd_squeak.wav" id="5_e7ctv"]
+[ext_resource type="AudioStream" uid="uid://coq8miphysprd" path="res://__data__/built-in-resources/sounds/snd_select.wav" id="4_53d75"]
+[ext_resource type="AudioStream" uid="uid://bqarl4v1658o" path="res://__data__/built-in-resources/sounds/snd_squeak.wav" id="5_e7ctv"]
 [ext_resource type="PackedScene" uid="uid://cfmmgpj17a2fc" path="res://scenes/encounter_battle/ui/button/battle_screen_button.tscn" id="5_wxkx7"]
-[ext_resource type="Texture2D" uid="uid://7t5wbkpk50fu" path="res://assets/textures/ui/buttons/spr_actbt_center_0.png" id="6_53d75"]
+[ext_resource type="Texture2D" uid="uid://7t5wbkpk50fu" path="res://__data__/built-in-resources/textures/ui/buttons/spr_actbt_center_0.png" id="6_53d75"]
 [ext_resource type="Script" uid="uid://sekm2lap34uh" path="res://scripts/scenes/encounter_battle/state/BattlePlayerFightMenuState.cs" id="7_0mx1x"]
 [ext_resource type="Script" uid="uid://dc27u6sxv148b" path="res://scripts/scenes/encounter_battle/state/BattlePlayerItemMenuState.cs" id="7_3peba"]
-[ext_resource type="Texture2D" uid="uid://p8a3d1ppm0r" path="res://assets/textures/ui/buttons/spr_actbt_center_1.png" id="7_e7ctv"]
+[ext_resource type="Texture2D" uid="uid://p8a3d1ppm0r" path="res://__data__/built-in-resources/textures/ui/buttons/spr_actbt_center_1.png" id="7_e7ctv"]
 [ext_resource type="PackedScene" uid="uid://d0q7av0w3c7gt" path="res://scenes/encounter_battle/ui/ui_elements/battle_diamage_text/battle_damage_text.tscn" id="8_du4b0"]
 [ext_resource type="Script" uid="uid://dwcjax4y5ew3q" path="res://scripts/scenes/encounter_battle/state/BattlePlayerActMenuState.cs" id="8_q4xod"]
-[ext_resource type="Texture2D" uid="uid://dtxtjdaxf7g27" path="res://assets/textures/ui/buttons/spr_itembt_0.png" id="8_taqgn"]
+[ext_resource type="Texture2D" uid="uid://dtxtjdaxf7g27" path="res://__data__/built-in-resources/textures/ui/buttons/spr_itembt_0.png" id="8_taqgn"]
 [ext_resource type="Script" uid="uid://bg88lu2onh1r2" path="res://scripts/scenes/encounter_battle/ui/button/BattleScreenButtonManager.cs" id="8_wxkx7"]
-[ext_resource type="Texture2D" uid="uid://dj7bbitqv4f76" path="res://assets/textures/ui/buttons/spr_itembt_1.png" id="9_oxe8y"]
-[ext_resource type="Texture2D" uid="uid://d37kqqs16srem" path="res://assets/textures/ui/buttons/spr_sparebt_0.png" id="10_66xs5"]
+[ext_resource type="Texture2D" uid="uid://dj7bbitqv4f76" path="res://__data__/built-in-resources/textures/ui/buttons/spr_itembt_1.png" id="9_oxe8y"]
+[ext_resource type="Texture2D" uid="uid://d37kqqs16srem" path="res://__data__/built-in-resources/textures/ui/buttons/spr_sparebt_0.png" id="10_66xs5"]
 [ext_resource type="Script" uid="uid://b2mvblo5kl3xc" path="res://scripts/scenes/encounter_battle/state/BattlePlayerMercyMenuState.cs" id="10_du4b0"]
-[ext_resource type="Texture2D" uid="uid://k11abgt7uggw" path="res://assets/textures/ui/buttons/spr_sparebt_1.png" id="11_17tmt"]
+[ext_resource type="Texture2D" uid="uid://k11abgt7uggw" path="res://__data__/built-in-resources/textures/ui/buttons/spr_sparebt_1.png" id="11_17tmt"]
 [ext_resource type="Script" uid="uid://050kpagro83y" path="res://scripts/scenes/encounter_battle/state/BattlePlayerDialogState.cs" id="11_noyau"]
 [ext_resource type="PackedScene" uid="uid://fg7a0q46v718" path="res://scenes/encounter_battle/battle_player_soul/battle_player_soul.tscn" id="12_2xdie"]
 [ext_resource type="Script" uid="uid://cce0p6lao4kpg" path="res://scripts/scenes/encounter_battle/BattleMenuManager.cs" id="13_13wr6"]
 [ext_resource type="Script" uid="uid://bv7ve8i3arvcq" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterTextMenu.cs" id="13_nakc4"]
-[ext_resource type="AudioStream" uid="uid://dmtjjdohc4f7u" path="res://assets/audio/voice/snd_text2.wav" id="19_66xs5"]
+[ext_resource type="Script" uid="uid://3iy182u0a5o5" path="res://scripts/scenes/encounter_battle/state/BattleEnemyDialogueState.cs" id="15_mdx4q"]
+[ext_resource type="AudioStream" uid="uid://dmtjjdohc4f7u" path="res://__data__/built-in-resources/sounds/voice/snd_text2.wav" id="19_66xs5"]
 [ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="19_taqgn"]
 [ext_resource type="Script" uid="uid://bpyxalubh243m" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterChoiceEnemyMenu.cs" id="19_vdmq1"]
-[ext_resource type="FontFile" uid="uid://bn6wautbcglmx" path="res://assets/fonts/FZXS12.ttf" id="20_oxe8y"]
+[ext_resource type="FontFile" uid="uid://bn6wautbcglmx" path="res://__data__/built-in-resources/fonts/FZXS12.ttf" id="20_oxe8y"]
 [ext_resource type="Script" uid="uid://c2nsgymkcwbb6" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterItemMenu.cs" id="23_0mx1x"]
 [ext_resource type="PackedScene" uid="uid://b4s2vi1x468nj" path="res://scenes/encounter_battle/ui/ui_elements/choice_menu/encounter_choice_list_menu.tscn" id="24_noyau"]
 [ext_resource type="PackedScene" uid="uid://chb46puy2x813" path="res://scenes/encounter_battle/ui/ui_elements/choice_menu/encounter_choice_page_menu.tscn" id="24_vdmq1"]
 [ext_resource type="Script" uid="uid://cq7rq1smnlytk" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterActPageMenu.cs" id="25_q4xod"]
 [ext_resource type="PackedScene" uid="uid://dtiq2nxayrrbj" path="res://scenes/encounter_battle/ui/ui_elements/battle_attack_gauge_bar/battle_attack_gauge_bar.tscn" id="26_du4b0"]
 [ext_resource type="Script" uid="uid://ic16gwu4kje7" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterMercyMenu.cs" id="26_noyau"]
+[ext_resource type="PackedScene" uid="uid://3dmh7idg5rqu" path="res://scenes/encounter_battle/ui/speech_bubble/speech_bubble.tscn" id="39_1x56u"]
+
+[sub_resource type="Resource" id="Resource_mdx4q"]
+script = ExtResource("3_1x56u")
+AttackAnimation = ExtResource("2_aoui3")
+metadata/_custom_type_script = "uid://dilvjq0nqq1w6"
 
 [sub_resource type="Resource" id="Resource_13wr6"]
 script = ExtResource("2_13wr6")
-DefaultEncounterText = "* 你是[color=red]猪[color=white]你是[color=orange][voice=null]猪[color=white]你是[color=yellow]猪[color=white]
-* [voice=assets/audio/voice/snd_txtsans.wav]你是[color=green][size=12][sound=assets/audio/sfx/snd_heal.wav]猪[size=24][color=white]你是[color=aqua]猪[color=white]你是[color=blue][outline_size=2][outline_color=red]猪[color=white]
-* 你是[color=purple]猪[color=white]你是[instant][font=assets/fonts/MonsterFriendFore.otf][instant]UNDERTALE PIG"
+DefaultEncounterText = "* UndertaleMaker[color=aqua]X[/color] by Yanxiyimeng!
+* UndertaleMaker[color=aqua]X[/color] by Yanxiyimeng!"
 EncounterBattleFirstState = "BattlePlayerChoiceActionState"
 metadata/_custom_type_script = "uid://5vy313u34hfc"
 
 [node name="EncounterBattle" type="Node" node_paths=PackedStringArray("PlayerSoul", "MainArena", "BattleStateMachine", "StatusBar", "EnemysNode")]
 script = ExtResource("1_a5x5v")
+We = SubResource("Resource_mdx4q")
 PlayerSoul = NodePath("Players/BattlePlayerSoul")
 MainArena = NodePath("Arenas/BattleArenaMain")
 BattleStateMachine = NodePath("BattleStateMachine")
@@ -109,6 +118,11 @@ SndSqueak = ExtResource("5_e7ctv")
 MenuManager = NodePath("../../UILayer/BattleMenuManager")
 MercyChoiceMenu = NodePath("../../UILayer/BattleMenuManager/EncounterMercyMenu")
 metadata/_custom_type_script = "uid://b2mvblo5kl3xc"
+
+[node name="BattleEnemyDialogueState" type="Node" parent="BattleStateMachine"]
+script = ExtResource("15_mdx4q")
+DialogueSpeechBubble = ExtResource("39_1x56u")
+metadata/_custom_type_script = "uid://3iy182u0a5o5"
 
 [node name="BackgroundLayer" type="Control" parent="."]
 layout_mode = 3
@@ -198,7 +212,7 @@ theme_override_constants/paragraph_separation = 10
 bbcode_enabled = true
 fit_content = true
 scroll_active = false
-autowrap_mode = 0
+autowrap_mode = 1
 script = ExtResource("19_taqgn")
 metadata/_custom_type_script = "uid://dmq4qew4auuss"
 

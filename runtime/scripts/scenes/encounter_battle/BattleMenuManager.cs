@@ -20,17 +20,16 @@ public partial class BattleMenuManager : TabContainer
 	public async System.Threading.Tasks.Task OpenMenu(string menuName)
 	{
 		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
-		Visible = true;
 		if (menuList.TryGetValue(prevMenuName, out BaseEncounterMenu prevMenu))
 		{
-			prevMenu.Visible = false;
 			prevMenu.UIHidden();
 		}
 		if (menuList.TryGetValue(menuName, out BaseEncounterMenu menu))
 		{
 			prevMenuName = menuName;
-			menu.Visible = true;
 			menu.UIVisible();
+			menu.Visible = true;
 		}
+		Visible = true;
 	}
 }

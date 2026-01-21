@@ -60,7 +60,6 @@ public partial class BattlePlayerItemMenuState : StateNode
 	public override async void _EnterState()
 	{
 		await MenuManager.OpenMenu("EncounterItemMenu");
-		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 		ItemChoiceMenu.SetChoice(ItemChoice);
 	}
 

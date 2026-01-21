@@ -45,6 +45,8 @@ public partial class TextTyper : Godot.RichTextLabel
 	}
 	[Export]
 	public bool Instant = false;
+	[Export]
+	public bool NoSkip = false;
 
 	[Export]
 	public AudioStream Voice = null;
@@ -60,9 +62,7 @@ public partial class TextTyper : Godot.RichTextLabel
 	public TextTyper()
 	{
 		BbcodeEnabled = true;
-		FitContent = true;
 		ScrollActive = false;
-		AutowrapMode = TextServer.AutowrapMode.Off;
 	}
 
 	public override void _Process(double delta)
@@ -79,6 +79,13 @@ public partial class TextTyper : Godot.RichTextLabel
 		}
 		else
 		{
+			if (!NoSkip && !Instant && !Engine.IsEditorHint())
+			{
+				if (Input.IsActionJustPressed("cancel"))
+				{
+					Instant = true;
+				}
+			}
 			if (_typerWattingTimer > 0.0) _typerWattingTimer -= delta;
 			else
 			{
@@ -371,11 +378,13 @@ public partial class TextTyper : Godot.RichTextLabel
 	{
 		return (_waitForKeyAction == null) && (!IsFinished());
 	}
-	public void Start(string text)
+	public void Start(string text = null)
 	{
 		Clear();
 		ResetData();
+		if (text == null) return;
 		TyperText = text;
+		Instant = false;
 	}
 
 	public new bool IsFinished()

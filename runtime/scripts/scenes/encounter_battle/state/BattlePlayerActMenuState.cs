@@ -160,9 +160,8 @@ public partial class BattlePlayerActMenuState : StateNode
 	private async Task _OpenEnemyChoiceMenu()
 	{
 		_selected = false;
-		encounterChoiceEnemyMenu.HpBarSetVisible(false);
 		await MenuManager.OpenMenu("EncounterChoiceEnemyMenu");
-		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+		encounterChoiceEnemyMenu.HpBarSetVisible(false);
 		encounterChoiceEnemyMenu.SetChoice(EnemyChoice);
 	}
 

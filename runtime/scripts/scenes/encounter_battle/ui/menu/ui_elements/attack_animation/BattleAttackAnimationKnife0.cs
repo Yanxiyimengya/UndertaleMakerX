@@ -10,6 +10,10 @@ public partial class BattleAttackAnimationKnife0 : BattleAttackAnimation
 	{
 		animSprite2D.Play();
 		animSprite2D.Connect(AnimatedSprite2D.SignalName.AnimationFinished, 
-			Callable.From(() => EmitSignal(SignalName.Finished, [])));
+			Callable.From(() => {
+				EmitSignal(SignalName.Finished, []);
+				QueueFree();
+			}
+		));
 	}
 }

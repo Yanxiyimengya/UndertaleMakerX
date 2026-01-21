@@ -28,7 +28,7 @@ public partial class PlayerDataManager : Node
         new BaseItem(),
         new BaseItem(),
     };
-	public BaseWeapon Weapon = null;
+	public BaseWeapon Weapon = new BaseWeapon();
 
 	public int GetItemCount()
 	{

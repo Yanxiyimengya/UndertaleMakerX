@@ -1,6 +1,8 @@
 using Godot;
 using System;
 
+
+[GlobalClass]
 public partial class BaseWeapon : BaseItem
 {
 	[Export]

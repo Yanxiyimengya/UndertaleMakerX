@@ -37,6 +37,7 @@ project/assembly_name="UTMX-Runtime"
 [file_customization]
 
 folder_colors={
+"res://Properties/": "gray",
 "res://addons/": "red",
 "res://assets/": "orange",
 "res://scenes/": "yellow",

@@ -1,4 +1,5 @@
 using Godot;
+
 using System;
 using System.Threading.Tasks;
 
@@ -9,8 +10,40 @@ public partial class BattleDamageText : Node2D
 	public delegate void EndedEventHandler();
 
 	[Export]
-	TextTyper DamageTextTyper;
-	
+	public TextTyper DamageTextTyper;
+
+
+	private float _ystart = 0.0F;
+	private double vspeed = -140;
+	private double gravity = 600;
+	private double waitting = 0.75;
+
+	public override void _EnterTree()
+	{
+		_ystart = Position.Y;
+	}
+	public override void _Process(double delta)
+	{
+		if (Position.Y <= _ystart)
+		{
+			Position = new Vector2(Position.X, Position.Y + (float)(vspeed * delta));
+			vspeed += gravity * delta;
+		}
+		else
+		{
+			if (waitting > 0)
+			{
+				waitting -= delta;
+			}
+			else
+			{
+				End();
+			}
+			gravity = 0;
+			vspeed = 0;
+		}
+	}
+
 	public void SetText(string text)
 	{
 		DamageTextTyper.TyperColor = Color.Color8(0xC0, 0xC0, 0xC0);
@@ -24,11 +57,13 @@ public partial class BattleDamageText : Node2D
 		Start();
 	}
 
-	private async void Start()
+	public void End()
 	{
-		await ToSignal(GetTree().CreateTimer(1.0), Timer.SignalName.Timeout);
 		EmitSignal(SignalName.Ended, []);
 		QueueFree();
+	}
+	private void Start()
+	{
 	}
 
 }

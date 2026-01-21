@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://buf56qyfu4560"]
 
-[ext_resource type="Texture2D" uid="uid://ntyrfjwuxajv" path="res://assets/textures/ui/battle_screen/spr_slice_o_0-Sheet.png" id="1_eyuth"]
+[ext_resource type="Texture2D" uid="uid://ntyrfjwuxajv" path="res://__data__/built-in-resources/textures/ui/battle_screen/spr_slice_o_0-Sheet.png" id="1_eyuth"]
 [ext_resource type="Script" uid="uid://b7jpaxj7a6loa" path="res://scripts/scenes/encounter_battle/ui/menu/ui_elements/attack_animation/BattleAttackAnimationKnife0.cs" id="1_xw6ss"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xw6ss"]
@@ -47,15 +47,18 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_m7w00")
+}, {
+"duration": 1.0,
+"texture": null
 }],
-"loop": true,
+"loop": false,
 "name": &"default",
-"speed": 10.0
+"speed": 11.0
 }]
 
-[node name="BattleAttackAnimationKnife0" type="Node2D"]
+[node name="BattleAttackAnimationKnife0" type="Node2D" node_paths=PackedStringArray("animSprite2D")]
 script = ExtResource("1_xw6ss")
+animSprite2D = NodePath("AnimatedSprite2D")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_yxhie")
-frame_progress = 0.6511302

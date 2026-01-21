@@ -31,8 +31,8 @@ public partial class BattlePlayerFightMenuState : StateNode
 	private int _enemyChoice = 0; 
 	private EncounterBattle _encounterBattle; // 当前战斗场景引用
 	private int _state = 0; // 状态机：0-选择敌人 1-攻击计量条 2-显示伤害文本
-	private float _damage = 0f; // 计算出的伤害值
-	private bool _isMiss = false; // 是否未命中（重命名：避免关键字冲突）
+	private float _damage = 0f; // 计算出的伤害
+	private bool _isTargetMiss = false; // 是否未命中
 	private BattleAttackAnimation _attackAnimation; // 攻击动画实例
 	private BattleDamageText _attackDamageText; // 伤害文本实例
 
@@ -53,7 +53,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 	#region 核心业务逻辑
 	private void OnGaugeBarHitted(bool missed, float hitValue)
 	{
-		_isMiss = missed;
+		_isTargetMiss = missed;
 		_attackAnimation = null;
 
 		BaseEnemy targetEnemy = GetTargetEnemy();
@@ -62,7 +62,6 @@ public partial class BattlePlayerFightMenuState : StateNode
 		if (PlayerDataManager.Instance != null && PlayerDataManager.Instance.Weapon != null)
 		{
 			_damage = (float)PlayerDataManager.Instance.Weapon._CalculateDamage(hitValue, targetEnemy);
-			_isMiss = _isMiss || _damage <= 0;
 			SpawnAttackAnimation(targetEnemy);
 		}
 
@@ -71,7 +70,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 			ShowDamageText(targetEnemy);
 		}
 
-		targetEnemy.HandleAttack(_isMiss);
+		targetEnemy.HandleAttack(_isTargetMiss);
 	}
 
 	private void ShowDamageText(BaseEnemy targetEnemy)
@@ -80,7 +79,14 @@ public partial class BattlePlayerFightMenuState : StateNode
 		targetEnemy.AddChild(_attackDamageText);
 		_state = STATE_SHOW_DAMAGE;
 
-		if (_isMiss)
+		_attackDamageText.Connect(
+			BattleDamageText.SignalName.Ended,
+			Callable.From(async void () => {
+				await GaugeBar.End();
+				_NextState();
+				}),
+			(uint)Node.ConnectFlags.OneShot);
+		if (_isTargetMiss)
 		{
 			_attackDamageText.SetText(targetEnemy.MissText);
 		}
@@ -88,13 +94,6 @@ public partial class BattlePlayerFightMenuState : StateNode
 		{
 			_attackDamageText.SetNumber((int)_damage);
 		}
-		_attackDamageText.Connect(
-			BattleDamageText.SignalName.Ended,
-			Callable.From(async void () => {
-				await GaugeBar.End();
-				 _NextState();
-				}),
-			(uint)Node.ConnectFlags.OneShot);
 	}
 
 	private void SpawnAttackAnimation(BaseEnemy targetEnemy)
@@ -103,7 +102,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 		if (currentWeapon?.AttackAnimation == null) return;
 
 		_attackAnimation = (BattleAttackAnimation)currentWeapon.AttackAnimation?.Instantiate();
-		_attackAnimation.GlobalPosition = targetEnemy.GlobalPosition;
+		_attackAnimation.GlobalPosition = targetEnemy.GlobalPosition + targetEnemy.CenterPosition;
 		AddChild(_attackAnimation);
 
 		_attackAnimation.Connect(
@@ -197,9 +196,9 @@ public partial class BattlePlayerFightMenuState : StateNode
 	#region 状态机生命周期
 	public override async void _EnterState()
 	{
-		EncounterChoiceEnemyMenu.HpBarSetVisible(true);
 		await OpenEnemyChoiceMenu();
 		EncounterChoiceEnemyMenu.SetChoice(_enemyChoice);
+		EncounterChoiceEnemyMenu.HpBarSetVisible(true);
 		_state = STATE_SELECT_ENEMY;
 	}
 
@@ -211,7 +210,6 @@ public partial class BattlePlayerFightMenuState : StateNode
 	private async Task OpenEnemyChoiceMenu()
 	{
 		await MenuManager.OpenMenu("EncounterChoiceEnemyMenu");
-		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 	}
 
 	public override void _ExitState() {

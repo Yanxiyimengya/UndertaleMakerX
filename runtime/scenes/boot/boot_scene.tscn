@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://ek5fye1ues0f" path="res://scripts/scenes/boot_splash/BootSplash.cs" id="1_vsr1g"]
 [ext_resource type="Texture2D" uid="uid://bpiib7svxf677" path="res://assets/icons/utmx-icon-256.svg" id="2_plq4m"]
-[ext_resource type="FontFile" uid="uid://dioq7ttrn3glm" path="res://assets/fonts/MonsterFriendBack.otf" id="3_svh1u"]
-[ext_resource type="FontFile" uid="uid://bcs627v4yubkm" path="res://assets/fonts/MonsterFriendFore.otf" id="4_ap0b2"]
+[ext_resource type="FontFile" uid="uid://dioq7ttrn3glm" path="res://__data__/built-in-resources/fonts/MonsterFriendBack.otf" id="3_svh1u"]
+[ext_resource type="FontFile" uid="uid://bcs627v4yubkm" path="res://__data__/built-in-resources/fonts/MonsterFriendFore.otf" id="4_ap0b2"]
 
 [sub_resource type="Animation" id="Animation_iatiw"]
 length = 0.001

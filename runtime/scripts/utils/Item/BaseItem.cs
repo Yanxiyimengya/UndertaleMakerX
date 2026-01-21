@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-[GlobalClass] // Godot推荐为自定义Resource添加该特性
+[GlobalClass]
 public partial class BaseItem : Resource
 {
     [Export]

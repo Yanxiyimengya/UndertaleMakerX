@@ -1,9 +1,14 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class EncounterBattle : Node
 {
+	
+	[Export]
+	BaseWeapon We;
+	
 	[Export]
 	BattlePlayerSoul PlayerSoul;
 	[Export]
@@ -27,16 +32,7 @@ public partial class EncounterBattle : Node
 	}
 
 	public string EncounterText = "";
-	public List<BaseEnemy> Enemys = [
-		new BaseEnemy(),
-		new BaseEnemy(),
-		new BaseEnemy(),
-		new BaseEnemy(),
-		new BaseEnemy(),
-		new BaseEnemy(),
-		new BaseEnemy(),
-
-		];
+	public List<BaseEnemy> Enemys = [];
 	public bool CanFree;
 	
 	private EncounterConfiguration encounterConfig = null;
@@ -47,15 +43,27 @@ public partial class EncounterBattle : Node
 		foreach (BaseEnemy enemy in Enemys)
 		{
 			EnemysNode.AddChild(enemy);
-		}	
+		}
+		PlayerDataManager.Instance.Weapon = We;
+
 	}
 
 	public override void _Ready()
 	{
 		BattleStateMachine.SwitchToState(encounterConfig.EncounterBattleFirstState);
+		AddEnemy(new BaseEnemy(), new Vector2(0F , -0F));
 	}
 	public BattlePlayerSoul GetPlayerSoul()
 	{
 		return PlayerSoul;
+	}
+
+	public void AddEnemy(BaseEnemy enemy, Vector2 position)
+	{
+		Enemys.Add(enemy);
+		if (! enemy.IsInsideTree()) {
+			EnemysNode.AddChild(enemy);
+			enemy.Position = position;
+		}
 	}
 }

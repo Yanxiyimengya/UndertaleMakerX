@@ -15,61 +15,72 @@ public partial class BattlePlayerMercyMenuState : StateNode
 
 	public int MercyChoice = 0;
 
+	private bool _freed = false;
+
 	public override void _Process(double delta)
 	{
-		if (Input.IsActionJustPressed("up"))
+		if (_freed)
 		{
-			MercyChoice -= 1;
-			if (MercyChoice < 0)
-			{
-				MercyChoice = 0;
-			}
-			else 
-			{
-				GlobalStreamPlayer.Instance.PlaySound(SndSqueak);
-			}
-			MercyChoiceMenu.SetChoice(MercyChoice);
-		}
-		else if (Input.IsActionJustPressed("down"))
-		{
-			MercyChoice += 1;
-			if (MercyChoice >= MercyChoiceMenu.GetItemCount())
-			{
-				MercyChoice = MercyChoiceMenu.GetItemCount() - 1;
-			}
-			else
-			{
-				GlobalStreamPlayer.Instance.PlaySound(SndSqueak);
-			}
-			MercyChoiceMenu.SetChoice(MercyChoice);
-		}
-		else if (Input.IsActionJustPressed("cancel"))
-		{
-			EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerChoiceActionState"]);
-		}
-		else if (Input.IsActionJustPressed("confirm"))
-		{
-			string choiced = (string)MercyChoiceMenu.GetChoicedItemId();
 
-			if (choiced == "SPARE")
+		}
+		else
+		{
+
+			if (Input.IsActionJustPressed("up"))
 			{
-				if (GetTree().CurrentScene is EncounterBattle enc)
+				MercyChoice -= 1;
+				if (MercyChoice < 0)
 				{
-					foreach (BaseEnemy enemy in enc.Enemys)
+					MercyChoice = 0;
+				}
+				else
+				{
+					GlobalStreamPlayer.Instance.PlaySound(SndSqueak);
+				}
+				MercyChoiceMenu.SetChoice(MercyChoice);
+			}
+			else if (Input.IsActionJustPressed("down"))
+			{
+				MercyChoice += 1;
+				if (MercyChoice >= MercyChoiceMenu.GetItemCount())
+				{
+					MercyChoice = MercyChoiceMenu.GetItemCount() - 1;
+				}
+				else
+				{
+					GlobalStreamPlayer.Instance.PlaySound(SndSqueak);
+				}
+				MercyChoiceMenu.SetChoice(MercyChoice);
+			}
+			else if (Input.IsActionJustPressed("cancel"))
+			{
+				EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerChoiceActionState"]);
+			}
+			else if (Input.IsActionJustPressed("confirm"))
+			{
+				string choiced = (string)MercyChoiceMenu.GetChoicedItemId();
+
+				if (choiced == "SPARE")
+				{
+					if (GetTree().CurrentScene is EncounterBattle enc)
 					{
-						if (enemy.AllowSpare && enemy.CanSpare)
+						foreach (BaseEnemy enemy in enc.Enemys)
 						{
-							enemy.OnSpare();
+							if (enemy.AllowSpare && enemy.CanSpare)
+							{
+								enemy.OnSpare();
+							}
 						}
 					}
 				}
+				EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerDialogState"]);
 			}
-			EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerDialogState"]);
 		}
 	}
 	
 	public override async void _EnterState()
 	{
+		_freed = false;
 		await MenuManager.OpenMenu("EncounterMercyMenu");
 		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 		MercyChoiceMenu.SetChoice(MercyChoice);

@@ -11,11 +11,9 @@ public partial class EncounterChoiceMenuItem : HBoxContainer
 		set
 		{
 			text = value;
-			DisplayTextTyper.Start($"* {value}");
+			DisplayTextTyper.Start($"[instant]* {value}");
 		}
 	}
-
-
 	[Export]
 	public bool ProgressVisible
 	{

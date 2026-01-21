@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b6ur6lbelpbj0" path="res://scripts/scenes/encounter_battle/ui/menu/ui_elements/choice_menu/choice_menu_item/EncounterChoiceMenuItem.cs" id="1_6jsmc"]
 [ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="1_jr0et"]
-[ext_resource type="FontFile" uid="uid://bn6wautbcglmx" path="res://assets/fonts/FZXS12.ttf" id="3_kqo6q"]
+[ext_resource type="FontFile" uid="uid://bn6wautbcglmx" path="res://__data__/built-in-resources/fonts/FZXS12.ttf" id="3_kqo6q"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vdmq1"]
 bg_color = Color(1, 0, 0, 1)
@@ -38,10 +38,8 @@ fit_content = true
 scroll_active = false
 autowrap_mode = 0
 script = ExtResource("1_jr0et")
-TyperText = "* "
 TyperSize = 24
 TyperFont = ExtResource("3_kqo6q")
-Instant = true
 metadata/_custom_type_script = "uid://dmq4qew4auuss"
 
 [node name="ProgressBarMarginContainer" type="MarginContainer" parent="."]

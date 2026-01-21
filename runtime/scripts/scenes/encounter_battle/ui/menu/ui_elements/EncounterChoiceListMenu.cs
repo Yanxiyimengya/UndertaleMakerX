@@ -23,7 +23,7 @@ public partial class EncounterChoiceListMenu : EncounterChoiceMenu
 		UtScrollBar.Visible = v;
 	}
 
-	public override void SetChoice(int choice)
+	public async override void SetChoice(int choice)
 	{
 		if (choice >= _items.Count)
 		{
@@ -54,12 +54,15 @@ public partial class EncounterChoiceListMenu : EncounterChoiceMenu
 					menuItem.ProgressMaxValue = choiceItem.MaxValue;
 					menuItem.ProgressValue = choiceItem.Value;
 				}
+			}
 
-				if (choice == slot)
-				{
-					BattlePlayerSoul soul = enc.GetPlayerSoul();
-					soul.GlobalTransform = menuItem.GetSoulTransform();
-				}
+			await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+			int soulSelectIndex = choice - _firstIndex;
+			if (soulSelectIndex < 3)
+			{
+				var menuItem = MenuItems[soulSelectIndex];
+				BattlePlayerSoul soul = enc.GetPlayerSoul();
+				soul.GlobalTransform = menuItem.GetSoulTransform();
 			}
 		}
 	}
