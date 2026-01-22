@@ -12,7 +12,6 @@ public partial class BaseItem : Resource
 
     public virtual void OnUseSelected()
     {
-        DialogueQueueManager.Instance.AppendDialogue("ASNHIUDSHNUSAIDBUSHB");
     }
 
     public virtual void OnDropSelected()

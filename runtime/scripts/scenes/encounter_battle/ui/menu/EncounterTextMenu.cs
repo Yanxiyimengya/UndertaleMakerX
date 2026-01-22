@@ -10,9 +10,18 @@ public partial class EncounterTextMenu : BaseEncounterMenu
 	Font DefaultFont;
 	[Export]
 	int FontSize;
-	[Export]
-	AudioStream DefaultVoice;
-
+	
+	private AudioStream _defaultVoice;
+	
+	public override void _Ready()
+	{
+		_defaultVoice = GlobalStreamPlayer.Instance.GetStream("TEXT_TYPER_VOICE");
+	}
+	
+	public override void _Process(double delta)
+	{
+	}
+	
 	public override void UIVisible()
 	{
 	}
@@ -21,21 +30,18 @@ public partial class EncounterTextMenu : BaseEncounterMenu
 		encounterTextTyper.Start("");
 	}
 
-	public override void _Process(double delta)
-	{
-	}
 	
 	public void ShowEncounterText(string text) 
 	{
 		encounterTextTyper.TyperFont = DefaultFont;
-		encounterTextTyper.TyperSize = FontSize;
-		encounterTextTyper.Voice = DefaultVoice;
+		encounterTextTyper.TyperSize = 24;
+		encounterTextTyper.Voice = _defaultVoice;
 		encounterTextTyper.Instant = false;
 		if (GetTree().CurrentScene is EncounterBattle enc) 
 			encounterTextTyper.Start(text);
 	}
 
-	public bool TextTyperFinished()
+	public bool IsTextTyperFinished()
 	{
 		return encounterTextTyper.IsFinished();
 	}

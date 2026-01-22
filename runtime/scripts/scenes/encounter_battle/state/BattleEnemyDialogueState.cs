@@ -6,13 +6,16 @@ public partial class BattleEnemyDialogueState : StateNode
 {
 	[Export]
 	public PackedScene DialogueSpeechBubble;
-	
+	[Export]
+	public BattleMenuManager MenuManager;
+
 	public override void _Process(double delta)
 	{
 	}
 
 	public override void _EnterState()
 	{
+		MenuManager.CloseAllMenu();
 	}
 
 	public override void _ExitState()

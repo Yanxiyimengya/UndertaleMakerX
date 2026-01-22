@@ -17,7 +17,7 @@ public partial class SpeechBubble : Node2D
 	[Export]
 	public Vector2 Size = new Vector2(50F, 50F);
 	[Export(PropertyHint.Enum, "Top,Bottom,Left,Right")]
-	public int dir = 2;
+	public int Dir = 2;
 	[Export]
 	public float SpikeOffset = 0F;
 	[Export]
@@ -30,7 +30,7 @@ public partial class SpeechBubble : Node2D
 	public TextureRect SpeechBubbleSpikeTexture;
 
 	private Vector2 _minimumSize = new Vector2(45, 45);
-	public string _text;
+	private string _text;
 
 	public override void _Ready()
 	{
@@ -41,10 +41,10 @@ public partial class SpeechBubble : Node2D
 	{
 		Size = new Vector2(MathF.Max(Size.X, _minimumSize.X), MathF.Max(Size.Y, _minimumSize.Y));
 		SpeechBubbleTextTyper.Size = Size;
-
 		SpeechBubbleSpikeTexture.Visible = !HideSpike;
+
 		if (!HideSpike) { 
-			switch (dir)
+			switch (Dir)
 			{
 				case 0:
 					SpeechBubbleSpikeTexture.RotationDegrees = 270.0F;
@@ -70,7 +70,7 @@ public partial class SpeechBubble : Node2D
 
 		if (InSpike)
 		{
-			switch (dir)
+			switch (Dir)
 			{
 				case 0:
 					SpeechBubbleSpikeTexture.Position = new Vector2(SpeechBubbleSpikeTexture.Size.Y * 0.5F
@@ -107,7 +107,7 @@ public partial class SpeechBubble : Node2D
 		else
 		{
 			SpeechBubbleTextTyper.Position = -Size * 0.5F;
-			switch (dir)
+			switch (Dir)
 			{
 				case 0:
 					SpeechBubbleSpikeTexture.Position = new Vector2(

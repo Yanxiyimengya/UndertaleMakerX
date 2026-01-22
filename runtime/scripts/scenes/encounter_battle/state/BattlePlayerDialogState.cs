@@ -12,7 +12,7 @@ public partial class BattlePlayerDialogState : StateNode
 	BattleScreenButtonManager BattleButtonManager;
 	public override void _Process(double delta)
 	{
-		if (TextMenu.TextTyperFinished())
+		if (TextMenu.IsTextTyperFinished())
 		{
 			if (Input.IsActionJustPressed("confirm"))
 			{
@@ -24,10 +24,6 @@ public partial class BattlePlayerDialogState : StateNode
 	public override async void _EnterState()
 	{
 		NextStep();
-		if (GetTree().CurrentScene is EncounterBattle enc)
-		{
-			enc.GetPlayerSoul().Visible = false;
-		}
 		await MenuManager.OpenMenu("EncounterTextMenu");
 		BattleButtonManager.ReleaseAllButton();
 	}
@@ -42,12 +38,20 @@ public partial class BattlePlayerDialogState : StateNode
 
 	private void NextStep()
 	{
-		if (DialogueQueueManager.Instance.DialogueCount() > 0)
+		if (GetTree().CurrentScene is EncounterBattle enc)
 		{
-			string dialogueText = DialogueQueueManager.Instance.GetNextDialogueAsText();
-			TextMenu.ShowEncounterText($"* {dialogueText}");
+			BattlePlayerSoul soul = enc.GetPlayerSoul();
+			soul.Visible = false;
+			if (DialogueQueueManager.Instance.DialogueCount() > 0)
+			{
+				string dialogueText = DialogueQueueManager.Instance.GetNextDialogueAsText();
+				TextMenu.ShowEncounterText($"* {dialogueText}");
+			}
+			else
+			{
+				if (! enc.Endded)
+					EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerChoiceActionState"]);
+			}
 		}
-		else 
-			EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerChoiceActionState"]);
 	}
 }

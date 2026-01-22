@@ -89,7 +89,7 @@ public partial class BattlePlayerActMenuState : StateNode
 				ActChoice = Math.Clamp(ActChoice, 0, encounterActPageMenu.GetItemCount() - 1);
 				encounterActPageMenu.SetChoice(ActChoice);
 				_prevActChoice = ActChoice;
-				GlobalStreamPlayer.Instance.PlaySound(SndSqueak);
+				GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SQUEAK"));
 			}
 
 			if (Input.IsActionJustPressed("cancel"))
@@ -115,7 +115,7 @@ public partial class BattlePlayerActMenuState : StateNode
 				}
 				else
 				{
-					GlobalStreamPlayer.Instance.PlaySound(SndSqueak);
+					GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SQUEAK"));
 				}
 				encounterChoiceEnemyMenu.SetChoice(EnemyChoice);
 			}
@@ -130,7 +130,7 @@ public partial class BattlePlayerActMenuState : StateNode
 					}
 					else
 					{
-						GlobalStreamPlayer.Instance.PlaySound(SndSqueak);
+						GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SQUEAK"));
 					}
 					encounterChoiceEnemyMenu.SetChoice(EnemyChoice);
 				}
@@ -142,7 +142,7 @@ public partial class BattlePlayerActMenuState : StateNode
 			else if (Input.IsActionJustPressed("confirm"))
 			{
 				await _OpenActMenu();
-				GlobalStreamPlayer.Instance.PlaySound(SndSelect);
+				GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SELECT"));
 			}
 		}
 	}

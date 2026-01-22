@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://buf56qyfu4560"]
+[gd_scene load_steps=11 format=3 uid="uid://buf56qyfu4560"]
 
 [ext_resource type="Texture2D" uid="uid://ntyrfjwuxajv" path="res://__data__/built-in-resources/textures/ui/battle_screen/spr_slice_o_0-Sheet.png" id="1_eyuth"]
 [ext_resource type="Script" uid="uid://b7jpaxj7a6loa" path="res://scripts/scenes/encounter_battle/ui/menu/ui_elements/attack_animation/BattleAttackAnimationKnife0.cs" id="1_xw6ss"]
+[ext_resource type="AudioStream" uid="uid://bt8ejn6arrtt3" path="res://assets/sounds/sfx/snd_laz.wav" id="2_6xcgh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xw6ss"]
 atlas = ExtResource("1_eyuth")
@@ -59,6 +60,7 @@ animations = [{
 [node name="BattleAttackAnimationKnife0" type="Node2D" node_paths=PackedStringArray("animSprite2D")]
 script = ExtResource("1_xw6ss")
 animSprite2D = NodePath("AnimatedSprite2D")
+attackSound = ExtResource("2_6xcgh")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_yxhie")

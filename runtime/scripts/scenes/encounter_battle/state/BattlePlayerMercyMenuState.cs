@@ -5,23 +5,33 @@ using System;
 public partial class BattlePlayerMercyMenuState : StateNode
 {
 	[Export]
-	AudioStream SndSelect;
-	[Export]
-	AudioStream SndSqueak;
-	[Export]
 	BattleMenuManager MenuManager;
+	[Export]
+	EncounterTextMenu TextMenu;
+	[Export]
+	BattleScreenButtonManager BattleButtonManager;
 	[Export]
 	EncounterMercyMenu MercyChoiceMenu;
 
 	public int MercyChoice = 0;
 
 	private bool _freed = false;
+	private BattlePlayerSoul _playerSoul;
+	private string _freeText = "";
 
 	public override void _Process(double delta)
 	{
 		if (_freed)
 		{
-
+			if (_playerSoul != null)
+			{
+				_playerSoul.Position = new Vector2(_playerSoul.Position.X - (float)(delta * 120), 
+					_playerSoul.Position.Y);
+			}
+			if (TextMenu.IsTextTyperFinished())
+			{
+				
+			}
 		}
 		else
 		{
@@ -35,7 +45,7 @@ public partial class BattlePlayerMercyMenuState : StateNode
 				}
 				else
 				{
-					GlobalStreamPlayer.Instance.PlaySound(SndSqueak);
+					GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SQUEAK"));
 				}
 				MercyChoiceMenu.SetChoice(MercyChoice);
 			}
@@ -48,8 +58,9 @@ public partial class BattlePlayerMercyMenuState : StateNode
 				}
 				else
 				{
-					GlobalStreamPlayer.Instance.PlaySound(SndSqueak);
+					GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SQUEAK"));
 				}
+
 				MercyChoiceMenu.SetChoice(MercyChoice);
 			}
 			else if (Input.IsActionJustPressed("cancel"))
@@ -58,8 +69,8 @@ public partial class BattlePlayerMercyMenuState : StateNode
 			}
 			else if (Input.IsActionJustPressed("confirm"))
 			{
+				GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SELECT"));
 				string choiced = (string)MercyChoiceMenu.GetChoicedItemId();
-
 				if (choiced == "SPARE")
 				{
 					if (GetTree().CurrentScene is EncounterBattle enc)
@@ -73,7 +84,10 @@ public partial class BattlePlayerMercyMenuState : StateNode
 						}
 					}
 				}
-				EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerDialogState"]);
+				else if (choiced == "FREE")
+				{
+					_Free();
+				}
 			}
 		}
 	}
@@ -87,5 +101,27 @@ public partial class BattlePlayerMercyMenuState : StateNode
 	}
 	public override void _ExitState()
 	{
+	}
+
+	private async void _OpenTextMenu()
+	{
+		DialogueQueueManager.Instance.AppendDialogue(_freeText);
+		await MenuManager.OpenMenu("EncounterTextMenu");
+	}
+
+	private void _Free()
+	{ 
+		if (GetTree().CurrentScene is EncounterBattle enc)
+		{
+			_freed = true;
+			_playerSoul = enc.GetPlayerSoul();
+			_playerSoul.Freed = true;
+			_playerSoul.Visible = true;
+			_OpenTextMenu();
+			enc.Endded = true;
+			TextMenu.ShowEncounterText(enc.FreeText);
+			BattleButtonManager.ReleaseAllButton();
+			GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("ESCAPED"));
+		}
 	}
 }

@@ -38,13 +38,13 @@ public partial class BattlePlayerChoiceActionState : StateNode
 		if (Input.IsActionJustPressed("left"))
 		{
 			ActionChoice -= 1;
-			GlobalStreamPlayer.Instance.PlaySound(SndSqueak);
+			GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SQUEAK"));
 			if (ActionChoice < 0) ActionChoice = BattleButtonManager.GetButtonCount() - 1;
 		}
 		else if (Input.IsActionJustPressed("right"))
 		{
 			ActionChoice += 1;
-			GlobalStreamPlayer.Instance.PlaySound(SndSqueak);
+			GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SQUEAK"));
 			if (ActionChoice >= BattleButtonManager.GetButtonCount()) ActionChoice = 0;
 		}
 		else if (Input.IsActionJustPressed("confirm"))
@@ -54,7 +54,7 @@ public partial class BattlePlayerChoiceActionState : StateNode
 				EmitSignal(SignalName.RequestSwitchState, [state]);
 			}
 
-			GlobalStreamPlayer.Instance.PlaySound(SndSelect);
+			GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SELECT"));
 		}
 		SetChoice(ActionChoice);
 	}

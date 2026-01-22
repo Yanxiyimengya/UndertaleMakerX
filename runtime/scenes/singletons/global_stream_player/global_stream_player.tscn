@@ -1,0 +1,16 @@
+[gd_scene load_steps=7 format=3 uid="uid://1lsxtliaynw4"]
+
+[ext_resource type="Script" uid="uid://unedikdlntim" path="res://scripts/singletons/GlobalStreamPlayer.cs" id="1_811sd"]
+[ext_resource type="AudioStream" uid="uid://coq8miphysprd" path="res://assets/sounds/sfx/snd_select.wav" id="2_uvksp"]
+[ext_resource type="AudioStream" uid="uid://bqarl4v1658o" path="res://assets/sounds/sfx/snd_squeak.wav" id="3_wojre"]
+[ext_resource type="AudioStream" uid="uid://cdgcsi75ifjss" path="res://assets/sounds/sfx/snd_escaped.wav" id="4_yuuso"]
+[ext_resource type="AudioStream" uid="uid://dmtjjdohc4f7u" path="res://assets/sounds/voice/snd_text2.wav" id="5_yuuso"]
+[ext_resource type="AudioStream" uid="uid://d2u6tsm4bxsnh" path="res://assets/sounds/voice/snd_text.wav" id="6_8rblb"]
+
+[node name="GlobalStreamPlayer" type="Node"]
+script = ExtResource("1_811sd")
+SelectSoundStream = ExtResource("2_uvksp")
+SqueakSoundStream = ExtResource("3_wojre")
+EscapedSoundStream = ExtResource("4_yuuso")
+TextSoundStream = ExtResource("5_yuuso")
+EnemyDialogueSoundStream = ExtResource("6_8rblb")

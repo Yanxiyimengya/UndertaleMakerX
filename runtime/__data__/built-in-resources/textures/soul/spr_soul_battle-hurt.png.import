@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ddf5w0nj7k3qg"
-path="res://.godot/imported/spr_soul_battle_0.png-4106fa1b7beb90d22a03bbd962834981.ctex"
+uid="uid://bgxo10apbihsc"
+path="res://.godot/imported/spr_soul_battle-hurt.png-935af0be85f7338ad6a135b7b0e871e1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://__data__/built-in-resources/textures/soul/spr_soul_battle_0.png"
-dest_files=["res://.godot/imported/spr_soul_battle_0.png-4106fa1b7beb90d22a03bbd962834981.ctex"]
+source_file="res://__data__/built-in-resources/textures/soul/spr_soul_battle-hurt.png"
+dest_files=["res://.godot/imported/spr_soul_battle-hurt.png-935af0be85f7338ad6a135b7b0e871e1.ctex"]
 
 [params]
 

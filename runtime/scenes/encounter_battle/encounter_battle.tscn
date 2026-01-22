@@ -1,16 +1,15 @@
-[gd_scene load_steps=43 format=3 uid="uid://o3ubysucd5hn"]
+[gd_scene load_steps=52 format=3 uid="uid://o3ubysucd5hn"]
 
 [ext_resource type="Script" uid="uid://bicdg5gxj4cwq" path="res://scripts/scenes/encounter_battle/EncounterBattle.cs" id="1_a5x5v"]
 [ext_resource type="Texture2D" uid="uid://cpt8lkhth2ikc" path="res://__data__/built-in-resources/textures/ui/battle_screen/bg/spr_battlebg_0.png" id="2_4xtxd"]
 [ext_resource type="Script" uid="uid://5vy313u34hfc" path="res://scripts/utils/encounter/EncounterConfiguration.cs" id="2_13wr6"]
 [ext_resource type="Script" uid="uid://cctn2p527r38" path="res://scripts/utils/state_machine/StateMachine.cs" id="2_62htl"]
-[ext_resource type="PackedScene" uid="uid://buf56qyfu4560" path="res://scenes/encounter_battle/ui/ui_elements/attack_animation/battle_attack_animation_knife_0.tscn" id="2_aoui3"]
+[ext_resource type="PackedScene" uid="uid://buf56qyfu4560" path="res://scenes/encounter_battle/ui/attack_animation/battle_attack_animation_knife_0.tscn" id="2_aoui3"]
 [ext_resource type="Script" uid="uid://dilvjq0nqq1w6" path="res://scripts/utils/Item/BaseWeapon.cs" id="3_1x56u"]
 [ext_resource type="Script" uid="uid://c0ouwp06q4136" path="res://scripts/scenes/encounter_battle/state/BattlePlayerChoiceActionState.cs" id="3_18p8v"]
-[ext_resource type="PackedScene" uid="uid://bsu68i8btkpis" path="res://scenes/encounter_battle/battle_arena/battle_arena.tscn" id="3_62htl"]
 [ext_resource type="PackedScene" uid="uid://cee05uq5s87yp" path="res://scenes/encounter_battle/ui/status_bar/battle_status_bar.tscn" id="4_18p8v"]
-[ext_resource type="AudioStream" uid="uid://coq8miphysprd" path="res://__data__/built-in-resources/sounds/snd_select.wav" id="4_53d75"]
-[ext_resource type="AudioStream" uid="uid://bqarl4v1658o" path="res://__data__/built-in-resources/sounds/snd_squeak.wav" id="5_e7ctv"]
+[ext_resource type="AudioStream" uid="uid://coq8miphysprd" path="res://assets/sounds/sfx/snd_select.wav" id="4_53d75"]
+[ext_resource type="AudioStream" uid="uid://bqarl4v1658o" path="res://assets/sounds/sfx/snd_squeak.wav" id="5_e7ctv"]
 [ext_resource type="PackedScene" uid="uid://cfmmgpj17a2fc" path="res://scenes/encounter_battle/ui/button/battle_screen_button.tscn" id="5_wxkx7"]
 [ext_resource type="Texture2D" uid="uid://7t5wbkpk50fu" path="res://__data__/built-in-resources/textures/ui/buttons/spr_actbt_center_0.png" id="6_53d75"]
 [ext_resource type="Script" uid="uid://sekm2lap34uh" path="res://scripts/scenes/encounter_battle/state/BattlePlayerFightMenuState.cs" id="7_0mx1x"]
@@ -29,16 +28,25 @@
 [ext_resource type="Script" uid="uid://cce0p6lao4kpg" path="res://scripts/scenes/encounter_battle/BattleMenuManager.cs" id="13_13wr6"]
 [ext_resource type="Script" uid="uid://bv7ve8i3arvcq" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterTextMenu.cs" id="13_nakc4"]
 [ext_resource type="Script" uid="uid://3iy182u0a5o5" path="res://scripts/scenes/encounter_battle/state/BattleEnemyDialogueState.cs" id="15_mdx4q"]
-[ext_resource type="AudioStream" uid="uid://dmtjjdohc4f7u" path="res://__data__/built-in-resources/sounds/voice/snd_text2.wav" id="19_66xs5"]
+[ext_resource type="Script" uid="uid://clyj12q3o6mo" path="res://scripts/scenes/encounter_battle/state/BattleEnemyState.cs" id="17_wibws"]
+[ext_resource type="Script" uid="uid://vrolycbhr1jt" path="res://scripts/utils/arena/BattleArenaGroup.cs" id="18_3wf68"]
 [ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="19_taqgn"]
+[ext_resource type="Script" uid="uid://dhnalni3d8hxk" path="res://scripts/utils/arena/BattleRectangleArenaExpand.cs" id="19_u6j2e"]
 [ext_resource type="Script" uid="uid://bpyxalubh243m" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterChoiceEnemyMenu.cs" id="19_vdmq1"]
-[ext_resource type="FontFile" uid="uid://bn6wautbcglmx" path="res://__data__/built-in-resources/fonts/FZXS12.ttf" id="20_oxe8y"]
+[ext_resource type="Script" uid="uid://c1x2xbfi7a26s" path="res://scripts/utils/arena/BattleRectangleArenaCulling.cs" id="20_3wf68"]
+[ext_resource type="Script" uid="uid://d5lmf2lb6pw6" path="res://scripts/utils/arena/BattleCircleArenaExpand.cs" id="22_u6j2e"]
 [ext_resource type="Script" uid="uid://c2nsgymkcwbb6" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterItemMenu.cs" id="23_0mx1x"]
+[ext_resource type="FontFile" uid="uid://butt4gvjxibtq" path="res://__data__/built-in-resources/fonts/FZXS12.ttf" id="23_3wf68"]
+[ext_resource type="Script" uid="uid://b0jhd0v0s2qjl" path="res://scripts/utils/arena/BattleCircleArenaCulling.cs" id="23_knxdc"]
+[ext_resource type="Script" uid="uid://bvc8v5g3o1q87" path="res://scripts/utils/arena/BattlePolygonArenaExpand.cs" id="24_kyp32"]
 [ext_resource type="PackedScene" uid="uid://b4s2vi1x468nj" path="res://scenes/encounter_battle/ui/ui_elements/choice_menu/encounter_choice_list_menu.tscn" id="24_noyau"]
 [ext_resource type="PackedScene" uid="uid://chb46puy2x813" path="res://scenes/encounter_battle/ui/ui_elements/choice_menu/encounter_choice_page_menu.tscn" id="24_vdmq1"]
 [ext_resource type="Script" uid="uid://cq7rq1smnlytk" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterActPageMenu.cs" id="25_q4xod"]
+[ext_resource type="Script" uid="uid://bokxy6hkxj2r0" path="res://scripts/utils/arena/BattlePolygonArenaCulling.cs" id="25_wibws"]
 [ext_resource type="PackedScene" uid="uid://dtiq2nxayrrbj" path="res://scenes/encounter_battle/ui/ui_elements/battle_attack_gauge_bar/battle_attack_gauge_bar.tscn" id="26_du4b0"]
 [ext_resource type="Script" uid="uid://ic16gwu4kje7" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterMercyMenu.cs" id="26_noyau"]
+[ext_resource type="Script" uid="uid://chldlchltn3yg" path="res://scripts/utils/arena/BattleArenaMask.cs" id="26_r2q8g"]
+[ext_resource type="Texture2D" uid="uid://cxuenppvula12" path="res://icon.svg" id="27_ubpum"]
 [ext_resource type="PackedScene" uid="uid://3dmh7idg5rqu" path="res://scenes/encounter_battle/ui/speech_bubble/speech_bubble.tscn" id="39_1x56u"]
 
 [sub_resource type="Resource" id="Resource_mdx4q"]
@@ -49,15 +57,18 @@ metadata/_custom_type_script = "uid://dilvjq0nqq1w6"
 [sub_resource type="Resource" id="Resource_13wr6"]
 script = ExtResource("2_13wr6")
 DefaultEncounterText = "* UndertaleMaker[color=aqua]X[/color] by Yanxiyimeng!
-* UndertaleMaker[color=aqua]X[/color] by Yanxiyimeng!"
-EncounterBattleFirstState = "BattlePlayerChoiceActionState"
+* 希望你可以用它做出有趣的游戏！"
+FreeText = "* Don't show me again."
+EncounterBattleFirstState = "BattleEnemyState"
 metadata/_custom_type_script = "uid://5vy313u34hfc"
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3wf68"]
 
 [node name="EncounterBattle" type="Node" node_paths=PackedStringArray("PlayerSoul", "MainArena", "BattleStateMachine", "StatusBar", "EnemysNode")]
 script = ExtResource("1_a5x5v")
 We = SubResource("Resource_mdx4q")
 PlayerSoul = NodePath("Players/BattlePlayerSoul")
-MainArena = NodePath("Arenas/BattleArenaMain")
+MainArena = NodePath("BattleArenaGroup/MainArena")
 BattleStateMachine = NodePath("BattleStateMachine")
 StatusBar = NodePath("UILayer/BattleStatusBar")
 EnemysNode = NodePath("Enemys")
@@ -111,18 +122,23 @@ MenuManager = NodePath("../../UILayer/BattleMenuManager")
 ItemChoiceMenu = NodePath("../../UILayer/BattleMenuManager/EncounterItemMenu")
 metadata/_custom_type_script = "uid://dc27u6sxv148b"
 
-[node name="BattlePlayerMercyMenuState" type="Node" parent="BattleStateMachine" node_paths=PackedStringArray("MenuManager", "MercyChoiceMenu")]
+[node name="BattlePlayerMercyMenuState" type="Node" parent="BattleStateMachine" node_paths=PackedStringArray("MenuManager", "TextMenu", "BattleButtonManager", "MercyChoiceMenu")]
 script = ExtResource("10_du4b0")
-SndSelect = ExtResource("4_53d75")
-SndSqueak = ExtResource("5_e7ctv")
 MenuManager = NodePath("../../UILayer/BattleMenuManager")
+TextMenu = NodePath("../../UILayer/BattleMenuManager/EncounterTextMenu")
+BattleButtonManager = NodePath("../../UILayer/BattleScreenButtonManager")
 MercyChoiceMenu = NodePath("../../UILayer/BattleMenuManager/EncounterMercyMenu")
 metadata/_custom_type_script = "uid://b2mvblo5kl3xc"
 
-[node name="BattleEnemyDialogueState" type="Node" parent="BattleStateMachine"]
+[node name="BattleEnemyDialogueState" type="Node" parent="BattleStateMachine" node_paths=PackedStringArray("MenuManager")]
 script = ExtResource("15_mdx4q")
 DialogueSpeechBubble = ExtResource("39_1x56u")
+MenuManager = NodePath("../../UILayer/BattleMenuManager")
 metadata/_custom_type_script = "uid://3iy182u0a5o5"
+
+[node name="BattleEnemyState" type="Node" parent="BattleStateMachine"]
+script = ExtResource("17_wibws")
+metadata/_custom_type_script = "uid://clyj12q3o6mo"
 
 [node name="BackgroundLayer" type="Control" parent="."]
 layout_mode = 3
@@ -142,28 +158,60 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="TextureRect" type="TextureRect" parent="BackgroundLayer"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-offset_top = 1.0
-offset_right = 3.0
-offset_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
 [node name="BackgroundSprite" type="Sprite2D" parent="BackgroundLayer"]
 visible = false
 position = Vector2(320, 127)
 texture = ExtResource("2_4xtxd")
 
-[node name="Arenas" type="Node2D" parent="."]
+[node name="BattleArenaGroup" type="Node2D" parent="."]
+script = ExtResource("18_3wf68")
+metadata/_custom_type_script = "uid://vrolycbhr1jt"
 
-[node name="BattleArenaMain" parent="Arenas" instance=ExtResource("3_62htl")]
+[node name="BattleArenaMask" type="Node2D" parent="BattleArenaGroup"]
+clip_children = 1
+script = ExtResource("26_r2q8g")
+metadata/_custom_type_script = "uid://chldlchltn3yg"
+
+[node name="Icon" type="Sprite2D" parent="BattleArenaGroup/BattleArenaMask"]
+position = Vector2(119, 213)
+texture = ExtResource("27_ubpum")
+
+[node name="MainArena" type="Node2D" parent="BattleArenaGroup"]
 position = Vector2(320, 320)
-Size = Vector2(566, 130)
+script = ExtResource("19_u6j2e")
+size = Vector2(566, 130)
+metadata/_custom_type_script = "uid://dhnalni3d8hxk"
+
+[node name="BattleRectangleArenaCulling" type="Node2D" parent="BattleArenaGroup"]
+position = Vector2(310, 235)
+script = ExtResource("20_3wf68")
+metadata/_custom_type_script = "uid://c1x2xbfi7a26s"
+
+[node name="BattleCircleArenaExpand" type="Node2D" parent="BattleArenaGroup"]
+top_level = true
+position = Vector2(117, 215)
+script = ExtResource("22_u6j2e")
+metadata/_custom_type_script = "uid://d5lmf2lb6pw6"
+
+[node name="BattleCircleArenaCulling" type="Node2D" parent="BattleArenaGroup"]
+position = Vector2(423, 174)
+script = ExtResource("23_knxdc")
+metadata/_custom_type_script = "uid://b0jhd0v0s2qjl"
+
+[node name="BattlePolygonArenaExpand" type="Node2D" parent="BattleArenaGroup"]
+position = Vector2(507, 203)
+script = ExtResource("24_kyp32")
+Vertices = PackedVector2Array(0, 0, 100, 0, 0, 100)
+metadata/_custom_type_script = "uid://bvc8v5g3o1q87"
+
+[node name="BattlePolygonArenaCulling" type="Node2D" parent="BattleArenaGroup"]
+position = Vector2(475, 341)
+script = ExtResource("25_wibws")
+Vertices = PackedVector2Array(0, 0, 98.4, -35.75, 0, 98.685)
+metadata/_custom_type_script = "uid://bokxy6hkxj2r0"
+
+[node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0
 
 [node name="UILayer" type="Node" parent="."]
 
@@ -181,8 +229,9 @@ PlayerLv = 1
 [node name="BattleMenuManager" type="TabContainer" parent="UILayer"]
 offset_left = 37.0
 offset_top = 255.0
-offset_right = 602.0
+offset_right = 603.0
 offset_bottom = 385.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_3wf68")
 current_tab = 0
 tabs_visible = false
 script = ExtResource("13_13wr6")
@@ -191,9 +240,8 @@ script = ExtResource("13_13wr6")
 layout_mode = 2
 script = ExtResource("13_nakc4")
 encounterTextTyper = NodePath("EncounterTextTyper")
-DefaultFont = ExtResource("20_oxe8y")
+DefaultFont = ExtResource("23_3wf68")
 FontSize = 24
-DefaultVoice = ExtResource("19_66xs5")
 metadata/_tab_index = 0
 
 [node name="EncounterTextTyper" type="RichTextLabel" parent="UILayer/BattleMenuManager/EncounterTextMenu"]
@@ -268,8 +316,9 @@ buttonPressedTexture = ExtResource("11_17tmt")
 
 [node name="Players" type="Node2D" parent="."]
 
-[node name="BattlePlayerSoul" parent="Players" instance=ExtResource("12_2xdie")]
-visible = false
+[node name="BattlePlayerSoul" parent="Players" node_paths=PackedStringArray("ArenaGroup") instance=ExtResource("12_2xdie")]
+position = Vector2(294, 305)
+ArenaGroup = NodePath("../../BattleArenaGroup")
 
 [node name="Enemys" type="Node2D" parent="."]
 position = Vector2(320, 240)

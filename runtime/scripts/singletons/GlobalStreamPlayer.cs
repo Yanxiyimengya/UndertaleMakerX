@@ -1,14 +1,26 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 public partial class GlobalStreamPlayer : Node
 {
+	[Export]
+	public AudioStream SelectSoundStream;
+	[Export]
+	public AudioStream SqueakSoundStream;
+	[Export]
+	public AudioStream EscapedSoundStream;
+	[Export]
+	public AudioStream TextSoundStream;
+	[Export]
+	public AudioStream EnemyDialogueSoundStream;
 
 	public static GlobalStreamPlayer Instance;
 	private AudioStreamPlayer soundPlayer = null;
 	private Dictionary<string, AudioStreamPlayer> bgmPlayers = new Dictionary<string, AudioStreamPlayer>();
 	private Queue<AudioStreamPlayer> bgmPlayersPool = new Queue<AudioStreamPlayer>();
+	private Dictionary<string, AudioStream> _streamLibrary = new Dictionary<string, AudioStream>();
 
 	public GlobalStreamPlayer()
 	{
@@ -20,6 +32,13 @@ public partial class GlobalStreamPlayer : Node
 		Instance = this;
 		base._EnterTree();
 		AddChild(soundPlayer);
+		
+		AppendStreamToLibrary("SELECT", SelectSoundStream);
+		AppendStreamToLibrary("SQUEAK", SqueakSoundStream);
+		AppendStreamToLibrary("ESCAPED", EscapedSoundStream);
+		AppendStreamToLibrary("TEXT_TYPER_VOICE", TextSoundStream);
+		AppendStreamToLibrary("ENEMY_VOICE", EnemyDialogueSoundStream);
+
 	}
 
 	public void PlaySound(AudioStream stream)
@@ -90,4 +109,25 @@ public partial class GlobalStreamPlayer : Node
 		}
 	}
 
+	public void AppendStreamToLibrary(string id, AudioStream stream)
+	{
+		if (stream == null) return;
+		if (!_streamLibrary.TryGetValue(id, out _))
+		{
+			_streamLibrary[id] = stream; 
+		}
+	}
+
+	public void RemoveStreamToLibrary(string id)
+	{
+		if (_streamLibrary.TryGetValue(id, out _))
+		{
+			_streamLibrary.Remove(id);
+		}
+	}
+
+	public AudioStream GetStream(string id)
+	{
+		return _streamLibrary[id];
+	}
 }

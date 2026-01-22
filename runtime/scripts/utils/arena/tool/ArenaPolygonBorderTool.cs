@@ -1,0 +1,52 @@
+using Godot;  
+using System;  
+  
+public static class ArenaPolygonBorderTool  
+{
+	public static float GetSignedArea(Vector2[] polygon)  
+	{  
+		float area = 0.0f;  
+		int n = polygon.Length;  
+		  
+		for (int i = 0; i < n; i++)  
+		{  
+			var p1 = polygon[i];  
+			var p2 = polygon[(i + 1) % n];  
+			area += p1.Cross(p2);  
+		}  
+		  
+		return area / 2.0f;  
+	}  
+	
+	public static Vector2[] GetBorderPolygon(Vector2[] polygon, float weight)  
+	{  
+		var result = new Vector2[polygon.Length];  
+		bool isCw = GetSignedArea(polygon) > 0.0f;  
+		  
+		for (int i = 0; i < polygon.Length; i++)  
+		{  
+			var current = polygon[i];  
+			var prev = polygon[(i - 1 + polygon.Length) % polygon.Length];  
+			var next = polygon[(i + 1) % polygon.Length];  
+			  
+			// 获取左右两个相邻点  
+			var vPrev = (current - prev).Normalized();  
+			var vNext = (current - next).Normalized();  
+			  
+			// 构造相邻边方向单位向量  
+			var cross = vNext.Cross(vPrev);  
+			var isConcave = isCw ? cross > 0 : cross < 0;  
+			var area = Mathf.Abs(cross);  
+			  
+			if (Mathf.IsZeroApprox(area)) continue;  
+			  
+			var sumDir = vPrev + vNext;  
+			var s = weight / area * (isConcave ? 1 : -1);  
+			var offset = sumDir * s;  
+			  
+			result[i] = current + offset;  
+		}  
+		  
+		return result;  
+	}  
+}

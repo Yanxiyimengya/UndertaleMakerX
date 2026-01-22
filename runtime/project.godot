@@ -22,7 +22,7 @@ config/icon="uid://ddfgd4qs5sg3p"
 
 [autoload]
 
-GlobalStreamPlayer="*res://scripts/singletons/GlobalStreamPlayer.cs"
+GlobalStreamPlayer="*res://scenes/singletons/global_stream_player/global_stream_player.tscn"
 
 [display]
 

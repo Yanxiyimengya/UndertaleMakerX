@@ -76,6 +76,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 	private void ShowDamageText(BaseEnemy targetEnemy)
 	{
 		_attackDamageText = (BattleDamageText)DamageTextPackedScene?.Instantiate();
+		_attackDamageText.Position = targetEnemy.CenterPosition;
 		targetEnemy.AddChild(_attackDamageText);
 		_state = STATE_SHOW_DAMAGE;
 
@@ -142,7 +143,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 
 			if (previousChoice != _enemyChoice && SndSqueak != null)
 			{
-				GlobalStreamPlayer.Instance.PlaySound(SndSqueak);
+				GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SQUEAK"));
 			}
 
 			EncounterChoiceEnemyMenu?.SetChoice(_enemyChoice);
@@ -156,7 +157,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 
 			if (previousChoice != _enemyChoice && SndSqueak != null)
 			{
-				GlobalStreamPlayer.Instance.PlaySound(SndSqueak);
+				GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SQUEAK"));
 			}
 
 			EncounterChoiceEnemyMenu?.SetChoice(_enemyChoice);
@@ -165,7 +166,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 		{
 			await OpenAttackGaugeMenu();
 			_state = STATE_ATTACK_GAUGE;
-			GlobalStreamPlayer.Instance.PlaySound(SndSelect);
+			GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SELECT"));
 		}
 		else if (Input.IsActionJustPressed("cancel"))
 		{

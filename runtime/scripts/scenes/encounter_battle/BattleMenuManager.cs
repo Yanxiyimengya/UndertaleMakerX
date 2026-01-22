@@ -16,6 +16,16 @@ public partial class BattleMenuManager : TabContainer
 			menuList.Add(menu.Name, menu);
 		}
 	}
+	
+	public void CloseAllMenu()
+	{
+		Visible = false;
+		if (menuList.TryGetValue(prevMenuName, out BaseEncounterMenu prevMenu))
+		{
+			prevMenu.UIHidden();
+			prevMenuName = "";
+		}
+	}
 
 	public async System.Threading.Tasks.Task OpenMenu(string menuName)
 	{

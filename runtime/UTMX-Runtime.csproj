@@ -5,4 +5,7 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>UTMXRuntime</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="scripts\utils\arena\" />
+  </ItemGroup>
 </Project>

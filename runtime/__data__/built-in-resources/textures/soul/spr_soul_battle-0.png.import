@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cc35fycb55nfp"
-path="res://.godot/imported/spr_soul_battle-1.png-fe76f339ee0f28ee53024057fce7455e.ctex"
+uid="uid://bi04oi56jlyi3"
+path="res://.godot/imported/spr_soul_battle-0.png-6951b06fa91c6ecfadd6948d61020b38.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://__data__/built-in-resources/textures/soul/spr_soul_battle-1.png"
-dest_files=["res://.godot/imported/spr_soul_battle-1.png-fe76f339ee0f28ee53024057fce7455e.ctex"]
+source_file="res://__data__/built-in-resources/textures/soul/spr_soul_battle-0.png"
+dest_files=["res://.godot/imported/spr_soul_battle-0.png-6951b06fa91c6ecfadd6948d61020b38.ctex"]
 
 [params]
 

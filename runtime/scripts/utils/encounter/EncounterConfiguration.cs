@@ -6,7 +6,10 @@ public partial class EncounterConfiguration : Resource
 {
 	[Export(PropertyHint.MultilineText)]
 	public string DefaultEncounterText = "";
-	[Export]
+    [Export(PropertyHint.MultilineText)]
+    public string FreeText = "";
+
+    [Export]
 	public string EncounterBattleFirstState = "";
     [Export]
     public bool CanFree = true;

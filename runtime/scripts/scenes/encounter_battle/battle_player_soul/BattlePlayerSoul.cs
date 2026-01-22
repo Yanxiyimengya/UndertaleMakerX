@@ -1,10 +1,15 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 [GlobalClass]
 public partial class BattlePlayerSoul : CharacterBody2D
 {
-
+	[Export]
+	BattleArenaGroup ArenaGroup;
+	[Export]
+	public float CollisionRadius = 8.0F;
 	[Export]
 	public bool EnableCollision {
 		get => _enableCollision;
@@ -27,7 +32,7 @@ public partial class BattlePlayerSoul : CharacterBody2D
 			}
 		}
 	}
-
+	[Export]
 	public bool Movable
 	{
 		get => _movable;
@@ -35,48 +40,82 @@ public partial class BattlePlayerSoul : CharacterBody2D
 		{
 			_movable = value;
 		}
-
 	}
+
+	[Export]
+	public bool Freed
+	{
+		get => _freed;
+		set
+		{
+			_freed = value;
+			if (_freed)
+			{
+				animSprite2d.Play("free");
+				EnableCollision = false;
+				Movable = false;
+			}
+		}
+	}
+
+	[Export]
+	public AnimatedSprite2D animSprite2d;
 
 	private uint _collisionLayer = 0;
 	private uint _collisionMask = 0;
 	private bool _enableCollision = true;
 	private bool _movable = true;
+	private bool _freed = false;
+	private List<Vector2> _checkPoints = new List<Vector2>();
 
 	public const float Speed = 300.0f;
 	public const float JumpVelocity = -400.0f;
+
+	public override void _Ready()
+	{
+		int count = 8;
+		for (float i = 0; i < count; i++)
+		{
+			_checkPoints.Add(CollisionRadius * Vector2.Down.Rotated((i / count) * Mathf.Tau));
+		}
+	}
+
 	public override void _PhysicsProcess(double delta)
 	{
 		if (_movable)
 		{
-			Vector2 velocity = Velocity;
-
-			// Add the gravity.
-			if (!IsOnFloor())
-			{
-				velocity += GetGravity() * (float)delta;
-			}
-
-			// Handle Jump.
-			if (Input.IsActionJustPressed("ui_accept") && IsOnFloor())
-			{
-				velocity.Y = JumpVelocity;
-			}
-
-			// Get the input direction and handle the movement/deceleration.
-			// As good practice, you should replace UI actions with custom gameplay actions.
-			Vector2 direction = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
-			if (direction != Vector2.Zero)
-			{
-				velocity.X = direction.X * Speed;
-			}
-			else
-			{
-				velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
-			}
-
-			Velocity = velocity;
+			ProcessMove(delta);
 			MoveAndSlide();
 		}
+	}
+
+	public void ProcessMove(double delta)
+	{ 
+		Vector2 inputDir = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down").Normalized();
+		Vector2 targetPos = GlobalPosition + inputDir * Speed * (float)delta;
+		GlobalPosition = targetPos;
+
+		if (! IsInsideArena(targetPos))
+		{
+			while (! IsInsideArena(GlobalPosition))
+			{
+				GlobalPosition = ArenaGroup.PushBackInside(GlobalPosition, _checkPoints.ToArray(), 0.25F);
+			}
+		}
+
+		MoveAndSlide();
+	}
+
+	private bool IsInsideArena(Vector2 center)
+	{
+		foreach (Vector2 offset in _checkPoints)
+		{
+			Vector2 worldPoint = center + offset;
+			if (!ArenaGroup.IsPointInArenas(worldPoint))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 }

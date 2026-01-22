@@ -12,7 +12,7 @@ public partial class EncounterBattle : Node
 	[Export]
 	BattlePlayerSoul PlayerSoul;
 	[Export]
-	BattleArena MainArena;
+	BattleRectangleArenaExpand MainArena;
 	[Export]
 	StateMachine BattleStateMachine;
 	[Export]
@@ -22,20 +22,23 @@ public partial class EncounterBattle : Node
 	[Export]
 	EncounterConfiguration Config
 	{
-		get => encounterConfig;
+		get => _encounterConfig;
 		set
 		{
-			encounterConfig = value;
-			CanFree = encounterConfig.CanFree;
-			EncounterText = encounterConfig.DefaultEncounterText;
+			_encounterConfig = value;
+			CanFree = _encounterConfig.CanFree;
+			EncounterText = _encounterConfig.DefaultEncounterText;
+			FreeText = _encounterConfig.FreeText;
 		}
 	}
 
 	public string EncounterText = "";
+	public string FreeText = "";
 	public List<BaseEnemy> Enemys = [];
 	public bool CanFree;
-	
-	private EncounterConfiguration encounterConfig = null;
+	public bool Endded = false;
+
+	private EncounterConfiguration _encounterConfig = null;
 
 
 	public override void _EnterTree()
@@ -45,12 +48,11 @@ public partial class EncounterBattle : Node
 			EnemysNode.AddChild(enemy);
 		}
 		PlayerDataManager.Instance.Weapon = We;
-
 	}
 
 	public override void _Ready()
 	{
-		BattleStateMachine.SwitchToState(encounterConfig.EncounterBattleFirstState);
+		BattleStateMachine.SwitchToState(_encounterConfig.EncounterBattleFirstState);
 		AddEnemy(new BaseEnemy(), new Vector2(0F , -0F));
 	}
 	public BattlePlayerSoul GetPlayerSoul()
