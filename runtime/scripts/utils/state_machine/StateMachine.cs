@@ -23,7 +23,6 @@ public partial class StateMachine : Node
 				nextStateNode._EnterState();
 				_currentStateName = value;
 			}
-
 			else if (string.IsNullOrEmpty(value))
 			{
 				_currentStateName = string.Empty;
@@ -87,15 +86,12 @@ public partial class StateMachine : Node
 	}
 	public async void SwitchToState(string stateName)
 	{
-		if (_stateNodes.ContainsKey(stateName))
+		if (_stateNodes.TryGetValue(stateName, out StateNode nextStateNode) && nextStateNode != null)
 		{
-			if (_stateNodes.TryGetValue(stateName, out StateNode nextStateNode) && nextStateNode != null)
+			if (nextStateNode._CanEnterState())
 			{
-				if (nextStateNode._CanEnterState())
-				{
-					await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
-					CurrentStateName = stateName;
-				}
+				await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+				CurrentStateName = stateName;
 			}
 		}
 	}

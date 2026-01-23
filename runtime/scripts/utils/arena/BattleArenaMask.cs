@@ -5,12 +5,16 @@ using System;
 [GlobalClass]
 public partial class BattleArenaMask : Node2D
 {
-	public override void _Ready()
+	public BattleArenaMask()
 	{
 		ClipChildren = ClipChildrenMode.Only;
 	}
-
 	public override void _Process(double delta)
+	{
+		QueueRedraw();
+	}
+
+	public override void _Draw()
 	{
 		if (IsInsideTree() && Visible)
 		{
@@ -18,7 +22,7 @@ public partial class BattleArenaMask : Node2D
 			if (_arenaGroup != null && _arenaGroup.Visible)
 			{
 				Rid _canvasItem = GetCanvasItem();
-                RenderingServer.CanvasItemClear(_canvasItem);
+				RenderingServer.CanvasItemClear(_canvasItem);
 				RenderingServer.CanvasItemAddSetTransform(_canvasItem, _arenaGroup.CameraTransform);
 				RenderingServer.CanvasItemAddTextureRect(_canvasItem, GetViewportRect(),
 						_arenaGroup.GetMaskViewportTexture());

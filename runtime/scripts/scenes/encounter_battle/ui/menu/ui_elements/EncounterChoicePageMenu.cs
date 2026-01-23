@@ -60,14 +60,14 @@ public partial class EncounterChoicePageMenu : EncounterChoiceMenu
 			}
 
 			
-            await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
-            int soulSelectIndex = choice - (page * MenuItems.Count);
-            if (soulSelectIndex < 3)
-            {
+			await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+			int soulSelectIndex = choice - (page * MenuItems.Count);
+			if (soulSelectIndex < 3)
+			{
 				var menuItem = MenuItems[soulSelectIndex];
-                BattlePlayerSoul soul = enc.GetPlayerSoul();
-                soul.GlobalTransform = menuItem.GetSoulTransform();
-            }
-        }
+				BattlePlayerSoul soul = enc.GetPlayerSoul();
+				soul.GlobalTransform = menuItem.GetSoulTransform();
+			}
+		}
 	}
 }

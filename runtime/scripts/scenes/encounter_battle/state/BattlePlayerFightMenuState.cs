@@ -8,12 +8,6 @@ public partial class BattlePlayerFightMenuState : StateNode
 {
 	#region 导出配置（序列化字段）
 	[Export]
-	public AudioStream SndSelect { get; set; } // 改为属性，提升封装性
-
-	[Export]
-	public AudioStream SndSqueak { get; set; }
-
-	[Export]
 	public PackedScene DamageTextPackedScene { get; set; }
 
 	[Export]
@@ -59,7 +53,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 		BaseEnemy targetEnemy = GetTargetEnemy();
 		if (targetEnemy == null) return;
 
-		if (PlayerDataManager.Instance != null && PlayerDataManager.Instance.Weapon != null)
+		if (PlayerDataManager.Instance != null && PlayerDataManager.Instance.Weapon != null && !missed)
 		{
 			_damage = (float)PlayerDataManager.Instance.Weapon._CalculateDamage(hitValue, targetEnemy);
 			SpawnAttackAnimation(targetEnemy);
@@ -90,6 +84,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 		if (_isTargetMiss)
 		{
 			_attackDamageText.SetText(targetEnemy.MissText);
+			_attackDamageText.End();
 		}
 		else
 		{
@@ -141,7 +136,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 			int previousChoice = _enemyChoice;
 			_enemyChoice = Math.Max(_enemyChoice - 1, 0);
 
-			if (previousChoice != _enemyChoice && SndSqueak != null)
+			if (previousChoice != _enemyChoice)
 			{
 				GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SQUEAK"));
 			}
@@ -155,7 +150,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 			int previousChoice = _enemyChoice;
 			_enemyChoice = Math.Min(_enemyChoice + 1, _encounterBattle.Enemys.Count - 1);
 
-			if (previousChoice != _enemyChoice && SndSqueak != null)
+			if (previousChoice != _enemyChoice)
 			{
 				GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SQUEAK"));
 			}

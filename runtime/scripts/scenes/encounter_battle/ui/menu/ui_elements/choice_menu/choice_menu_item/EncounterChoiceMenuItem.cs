@@ -11,7 +11,7 @@ public partial class EncounterChoiceMenuItem : HBoxContainer
 		set
 		{
 			text = value;
-			DisplayTextTyper.Start($"[instant]* {value}");
+			DisplayTextTyper.Start($"[instant=true]* {value}");
 		}
 	}
 	[Export]

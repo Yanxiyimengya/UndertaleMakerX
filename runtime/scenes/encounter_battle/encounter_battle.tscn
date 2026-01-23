@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://o3ubysucd5hn"]
+[gd_scene load_steps=48 format=3 uid="uid://o3ubysucd5hn"]
 
 [ext_resource type="Script" uid="uid://bicdg5gxj4cwq" path="res://scripts/scenes/encounter_battle/EncounterBattle.cs" id="1_a5x5v"]
 [ext_resource type="Texture2D" uid="uid://cpt8lkhth2ikc" path="res://__data__/built-in-resources/textures/ui/battle_screen/bg/spr_battlebg_0.png" id="2_4xtxd"]
@@ -54,8 +54,12 @@ script = ExtResource("2_13wr6")
 DefaultEncounterText = "* UndertaleMaker[color=aqua]X[/color] by Yanxiyimeng!
 * 希望你可以用它做出有趣的游戏！"
 FreeText = "* Don't show me again."
-EncounterBattleFirstState = "BattleEnemyState"
+EncounterBattleFirstState = "BattlePlayerChoiceActionState"
 metadata/_custom_type_script = "uid://5vy313u34hfc"
+
+[sub_resource type="GDScript" id="GDScript_knxdc"]
+script/source = "extends Camera2D
+"
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3wf68"]
 
@@ -69,38 +73,40 @@ StatusBar = NodePath("UILayer/BattleStatusBar")
 EnemysNode = NodePath("Enemys")
 Config = SubResource("Resource_13wr6")
 
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(320, 240)
+ignore_rotation = false
+script = SubResource("GDScript_knxdc")
+
 [node name="BattleStateMachine" type="Node" parent="."]
 script = ExtResource("2_62htl")
 metadata/_custom_type_script = "uid://cctn2p527r38"
 
-[node name="BattlePlayerDialogState" type="Node" parent="BattleStateMachine" node_paths=PackedStringArray("MenuManager", "TextMenu")]
+[node name="BattlePlayerDialogState" type="Node" parent="BattleStateMachine" node_paths=PackedStringArray("MenuManager", "TextMenu", "BattleButtonManager")]
 script = ExtResource("11_noyau")
 MenuManager = NodePath("../../UILayer/BattleMenuManager")
 TextMenu = NodePath("../../UILayer/BattleMenuManager/EncounterTextMenu")
+BattleButtonManager = NodePath("../../UILayer/BattleScreenButtonManager")
 metadata/_custom_type_script = "uid://050kpagro83y"
 
-[node name="BattlePlayerChoiceActionState" type="Node" parent="BattleStateMachine" node_paths=PackedStringArray("TextMenu", "MenuManager")]
+[node name="BattlePlayerChoiceActionState" type="Node" parent="BattleStateMachine" node_paths=PackedStringArray("BattleButtonManager", "TextMenu", "MenuManager")]
 script = ExtResource("3_18p8v")
-SndSelect = ExtResource("4_53d75")
-SndSqueak = ExtResource("5_e7ctv")
+BattleButtonManager = NodePath("../../UILayer/BattleScreenButtonManager")
 TextMenu = NodePath("../../UILayer/BattleMenuManager/EncounterTextMenu")
 MenuManager = NodePath("../../UILayer/BattleMenuManager")
 metadata/_custom_type_script = "uid://c0ouwp06q4136"
 
-[node name="BattlePlayerFightMenuState" type="Node" parent="BattleStateMachine" node_paths=PackedStringArray("MenuManager", "EncounterChoiceEnemyMenu", "GaugeBar")]
+[node name="BattlePlayerFightMenuState" type="Node" parent="BattleStateMachine" node_paths=PackedStringArray("MenuManager", "EncounterChoiceEnemyMenu", "GaugeBar", "BattleButtonManager")]
 script = ExtResource("7_0mx1x")
-SndSelect = ExtResource("4_53d75")
-SndSqueak = ExtResource("5_e7ctv")
 DamageTextPackedScene = ExtResource("8_du4b0")
 MenuManager = NodePath("../../UILayer/BattleMenuManager")
 EncounterChoiceEnemyMenu = NodePath("../../UILayer/BattleMenuManager/EncounterChoiceEnemyMenu")
 GaugeBar = NodePath("../../UILayer/BattleMenuManager/EncounterAttackGaugeBarMenu")
+BattleButtonManager = NodePath("../../UILayer/BattleScreenButtonManager")
 metadata/_custom_type_script = "uid://sekm2lap34uh"
 
 [node name="BattlePlayerActMenuState" type="Node" parent="BattleStateMachine" node_paths=PackedStringArray("MenuManager", "encounterChoiceEnemyMenu", "encounterActPageMenu")]
 script = ExtResource("8_q4xod")
-SndSelect = ExtResource("4_53d75")
-SndSqueak = ExtResource("5_e7ctv")
 MenuManager = NodePath("../../UILayer/BattleMenuManager")
 encounterChoiceEnemyMenu = NodePath("../../UILayer/BattleMenuManager/EncounterChoiceEnemyMenu")
 encounterActPageMenu = NodePath("../../UILayer/BattleMenuManager/EncounterActPageMenu")
@@ -114,10 +120,11 @@ MenuManager = NodePath("../../UILayer/BattleMenuManager")
 ItemChoiceMenu = NodePath("../../UILayer/BattleMenuManager/EncounterItemMenu")
 metadata/_custom_type_script = "uid://dc27u6sxv148b"
 
-[node name="BattlePlayerMercyMenuState" type="Node" parent="BattleStateMachine" node_paths=PackedStringArray("MenuManager", "TextMenu", "MercyChoiceMenu")]
+[node name="BattlePlayerMercyMenuState" type="Node" parent="BattleStateMachine" node_paths=PackedStringArray("MenuManager", "TextMenu", "BattleButtonManager", "MercyChoiceMenu")]
 script = ExtResource("10_du4b0")
 MenuManager = NodePath("../../UILayer/BattleMenuManager")
 TextMenu = NodePath("../../UILayer/BattleMenuManager/EncounterTextMenu")
+BattleButtonManager = NodePath("../../UILayer/BattleScreenButtonManager")
 MercyChoiceMenu = NodePath("../../UILayer/BattleMenuManager/EncounterMercyMenu")
 metadata/_custom_type_script = "uid://b2mvblo5kl3xc"
 
@@ -288,11 +295,3 @@ ArenaGroup = NodePath("../../BattleArenaGroup")
 
 [node name="Enemys" type="Node2D" parent="."]
 position = Vector2(320, 240)
-
-[node name="CameraCenter" type="Node2D" parent="."]
-position = Vector2(320, 240)
-
-[node name="Camera2D" type="Camera2D" parent="CameraCenter"]
-position = Vector2(-320, -240)
-anchor_mode = 0
-ignore_rotation = false

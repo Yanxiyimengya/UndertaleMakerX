@@ -90,27 +90,28 @@ public partial class BattleArenaGroup : Node2D
 	public override void _Process(double delta)
 	{
 		GetCameraTransform();
-		_DrawArenas();
+		_Draw();
 	}
 
 	public Vector2 GetScreenTopLeftPosition()  
-{  
-	if (GetViewport().GetCamera2D() is Camera2D camera)  
 	{  
-		Vector2 screenCenter = camera.GetScreenCenterPosition();  
-		Vector2 screenSize = GetViewport().GetVisibleRect().Size; 
-		Transform2D cameraTransform = camera.GetTransform();  
-		Transform2D cameraBasis = cameraTransform;  
-		cameraBasis.Origin = Vector2.Zero;
-		Vector2 halfScreenOffset = cameraBasis.BasisXform(-screenSize * 0.5f);  
-		return screenCenter + halfScreenOffset;  
-	}  
-	return Vector2.Zero;  
-}
+		if (GetViewport().GetCamera2D() is Camera2D camera)  
+		{  
+			Vector2 screenCenter = camera.GetScreenCenterPosition();  
+			Vector2 screenSize = GetViewport().GetVisibleRect().Size; 
+			Transform2D cameraTransform = camera.GetTransform();
+			Vector2 halfScreenOffset = -screenSize * 0.5F * (Vector2.One / camera.Zoom);
+
+			cameraTransform.Origin = Vector2.Zero;
+			return screenCenter + cameraTransform * halfScreenOffset;  
+		}  
+		return Vector2.Zero;  
+	}
 	
 	public void GetCameraTransform()
 	{
 		CameraTransform = Transform2D.Identity;
+		CameraTransformInverse = CameraTransform.Inverse();
 		if (GetViewport().GetCamera2D() is Camera2D camera)
 		{
 			Viewport viewport = GetViewport();
@@ -118,19 +119,19 @@ public partial class BattleArenaGroup : Node2D
 			Vector2 screenSize = visibleRect.Size;
 			Vector2 zoom = new Vector2(Math.Abs(camera.Zoom.X), Math.Abs(camera.Zoom.Y));
 			Vector2 zoomScale = new Vector2(1f / zoom.X, 1f / zoom.Y);
-			Vector2 cameraPos = camera.GlobalPosition;
 			float rotation = camera.IgnoreRotation ? 0F : camera.GlobalRotation;
 			CameraTransform = new Transform2D(
 				rotation,
 				zoomScale,
 				0f,
-				cameraPos
+				(camera.AnchorMode == Camera2D.AnchorModeEnum.FixedTopLeft) ? 
+					camera.GlobalPosition : GetScreenTopLeftPosition()
 			);
 			CameraTransformInverse = CameraTransform.AffineInverse();
 		}
 	}
 
-	private void _DrawArenas()
+	public override void _Draw()
 	{
 		RenderingServer.CanvasItemClear(MainCanvasItem);
 		RenderingServer.CanvasItemClear(_arenaBorderRenderingCanvasItem);
@@ -144,7 +145,6 @@ public partial class BattleArenaGroup : Node2D
 			RenderingServer.ViewportSetSize(_maskViewport, viewportSize.X, viewportSize.Y);
 
 			RenderingServer.CanvasItemSetTransform(MainCanvasItem, CameraTransform);
-
 			RenderingServer.CanvasItemAddTextureRect(MainCanvasItem, new Rect2(Vector2.Zero, viewportSize),
 				_borderViewportTextureRid);
 			RenderingServer.CanvasItemAddTextureRect(MainCanvasItem, new Rect2(Vector2.Zero, viewportSize),
@@ -228,6 +228,7 @@ public partial class BattleArenaGroup : Node2D
 		}
 		return closestCenter;
 	}
+
 
 	public Rid GetMaskViewportTexture()
 	{

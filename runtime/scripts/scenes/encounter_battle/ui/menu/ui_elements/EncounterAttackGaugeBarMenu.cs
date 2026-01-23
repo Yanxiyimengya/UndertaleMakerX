@@ -43,7 +43,8 @@ public partial class EncounterAttackGaugeBarMenu : BaseEncounterMenu
 	public void Hit()
 	{
 		if (!_started) return;
-		_tween?.Kill();
+        _started = false;
+        _tween?.Kill();
 		TargetChoiceBar.Play();
 		TargetSprite2D.Scale = new Vector2(1.0F, TargetSprite2D.Scale.Y);
 		TargetSprite2D.Modulate = Colors.White;

@@ -31,6 +31,9 @@ public partial class BattlePlayerMercyMenuState : StateNode
 			if (TextMenu.IsTextTyperFinished())
 			{
 				
+				if (Input.IsActionJustPressed("confirm"))
+				{
+				}
 			}
 		}
 		else

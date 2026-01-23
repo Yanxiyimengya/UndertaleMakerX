@@ -1,9 +1,17 @@
-[gd_scene load_steps=4 format=3 uid="uid://dbstu48ru7vek"]
+[gd_scene load_steps=5 format=3 uid="uid://dbstu48ru7vek"]
 
 [ext_resource type="FontFile" uid="uid://e0isplnd10cj" path="res://__data__/built-in-resources/fonts/UndertaleDialogue.ttf" id="1_5bhgw"]
+[ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="2_i1yiq"]
 
 [sub_resource type="GDScript" id="GDScript_5bhgw"]
 script/source = "extends Node;
+var s = \"你哈话谁都会啊是不对啊是不会丢和压缩百度云\";
+@onready var text_typer: TextTyper = $TextTyper
+
+func _process(delta: float) -> void:
+	if (Input.is_action_just_pressed(\"confirm\")) : 
+		text_typer.Start(\"\");
+		text_typer.Start(s);
 "
 
 [sub_resource type="LabelSettings" id="LabelSettings_i1yiq"]
@@ -25,3 +33,13 @@ offset_bottom = 23.0
 text = "The quick brown fox jumps over the lazy dog
 看到那颗心了吗那是你的灵魂所在LV"
 label_settings = SubResource("LabelSettings_i1yiq")
+
+[node name="TextTyper" type="RichTextLabel" parent="."]
+offset_left = 114.0
+offset_top = 160.0
+offset_right = 448.0
+offset_bottom = 315.0
+bbcode_enabled = true
+scroll_active = false
+script = ExtResource("2_i1yiq")
+metadata/_custom_type_script = "uid://dmq4qew4auuss"

@@ -22,6 +22,7 @@ public partial class BattleDamageText : Node2D
 	{
 		_ystart = Position.Y;
 	}
+	
 	public override void _Process(double delta)
 	{
 		if (Position.Y <= _ystart)
@@ -38,6 +39,7 @@ public partial class BattleDamageText : Node2D
 			else
 			{
 				End();
+				QueueFree();
 			}
 			gravity = 0;
 			vspeed = 0;
@@ -47,12 +49,14 @@ public partial class BattleDamageText : Node2D
 	public void SetText(string text)
 	{
 		DamageTextTyper.TyperColor = Color.Color8(0xC0, 0xC0, 0xC0);
+		DamageTextTyper.Instant = true;
 		DamageTextTyper.Start(text);
 		Start();
 	}
 	public void SetNumber(int number)
 	{
 		DamageTextTyper.TyperColor = Colors.Red;
+		DamageTextTyper.Instant = true;
 		DamageTextTyper.Start(number.ToString());
 		Start();
 	}
@@ -60,7 +64,6 @@ public partial class BattleDamageText : Node2D
 	public void End()
 	{
 		EmitSignal(SignalName.Ended, []);
-		QueueFree();
 	}
 	private void Start()
 	{

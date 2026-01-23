@@ -384,7 +384,6 @@ public partial class TextTyper : Godot.RichTextLabel
 		ResetData();
 		if (text == null) return;
 		TyperText = text;
-		Instant = false;
 	}
 
 	public new bool IsFinished()

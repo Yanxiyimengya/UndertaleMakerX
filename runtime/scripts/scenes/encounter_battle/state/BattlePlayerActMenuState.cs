@@ -6,11 +6,6 @@ using System.Threading.Tasks;
 public partial class BattlePlayerActMenuState : StateNode
 {
 	[Export]
-	public AudioStream SndSelect;
-	[Export]
-	public AudioStream SndSqueak;
-
-	[Export]
 	public BattleMenuManager MenuManager;
 	[Export]
 	public EncounterChoiceEnemyMenu encounterChoiceEnemyMenu;

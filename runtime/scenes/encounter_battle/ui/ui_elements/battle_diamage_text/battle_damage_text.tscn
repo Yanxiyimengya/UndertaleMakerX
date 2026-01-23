@@ -23,5 +23,4 @@ script = ExtResource("2_pxun5")
 TyperText = "MISS"
 TyperSize = 32
 TyperFont = ExtResource("1_ewr1v")
-Instant = true
 metadata/_custom_type_script = "uid://dmq4qew4auuss"

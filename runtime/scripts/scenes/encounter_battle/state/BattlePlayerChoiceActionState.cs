@@ -6,11 +6,6 @@ using System.Collections.Generic;
 public partial class BattlePlayerChoiceActionState : StateNode
 {
 	[Export]
-	AudioStream SndSelect;
-	[Export]
-	AudioStream SndSqueak;
-	
-	[Export]
 	BattleScreenButtonManager BattleButtonManager;
 	[Export]
 	EncounterTextMenu TextMenu;
