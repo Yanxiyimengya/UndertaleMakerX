@@ -34,7 +34,7 @@ public partial class BattleCircleArenaExpand : BattleArenaExpand
 		RenderingServer.CanvasItemAddCircle(
 			maskRenderingItem,   
 			Vector2.Zero,
-			_radius,   
+			_radius,
 			ContentColor  
 		);  
 	}

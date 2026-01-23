@@ -9,7 +9,7 @@ public partial class BattlePlayerSoul : CharacterBody2D
 	[Export]
 	BattleArenaGroup ArenaGroup;
 	[Export]
-	public float CollisionRadius = 8.0F;
+	public float CollisionRadius = 8F;
 	[Export]
 	public bool EnableCollision {
 		get => _enableCollision;
@@ -85,7 +85,6 @@ public partial class BattlePlayerSoul : CharacterBody2D
 		if (_movable)
 		{
 			ProcessMove(delta);
-			MoveAndSlide();
 		}
 	}
 
@@ -99,7 +98,7 @@ public partial class BattlePlayerSoul : CharacterBody2D
 		{
 			while (! IsInsideArena(GlobalPosition))
 			{
-				GlobalPosition = ArenaGroup.PushBackInside(GlobalPosition, _checkPoints.ToArray(), 0.25F);
+				GlobalPosition = ArenaGroup.PushBackInside(GlobalPosition, _checkPoints.ToArray(), 1.0F);
 			}
 		}
 

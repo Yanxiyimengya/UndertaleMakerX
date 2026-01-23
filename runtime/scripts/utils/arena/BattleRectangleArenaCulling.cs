@@ -15,6 +15,7 @@ public partial class BattleRectangleArenaCulling : BattleArenaCulling
             {
                 _size = value;
                 IsDirty = true;
+                UpdateCollisionShape(_shape);
             }
 
         }
@@ -25,14 +26,24 @@ public partial class BattleRectangleArenaCulling : BattleArenaCulling
     public override void DrawFrame(Rid borderRenderingItem, Rid maskRenderingItem,
 		Rid borderCullingCanvasItem, Rid maskCullingCanvasItem)
 	{
-		Vector2 border_size = Vector2.One * BorderWidth;
+		Vector2 borderSize = Vector2.One * BorderWidth;
 		Rect2 _rect;
 
-		_rect = new Rect2(-_size * 0.5F - border_size, _size + border_size * 2F);
+		_rect = new Rect2(-_size * 0.5F - borderSize, _size + borderSize * 2F);
 		RenderingServer.CanvasItemAddRect(maskCullingCanvasItem, _rect, Colors.White);
-		// 反过来向遮罩层绘制
 
 		_rect = new Rect2(-_size * 0.5F, _size);
 		RenderingServer.CanvasItemAddRect(borderCullingCanvasItem, _rect, Colors.Black);
 	}
+
+    protected override Rid GenerateCollisionShape()
+    {
+        return PhysicsServer2D.RectangleShapeCreate();
+    }
+
+    protected override void UpdateCollisionShape(Rid shape)
+    {
+        Vector2 borderSize = Vector2.One * BorderWidth * 2F;
+        PhysicsServer2D.ShapeSetData(shape, (_size+borderSize) / 2F);
+    }
 }
