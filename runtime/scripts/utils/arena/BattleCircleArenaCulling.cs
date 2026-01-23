@@ -5,23 +5,35 @@ using System;
 [GlobalClass]
 public partial class BattleCircleArenaCulling : BattleArenaCulling
 {
-	[Export]
-	public float radius = 70f;
+    [Export]
+    public float Radius
+    {
+        get => _radius;
+        set
+        {
+            if (_radius != value)
+            {
+                _radius = value;
+                IsDirty = true;
+            }
+        }
+    }
 
-	public override void DrawFrame(Rid borderRenderingItem, Rid maskRenderingItem,
+    private float _radius = 70f;
+    public override void DrawFrame(Rid borderRenderingItem, Rid maskRenderingItem,
 		Rid borderCullingCanvasItem, Rid maskCullingCanvasItem)
 	{
 		RenderingServer.CanvasItemAddCircle(
 			borderCullingCanvasItem,
 			Vector2.Zero,
-			radius - BorderWidth,
+            _radius - BorderWidth,
 			Colors.White
 		);
 
 		RenderingServer.CanvasItemAddCircle(
 			maskCullingCanvasItem,
 			Vector2.Zero,
-			radius,
+            _radius,
 			Colors.White
 		);
 	}

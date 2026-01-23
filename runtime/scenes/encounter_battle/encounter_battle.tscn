@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://o3ubysucd5hn"]
+[gd_scene load_steps=48 format=3 uid="uid://o3ubysucd5hn"]
 
 [ext_resource type="Script" uid="uid://bicdg5gxj4cwq" path="res://scripts/scenes/encounter_battle/EncounterBattle.cs" id="1_a5x5v"]
 [ext_resource type="Texture2D" uid="uid://cpt8lkhth2ikc" path="res://__data__/built-in-resources/textures/ui/battle_screen/bg/spr_battlebg_0.png" id="2_4xtxd"]
@@ -35,10 +35,8 @@
 [ext_resource type="Script" uid="uid://bpyxalubh243m" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterChoiceEnemyMenu.cs" id="19_vdmq1"]
 [ext_resource type="Script" uid="uid://c2nsgymkcwbb6" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterItemMenu.cs" id="23_0mx1x"]
 [ext_resource type="FontFile" uid="uid://butt4gvjxibtq" path="res://__data__/built-in-resources/fonts/FZXS12.ttf" id="23_3wf68"]
-[ext_resource type="Script" uid="uid://d5lmf2lb6pw6" path="res://scripts/utils/arena/BattleCircleArenaExpand.cs" id="23_kyp32"]
 [ext_resource type="PackedScene" uid="uid://b4s2vi1x468nj" path="res://scenes/encounter_battle/ui/ui_elements/choice_menu/encounter_choice_list_menu.tscn" id="24_noyau"]
 [ext_resource type="PackedScene" uid="uid://chb46puy2x813" path="res://scenes/encounter_battle/ui/ui_elements/choice_menu/encounter_choice_page_menu.tscn" id="24_vdmq1"]
-[ext_resource type="Script" uid="uid://b0jhd0v0s2qjl" path="res://scripts/utils/arena/BattleCircleArenaCulling.cs" id="24_wibws"]
 [ext_resource type="Script" uid="uid://cq7rq1smnlytk" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterActPageMenu.cs" id="25_q4xod"]
 [ext_resource type="PackedScene" uid="uid://dtiq2nxayrrbj" path="res://scenes/encounter_battle/ui/ui_elements/battle_attack_gauge_bar/battle_attack_gauge_bar.tscn" id="26_du4b0"]
 [ext_resource type="Script" uid="uid://ic16gwu4kje7" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterMercyMenu.cs" id="26_noyau"]
@@ -59,18 +57,18 @@ FreeText = "* Don't show me again."
 EncounterBattleFirstState = "BattleEnemyState"
 metadata/_custom_type_script = "uid://5vy313u34hfc"
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3wf68"]
+
 [sub_resource type="GDScript" id="GDScript_knxdc"]
 script/source = "extends Camera2D
 
 var timer = 0.0;
 
 func _process(delta: float) -> void:
-	zoom = Vector2.ONE + Vector2.ONE * sin(timer) * 0.2;
-	rotation_degrees = sin(timer * 0.1) * 10;
+	zoom = Vector2.ONE + Vector2.ONE * sin(timer * 6) * 0.5;
+	rotation_degrees = sin(timer * 10) * 90;
 	timer += delta;
 "
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3wf68"]
 
 [node name="EncounterBattle" type="Node" node_paths=PackedStringArray("PlayerSoul", "MainArena", "BattleStateMachine", "StatusBar", "EnemysNode")]
 script = ExtResource("1_a5x5v")
@@ -81,11 +79,6 @@ BattleStateMachine = NodePath("BattleStateMachine")
 StatusBar = NodePath("UILayer/BattleStatusBar")
 EnemysNode = NodePath("Enemys")
 Config = SubResource("Resource_13wr6")
-
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(320, 240)
-ignore_rotation = false
-script = SubResource("GDScript_knxdc")
 
 [node name="BattleStateMachine" type="Node" parent="."]
 script = ExtResource("2_62htl")
@@ -170,52 +163,34 @@ position = Vector2(320, 127)
 texture = ExtResource("2_4xtxd")
 
 [node name="BattleArenaGroup" type="Node2D" parent="."]
+process_priority = 1
 script = ExtResource("18_3wf68")
 metadata/_custom_type_script = "uid://vrolycbhr1jt"
 
 [node name="BattleArenaMask" type="Node2D" parent="BattleArenaGroup"]
+process_priority = 1
 clip_children = 1
 script = ExtResource("26_r2q8g")
 metadata/_custom_type_script = "uid://chldlchltn3yg"
 
 [node name="Icon" type="Sprite2D" parent="BattleArenaGroup/BattleArenaMask"]
-position = Vector2(398.00003, 237)
+position = Vector2(250.00003, 325)
 rotation = -0.9612248
 scale = Vector2(10.886716, 10.886716)
 texture = ExtResource("27_ubpum")
 
 [node name="MainArena" type="Node2D" parent="BattleArenaGroup"]
-position = Vector2(320, 320)
+position = Vector2(318, 309)
 script = ExtResource("19_u6j2e")
-size = Vector2(566, 130)
+Size = Vector2(565, 140)
 metadata/_custom_type_script = "uid://dhnalni3d8hxk"
 
-[node name="BattleCircleArenaExpand" type="Node2D" parent="BattleArenaGroup"]
-position = Vector2(622, 222)
-script = ExtResource("23_kyp32")
-metadata/_custom_type_script = "uid://d5lmf2lb6pw6"
-
-[node name="BattleCircleArenaExpand2" type="Node2D" parent="BattleArenaGroup"]
-position = Vector2(566, 124)
-script = ExtResource("23_kyp32")
-metadata/_custom_type_script = "uid://d5lmf2lb6pw6"
-
-[node name="BattleCircleArenaExpand3" type="Node2D" parent="BattleArenaGroup"]
-position = Vector2(462, 130)
-script = ExtResource("23_kyp32")
-radius = 40.17
-metadata/_custom_type_script = "uid://d5lmf2lb6pw6"
-
-[node name="BattleRectangleArenaExpand" type="Node2D" parent="BattleArenaGroup"]
-position = Vector2(370, 197)
+[node name="MainArena2" type="Node2D" parent="BattleArenaGroup"]
+position = Vector2(280, 263)
+rotation = 0.68084896
 script = ExtResource("19_u6j2e")
+Size = Vector2(600, 140)
 metadata/_custom_type_script = "uid://dhnalni3d8hxk"
-
-[node name="BattleCircleArenaCulling" type="Node2D" parent="BattleArenaGroup"]
-position = Vector2(292, 233)
-script = ExtResource("24_wibws")
-radius = 39.775
-metadata/_custom_type_script = "uid://b0jhd0v0s2qjl"
 
 [node name="UILayer" type="Control" parent="."]
 layout_mode = 3
@@ -331,3 +306,8 @@ ArenaGroup = NodePath("../../BattleArenaGroup")
 
 [node name="Enemys" type="Node2D" parent="."]
 position = Vector2(320, 240)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(320, 240)
+ignore_rotation = false
+script = SubResource("GDScript_knxdc")

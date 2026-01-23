@@ -5,20 +5,34 @@ using System;
 [GlobalClass]
 public partial class BattleRectangleArenaCulling : BattleArenaCulling
 {
-	[Export]
-	public Vector2 size = new Vector2(140, 140);
-   
-	public override void DrawFrame(Rid borderRenderingItem, Rid maskRenderingItem,
+    [Export]
+    public Vector2 Size
+    {
+        get => _size;
+        set
+        {
+            if (_size != value)
+            {
+                _size = value;
+                IsDirty = true;
+            }
+
+        }
+    }
+
+    private Vector2 _size = new Vector2(140, 140);
+
+    public override void DrawFrame(Rid borderRenderingItem, Rid maskRenderingItem,
 		Rid borderCullingCanvasItem, Rid maskCullingCanvasItem)
 	{
-		Vector2 borderSize = Vector2.One * BorderWidth;
+		Vector2 border_size = Vector2.One * BorderWidth;
 		Rect2 _rect;
 
-		_rect = new Rect2(-size * 0.5F - borderSize, size + borderSize * 2F);
+		_rect = new Rect2(-_size * 0.5F - border_size, _size + border_size * 2F);
 		RenderingServer.CanvasItemAddRect(maskCullingCanvasItem, _rect, Colors.White);
 		// 反过来向遮罩层绘制
 
-		_rect = new Rect2(-size * 0.5F, size);
+		_rect = new Rect2(-_size * 0.5F, _size);
 		RenderingServer.CanvasItemAddRect(borderCullingCanvasItem, _rect, Colors.Black);
 	}
 }

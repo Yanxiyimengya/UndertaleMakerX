@@ -78,33 +78,77 @@ public partial class BattleArenaGroup : Node2D
 		if (_arenaBorderCullingCanvasItem.IsValid) RenderingServer.FreeRid(_arenaBorderCullingCanvasItem);
 		if (_arenaMaskRenderingCanvasItem.IsValid) RenderingServer.FreeRid(_arenaMaskRenderingCanvasItem);
 		if (_arenaMaskCullingCanvasItem.IsValid) RenderingServer.FreeRid(_arenaMaskCullingCanvasItem);
-
 		if (_borderCanvas.IsValid) RenderingServer.FreeRid(_borderCanvas);
 		if (_maskCanvas.IsValid) RenderingServer.FreeRid(_maskCanvas);
 		if (MainCanvas.IsValid) RenderingServer.FreeRid(MainCanvas);
-
 		if (_borderViewport.IsValid) RenderingServer.FreeRid(_borderViewport);
 		if (_maskViewport.IsValid) RenderingServer.FreeRid(_maskViewport);
+	}
+
+	public override void _Ready()
+	{
+		QueueRedraw();
 	}
 
 	public override void _Process(double delta)
 	{
 		GetCameraTransform();
-		// 使用 CallDeferred 确保摄像机完全更新后再绘制
-		CallDeferred(MethodName._Draw);
+		RenderingServer.CanvasItemSetTransform(MainCanvasItem, CameraTransform);
+		if (IsInsideTree() && Visible)
+		{
+			RenderingServer.CanvasItemClear(_arenaBorderRenderingCanvasItem);
+			RenderingServer.CanvasItemClear(_arenaMaskRenderingCanvasItem);
+			RenderingServer.CanvasItemClear(_arenaBorderCullingCanvasItem);
+			RenderingServer.CanvasItemClear(_arenaMaskCullingCanvasItem);
+			bool _requireRedraw = false;
+			foreach (Node _child in GetChildren())
+			{
+				if (_child is BaseBattleArena arena)
+				{
+					if (!arena.Visible) continue;
+					Transform2D arenaTransform2D = CameraTransformInverse * arena.GetTransform();
+					RenderingServer.CanvasItemAddSetTransform(_arenaBorderRenderingCanvasItem, arenaTransform2D);
+					RenderingServer.CanvasItemAddSetTransform(_arenaMaskRenderingCanvasItem, arenaTransform2D);
+					RenderingServer.CanvasItemAddSetTransform(_arenaBorderCullingCanvasItem, arenaTransform2D);
+					RenderingServer.CanvasItemAddSetTransform(_arenaMaskCullingCanvasItem, arenaTransform2D);
+					arena.DrawFrame(_arenaBorderRenderingCanvasItem, _arenaMaskRenderingCanvasItem,
+						_arenaBorderCullingCanvasItem, _arenaMaskCullingCanvasItem);
+					if (arena.IsDirty)
+					{
+						arena.IsDirty = false;
+						_requireRedraw = true;
+					}
+				}
+			}
+			if (_requireRedraw)
+			{
+				RenderingServer.ViewportSetActive(GetViewport().GetViewportRid(), false);
+				RenderingServer.ViewportSetActive(GetViewport().GetViewportRid(), true);
+			}
+		}
+	}
+
+	public override void _Draw()
+	{
+		RenderingServer.CanvasItemClear(MainCanvasItem);
+		Vector2I viewportSize = (Vector2I)GetViewport().GetVisibleRect().Size;
+		RenderingServer.ViewportSetSize(_borderViewport, viewportSize.X, viewportSize.Y);
+		RenderingServer.ViewportSetSize(_maskViewport, viewportSize.X, viewportSize.Y);
+		RenderingServer.CanvasItemAddTextureRect(MainCanvasItem, new Rect2(Vector2.Zero, viewportSize),
+			_borderViewportTextureRid);
+		RenderingServer.CanvasItemAddTextureRect(MainCanvasItem, new Rect2(Vector2.Zero, viewportSize),
+				_maskViewportTextureRid);
 	}
 
 	public Vector2 GetScreenTopLeftPosition()  
 	{  
 		if (GetViewport().GetCamera2D() is Camera2D camera)  
 		{  
-			Vector2 screenCenter = camera.GetScreenCenterPosition();  
 			Vector2 screenSize = GetViewport().GetVisibleRect().Size; 
 			Transform2D cameraTransform = camera.GetTransform();
 			Vector2 halfScreenOffset = -screenSize * 0.5F * (Vector2.One / camera.Zoom);
-
 			cameraTransform.Origin = Vector2.Zero;
-			return screenCenter + cameraTransform * halfScreenOffset;  
+			return camera.GetScreenCenterPosition() + cameraTransform * halfScreenOffset;  
 		}  
 		return Vector2.Zero;  
 	}
@@ -113,9 +157,9 @@ public partial class BattleArenaGroup : Node2D
 	{
 		CameraTransform = Transform2D.Identity;
 		CameraTransformInverse = CameraTransform.Inverse();
-		if (GetViewport().GetCamera2D() is Camera2D camera)
+		Viewport viewport = GetViewport();
+		if (viewport.GetCamera2D() is Camera2D camera)
 		{
-			Viewport viewport = GetViewport();
 			Rect2 visibleRect = viewport.GetVisibleRect();
 			Vector2 screenSize = visibleRect.Size;
 			Vector2 zoom = new Vector2(Math.Abs(camera.Zoom.X), Math.Abs(camera.Zoom.Y));
@@ -129,42 +173,6 @@ public partial class BattleArenaGroup : Node2D
 					camera.GlobalPosition : GetScreenTopLeftPosition()
 			);
 			CameraTransformInverse = CameraTransform.AffineInverse();
-		}
-	}
-
-	public override void _Draw()
-	{
-		RenderingServer.CanvasItemClear(MainCanvasItem);
-		RenderingServer.CanvasItemClear(_arenaBorderRenderingCanvasItem);
-		RenderingServer.CanvasItemClear(_arenaMaskRenderingCanvasItem);
-		RenderingServer.CanvasItemClear(_arenaBorderCullingCanvasItem);
-		RenderingServer.CanvasItemClear(_arenaMaskCullingCanvasItem);
-		if (IsInsideTree() && Visible)
-		{
-			Vector2I viewportSize = (Vector2I)GetViewport().GetVisibleRect().Size;
-			RenderingServer.ViewportSetSize(_borderViewport, viewportSize.X, viewportSize.Y);
-			RenderingServer.ViewportSetSize(_maskViewport, viewportSize.X, viewportSize.Y);
-
-			RenderingServer.CanvasItemSetTransform(MainCanvasItem, CameraTransform);
-			RenderingServer.CanvasItemAddTextureRect(MainCanvasItem, new Rect2(Vector2.Zero, viewportSize),
-				_borderViewportTextureRid);
-			RenderingServer.CanvasItemAddTextureRect(MainCanvasItem, new Rect2(Vector2.Zero, viewportSize),
-					_maskViewportTextureRid);
-
-			foreach (Node _child in GetChildren())
-			{
-				if (_child is BaseBattleArena arena)
-				{
-					if (!arena.Visible) continue;
-					Transform2D arenaTransform2D = CameraTransformInverse * arena.GetTransform();
-					RenderingServer.CanvasItemAddSetTransform(_arenaBorderRenderingCanvasItem, arenaTransform2D);
-					RenderingServer.CanvasItemAddSetTransform(_arenaMaskRenderingCanvasItem, arenaTransform2D);
-					RenderingServer.CanvasItemAddSetTransform(_arenaBorderCullingCanvasItem, arenaTransform2D);
-					RenderingServer.CanvasItemAddSetTransform(_arenaMaskCullingCanvasItem, arenaTransform2D);
-					arena.DrawFrame(_arenaBorderRenderingCanvasItem, _arenaMaskRenderingCanvasItem,
-						_arenaBorderCullingCanvasItem, _arenaMaskCullingCanvasItem);
-				}
-			}
 		}
 	}
 

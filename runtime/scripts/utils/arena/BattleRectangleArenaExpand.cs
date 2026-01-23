@@ -7,24 +7,38 @@ using System;
 public partial class BattleRectangleArenaExpand : BattleArenaExpand
 {
 	[Export]
-	public Vector2 size = new Vector2(140, 140);
-	
-	public override void DrawFrame(Rid borderRenderingItem, Rid maskRenderingItem,
+	public Vector2 Size
+	{
+		get => _size;
+		set
+		{
+			if (_size != value)
+			{
+                _size = value;
+                IsDirty = true;
+			}
+
+        }
+	}
+
+	private Vector2 _size = new Vector2(140, 140);
+
+    public override void DrawFrame(Rid borderRenderingItem, Rid maskRenderingItem,
 		Rid borderCullingCanvasItem, Rid maskCullingCanvasItem)
 	{
 		Vector2 borderSize = Vector2.One * BorderWidth;
 		Rect2 _rect;
 
-		_rect = new Rect2(-size * 0.5F - borderSize, size + borderSize * 2F);
+		_rect = new Rect2(-_size * 0.5F - borderSize, _size + borderSize * 2F);
 		RenderingServer.CanvasItemAddRect(borderRenderingItem, _rect, BorderColor);
 		
-		_rect = new Rect2(-size * 0.5F , size);
+		_rect = new Rect2(-_size * 0.5F , _size);
 		RenderingServer.CanvasItemAddRect(maskRenderingItem, _rect, ContentColor);
 	}
 
 	public override Vector2 GetRecentPointInArena(Vector2 point)
 	{
-		Vector2 half = size * 0.5f;
+		Vector2 half = _size * 0.5f;
 		Vector2 minBounds = -half;
 		Vector2 maxBounds = half;
 		return point.Clamp(minBounds, maxBounds);
@@ -33,13 +47,13 @@ public partial class BattleRectangleArenaExpand : BattleArenaExpand
 	public override bool IsPointInArena(Vector2 point)
 	{
 		Vector2 borderSize = Vector2.One * BorderWidth;
-		Rect2 arenaRect = new Rect2(-size * 0.5F, size);
+		Rect2 arenaRect = new Rect2(-_size * 0.5F, _size);
 		return arenaRect.HasPoint(point);
 	}
 	public override bool IsSegmentInArena(Vector2 from, Vector2 to)
 	{
 		Vector2 borderSize = Vector2.One * BorderWidth;
-		Rect2 arenaRect = new Rect2(-size * 0.5F + borderSize, size - borderSize);
+		Rect2 arenaRect = new Rect2(-_size * 0.5F + borderSize, _size - borderSize);
 
 		if (arenaRect.HasPoint(from) || arenaRect.HasPoint(to))
 		{

@@ -13,6 +13,7 @@ public partial class BattlePolygonArenaExpand : BattleArenaExpand
 			if (_vertices != value)
 			{
 				_vertices = value;
+				IsDirty = true;
 				_borderVertices = ArenaPolygonBorderTool.GetBorderPolygon(_vertices, BorderWidth);
 			}
 		}
