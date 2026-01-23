@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 [GlobalClass]
-public partial class BattleScreenButtonManager : Node
+public partial class BattleScreenButtonManager : Node2D
 {
 	private System.Collections.Generic.Dictionary<string, BattleScreenButton> buttonList = 
 				new Dictionary<string, BattleScreenButton>();
@@ -20,15 +20,15 @@ public partial class BattleScreenButtonManager : Node
 		}
 	}
 
-    public void ReleaseAllButton()
-    {
-        foreach (KeyValuePair<string, BattleScreenButton> pair in buttonList)
-        {
-            pair.Value.Pressed = false;
-        }
-    }
+	public void ReleaseAllButton()
+	{
+		foreach (KeyValuePair<string, BattleScreenButton> pair in buttonList)
+		{
+			pair.Value.Pressed = false;
+		}
+	}
 
-    public void ReleaseButton(string id)
+	public void ReleaseButton(string id)
 	{
 		if (GetButton(id, out BattleScreenButton btn))
 		{
@@ -53,14 +53,14 @@ public partial class BattleScreenButtonManager : Node
 		if (buttonList.TryGetValue(id, out button))
 			return true;
 		return false;
-    }
+	}
 
-    public string GetPrevButtonId()
-    {
+	public string GetPrevButtonId()
+	{
 		return _prevButtonId;
-    }
+	}
 
-    public int GetButtonCount()
+	public int GetButtonCount()
 	{
 		return buttonList.Count;
 	}

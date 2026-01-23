@@ -10,14 +10,19 @@ public partial class BattleArenaMask : Node2D
 		ClipChildren = ClipChildrenMode.Only;
 	}
 
-	public override void _Draw()
+	public override void _Process(double delta)
 	{
-		BattleArenaGroup _arenaGroup = GetParent() as BattleArenaGroup;
-		if (_arenaGroup != null)
+		if (IsInsideTree() && Visible)
 		{
-			Rid _canvasItem = GetCanvasItem();
-			RenderingServer.CanvasItemAddTextureRect(_canvasItem, GetViewportRect(),
-					_arenaGroup.GetMaskViewportTexture());
+			BattleArenaGroup _arenaGroup = GetParent() as BattleArenaGroup;
+			if (_arenaGroup != null && _arenaGroup.Visible)
+			{
+				Rid _canvasItem = GetCanvasItem();
+                RenderingServer.CanvasItemClear(_canvasItem);
+				RenderingServer.CanvasItemAddSetTransform(_canvasItem, _arenaGroup.CameraTransform);
+				RenderingServer.CanvasItemAddTextureRect(_canvasItem, GetViewportRect(),
+						_arenaGroup.GetMaskViewportTexture());
+			}
 		}
 	}
 }

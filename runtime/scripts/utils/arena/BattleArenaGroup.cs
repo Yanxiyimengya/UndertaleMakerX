@@ -5,6 +5,9 @@ using System;
 [GlobalClass]
 public partial class BattleArenaGroup : Node2D
 {
+	public Rid MainCanvasItem;
+	public Rid MainCanvas;
+	
 	private Rid _arenaBorderRenderingCanvasItem;
 	private Rid _arenaBorderCullingCanvasItem;
 	private Rid _arenaMaskRenderingCanvasItem;
@@ -18,10 +21,19 @@ public partial class BattleArenaGroup : Node2D
 	private Rid _borderViewportCamera;
 	private static CanvasItemMaterial _cullingMaterial = new CanvasItemMaterial();
 
+	public Transform2D CameraTransform;
+	public Transform2D CameraTransformInverse;
+
+	static BattleArenaGroup()  
+	{
+		_cullingMaterial = new CanvasItemMaterial();  
+		_cullingMaterial.BlendMode = CanvasItemMaterial.BlendModeEnum.Sub;  
+	}
 	public override void _EnterTree()
 	{
 		_borderCanvas = RenderingServer.CanvasCreate();
 		_maskCanvas = RenderingServer.CanvasCreate();
+		MainCanvas = RenderingServer.CanvasCreate();
 
 		_borderViewport = RenderingServer.ViewportCreate();
 		RenderingServer.ViewportSetActive(_borderViewport, true);
@@ -37,77 +49,120 @@ public partial class BattleArenaGroup : Node2D
 		RenderingServer.ViewportSetUpdateMode(_maskViewport, RenderingServer.ViewportUpdateMode.Always);
 		RenderingServer.ViewportAttachCanvas(_maskViewport, _maskCanvas);
 
+		RenderingServer.ViewportAttachCanvas(GetViewport().GetViewportRid(), MainCanvas);
+
 		_borderViewportTextureRid = RenderingServer.ViewportGetTexture(_borderViewport);
 		_maskViewportTextureRid = RenderingServer.ViewportGetTexture(_maskViewport);
 
-
-		_cullingMaterial.BlendMode = CanvasItemMaterial.BlendModeEnum.Sub;
+		MainCanvasItem = RenderingServer.CanvasItemCreate();
 		_arenaBorderRenderingCanvasItem = RenderingServer.CanvasItemCreate();
 		_arenaBorderCullingCanvasItem = RenderingServer.CanvasItemCreate();
 		_arenaMaskRenderingCanvasItem = RenderingServer.CanvasItemCreate();
 		_arenaMaskCullingCanvasItem = RenderingServer.CanvasItemCreate();
-		RenderingServer.CanvasItemSetMaterial(_arenaBorderCullingCanvasItem, _cullingMaterial.GetRid());
-		RenderingServer.CanvasItemSetMaterial(_arenaMaskCullingCanvasItem, _cullingMaterial.GetRid());
 
-		Rid _canvasItem = GetCanvasItem();
+		RenderingServer.CanvasItemSetParent(MainCanvasItem, GetCanvas());
 		RenderingServer.CanvasItemSetParent(_arenaBorderRenderingCanvasItem, _borderCanvas);
 		RenderingServer.CanvasItemSetParent(_arenaBorderCullingCanvasItem, _borderCanvas);
 		RenderingServer.CanvasItemSetParent(_arenaMaskRenderingCanvasItem, _maskCanvas);
 		RenderingServer.CanvasItemSetParent(_arenaMaskCullingCanvasItem, _maskCanvas);
+
+		_cullingMaterial.BlendMode = CanvasItemMaterial.BlendModeEnum.Sub;
+		RenderingServer.CanvasItemSetMaterial(_arenaBorderCullingCanvasItem, _cullingMaterial.GetRid());
+		RenderingServer.CanvasItemSetMaterial(_arenaMaskCullingCanvasItem, _cullingMaterial.GetRid());
 	}
 
 	public override void _ExitTree()
 	{
-		if (_borderCanvas.IsValid) RenderingServer.FreeRid(_borderCanvas);
-		if (_maskCanvas.IsValid) RenderingServer.FreeRid(_maskCanvas);
-
-		if (_borderViewport.IsValid) RenderingServer.FreeRid(_borderViewport);
-		if (_maskViewport.IsValid) RenderingServer.FreeRid(_maskViewport);
-
+		if (MainCanvasItem.IsValid) RenderingServer.FreeRid(MainCanvasItem);
 		if (_arenaBorderRenderingCanvasItem.IsValid) RenderingServer.FreeRid(_arenaBorderRenderingCanvasItem);
 		if (_arenaBorderCullingCanvasItem.IsValid) RenderingServer.FreeRid(_arenaBorderCullingCanvasItem);
 		if (_arenaMaskRenderingCanvasItem.IsValid) RenderingServer.FreeRid(_arenaMaskRenderingCanvasItem);
 		if (_arenaMaskCullingCanvasItem.IsValid) RenderingServer.FreeRid(_arenaMaskCullingCanvasItem);
+
+		if (_borderCanvas.IsValid) RenderingServer.FreeRid(_borderCanvas);
+		if (_maskCanvas.IsValid) RenderingServer.FreeRid(_maskCanvas);
+		if (MainCanvas.IsValid) RenderingServer.FreeRid(MainCanvas);
+
+		if (_borderViewport.IsValid) RenderingServer.FreeRid(_borderViewport);
+		if (_maskViewport.IsValid) RenderingServer.FreeRid(_maskViewport);
 	}
 
 	public override void _Process(double delta)
 	{
-		base._Process(delta);
+		GetCameraTransform();
 		_DrawArenas();
 	}
 
-	public override void _Draw()
+	public Vector2 GetScreenTopLeftPosition()  
+{  
+	if (GetViewport().GetCamera2D() is Camera2D camera)  
+	{  
+		Vector2 screenCenter = camera.GetScreenCenterPosition();  
+		Vector2 screenSize = GetViewport().GetVisibleRect().Size; 
+		Transform2D cameraTransform = camera.GetTransform();  
+		Transform2D cameraBasis = cameraTransform;  
+		cameraBasis.Origin = Vector2.Zero;
+		Vector2 halfScreenOffset = cameraBasis.BasisXform(-screenSize * 0.5f);  
+		return screenCenter + halfScreenOffset;  
+	}  
+	return Vector2.Zero;  
+}
+	
+	public void GetCameraTransform()
 	{
-		Vector2I viewportSize = (Vector2I)GetViewportRect().Size;
-		RenderingServer.ViewportSetSize(_borderViewport, viewportSize.X, viewportSize.Y);
-		RenderingServer.ViewportSetSize(_maskViewport, viewportSize.X, viewportSize.Y);
-
-		Rid _canvasItem = GetCanvasItem();
-		RenderingServer.CanvasItemClear(_canvasItem);
-		RenderingServer.CanvasItemAddTextureRect(_canvasItem, GetViewportRect(),
-			_borderViewportTextureRid);
-		RenderingServer.CanvasItemAddTextureRect(_canvasItem, GetViewportRect(),
-				_maskViewportTextureRid);
+		CameraTransform = Transform2D.Identity;
+		if (GetViewport().GetCamera2D() is Camera2D camera)
+		{
+			Viewport viewport = GetViewport();
+			Rect2 visibleRect = viewport.GetVisibleRect();
+			Vector2 screenSize = visibleRect.Size;
+			Vector2 zoom = new Vector2(Math.Abs(camera.Zoom.X), Math.Abs(camera.Zoom.Y));
+			Vector2 zoomScale = new Vector2(1f / zoom.X, 1f / zoom.Y);
+			Vector2 cameraPos = camera.GlobalPosition;
+			float rotation = camera.IgnoreRotation ? 0F : camera.GlobalRotation;
+			CameraTransform = new Transform2D(
+				rotation,
+				zoomScale,
+				0f,
+				cameraPos
+			);
+			CameraTransformInverse = CameraTransform.AffineInverse();
+		}
 	}
 
 	private void _DrawArenas()
 	{
+		RenderingServer.CanvasItemClear(MainCanvasItem);
 		RenderingServer.CanvasItemClear(_arenaBorderRenderingCanvasItem);
 		RenderingServer.CanvasItemClear(_arenaMaskRenderingCanvasItem);
 		RenderingServer.CanvasItemClear(_arenaBorderCullingCanvasItem);
 		RenderingServer.CanvasItemClear(_arenaMaskCullingCanvasItem);
-
-		foreach (Node _child in GetChildren())
+		if (IsInsideTree() && Visible)
 		{
-			if (_child is BaseBattleArena arena)
+			Vector2I viewportSize = (Vector2I)GetViewport().GetVisibleRect().Size;
+			RenderingServer.ViewportSetSize(_borderViewport, viewportSize.X, viewportSize.Y);
+			RenderingServer.ViewportSetSize(_maskViewport, viewportSize.X, viewportSize.Y);
+
+			RenderingServer.CanvasItemSetTransform(MainCanvasItem, CameraTransform);
+
+			RenderingServer.CanvasItemAddTextureRect(MainCanvasItem, new Rect2(Vector2.Zero, viewportSize),
+				_borderViewportTextureRid);
+			RenderingServer.CanvasItemAddTextureRect(MainCanvasItem, new Rect2(Vector2.Zero, viewportSize),
+					_maskViewportTextureRid);
+
+			foreach (Node _child in GetChildren())
 			{
-				if (!arena.Visible) continue;
-				RenderingServer.CanvasItemAddSetTransform(_arenaBorderRenderingCanvasItem, arena.GetTransform());
-				RenderingServer.CanvasItemAddSetTransform(_arenaMaskRenderingCanvasItem, arena.GetTransform());
-				RenderingServer.CanvasItemAddSetTransform(_arenaBorderCullingCanvasItem, arena.GetTransform());
-				RenderingServer.CanvasItemAddSetTransform(_arenaMaskCullingCanvasItem, arena.GetTransform());
-				arena.DrawFrame(_arenaBorderRenderingCanvasItem, _arenaMaskRenderingCanvasItem,
-					_arenaBorderCullingCanvasItem, _arenaMaskCullingCanvasItem);
+				if (_child is BaseBattleArena arena)
+				{
+					if (!arena.Visible) continue;
+					Transform2D arenaTransform2D = CameraTransformInverse * arena.GetTransform();
+					RenderingServer.CanvasItemAddSetTransform(_arenaBorderRenderingCanvasItem, arenaTransform2D);
+					RenderingServer.CanvasItemAddSetTransform(_arenaMaskRenderingCanvasItem, arenaTransform2D);
+					RenderingServer.CanvasItemAddSetTransform(_arenaBorderCullingCanvasItem, arenaTransform2D);
+					RenderingServer.CanvasItemAddSetTransform(_arenaMaskCullingCanvasItem, arenaTransform2D);
+					arena.DrawFrame(_arenaBorderRenderingCanvasItem, _arenaMaskRenderingCanvasItem,
+						_arenaBorderCullingCanvasItem, _arenaMaskCullingCanvasItem);
+				}
 			}
 		}
 	}
