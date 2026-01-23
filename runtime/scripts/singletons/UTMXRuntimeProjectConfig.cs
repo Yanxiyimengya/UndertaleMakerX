@@ -3,7 +3,7 @@ using Godot.Collections;
 using System;
 
 // 引擎配置文件读取类
-public partial class UTMXRuntimeProjectConfig : Node
+public partial class UTMXRuntimeProjectConfig
 {
     private static readonly Lazy<UTMXRuntimeProjectConfig> _instance =
         new Lazy<UTMXRuntimeProjectConfig>(() => new UTMXRuntimeProjectConfig());

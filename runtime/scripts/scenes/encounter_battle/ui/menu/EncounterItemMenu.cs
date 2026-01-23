@@ -6,15 +6,16 @@ public partial class EncounterItemMenu : EncounterChoiceListMenu
 	public override void UIVisible()
 	{
 		ClearItem();
-		for (int i = 0; i < PlayerDataManager.Instance.Items.Count; i ++)
-		{
-			BaseItem item = PlayerDataManager.Instance.Items[i];
-			AddItem(i, item.DisplayName, 1, 1);
-		}
 		HpBarSetVisible(false);
+		int index = 0;
+		foreach (BaseItem inventoryItem in PlayerDataManager.Instance.Items)
+		{
+			AddItem(index, inventoryItem.DisplayName, 1, 1);
+			index ++;
+		}
 	}
 	public override void UIHidden()
 	{
-
+		ClearItem();
 	}
 }

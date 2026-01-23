@@ -12,7 +12,7 @@ public partial class BattleScreenButtonManager : Node2D
 
 	public override void _Ready()
 	{
-		base._Ready();
+		buttonList.Clear();
 		foreach (Node childNode in this.GetChildren())
 		{
 			if (!(childNode is BattleScreenButton btn)) continue;
@@ -49,7 +49,6 @@ public partial class BattleScreenButtonManager : Node2D
 	}
 
 	public bool GetButton(string id, out BattleScreenButton button) {
-
 		if (buttonList.TryGetValue(id, out button))
 			return true;
 		return false;

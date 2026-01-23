@@ -1,13 +1,15 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class EncounterChoiceMenu : BaseEncounterMenu
 {
 
 	[Export]
 	public Godot.Collections.Array<EncounterChoiceMenuItem> MenuItems;
-    public partial class ChoiceItem : RefCounted
+
+    public partial class ChoiceItem : GodotObject
 	{
 		public object ItemId;
 		public string ItemDisplayName;
@@ -36,24 +38,36 @@ public partial class EncounterChoiceMenu : BaseEncounterMenu
 	}
 
 	protected int _currentChoice = 0; // 当前选择
-	protected List<ChoiceItem> _items = [];
+	private List<ChoiceItem> _items = [];
 
-	public override void UIVisible() { }
+	~EncounterChoiceMenu()
+	{
+		ClearItem();
+	}
+
+
+    public override void UIVisible() { }
 	public override void UIHidden() { }
 
 	public virtual void AddItem(object itemId, string displayName, float value = 1, float maxValue = 1)
 	{
-		_items.Add(new ChoiceItem(itemId).SetDisplayName(displayName).SetValue(value).SetMaxValue(maxValue));
+        _items.Add(new ChoiceItem(itemId).SetDisplayName(displayName).SetValue(value).SetMaxValue(maxValue));
 	}
 	public virtual void RemoveItem(int i)
 	{
-		if (i > -1 && i < _items.Count)
+		if (i > -1 && i < GetItemCount())
 		{
-			_items.RemoveAt(i);
-		}
+			_items[i].Free();
+            _items.RemoveAt(i);
+        }
 	}
 
-	public object GetChoicedItemId()
+	public ChoiceItem GetItem(int index)
+	{
+		return _items[index];
+	}
+
+    public object GetChoicedItemId()
 	{
 		return _items[_currentChoice].ItemId;
     }
@@ -62,10 +76,13 @@ public partial class EncounterChoiceMenu : BaseEncounterMenu
         return _items[_currentChoice].ItemDisplayName;
     }
 
-
     public void ClearItem()
 	{
-		_items.Clear();
+        foreach (ChoiceItem item in _items)
+		{
+			item.Free();
+		}
+        _items.Clear();
 	}
 
 	public int GetItemCount()
@@ -75,7 +92,7 @@ public partial class EncounterChoiceMenu : BaseEncounterMenu
 
 	public virtual void SetChoice(int Choice)
 	{
-		if (Choice >= _items.Count)
+		if (Choice >= GetItemCount())
 		{
 			return;
 		}

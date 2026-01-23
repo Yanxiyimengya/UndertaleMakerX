@@ -91,55 +91,61 @@ public partial class UndertaleStyleScrollBar : Control
 
 	public override void _ExitTree()
 	{
-		if (_topArrow.IsValid)
-			RenderingServer.FreeRid(_topArrow);
-		if (_bottomArrow.IsValid)
-			RenderingServer.FreeRid(_bottomArrow);
+		if (_topArrow.IsValid) RenderingServer.FreeRid(_topArrow);
+		if (_bottomArrow.IsValid) RenderingServer.FreeRid(_bottomArrow);
 	}
 
 	public override void _Process(double delta)
 	{
-		_inTop = _inTop ? (_currentIndex < PageSize) : (_currentIndex == 0);
-		_inBottom = _inBottom ? (_currentIndex >= Count - PageSize) : (_currentIndex == Count - 1);
-
-		if (Count > PageSize && ArrowTexture != null)
+		if (IsVisibleInTree())
 		{
-			float halfCount = Count / 2.0f;
-			float totalPointHeight = _pointSize.Y * Count;
-			float totalSpacing = Spacing * (Count - 1);
-			float centerOffset = (totalPointHeight + totalSpacing) / 2;
+			_inTop = _inTop ? (_currentIndex < PageSize) : (_currentIndex == 0);
+			_inBottom = _inBottom ? (_currentIndex >= Count - PageSize) : (_currentIndex == Count - 1);
 
-			float topY = -centerOffset + _pointSize.Y / 2 + Spacing / 2 - (float)_arrowAnimOffset;
-			RenderingServer.CanvasItemSetVisible(_topArrow, !_inTop);
-			RenderingServer.CanvasItemSetTransform(_topArrow,
-				Transform2D.Identity.Translated(new Vector2(0F, topY - 10)));
-
-			float bottomY = centerOffset - _pointSize.Y / 2 - Spacing / 2 + (float)_arrowAnimOffset;
-			RenderingServer.CanvasItemSetVisible(_bottomArrow, !_inBottom);
-			RenderingServer.CanvasItemSetTransform(_bottomArrow,
-				Transform2D.Identity.Scaled(new Vector2(1F, -1F)).Translated(new Vector2(0F, bottomY + 10)));
-
-			if (_arrowAnimTimer > 0)
+			if (Count > PageSize && ArrowTexture != null)
 			{
-				_arrowAnimTimer -= delta;
+				float halfCount = Count / 2.0f;
+				float totalPointHeight = _pointSize.Y * Count;
+				float totalSpacing = Spacing * (Count - 1);
+				float centerOffset = (totalPointHeight + totalSpacing) / 2;
+
+				float topY = -centerOffset + _pointSize.Y / 2 + Spacing / 2 - (float)_arrowAnimOffset;
+				RenderingServer.CanvasItemSetVisible(_topArrow, !_inTop);
+				RenderingServer.CanvasItemSetTransform(_topArrow,
+					Transform2D.Identity.Translated(new Vector2(0F, topY - 10)));
+
+				float bottomY = centerOffset - _pointSize.Y / 2 - Spacing / 2 + (float)_arrowAnimOffset;
+				RenderingServer.CanvasItemSetVisible(_bottomArrow, !_inBottom);
+				RenderingServer.CanvasItemSetTransform(_bottomArrow,
+					Transform2D.Identity.Scaled(new Vector2(1F, -1F)).Translated(new Vector2(0F, bottomY + 10)));
+
+				if (_arrowAnimTimer > 0)
+				{
+					_arrowAnimTimer -= delta;
+				}
+				else
+				{
+					_arrowAnimTimer = 1.0F;
+
+					if (_tween != null)
+					{
+						_tween.Kill();
+						_tween.Dispose();
+						_tween = null;
+					}
+					_tween = GetTree().CreateTween();
+					_tween.TweenProperty(this, "_arrowAnimOffset", 5, 0.42).From(0.0);
+
+				}
 			}
 			else
 			{
-				_arrowAnimTimer = 1.0F;
-				if (_tween != null && _tween.IsRunning())
-				{
-					_tween.Kill();
-				}
-				_tween = GetTree().CreateTween();
-				_tween.TweenProperty(this, "_arrowAnimOffset", 5, 0.42).From(0.0);
+				if (_topArrow.IsValid)
+					RenderingServer.CanvasItemSetVisible(_topArrow, false);
+				if (_bottomArrow.IsValid)
+					RenderingServer.CanvasItemSetVisible(_bottomArrow, false);
 			}
-		}
-		else
-		{
-			if (_topArrow.IsValid)
-				RenderingServer.CanvasItemSetVisible(_topArrow, false);
-			if (_bottomArrow.IsValid)
-				RenderingServer.CanvasItemSetVisible(_bottomArrow, false);
+
 		}
 	}
 

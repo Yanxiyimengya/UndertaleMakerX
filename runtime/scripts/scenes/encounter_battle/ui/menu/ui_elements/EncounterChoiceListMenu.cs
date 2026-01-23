@@ -25,7 +25,7 @@ public partial class EncounterChoiceListMenu : EncounterChoiceMenu
 
 	public async override void SetChoice(int choice)
 	{
-		if (choice >= _items.Count)
+		if (choice >= GetItemCount())
 		{
 			return;
 		}
@@ -40,13 +40,13 @@ public partial class EncounterChoiceListMenu : EncounterChoiceMenu
 			{
 				int slot = (i + _firstIndex);
 				EncounterChoiceMenuItem menuItem = MenuItems[i];
-				if (slot >= _items.Count)
+				if (slot >= GetItemCount())
 				{
 					menuItem.Visible = false;
 					continue;
 				}
 
-				ChoiceItem choiceItem = _items[slot];
+				ChoiceItem choiceItem = GetItem(slot);
 				menuItem.Visible = true;
 				menuItem.Text = choiceItem.ItemDisplayName;
 				if (menuItem.ProgressVisible)
@@ -63,6 +63,7 @@ public partial class EncounterChoiceListMenu : EncounterChoiceMenu
 				var menuItem = MenuItems[soulSelectIndex];
 				BattlePlayerSoul soul = enc.GetPlayerSoul();
 				soul.GlobalTransform = menuItem.GetSoulTransform();
+
 			}
 		}
 	}

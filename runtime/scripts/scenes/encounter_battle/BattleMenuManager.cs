@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
+[GlobalClass]
 public partial class BattleMenuManager : TabContainer
 {
 	private Dictionary<string, BaseEncounterMenu> menuList = new Dictionary<string, BaseEncounterMenu>();
@@ -16,7 +17,12 @@ public partial class BattleMenuManager : TabContainer
 			menuList.Add(menu.Name, menu);
 		}
 	}
-	
+
+	public override void _ExitTree()
+	{
+		menuList.Clear();
+	}
+
 	public void CloseAllMenu()
 	{
 		Visible = false;

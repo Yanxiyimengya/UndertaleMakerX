@@ -90,7 +90,8 @@ public partial class BattleArenaGroup : Node2D
 	public override void _Process(double delta)
 	{
 		GetCameraTransform();
-		_Draw();
+		// 使用 CallDeferred 确保摄像机完全更新后再绘制
+		CallDeferred(MethodName._Draw);
 	}
 
 	public Vector2 GetScreenTopLeftPosition()  

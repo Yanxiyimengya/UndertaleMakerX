@@ -3,13 +3,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public partial class DialogueQueueManager : Node
+public partial class DialogueQueueManager
 {
 	private static readonly Lazy<DialogueQueueManager> _instance =
 		new Lazy<DialogueQueueManager>(() => new DialogueQueueManager());
 	private DialogueQueueManager() { }
 	public static DialogueQueueManager Instance => _instance.Value;
-	public struct Dialogue
+	public partial class Dialogue : RefCounted
 	{
 		public string Message = "";
 		public Dictionary<string, Variant> MetaData;

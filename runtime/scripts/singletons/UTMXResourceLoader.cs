@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-internal partial class UTMXResourceLoader : Node
+internal partial class UTMXResourceLoader
 {
 
 	private static readonly Lazy<UTMXResourceLoader> _instance =

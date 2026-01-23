@@ -38,7 +38,6 @@ public partial class GlobalStreamPlayer : Node
 		AppendStreamToLibrary("ESCAPED", EscapedSoundStream);
 		AppendStreamToLibrary("TEXT_TYPER_VOICE", TextSoundStream);
 		AppendStreamToLibrary("ENEMY_VOICE", EnemyDialogueSoundStream);
-
 	}
 
 	public void PlaySound(AudioStream stream)

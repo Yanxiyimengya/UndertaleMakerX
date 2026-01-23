@@ -22,7 +22,7 @@ public partial class EncounterChoicePageMenu : EncounterChoiceMenu
 
 	public async override void SetChoice(int choice)
 	{
-		if (choice >= _items.Count)
+		if (choice >= GetItemCount())
 		{
 			return;
 		}
@@ -30,7 +30,7 @@ public partial class EncounterChoicePageMenu : EncounterChoiceMenu
 		_currentChoice = choice;
 		if (GetTree().CurrentScene is EncounterBattle enc)
 		{
-			if (_items.Count > MenuItems.Count)
+			if (GetItemCount() > MenuItems.Count)
 			{
 				PageTextTyper.Start($"PAGE {page + 1}");
 				PageTextTyper.Visible = true;
@@ -44,12 +44,12 @@ public partial class EncounterChoicePageMenu : EncounterChoiceMenu
 			{
 				int slot = (page * MenuItems.Count) + i;
 				EncounterChoiceMenuItem menuItem = MenuItems[i];
-				if (slot >= _items.Count)
+				if (slot >= GetItemCount())
 				{
 					menuItem.Visible = false;
 					continue;
 				}
-				ChoiceItem choiceItem = _items[slot];
+				ChoiceItem choiceItem = GetItem(slot);
 				menuItem.Visible = true;
 				menuItem.Text = choiceItem.ItemDisplayName;
 				if (menuItem.ProgressVisible)

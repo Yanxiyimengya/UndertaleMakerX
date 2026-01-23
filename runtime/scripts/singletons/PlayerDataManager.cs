@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Godot;
 
 // 用于管理本地玩家数据
-public partial class PlayerDataManager : Node
+public partial class PlayerDataManager
 {
 
 	private static readonly Lazy<PlayerDataManager> _instance =

@@ -53,7 +53,10 @@ public partial class EncounterBattle : Node
 	public override void _Ready()
 	{
 		BattleStateMachine.SwitchToState(_encounterConfig.EncounterBattleFirstState);
-		AddEnemy(new BaseEnemy(), new Vector2(0F , -0F));
+		AddEnemy(new BaseEnemy(), new Vector2(0F, -0F));
+		AddEnemy(new BaseEnemy(), new Vector2(0F, -0F));
+		AddEnemy(new BaseEnemy(), new Vector2(0F, -0F));
+		AddEnemy(new BaseEnemy(), new Vector2(0F, -0F));
 	}
 	public BattlePlayerSoul GetPlayerSoul()
 	{
