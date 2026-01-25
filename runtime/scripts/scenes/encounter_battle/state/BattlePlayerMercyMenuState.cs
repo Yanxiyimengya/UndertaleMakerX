@@ -78,7 +78,7 @@ public partial class BattlePlayerMercyMenuState : StateNode
 				{
 					if (GetTree().CurrentScene is EncounterBattle enc)
 					{
-						foreach (BaseEnemy enemy in enc.Enemys)
+						foreach (BaseEnemy enemy in BattleManager.Instance.EnemysList)
 						{
 							if (enemy.AllowSpare && enemy.CanSpare)
 							{
@@ -114,17 +114,14 @@ public partial class BattlePlayerMercyMenuState : StateNode
 
 	private void _Free()
 	{ 
-		if (GetTree().CurrentScene is EncounterBattle enc)
-		{
-			_freed = true;
-			_playerSoul = enc.GetPlayerSoul();
-			_playerSoul.Freed = true;
-			_playerSoul.Visible = true;
-			_OpenTextMenu();
-			enc.Endded = true;
-			TextMenu.ShowEncounterText(enc.FreeText);
-			BattleButtonManager.ReleaseAllButton();
-			GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("ESCAPED"));
-		}
+		_freed = true;
+		BattleManager.Instance.Endded = true;
+		_playerSoul = BattleManager.Instance.GetPlayerSoul();
+		_playerSoul.Freed = true;
+		_playerSoul.Visible = true;
+		_OpenTextMenu();
+		TextMenu.ShowEncounterText(BattleManager.Instance.FreeText);
+		BattleButtonManager.ReleaseAllButton();
+		GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("ESCAPED"));
 	}
 }

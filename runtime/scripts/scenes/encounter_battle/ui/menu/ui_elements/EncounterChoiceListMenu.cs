@@ -34,37 +34,33 @@ public partial class EncounterChoiceListMenu : EncounterChoiceMenu
 		UtScrollBar.Count = GetItemCount();
 		UtScrollBar.CurrentIndex = choice;
 		_currentChoice = choice;
-		if (GetTree().CurrentScene is EncounterBattle enc)
+
+		for (var i = 0; i < 3; i++)
 		{
-			for (var i = 0; i < 3; i++)
+			int slot = (i + _firstIndex);
+			EncounterChoiceMenuItem menuItem = MenuItems[i];
+			if (slot >= GetItemCount())
 			{
-				int slot = (i + _firstIndex);
-				EncounterChoiceMenuItem menuItem = MenuItems[i];
-				if (slot >= GetItemCount())
-				{
-					menuItem.Visible = false;
-					continue;
-				}
-
-				ChoiceItem choiceItem = GetItem(slot);
-				menuItem.Visible = true;
-				menuItem.Text = choiceItem.ItemDisplayName;
-				if (menuItem.ProgressVisible)
-				{
-					menuItem.ProgressMaxValue = choiceItem.MaxValue;
-					menuItem.ProgressValue = choiceItem.Value;
-				}
+				menuItem.Visible = false;
+				continue;
 			}
 
-			await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
-			int soulSelectIndex = choice - _firstIndex;
-			if (soulSelectIndex < 3)
+			ChoiceItem choiceItem = GetItem(slot);
+			menuItem.Visible = true;
+			menuItem.Text = choiceItem.ItemDisplayName;
+			if (menuItem.ProgressVisible)
 			{
-				var menuItem = MenuItems[soulSelectIndex];
-				BattlePlayerSoul soul = enc.GetPlayerSoul();
-				soul.GlobalTransform = menuItem.GetSoulTransform();
-
+				menuItem.ProgressMaxValue = choiceItem.MaxValue;
+				menuItem.ProgressValue = choiceItem.Value;
 			}
+		}
+
+		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+		int soulSelectIndex = choice - _firstIndex;
+		if (soulSelectIndex < 3)
+		{
+			var menuItem = MenuItems[soulSelectIndex];
+            BattleManager.Instance.GetPlayerSoul().GlobalTransform = menuItem.GetSoulTransform();
 		}
 	}
 }

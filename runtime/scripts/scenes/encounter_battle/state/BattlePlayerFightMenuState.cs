@@ -108,8 +108,8 @@ public partial class BattlePlayerFightMenuState : StateNode
 
 	private BaseEnemy GetTargetEnemy()
 	{
-		_enemyChoice = Math.Clamp(_enemyChoice, 0, _encounterBattle.Enemys.Count - 1);
-		return _encounterBattle.Enemys[_enemyChoice];
+		_enemyChoice = Math.Clamp(_enemyChoice, 0, BattleManager.Instance.GetEnemysCount() - 1);
+		return BattleManager.Instance.EnemysList[_enemyChoice];
 	}
 	#endregion
 
@@ -145,10 +145,10 @@ public partial class BattlePlayerFightMenuState : StateNode
 		}
 		else if (Input.IsActionJustPressed("down"))
 		{
-			if (_encounterBattle?.Enemys == null || _encounterBattle.Enemys.Count == 0) return;
+			if (BattleManager.Instance.GetEnemysCount() == 0) return;
 
 			int previousChoice = _enemyChoice;
-			_enemyChoice = Math.Min(_enemyChoice + 1, _encounterBattle.Enemys.Count - 1);
+			_enemyChoice = Math.Min(_enemyChoice + 1, BattleManager.Instance.GetEnemysCount() - 1);
 
 			if (previousChoice != _enemyChoice)
 			{
@@ -179,11 +179,8 @@ public partial class BattlePlayerFightMenuState : StateNode
 
 	private async Task OpenAttackGaugeMenu()
 	{
-		if (_encounterBattle?.GetPlayerSoul() is BattlePlayerSoul soul)
-		{
-			soul.Visible = false;
-		}
-		await MenuManager.OpenMenu("EncounterAttackGaugeBarMenu");
+        BattleManager.Instance.GetPlayerSoul().Visible = false;
+        await MenuManager.OpenMenu("EncounterAttackGaugeBarMenu");
 		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 		BattleButtonManager.ReleaseAllButton();
 	}
@@ -209,10 +206,12 @@ public partial class BattlePlayerFightMenuState : StateNode
 	}
 
 	public override void _ExitState() {
-		if (_encounterBattle?.GetPlayerSoul() is BattlePlayerSoul soul)
-		{
-			soul.Visible = true;
-		}
-	}
-	#endregion
+		BattleManager.Instance.GetPlayerSoul().Visible = true;
+
+    }
+    public override bool _CanEnterState()
+    {
+        return BattleManager.Instance.GetEnemysCount() > 0;
+    }
+    #endregion
 }

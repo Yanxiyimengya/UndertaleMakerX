@@ -5,11 +5,6 @@ using System;
 public partial class BattlePlayerItemMenuState : StateNode
 {
 	[Export]
-	AudioStream SndSelect;
-	[Export]
-	AudioStream SndSqueak;
-	
-	[Export]
 	BattleMenuManager MenuManager;
 	[Export]
 	EncounterItemMenu ItemChoiceMenu;

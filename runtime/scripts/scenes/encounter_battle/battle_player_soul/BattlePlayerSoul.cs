@@ -68,7 +68,7 @@ public partial class BattlePlayerSoul : CharacterBody2D
 	private bool _freed = false;
 	private List<Vector2> _checkPoints = new List<Vector2>();
 
-	public const float Speed = 300.0f;
+	public const float Speed = 175.0f;
 	public const float JumpVelocity = -400.0f;
 
 	public override void _Ready()
@@ -101,12 +101,12 @@ public partial class BattlePlayerSoul : CharacterBody2D
 				GlobalPosition = ArenaGroup.PushBackInside(GlobalPosition, _checkPoints.ToArray(), 1.0F);
 			}
 		}
-
 		MoveAndSlide();
 	}
 
 	private bool IsInsideArena(Vector2 center)
 	{
+		if (! _enableCollision) return true;
 		foreach (Vector2 offset in _checkPoints)
 		{
 			Vector2 worldPoint = center + offset;

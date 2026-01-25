@@ -180,7 +180,7 @@ public partial class BattleArenaGroup : Node2D
 	{
 		foreach (Node child in GetChildren())
 		{
-			if (child is not BattleArenaExpand arena) continue;
+			if (child is not BattleArenaExpand arena || !arena.Enabled) continue;
 			var localPoint = arena.GlobalTransform.AffineInverse() * pos;
 			var insideChild = arena.IsPointInArena(localPoint);
 			if (insideChild) return true;
@@ -192,7 +192,7 @@ public partial class BattleArenaGroup : Node2D
 	{
 		foreach (Node child in GetChildren())
 		{
-			if (child is not BattleArenaExpand arena) continue;
+			if (child is not BattleArenaExpand arena || !arena.Enabled) continue;
 			var insideChild = arena.IsSegmentInArena(
 				arena.GlobalTransform.AffineInverse() * from,
 				arena.GlobalTransform.AffineInverse() * to);
@@ -208,7 +208,7 @@ public partial class BattleArenaGroup : Node2D
 
 		foreach (Node child in GetChildren())
 		{
-			if (child is not BattleArenaExpand arena) continue;
+			if (child is not BattleArenaExpand arena || !arena.Enabled) continue;
 
 			var tempCenter = center;
 			var isValid = false;

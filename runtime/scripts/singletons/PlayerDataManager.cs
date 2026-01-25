@@ -13,8 +13,8 @@ public partial class PlayerDataManager
 
 	public string PlayerName = "FRISK";
 	public int PlayerLv = 1;
-	public float PlayerHp = 20F;
-	public float PlayerMaxHp = 20F;
+	public float PlayerHp = 92F;
+	public float PlayerMaxHp = 92F;
     public float PlayerAttack = 0F;
     public float PlayerDefence = 0F;
 

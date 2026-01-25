@@ -6,46 +6,13 @@ using System.Text.RegularExpressions;
 public partial class BattleStatusBar : Control
 {
 	[Export]
-	public string PlayerName {
-		get => playerName;
-		set 
-		{
-			playerName = value;
-			updateNameLvLabel();
-		}
-	}
-
+	public string PlayerName;
 	[Export]
-	public int PlayerLv
-	{
-		get => playerLv;
-		set
-		{
-			playerLv = value;
-			updateNameLvLabel();
-		}
-	}
-
+	public int PlayerLv;
 	[Export]
-	public double PlayerHp
-	{
-		get => playerHp;
-		set
-		{
-			playerHp = value;
-			updateHp();
-		}
-	}
+	public double PlayerHp;
 	[Export]
-	public double PlayerMaxHp
-	{
-		get => playerMaxHp;
-		set
-		{
-			playerMaxHp = value;
-			updateHp();
-		}
-	}
+	public double PlayerMaxHp;
 
 
 	[Export]
@@ -55,16 +22,14 @@ public partial class BattleStatusBar : Control
 	[Export]
 	public Label HpLabel;
 
-	private string playerName;
-	private int playerLv;
-	private double playerHp = 20.0;
-	private double playerMaxHp = 20.0;
+	private string _playerName;
+	private int _playerLv;
+	private double _playerHp = 20.0;
+	private double _playerMaxHp = 20.0;
 
 	public override void _Ready()
 	{
 		UpdatePlayerData();
-		updateNameLvLabel();
-		updateHp();
 	}
 
 	public override void _Process(double delta)
@@ -74,27 +39,31 @@ public partial class BattleStatusBar : Control
 
 	public void UpdatePlayerData()
 	{
-		PlayerName = PlayerDataManager.Instance.PlayerName;
-		playerLv = PlayerDataManager.Instance.PlayerLv;
-		playerHp = PlayerDataManager.Instance.PlayerHp;
-		playerMaxHp = PlayerDataManager.Instance.PlayerMaxHp;
+		_playerName = PlayerDataManager.Instance.PlayerName;
+		_playerLv = PlayerDataManager.Instance.PlayerLv;
+		_playerMaxHp = PlayerDataManager.Instance.PlayerMaxHp;
+		_playerHp = PlayerDataManager.Instance.PlayerHp;
+		updateNameLvLabel();
+		updateHp();
 	}
 
 	private void updateNameLvLabel()
 	{
 		if (NameLvLabel != null)
 		{
-			NameLvLabel.Text = $"{playerName}   LV {playerLv}";
+			NameLvLabel.Text = $"{_playerName}   LV {_playerLv}";
 		}
 	}
 	private void updateHp()
 	{
 		if (HpProgressBarLabel != null)
 		{
-			HpProgressBarLabel.MaxValue = playerMaxHp;
-			HpProgressBarLabel.Value = playerHp;
+			HpProgressBarLabel.MaxValue = _playerMaxHp;
+			HpProgressBarLabel.Value = _playerHp;
 			HpProgressBarLabel.CustomMinimumSize = new Vector2(
-				(float)Math.Round(playerMaxHp * 1.2F) + 1.0F, 21.0F);
+				(float)Math.Round(_playerMaxHp * 1.2F) + 1.0F, 21.0F);
+			HpLabel.Text = $"{_playerHp} / {_playerMaxHp}";
+
 		}
 	}
 }

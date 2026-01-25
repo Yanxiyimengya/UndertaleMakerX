@@ -10,7 +10,7 @@ public partial class EncounterActPageMenu : EncounterChoicePageMenu
 		if (GetTree().CurrentScene is EncounterBattle enc)
 		{
 			ClearItem();
-			BaseEnemy enemy = enc.Enemys[battlePlayerActMenuState.EnemyChoice];
+			BaseEnemy enemy = BattleManager.Instance.EnemysList[battlePlayerActMenuState.EnemyChoice];
 			foreach (string act in enemy.Actions)
 			{ 
 				AddItem(act, act);

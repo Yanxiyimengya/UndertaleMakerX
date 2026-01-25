@@ -48,7 +48,6 @@ public partial class BattlePlayerChoiceActionState : StateNode
 			{
 				EmitSignal(SignalName.RequestSwitchState, [state]);
 			}
-
 			GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SELECT"));
 		}
 		SetChoice(ActionChoice);
@@ -58,31 +57,24 @@ public partial class BattlePlayerChoiceActionState : StateNode
 	{
 		if (TryGetActionButtonMapping(ActionChoice, out string btnId))
 		{
-			if (GetTree().CurrentScene is EncounterBattle enc)
+			BattlePlayerSoul soul = BattleManager.Instance.GetPlayerSoul();
+			if (BattleButtonManager.GetButton(btnId, out BattleScreenButton btn))
 			{
-				BattlePlayerSoul soul = enc.GetPlayerSoul();
-				if (BattleButtonManager.GetButton(btnId, out BattleScreenButton btn))
-				{
-					soul.GlobalTransform = btn.GetSoulTransform();
-				}
+				soul.GlobalTransform = btn.GetSoulTransform();
 			}
 			BattleButtonManager.PressButton(btnId);
 		}
 	}
 
 	public override async void _EnterState()
-	{
-		await MenuManager.OpenMenu("EncounterTextMenu");
+    {
+        await MenuManager.OpenMenu("EncounterTextMenu");
 		SetChoice(ActionChoice);
 		
-		if (GetTree().CurrentScene is EncounterBattle enc)
-		{
-			TextMenu.ShowEncounterText(enc.EncounterText);
-			BattlePlayerSoul soul = enc.GetPlayerSoul();
-			soul.Movable = false;
-			soul.EnableCollision = false;
-			soul.Show();
-		}
+		TextMenu.ShowEncounterText(BattleManager.Instance.EncounterText);
+		BattlePlayerSoul soul = BattleManager.Instance.GetPlayerSoul();
+		soul.Movable = false;
+		soul.Show();
 	}
 
 	public override void _ExitState()

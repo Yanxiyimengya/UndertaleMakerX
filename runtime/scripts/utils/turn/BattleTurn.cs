@@ -1,0 +1,26 @@
+using Godot;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+public partial class BattleTurn : RefCounted
+{
+    public Vector2 ArenaSize = new Vector2(150, 140);
+    public Vector2 SoulPosition = new Vector2(320, 320);
+    public double TurnTime = 3.0;
+
+    public void Initialize()
+    {
+    }
+    public void Start()
+    {
+    }
+    public void End()
+    {
+    }
+    public void Update()
+    {
+    }
+}

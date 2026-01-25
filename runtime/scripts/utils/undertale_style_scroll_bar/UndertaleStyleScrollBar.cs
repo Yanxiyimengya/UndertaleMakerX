@@ -75,24 +75,29 @@ public partial class UndertaleStyleScrollBar : Control
 	private double _arrowAnimOffset = 0.0;
 	private Tween _tween;
 
-	public override void _EnterTree()
+	public UndertaleStyleScrollBar()
 	{
 		_topArrow = RenderingServer.CanvasItemCreate();
 		RenderingServer.CanvasItemSetParent(_topArrow, GetCanvasItem());
 		_bottomArrow = RenderingServer.CanvasItemCreate();
 		RenderingServer.CanvasItemSetParent(_bottomArrow, GetCanvasItem());
-
-		if (ArrowTexture != null)
-		{
-			RenderingServer.CanvasItemAddTextureRect(_topArrow, new Rect2(-ArrowTexture.GetSize() / 2, ArrowTexture.GetSize()), ArrowTexture.GetRid());
-			RenderingServer.CanvasItemAddTextureRect(_bottomArrow, new Rect2(-ArrowTexture.GetSize() / 2, ArrowTexture.GetSize()), ArrowTexture.GetRid());
-		}
 	}
 
-	public override void _ExitTree()
+	~UndertaleStyleScrollBar()
 	{
 		if (_topArrow.IsValid) RenderingServer.FreeRid(_topArrow);
 		if (_bottomArrow.IsValid) RenderingServer.FreeRid(_bottomArrow);
+	}
+
+	public override void _Ready()
+	{
+		if (ArrowTexture != null)
+		{
+			RenderingServer.CanvasItemAddTextureRect(_topArrow, 
+				new Rect2(-ArrowTexture.GetSize() / 2, ArrowTexture.GetSize()), ArrowTexture.GetRid());
+			RenderingServer.CanvasItemAddTextureRect(_bottomArrow, 
+				new Rect2(-ArrowTexture.GetSize() / 2, ArrowTexture.GetSize()), ArrowTexture.GetRid());
+		}
 	}
 
 	public override void _Process(double delta)

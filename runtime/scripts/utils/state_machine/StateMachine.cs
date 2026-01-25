@@ -35,8 +35,6 @@ public partial class StateMachine : Node
 
 	public override void _Ready()
 	{
-		base._Ready();
-
 		ChildEnteredTree += OnChildEnteredTree;
 		ChildExitingTree += OnChildExitingTree;
 
@@ -48,6 +46,10 @@ public partial class StateMachine : Node
 		if (!string.IsNullOrEmpty(CurrentStateName))
 		{
 			CurrentStateName = CurrentStateName;
+		}
+		else 
+		{
+			CurrentStateName = GetChild(0).Name;
 		}
 	}
 	private void OnChildEnteredTree(Node child)

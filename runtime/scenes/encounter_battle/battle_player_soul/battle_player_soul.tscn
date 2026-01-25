@@ -79,6 +79,7 @@ _data = {
 [node name="BattlePlayerSoul" type="CharacterBody2D" node_paths=PackedStringArray("animSprite2d")]
 modulate = Color(1, 0, 0, 1)
 script = ExtResource("1_4pjqo")
+CollisionRadius = 7.5
 animSprite2d = NodePath("Sprite2D")
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="."]

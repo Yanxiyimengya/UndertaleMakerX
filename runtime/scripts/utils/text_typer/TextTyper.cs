@@ -388,7 +388,7 @@ public partial class TextTyper : Godot.RichTextLabel
 
 	public new bool IsFinished()
 	{
-		return _typerProgress >= TyperText.Length;
+		return _typerProgress == TyperText.Length;
 	}
 	// 重置数据
 	public void ResetData()

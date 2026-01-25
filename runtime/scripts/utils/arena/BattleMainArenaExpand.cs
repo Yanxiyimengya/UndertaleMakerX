@@ -1,59 +1,58 @@
 using Godot;
 using Microsoft.VisualBasic;
 using System;
-
 [Tool]
 [GlobalClass]
-public partial class BattleRectangleArenaExpand : BattleArenaExpand
+public partial class BattleMainArenaExpand : BattleRectangleArenaExpand
 {
-	[Export]
-	public Vector2 Size
+	BattleMainArenaExpand()
 	{
-		get => _size;
-		set
-		{
-			if (_size != value)
-			{
-				_size = value;
-				IsDirty = true;
-			}
-
-		}
+		_size = new Vector2(140, 130);
 	}
-
-	protected Vector2 _size = new Vector2(140, 140);
-
 	public override void DrawFrame(Rid borderRenderingItem, Rid maskRenderingItem,
 		Rid borderCullingCanvasItem, Rid maskCullingCanvasItem)
 	{
 		Vector2 borderSize = Vector2.One * BorderWidth;
 		Rect2 _rect;
 
-		_rect = new Rect2(-_size * 0.5F - borderSize, _size + borderSize * 2F);
+		_rect = new Rect2(
+			-_size.X * 0.5F - borderSize.X,
+			-_size.Y - borderSize.Y,
+			_size.X + borderSize.X * 2F,
+			_size.Y + borderSize.Y * 2F
+		);
 		RenderingServer.CanvasItemAddRect(borderRenderingItem, _rect, BorderColor);
-		
-		_rect = new Rect2(-_size * 0.5F , _size);
+		_rect = new Rect2(
+			-_size.X * 0.5F,
+			-_size.Y,
+			_size.X,
+			_size.Y
+		);
 		RenderingServer.CanvasItemAddRect(maskRenderingItem, _rect, ContentColor);
 	}
 
 	public override Vector2 GetRecentPointInArena(Vector2 point)
 	{
-		Vector2 half = _size * 0.5f;
-		Vector2 minBounds = -half;
-		Vector2 maxBounds = half;
+		Vector2 minBounds = new Vector2(-_size.X * 0.5f, -_size.Y);
+		Vector2 maxBounds = new Vector2(_size.X * 0.5f, 0);
 		return point.Clamp(minBounds, maxBounds);
 	}
 
 	public override bool IsPointInArena(Vector2 point)
 	{
-		Vector2 borderSize = Vector2.One * BorderWidth;
-		Rect2 arenaRect = new Rect2(-_size * 0.5F, _size);
+		Rect2 arenaRect = new Rect2(-_size.X * 0.5F, -_size.Y, _size.X, _size.Y);
 		return arenaRect.HasPoint(point);
 	}
+
 	public override bool IsSegmentInArena(Vector2 from, Vector2 to)
 	{
 		Vector2 borderSize = Vector2.One * BorderWidth;
-		Rect2 arenaRect = new Rect2(-_size * 0.5F + borderSize, _size - borderSize);
+		Rect2 arenaRect = new Rect2(
+			-_size.X * 0.5F + borderSize.X,
+			-_size.Y + borderSize.Y,
+			_size.X - borderSize.X * 2F,
+			_size.Y - borderSize.Y * 2F
+		);
 
 		if (arenaRect.HasPoint(from) || arenaRect.HasPoint(to))
 		{
@@ -69,7 +68,7 @@ public partial class BattleRectangleArenaExpand : BattleArenaExpand
 
 		for (int i = 0; i < 4; i++)
 		{
-			if (Geometry2D.SegmentIntersectsSegment(from, to, rectCorners[i], rectCorners[(i + 1) % 4]).VariantType is Variant.Type.Nil)
+			if (Geometry2D.SegmentIntersectsSegment(from, to, rectCorners[i], rectCorners[(i + 1) % 4]).VariantType != Variant.Type.Nil)
 			{
 				return true;
 			}

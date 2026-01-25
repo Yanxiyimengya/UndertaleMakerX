@@ -1,36 +1,105 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 [GlobalClass]
 public partial class BattleEnemyDialogueState : StateNode
 {
 	[Export]
-	public PackedScene DialogueSpeechBubble;
+	public PackedScene DialogueSpeechBubblePackedScene;
 	[Export]
 	public BattleMenuManager MenuManager;
 
+	private EncounterBattle _encounterBattle;
+	private List<SpeechBubble> _speechBubbleList = new();
+
+	private Tween _tween;
 	public override void _Process(double delta)
 	{
+		if (Input.IsActionJustPressed("confirm"))
+		{
+			bool allFinished = true;
+			foreach (SpeechBubble bubble in _speechBubbleList)
+			{
+				if (! bubble.IsTextTyperFinished())
+				{
+					allFinished = false;
+				}
+			}
+			if (allFinished)
+			{
+				NextStep();
+			}
+		}
 	}
 
 	public override void _EnterState()
 	{
 		MenuManager.CloseAllMenu();
+		BattleMainArenaExpand _battleMainArena = BattleManager.Instance.GetMainArena();
+		BattleTurn currentTurn = BattleManager.Instance.GetCurrentTurn();
+		BattlePlayerSoul soul = BattleManager.Instance.GetPlayerSoul();
+		currentTurn.Initialize();
+		soul.GlobalPosition = currentTurn.SoulPosition;
+		soul.Movable = false;
+
+		if (_tween != null && _tween.IsRunning())
+		{
+			_tween.Kill();
+		}
+		_tween = GetTree().CreateTween();
+		_tween.TweenProperty(_battleMainArena, "Size", currentTurn.ArenaSize, 0.35);
+		_tween.TweenCallback(Callable.From(NextStep));
 	}
 
 	public override void _ExitState()
 	{
-		NextStep();
 	}
 
 
 	private void NextStep()
 	{
-		if (DialogueQueueManager.Instance.DialogueCount() > 0)
+		foreach (SpeechBubble bubble in _speechBubbleList)
 		{
-			string dialogueText = DialogueQueueManager.Instance.GetNextDialogueAsText();
+			bubble.QueueFree();
+		}
+		_speechBubbleList.Clear();
+
+
+		if (DialogueQueueManager.Instance.BattleEnemyDialogueCount() > 0)
+		{
+			Dictionary<int ,DialogueQueueManager.Dialogue> dialogue = DialogueQueueManager.Instance.GetBattleEnemyDialogues();
+			if (DialogueSpeechBubblePackedScene != null)
+			{
+				foreach (KeyValuePair<int, DialogueQueueManager.Dialogue> pair in dialogue)
+				{
+					if (pair.Key >= 0 && pair.Key < BattleManager.Instance.GetEnemysCount())
+					{
+						BaseEnemy enemy = BattleManager.Instance.EnemysList[pair.Key];
+						Node inst = DialogueSpeechBubblePackedScene.Instantiate();
+						if (inst is SpeechBubble bubble)
+						{
+							if (! enemy.IsInsideTree()) continue;
+							enemy.AddChild(bubble);
+							bubble.Text = pair.Value.Message;
+							pair.Value.TryGetMetaData("Poisition", out Variant offset);
+							pair.Value.TryGetMetaData("HideSpike", out Variant hideSpike);
+							pair.Value.TryGetMetaData("Dir", out Variant dir);
+							bubble.Position = enemy.CenterPosition + offset.AsVector2();
+							bubble.Dir = dir.AsInt32();
+							bubble.HideSpike = hideSpike.AsBool();
+							_speechBubbleList.Add(bubble);
+						}
+						else
+						{
+							inst.Free();
+						}
+
+					}
+				}
+			}
 		}
 		else
-			EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerChoiceActionState"]);
+			EmitSignal(SignalName.RequestSwitchState, ["BattleEnemyState"]);
 	}
 }

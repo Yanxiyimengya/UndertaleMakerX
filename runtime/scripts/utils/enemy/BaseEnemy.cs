@@ -11,7 +11,7 @@ public partial class BaseEnemy : Node2D
 	public float Defence = 0.0F;
 	public float Hp = 100.0F;
 	public float MaxHp = 100.0F;
-    public int Slot = 0;
+    public int EnemyIndex = 0;
     public bool AllowSpare = true;
 	public bool CanSpare = true;
     public string MissText = "MISS";
@@ -33,6 +33,15 @@ public partial class BaseEnemy : Node2D
     }
     public virtual void HandleAttack(bool missed)
     {
+        AddDialogue("你打我干什么啊啊啊");
+        AddDialogue("我要揍你！！！");
+    }
+
+    protected void AddDialogue(string dialogueMessage ,Vector2? offset = null, bool hideSpike = false, int dir = 2)
+    {
+        if (offset == null) 
+            offset = new Vector2(30, 0);
+        DialogueQueueManager.Instance.AppendBattleEnemyDialogue(EnemyIndex, dialogueMessage, (Vector2)offset, hideSpike);
     }
 
 }

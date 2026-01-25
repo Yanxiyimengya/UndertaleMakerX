@@ -93,9 +93,7 @@ public partial class BattlePlayerActMenuState : StateNode
 			}
 			else if (Input.IsActionJustPressed("confirm"))
 			{
-				string actionCommand = encounterActPageMenu.GetChoicedDisplayName();
-				_encounterBattle.Enemys[EnemyChoice].HandleAction(actionCommand);
-				EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerDialogState"]);
+				_NextState();
 			}
 
 		}
@@ -116,12 +114,12 @@ public partial class BattlePlayerActMenuState : StateNode
 			}
 			else if (Input.IsActionJustPressed("down"))
 			{
-				if (_encounterBattle != null && _encounterBattle.Enemys.Count > 0)
+				if (_encounterBattle != null && BattleManager.Instance.GetEnemysCount() > 0)
 				{
 					EnemyChoice += 1;
-					if (EnemyChoice >= _encounterBattle.Enemys.Count)
+					if (EnemyChoice >= BattleManager.Instance.GetEnemysCount())
 					{
-						EnemyChoice = _encounterBattle.Enemys.Count - 1;
+						EnemyChoice = BattleManager.Instance.GetEnemysCount() - 1;
 					}
 					else
 					{
@@ -144,7 +142,7 @@ public partial class BattlePlayerActMenuState : StateNode
 
 	private async Task _OpenActMenu()
 	{
-		if (_encounterBattle.Enemys[EnemyChoice].Actions.Count > 0)
+		if (BattleManager.Instance.EnemysList[EnemyChoice].Actions.Count > 0)
 		{
 			_selected = true;
 			await MenuManager.OpenMenu("EncounterActPageMenu");
@@ -160,6 +158,13 @@ public partial class BattlePlayerActMenuState : StateNode
 		encounterChoiceEnemyMenu.SetChoice(EnemyChoice);
 	}
 
+	private void _NextState()
+	{
+        string actionCommand = encounterActPageMenu.GetChoicedDisplayName();
+        BattleManager.Instance.EnemysList[EnemyChoice].HandleAction(actionCommand);
+        EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerDialogState"]);
+    }
+
 	public override async void _EnterState()
 	{
 		await _OpenEnemyChoiceMenu();
@@ -168,4 +173,8 @@ public partial class BattlePlayerActMenuState : StateNode
 	public override void _ExitState()
 	{
 	}
+    public override bool _CanEnterState()
+    {
+		return BattleManager.Instance.GetEnemysCount() > 0;
+    }
 }

@@ -34,10 +34,17 @@ public partial class SpeechBubble : Node2D
 
 	public override void _Ready()
 	{
+		UpdateBubble();
+		SpeechBubbleTextTyper.TyperColor = Colors.Black;
 		SpeechBubbleTextTyper.Start(Text);
 	}
 
 	public override void _Process(double delta)
+	{
+		UpdateBubble();
+	}
+	
+	private void UpdateBubble()
 	{
 		Size = new Vector2(MathF.Max(Size.X, _minimumSize.X), MathF.Max(Size.Y, _minimumSize.Y));
 		SpeechBubbleTextTyper.Size = Size;
@@ -133,5 +140,10 @@ public partial class SpeechBubble : Node2D
 					break;
 			}
 		}
+	}
+
+	public bool IsTextTyperFinished()
+	{
+		return SpeechBubbleTextTyper.IsFinished();
 	}
 }
