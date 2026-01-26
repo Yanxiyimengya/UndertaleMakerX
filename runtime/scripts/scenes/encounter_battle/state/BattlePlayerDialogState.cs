@@ -25,7 +25,7 @@ public partial class BattlePlayerDialogState : StateNode
 	{
 		NextStep();
 		await MenuManager.OpenMenu("EncounterTextMenu");
-		BattleButtonManager.ReleaseAllButton();
+		BattleButtonManager.ResetAllBattleButton();
 	}
 
 	public override void _ExitState()

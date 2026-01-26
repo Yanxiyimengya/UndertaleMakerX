@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://ntyrfjwuxajv" path="res://__data__/built-in-resources/textures/ui/battle_screen/spr_slice_o_0-Sheet.png" id="1_eyuth"]
 [ext_resource type="Script" uid="uid://b7jpaxj7a6loa" path="res://scripts/scenes/encounter_battle/ui/menu/ui_elements/attack_animation/BattleAttackAnimationKnife0.cs" id="1_xw6ss"]
-[ext_resource type="AudioStream" uid="uid://bt8ejn6arrtt3" path="res://assets/sounds/sfx/snd_laz.wav" id="2_6xcgh"]
+[ext_resource type="AudioStream" uid="uid://bt8ejn6arrtt3" path="res://__data__/built-in-resources/sounds/sfx/snd_laz.wav" id="2_6xcgh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xw6ss"]
 atlas = ExtResource("1_eyuth")

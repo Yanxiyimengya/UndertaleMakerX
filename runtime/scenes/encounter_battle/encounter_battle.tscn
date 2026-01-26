@@ -1,6 +1,7 @@
-[gd_scene load_steps=40 format=3 uid="uid://o3ubysucd5hn"]
+[gd_scene load_steps=42 format=3 uid="uid://o3ubysucd5hn"]
 
 [ext_resource type="Script" uid="uid://bicdg5gxj4cwq" path="res://scripts/scenes/encounter_battle/EncounterBattle.cs" id="1_a5x5v"]
+[ext_resource type="Script" uid="uid://b8qcvew1egbpd" path="res://scripts/singletons/interfaces/encounter_battle/UiInterface.cs" id="2_1x56u"]
 [ext_resource type="Texture2D" uid="uid://cpt8lkhth2ikc" path="res://__data__/built-in-resources/textures/ui/battle_screen/bg/spr_battlebg_0.png" id="2_4xtxd"]
 [ext_resource type="Script" uid="uid://cctn2p527r38" path="res://scripts/utils/state_machine/StateMachine.cs" id="2_62htl"]
 [ext_resource type="Script" uid="uid://c0ouwp06q4136" path="res://scripts/scenes/encounter_battle/state/BattlePlayerChoiceActionState.cs" id="3_18p8v"]
@@ -37,6 +38,7 @@
 [ext_resource type="PackedScene" uid="uid://dtiq2nxayrrbj" path="res://scenes/encounter_battle/ui/ui_elements/battle_attack_gauge_bar/battle_attack_gauge_bar.tscn" id="26_du4b0"]
 [ext_resource type="Script" uid="uid://ic16gwu4kje7" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterMercyMenu.cs" id="26_noyau"]
 [ext_resource type="Script" uid="uid://chldlchltn3yg" path="res://scripts/utils/arena/BattleArenaMask.cs" id="26_r2q8g"]
+[ext_resource type="Script" uid="uid://dwg2ab3ixqu8g" path="res://scripts/scenes/encounter_battle/ui/button/BattleScreenActionButton.cs" id="33_q4xod"]
 [ext_resource type="PackedScene" uid="uid://3dmh7idg5rqu" path="res://scenes/encounter_battle/ui/speech_bubble/speech_bubble.tscn" id="39_1x56u"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3wf68"]
@@ -47,6 +49,19 @@ PlayerSoul = NodePath("Players/BattlePlayerSoul")
 MainArena = NodePath("BattleArenaGroup/MainArena")
 BattleStateMachine = NodePath("BattleStateMachine")
 EnemysNode = NodePath("Enemys")
+
+[node name="MainCamera" type="Camera2D" parent="."]
+position = Vector2(320, 240)
+ignore_rotation = false
+
+[node name="BattleInterfaces" type="Node" parent="."]
+
+[node name="UIInterface" type="Node" parent="BattleInterfaces"]
+script = ExtResource("2_1x56u")
+
+[node name="ArenaInterface" type="Node" parent="BattleInterfaces"]
+
+[node name="EnemyInterface" type="Node" parent="BattleInterfaces"]
 
 [node name="BattleStateMachine" type="Node" parent="."]
 script = ExtResource("2_62htl")
@@ -240,21 +255,29 @@ metadata/_tab_index = 5
 [node name="BattleScreenButtonManager" type="Node2D" parent="UILayer"]
 script = ExtResource("8_wxkx7")
 
-[node name="FightButton" parent="UILayer/BattleScreenButtonManager" instance=ExtResource("5_wxkx7")]
+[node name="FIGHT" parent="UILayer/BattleScreenButtonManager" instance=ExtResource("5_wxkx7")]
 position = Vector2(87, 453)
+script = ExtResource("33_q4xod")
+TargetaState = "BattlePlayerFightMenuState"
 
-[node name="ActButton" parent="UILayer/BattleScreenButtonManager" instance=ExtResource("5_wxkx7")]
+[node name="ACT" parent="UILayer/BattleScreenButtonManager" instance=ExtResource("5_wxkx7")]
 position = Vector2(240, 453)
+script = ExtResource("33_q4xod")
+TargetaState = "BattlePlayerActMenuState"
 buttonTexture = ExtResource("6_53d75")
 buttonPressedTexture = ExtResource("7_e7ctv")
 
-[node name="ItemButton" parent="UILayer/BattleScreenButtonManager" instance=ExtResource("5_wxkx7")]
+[node name="ITEM" parent="UILayer/BattleScreenButtonManager" instance=ExtResource("5_wxkx7")]
 position = Vector2(400, 453)
+script = ExtResource("33_q4xod")
+TargetaState = "BattlePlayerItemMenuState"
 buttonTexture = ExtResource("8_taqgn")
 buttonPressedTexture = ExtResource("9_oxe8y")
 
-[node name="MercyButton" parent="UILayer/BattleScreenButtonManager" instance=ExtResource("5_wxkx7")]
+[node name="MERCY" parent="UILayer/BattleScreenButtonManager" instance=ExtResource("5_wxkx7")]
 position = Vector2(555, 453)
+script = ExtResource("33_q4xod")
+TargetaState = "BattlePlayerMercyMenuState"
 buttonTexture = ExtResource("10_66xs5")
 buttonPressedTexture = ExtResource("11_17tmt")
 
@@ -266,7 +289,3 @@ ArenaGroup = NodePath("../../BattleArenaGroup")
 
 [node name="Enemys" type="Node2D" parent="."]
 position = Vector2(320, 240)
-
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(320, 240)
-ignore_rotation = false

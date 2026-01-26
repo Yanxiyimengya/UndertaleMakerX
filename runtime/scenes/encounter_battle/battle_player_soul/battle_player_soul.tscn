@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://creftm2k8k0aw" path="res://scripts/scenes/encounter_battle/battle_player_soul/BattlePlayerSoul.cs" id="1_4pjqo"]
 [ext_resource type="Texture2D" uid="uid://bi04oi56jlyi3" path="res://__data__/built-in-resources/textures/soul/spr_soul_battle-0.png" id="2_4feig"]
-[ext_resource type="Texture2D" uid="uid://dfxhcfd8upbf7" path="res://__data__/built-in-resources/textures/soul/spr_heartgtfo_0-Sheet.png" id="3_4feig"]
+[ext_resource type="Texture2D" uid="uid://dfxhcfd8upbf7" path="res://__data__/built-in-resources/textures/soul/spr_heartgtfo/spr_heartgtfo_0-Sheet.png" id="3_4feig"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_x7lr4"]
 atlas = ExtResource("3_4feig")
@@ -64,7 +64,7 @@ tracks/0/path = NodePath("Sprite2D:self_modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.125),
+"times": PackedFloat32Array(0.125, 0.25),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [Color(0.49803922, 0.49803922, 0.49803922, 1), Color(1, 1, 1, 1)]
@@ -76,11 +76,12 @@ _data = {
 &"hurt": SubResource("Animation_x7lr4")
 }
 
-[node name="BattlePlayerSoul" type="CharacterBody2D" node_paths=PackedStringArray("animSprite2d")]
+[node name="BattlePlayerSoul" type="CharacterBody2D" node_paths=PackedStringArray("animSprite2d", "animPlayer")]
 modulate = Color(1, 0, 0, 1)
 script = ExtResource("1_4pjqo")
 CollisionRadius = 7.5
 animSprite2d = NodePath("Sprite2D")
+animPlayer = NodePath("AnimationPlayer")
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_00thf")

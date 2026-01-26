@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public class ScriptBridge
+public abstract class ScriptBridge
 {
+    //public abstract string ExecuteString(string str);
 }

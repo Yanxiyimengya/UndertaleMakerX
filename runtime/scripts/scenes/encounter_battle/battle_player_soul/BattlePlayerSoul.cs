@@ -57,18 +57,30 @@ public partial class BattlePlayerSoul : CharacterBody2D
 			}
 		}
 	}
+	[Export]
+	public Color SoulColor
+	{
+		get => Modulate;
+		set
+		{
+			Modulate = value;
+		}
+	}
 
 	[Export]
 	public AnimatedSprite2D animSprite2d;
+	[Export]
+	public AnimationPlayer animPlayer;
 
 	private uint _collisionLayer = 0;
 	private uint _collisionMask = 0;
 	private bool _enableCollision = true;
 	private bool _movable = true;
 	private bool _freed = false;
+	private double _invincibleTimer = 0.0F;
 	private List<Vector2> _checkPoints = new List<Vector2>();
 
-	public const float Speed = 175.0f;
+	public const float Speed = 145.0f;
 	public const float JumpVelocity = -400.0f;
 
 	public override void _Ready()
@@ -77,6 +89,20 @@ public partial class BattlePlayerSoul : CharacterBody2D
 		for (float i = 0; i < count; i++)
 		{
 			_checkPoints.Add(CollisionRadius * Vector2.Down.Rotated((i / count) * Mathf.Tau));
+		}
+	}
+
+	public override void _Process(double delta)
+	{
+		base._Process(delta);
+		if (_invincibleTimer > 0)
+		{
+			_invincibleTimer -= delta;
+			animPlayer.Play("hurt");
+		}
+		else
+		{
+			animPlayer.Play("RESET");
 		}
 	}
 
@@ -90,7 +116,7 @@ public partial class BattlePlayerSoul : CharacterBody2D
 
 	public void ProcessMove(double delta)
 	{ 
-		Vector2 inputDir = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down").Normalized();
+		Vector2 inputDir = Input.GetVector("left", "right", "up", "down").Normalized();
 		Vector2 targetPos = GlobalPosition + inputDir * Speed * (float)delta;
 		GlobalPosition = targetPos;
 
@@ -116,5 +142,18 @@ public partial class BattlePlayerSoul : CharacterBody2D
 			}
 		}
 		return true;
+	}
+
+	public void Hurt(double damage)
+	{
+		if (_invincibleTimer > 0) 
+			return;
+		PlayerDataManager.Instance.PlayerHp -= (float)damage;
+		_invincibleTimer = PlayerDataManager.Instance.PlayerInvincibleTime;
+		GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStreamFormLibrary("HURT"));
+		if (PlayerDataManager.Instance.PlayerHp <= 0)
+		{
+			BattleManager.Instance.GameOver();
+		}
 	}
 }

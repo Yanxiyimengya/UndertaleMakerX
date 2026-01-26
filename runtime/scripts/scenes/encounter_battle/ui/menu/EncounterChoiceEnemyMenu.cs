@@ -12,8 +12,9 @@ public partial class EncounterChoiceEnemyMenu : EncounterChoiceListMenu
 			for (int i = 0; i < BattleManager.Instance.GetEnemysCount(); i++)
 			{
 				BaseEnemy enemy = BattleManager.Instance.EnemysList[i];
-				AddItem(i, enemy.DisplayName + i.ToString(), enemy.MaxHp, enemy.Hp);
-				//TEMP
+				string enemyDiaplayText = ((enemy.CanSpare && enemy.AllowSpare) ? "[blend=yellow]" : "") +
+					enemy.DisplayName;
+				AddItem(i, enemyDiaplayText, enemy.MaxHp, enemy.Hp);
 			}
 		}
 	}

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dfxhcfd8upbf7"
-path="res://.godot/imported/spr_heartgtfo_0-Sheet.png-27800895fc924f33c905d160906a2441.ctex"
+uid="uid://dm8esbpdjcgsv"
+path="res://.godot/imported/spr_heartbreak_0.png-79624bd7a2ac1ebd633a7c016c7cd4d2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://__data__/built-in-resources/textures/soul/spr_heartgtfo_0-Sheet.png"
-dest_files=["res://.godot/imported/spr_heartgtfo_0-Sheet.png-27800895fc924f33c905d160906a2441.ctex"]
+source_file="res://__data__/built-in-resources/textures/soul/spr_heartbreak_0.png"
+dest_files=["res://.godot/imported/spr_heartbreak_0.png-79624bd7a2ac1ebd633a7c016c7cd4d2.ctex"]
 
 [params]
 

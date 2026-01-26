@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://u35aavgwl8im"]
+
+[ext_resource type="Script" uid="uid://bkdk03f3w2xuf" path="res://scripts/scenes/encounter_battle/ui/status_bar/StatueBarHpProgressBar.cs" id="1_qqd7w"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ubtbo"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qqd7w"]
+bg_color = Color(1, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3fh6g"]
+bg_color = Color(1, 1, 0, 1)
+
+[node name="StatueBarHpProgressBar" type="PanelContainer" node_paths=PackedStringArray("_backGround", "_foreGround")]
+custom_minimum_size = Vector2(25, 21)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ubtbo")
+script = ExtResource("1_qqd7w")
+_backGround = NodePath("BackgroundColorRect")
+_foreGround = NodePath("ForeColorRect")
+
+[node name="BackgroundColorRect" type="Panel" parent="."]
+custom_minimum_size = Vector2(25, 21)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_qqd7w")
+
+[node name="ForeColorRect" type="Panel" parent="."]
+custom_minimum_size = Vector2(0, 21)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_3fh6g")

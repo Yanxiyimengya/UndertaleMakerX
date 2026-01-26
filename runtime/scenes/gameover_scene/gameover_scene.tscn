@@ -1,0 +1,83 @@
+[gd_scene load_steps=11 format=3 uid="uid://bhklw8angg12w"]
+
+[ext_resource type="Script" uid="uid://tpdqbok7vyy8" path="res://scripts/scenes/gameover_scene/GameoverScene.cs" id="1_5vs5j"]
+[ext_resource type="Texture2D" uid="uid://dm8esbpdjcgsv" path="res://__data__/built-in-resources/textures/soul/spr_heartbreak_0.png" id="2_ffyyg"]
+[ext_resource type="Texture2D" uid="uid://bi04oi56jlyi3" path="res://__data__/built-in-resources/textures/soul/spr_soul_battle-0.png" id="2_jg54t"]
+[ext_resource type="Texture2D" uid="uid://be7tjrap5mupx" path="res://__data__/built-in-resources/textures/ui/gameover/spr_gameoverbg_0.png" id="2_o25v4"]
+[ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="3_jg54t"]
+[ext_resource type="Texture2D" uid="uid://84ot5rinyrk3" path="res://__data__/built-in-resources/textures/soul/spr_heartshards_sheet.png" id="3_llsh4"]
+[ext_resource type="FontFile" uid="uid://butt4gvjxibtq" path="res://__data__/built-in-resources/fonts/FZXS12.ttf" id="4_llsh4"]
+[ext_resource type="AudioStream" uid="uid://ddlvbybr05c6i" path="res://__data__/built-in-resources/sounds/voice/snd_txtasg.wav" id="5_ffyyg"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ffyyg"]
+particles_animation = true
+particles_anim_h_frames = 4
+particles_anim_v_frames = 1
+particles_anim_loop = true
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vduhi"]
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 90.0
+initial_velocity_min = 30.0
+initial_velocity_max = 100.0
+gravity = Vector3(0, 120, 0)
+anim_speed_min = 5.0
+anim_speed_max = 5.0
+
+[node name="GameoverScene" type="Node" node_paths=PackedStringArray("SoulPositionNode", "SoulSprite2D", "GameoverBg", "SoulParticles2D", "GameoverTextTyper")]
+script = ExtResource("1_5vs5j")
+SoulBreakTexture = ExtResource("2_ffyyg")
+SoulPositionNode = NodePath("Soul")
+SoulSprite2D = NodePath("Soul/PlayerSoulSprite2D")
+GameoverBg = NodePath("GameOverBGText")
+SoulParticles2D = NodePath("Soul/SoulParticles2D")
+GameoverTextTyper = NodePath("TextTyper")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Soul" type="Node2D" parent="."]
+position = Vector2(320, 320)
+
+[node name="PlayerSoulSprite2D" type="Sprite2D" parent="Soul"]
+texture = ExtResource("2_jg54t")
+
+[node name="SoulParticles2D" type="GPUParticles2D" parent="Soul"]
+material = SubResource("CanvasItemMaterial_ffyyg")
+emitting = false
+texture = ExtResource("3_llsh4")
+lifetime = 5.0
+one_shot = true
+process_material = SubResource("ParticleProcessMaterial_vduhi")
+
+[node name="GameOverBGText" type="Sprite2D" parent="."]
+position = Vector2(322, 124)
+texture = ExtResource("2_o25v4")
+
+[node name="TextTyper" type="RichTextLabel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -162.0
+offset_top = 84.0
+offset_right = 157.0
+offset_bottom = 198.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/paragraph_separation = 12
+bbcode_enabled = true
+scroll_active = false
+script = ExtResource("3_jg54t")
+TyperSpeed = 0.1
+TyperSize = 24
+TyperFont = ExtResource("4_llsh4")
+Voice = ExtResource("5_ffyyg")
+metadata/_custom_type_script = "uid://dmq4qew4auuss"

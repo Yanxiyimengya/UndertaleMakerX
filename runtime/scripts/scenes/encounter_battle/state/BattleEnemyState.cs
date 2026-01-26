@@ -58,7 +58,7 @@ public partial class BattleEnemyState : StateNode
 			_tween.Kill();
 		}
 		_tween = GetTree().CreateTween();
-		_tween.TweenProperty(_battleMainArena, "Size", new Vector2(565, 130), 0.35);
+		_tween.TweenProperty(_battleMainArena, "Size", new Vector2(565, 130), 0.4);
 		await ToSignal(_tween, Tween.SignalName.Finished);
 		EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerChoiceActionState"]);
 	}

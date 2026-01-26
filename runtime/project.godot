@@ -23,12 +23,14 @@ config/icon="uid://ddfgd4qs5sg3p"
 [autoload]
 
 GlobalStreamPlayer="*res://scenes/singletons/global_stream_player/global_stream_player.tscn"
+SceneManager="*res://scenes/singletons/scene_manager/scene_manager.tscn"
 
 [display]
 
 window/size/viewport_width=640
 window/size/viewport_height=480
 window/stretch/mode="viewport"
+window/vsync/vsync_mode=0
 
 [dotnet]
 

@@ -12,81 +12,56 @@ public partial class BattlePlayerChoiceActionState : StateNode
 	[Export]
 	BattleMenuManager MenuManager;
 
-	public int ActionChoice = 0;
-	private Dictionary<int, string> actionButtonMapping = new Dictionary<int, string>
-	{
-		{ 0 , "FightButton"},
-		{ 1 , "ActButton"},
-		{ 2 , "ItemButton"},
-		{ 3 , "MercyButton"},
-	}; // 按钮映射表
-	private Dictionary<int, string> actionMenuMapping = new Dictionary<int, string>
-	{
-		{ 0 , "BattlePlayerFightMenuState"},
-		{ 1 , "BattlePlayerActMenuState"},
-		{ 2 , "BattlePlayerItemMenuState"},
-		{ 3 , "BattlePlayerMercyMenuState"},
-	}; // 菜单行为映射表
-
+	private Vector2 _prevInputVector = Vector2.Zero;
 	public override void _Process(double delta)
 	{
-		if (Input.IsActionJustPressed("left"))
+		Vector2 inputVector = Input.GetVector("left", "right", "up", "down");
+		if (inputVector != _prevInputVector)
 		{
-			ActionChoice -= 1;
-			GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SQUEAK"));
-			if (ActionChoice < 0) ActionChoice = BattleButtonManager.GetButtonCount() - 1;
-		}
-		else if (Input.IsActionJustPressed("right"))
-		{
-			ActionChoice += 1;
-			GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SQUEAK"));
-			if (ActionChoice >= BattleButtonManager.GetButtonCount()) ActionChoice = 0;
-		}
-		else if (Input.IsActionJustPressed("confirm"))
-		{
-			if (TryGetActionMenuMapping(ActionChoice, out string state))
+			_prevInputVector = inputVector;
+			if (BattleButtonManager.MoveButton(inputVector))
 			{
-				EmitSignal(SignalName.RequestSwitchState, [state]);
+				GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
 			}
-			GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SELECT"));
 		}
-		SetChoice(ActionChoice);
-	}
 
-	public void SetChoice(int Choice)
-	{
-		if (TryGetActionButtonMapping(ActionChoice, out string btnId))
+		if (Input.IsActionJustPressed("confirm"))
 		{
-			BattlePlayerSoul soul = BattleManager.Instance.GetPlayerSoul();
-			if (BattleButtonManager.GetButton(btnId, out BattleScreenButton btn))
-			{
-				soul.GlobalTransform = btn.GetSoulTransform();
-			}
-			BattleButtonManager.PressButton(btnId);
+			BattleButtonManager.PressBattleButton(BattleButtonManager.GetCurrentHoverdBattleButtonId());
+			GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStreamFormLibrary("SELECT"));
+		}
+
+		BattlePlayerSoul soul = BattleManager.Instance.GetPlayerSoul();
+		if (BattleButtonManager.GetBattleButton(BattleButtonManager.GetCurrentHoverdBattleButtonId(), 
+			out BattleScreenButton btn))
+		{
+			soul.GlobalTransform = btn.GetSoulTransform();
 		}
 	}
-
 	public override async void _EnterState()
-    {
-        await MenuManager.OpenMenu("EncounterTextMenu");
-		SetChoice(ActionChoice);
-		
+	{
+		await MenuManager.OpenMenu("EncounterTextMenu");
 		TextMenu.ShowEncounterText(BattleManager.Instance.EncounterText);
 		BattlePlayerSoul soul = BattleManager.Instance.GetPlayerSoul();
 		soul.Movable = false;
 		soul.Show();
+
+		string id = BattleButtonManager.GetCurrentHoverdBattleButtonId();
+		if (string.IsNullOrEmpty(id))
+		{
+			if (BattleButtonManager.GetBattleButtonCount() > 0)
+			{
+				BattleButtonManager.GetBattleButtonId(0, out id);
+				BattleButtonManager.SetButtonHover(id);
+			}
+		}
+		else
+		{
+			BattleButtonManager.SetButtonHover(BattleButtonManager.GetCurrentHoverdBattleButtonId());
+		}
 	}
 
 	public override void _ExitState()
 	{
-	}
-
-	public bool TryGetActionButtonMapping(int ind,out string state)
-	{
-		return actionButtonMapping.TryGetValue(ind, out state);
-	}
-	public bool TryGetActionMenuMapping(int ind, out string state)
-	{
-		return actionMenuMapping.TryGetValue(ind, out state);
 	}
 }

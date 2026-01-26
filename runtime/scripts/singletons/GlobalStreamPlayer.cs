@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
+[GlobalClass]
 public partial class GlobalStreamPlayer : Node
 {
 	[Export]
@@ -15,6 +16,15 @@ public partial class GlobalStreamPlayer : Node
 	public AudioStream TextSoundStream;
 	[Export]
 	public AudioStream EnemyDialogueSoundStream;
+	[Export]
+	public AudioStream HurtSoundStream;
+	[Export]
+	public AudioStream HeartBeatBreakSoundStream;
+	[Export]
+	public AudioStream HeartPlosionSoundStream;
+
+	[Export]
+	public AudioStream GameOverMusicSoundStream;
 
 	public static GlobalStreamPlayer Instance;
 	private AudioStreamPlayer soundPlayer = null;
@@ -30,7 +40,6 @@ public partial class GlobalStreamPlayer : Node
 	public override void _EnterTree()
 	{
 		Instance = this;
-		base._EnterTree();
 		AddChild(soundPlayer);
 		
 		AppendStreamToLibrary("SELECT", SelectSoundStream);
@@ -38,15 +47,22 @@ public partial class GlobalStreamPlayer : Node
 		AppendStreamToLibrary("ESCAPED", EscapedSoundStream);
 		AppendStreamToLibrary("TEXT_TYPER_VOICE", TextSoundStream);
 		AppendStreamToLibrary("ENEMY_VOICE", EnemyDialogueSoundStream);
+		AppendStreamToLibrary("HURT", HurtSoundStream);
+
+		AppendStreamToLibrary("HEART_BEAT_BREAK", HeartBeatBreakSoundStream);
+		AppendStreamToLibrary("HEART_PLOSION", HeartPlosionSoundStream);
+
+		AppendStreamToLibrary("GAME_OVER", GameOverMusicSoundStream);
 	}
 
-	public void PlaySound(AudioStream stream)
+	public long PlaySound(AudioStream stream)
 	{
 		if (!soundPlayer.Playing) soundPlayer.Play();
 		if (soundPlayer.GetStreamPlayback() is AudioStreamPlaybackPolyphonic playback)
 		{
-			playback.PlayStream(stream);
+			return playback.PlayStream(stream);
 		}
+		return -1;
 	}
 
 	public void PlayBGM(string bgmId, AudioStream stream, bool loop = false)
@@ -76,9 +92,21 @@ public partial class GlobalStreamPlayer : Node
 			soundPlayer.SetMeta("id", bgmId);
 			soundPlayer.SetMeta("loop", loop);
 			bgmPlayers.Add(bgmId, soundPlayer);
+			this.AddChild(soundPlayer);
 		}
 		soundPlayer.Stream = stream;
 		soundPlayer.Play();
+	}
+
+	public void StopSound(long id)
+	{
+		if (soundPlayer.Playing)
+		{
+			if (soundPlayer.GetStreamPlayback() is AudioStreamPlaybackPolyphonic playback)
+			{
+				playback.StopStream(id);
+			}
+		}
 	}
 
 	public void StopBGM(string id)
@@ -92,7 +120,16 @@ public partial class GlobalStreamPlayer : Node
 		}
 	}
 
-	public void SetBgmVolume(string id, float targetVolumeDB, bool smooth = false, float duration = 1.0F)
+	public void StopAll()
+	{
+		soundPlayer.Stop();
+		foreach (string playerId in bgmPlayers.Keys)
+		{
+			StopBGM(playerId);
+		}
+	}
+
+	public void SetBgmVolume(string id, float targetVolumeDB, bool smooth = false, double duration = 1.0F)
 	{
 		if (bgmPlayers.TryGetValue(id, out AudioStreamPlayer player))
 		{
@@ -125,7 +162,7 @@ public partial class GlobalStreamPlayer : Node
 		}
 	}
 
-	public AudioStream GetStream(string id)
+	public AudioStream GetStreamFormLibrary(string id)
 	{
 		return _streamLibrary[id];
 	}

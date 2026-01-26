@@ -1,16 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://cee05uq5s87yp"]
+[gd_scene load_steps=5 format=3 uid="uid://cee05uq5s87yp"]
 
 [ext_resource type="Script" uid="uid://cf8pn8loy34yx" path="res://scripts/scenes/encounter_battle/ui/status_bar/BattleStatusBar.cs" id="1_htd3h"]
 [ext_resource type="FontFile" uid="uid://byqksst50cd7e" path="res://__data__/built-in-resources/fonts/Mars Needs Cunnilingus.ttf" id="2_vudbu"]
 [ext_resource type="Texture2D" uid="uid://cgfehv4ixi1c1" path="res://__data__/built-in-resources/textures/ui/battle_screen/spr_hpname_0.png" id="3_vudbu"]
+[ext_resource type="PackedScene" uid="uid://u35aavgwl8im" path="res://scenes/encounter_battle/ui/status_bar/statue_bar_hp_progress_bar.tscn" id="4_63fex"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rm3vi"]
-bg_color = Color(1, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hlxmo"]
-bg_color = Color(1, 1, 0, 1)
-
-[node name="BattleStatusBar" type="Control" node_paths=PackedStringArray("NameLvLabel", "HpProgressBarLabel", "HpLabel")]
+[node name="BattleStatusBar" type="Control" node_paths=PackedStringArray("NameLvLabel", "HpProgressBar", "HpLabel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,7 +15,7 @@ grow_vertical = 2
 script = ExtResource("1_htd3h")
 PlayerName = "YXYM"
 NameLvLabel = NodePath("HBoxContainer/NameLvLabelMarginContainer/NameLvLabel")
-HpProgressBarLabel = NodePath("HBoxContainer/HpProgressBarContainer/HpProgressBar")
+HpProgressBar = NodePath("HBoxContainer/HpProgressBarContainer/StatueBarHpProgressBar")
 HpLabel = NodePath("HBoxContainer/HpLabelContainer/HpProgressBar")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
@@ -66,16 +61,8 @@ size_flags_vertical = 0
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 0
 
-[node name="HpProgressBar" type="ProgressBar" parent="HBoxContainer/HpProgressBarContainer"]
-custom_minimum_size = Vector2(24, 21)
+[node name="StatueBarHpProgressBar" parent="HBoxContainer/HpProgressBarContainer" instance=ExtResource("4_63fex")]
 layout_mode = 2
-size_flags_horizontal = 0
-theme_override_font_sizes/font_size = 1
-theme_override_styles/background = SubResource("StyleBoxFlat_rm3vi")
-theme_override_styles/fill = SubResource("StyleBoxFlat_hlxmo")
-max_value = 20.0
-value = 20.0
-allow_greater = true
 
 [node name="HpLabelContainer" type="MarginContainer" parent="HBoxContainer"]
 layout_mode = 2

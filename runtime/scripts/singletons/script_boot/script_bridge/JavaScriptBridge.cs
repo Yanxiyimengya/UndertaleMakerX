@@ -1,5 +1,5 @@
 using System;
 
-public class JavaScriptBridge
+public class JavaScriptBridge : ScriptBridge
 {
 }

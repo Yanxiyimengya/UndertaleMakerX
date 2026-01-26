@@ -43,8 +43,8 @@ public abstract partial class StateNode : Node
 	// 退出自身状态的回调方法
 	public abstract void _ExitState();
 
-    public virtual bool _CanEnterState()
-    {
-        return true;
-    }
+	public virtual bool _CanEnterState()
+	{
+		return true;
+	}
 }

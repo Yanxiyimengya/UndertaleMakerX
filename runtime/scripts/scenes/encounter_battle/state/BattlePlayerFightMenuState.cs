@@ -138,7 +138,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 
 			if (previousChoice != _enemyChoice)
 			{
-				GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SQUEAK"));
+				GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
 			}
 
 			EncounterChoiceEnemyMenu?.SetChoice(_enemyChoice);
@@ -152,7 +152,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 
 			if (previousChoice != _enemyChoice)
 			{
-				GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SQUEAK"));
+				GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
 			}
 
 			EncounterChoiceEnemyMenu?.SetChoice(_enemyChoice);
@@ -161,7 +161,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 		{
 			await OpenAttackGaugeMenu();
 			_state = STATE_ATTACK_GAUGE;
-			GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SELECT"));
+			GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStreamFormLibrary("SELECT"));
 		}
 		else if (Input.IsActionJustPressed("cancel"))
 		{
@@ -182,7 +182,7 @@ public partial class BattlePlayerFightMenuState : StateNode
         BattleManager.Instance.GetPlayerSoul().Visible = false;
         await MenuManager.OpenMenu("EncounterAttackGaugeBarMenu");
 		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
-		BattleButtonManager.ReleaseAllButton();
+		BattleButtonManager.ResetAllBattleButton();
 	}
 	#endregion
 

@@ -12,11 +12,12 @@ public partial class PlayerDataManager
 	public static PlayerDataManager Instance => _instance.Value;
 
 	public string PlayerName = "FRISK";
-	public int PlayerLv = 1;
+	public int PlayerLv = 19;
 	public float PlayerHp = 92F;
 	public float PlayerMaxHp = 92F;
     public float PlayerAttack = 0F;
     public float PlayerDefence = 0F;
+	public float PlayerInvincibleTime = 0.005F;
 
     public List<BaseItem> Items = new List<BaseItem>()
 	{

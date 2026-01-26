@@ -34,10 +34,7 @@ public partial class StateMachine : Node
 	private string _currentStateName = string.Empty;
 
 	public override void _Ready()
-	{
-		ChildEnteredTree += OnChildEnteredTree;
-		ChildExitingTree += OnChildExitingTree;
-
+	{ 
 		foreach (Node childNode in GetChildren())
 		{
 			AddStateNodeIfValid(childNode);
@@ -50,27 +47,6 @@ public partial class StateMachine : Node
 		else 
 		{
 			CurrentStateName = GetChild(0).Name;
-		}
-	}
-	private void OnChildEnteredTree(Node child)
-	{
-		AddStateNodeIfValid(child);
-	}
-	private void OnChildExitingTree(Node child)
-	{
-		if (child is StateNode stateNode)
-		{
-			string stateName = stateNode.Name;
-			if (stateName == _currentStateName)
-			{
-				stateNode._ExitState();
-				stateNode.Enabled = false;
-				_currentStateName = string.Empty;
-			}
-			if (_stateNodes.ContainsKey(stateName))
-			{
-				_stateNodes.Remove(stateName);
-			}
 		}
 	}
 
@@ -100,11 +76,5 @@ public partial class StateMachine : Node
 	public bool HasState(string stateName)
 	{
 		return _stateNodes.ContainsKey(stateName);
-	}
-	public override void _ExitTree()
-	{
-		base._ExitTree();
-		ChildEnteredTree -= OnChildEnteredTree;
-		ChildExitingTree -= OnChildExitingTree;
 	}
 }

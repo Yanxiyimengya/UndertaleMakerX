@@ -18,8 +18,7 @@ public partial class BattleArenaGroup : Node2D
 	private Rid _maskCanvas;
 	private Rid _borderViewportTextureRid;
 	private Rid _maskViewportTextureRid;
-	private Rid _borderViewportCamera;
-	private static CanvasItemMaterial _cullingMaterial = new CanvasItemMaterial();
+	private static CanvasItemMaterial _cullingMaterial;
 
 	public Transform2D CameraTransform;
 	public Transform2D CameraTransformInverse;

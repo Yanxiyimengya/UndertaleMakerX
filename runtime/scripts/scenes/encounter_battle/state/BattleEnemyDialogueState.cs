@@ -48,9 +48,10 @@ public partial class BattleEnemyDialogueState : StateNode
 			_tween.Kill();
 		}
 		_tween = GetTree().CreateTween();
-		_tween.TweenProperty(_battleMainArena, "Size", currentTurn.ArenaSize, 0.35);
-		_tween.TweenCallback(Callable.From(NextStep));
-	}
+		_tween.TweenProperty(_battleMainArena, "Size", currentTurn.ArenaSize, 0.4);
+		NextStep();
+
+    }
 
 	public override void _ExitState()
 	{

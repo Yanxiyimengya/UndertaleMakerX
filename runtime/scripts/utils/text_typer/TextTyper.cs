@@ -135,16 +135,19 @@ public partial class TextTyper : Godot.RichTextLabel
 				Newline();
 			}
 
-			AddText(c.ToString());
-			if (!Instant)
+			if (_typerWattingTimer <= 0.0)
 			{
-				if (Voice != null && !Engine.IsEditorHint())
-				{
-					GlobalStreamPlayer.Instance.PlaySound(Voice);
-				}
-				break;
+				AddText(c.ToString());
 			}
-		}
+            if (!Instant)
+            {
+                if (Voice != null && !Engine.IsEditorHint())
+                {
+                    GlobalStreamPlayer.Instance.PlaySound(Voice);
+                }
+                break;
+            }
+        }
 	}
 	private bool _ParseBBCodeTag(string content, out string cmdName, out Dictionary<string, string> directParameters)
 	{
@@ -311,6 +314,7 @@ public partial class TextTyper : Godot.RichTextLabel
 				TyperColor = TyperColor;
 				TyperFont = TyperFont;
 				TyperSize = TyperSize;
+				Instant = false;
 				break;
 
 			case "img":
@@ -388,9 +392,9 @@ public partial class TextTyper : Godot.RichTextLabel
 
 	public new bool IsFinished()
 	{
-		return _typerProgress == TyperText.Length;
+		return _typerProgress >= TyperText.Length;
 	}
-	// 重置数据
+
 	public void ResetData()
 	{
 		_typerProgress = 0;

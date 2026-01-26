@@ -48,7 +48,7 @@ public partial class BattlePlayerMercyMenuState : StateNode
 				}
 				else
 				{
-					GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SQUEAK"));
+					GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
 				}
 				MercyChoiceMenu.SetChoice(MercyChoice);
 			}
@@ -61,7 +61,7 @@ public partial class BattlePlayerMercyMenuState : StateNode
 				}
 				else
 				{
-					GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SQUEAK"));
+					GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
 				}
 
 				MercyChoiceMenu.SetChoice(MercyChoice);
@@ -72,7 +72,7 @@ public partial class BattlePlayerMercyMenuState : StateNode
 			}
 			else if (Input.IsActionJustPressed("confirm"))
 			{
-				GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("SELECT"));
+				GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStreamFormLibrary("SELECT"));
 				string choiced = (string)MercyChoiceMenu.GetChoicedItemId();
 				if (choiced == "SPARE")
 				{
@@ -121,7 +121,7 @@ public partial class BattlePlayerMercyMenuState : StateNode
 		_playerSoul.Visible = true;
 		_OpenTextMenu();
 		TextMenu.ShowEncounterText(BattleManager.Instance.FreeText);
-		BattleButtonManager.ReleaseAllButton();
-		GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStream("ESCAPED"));
+		BattleButtonManager.ResetAllBattleButton();
+		GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStreamFormLibrary("ESCAPED"));
 	}
 }

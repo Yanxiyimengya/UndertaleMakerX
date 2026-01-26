@@ -23,7 +23,12 @@ public partial class UTMXMainLoop : SceneTree
 		Engine.MaxFps = UTMXRuntimeProjectConfig.Instance.TryGetDefault("application/max_fps",
 			ProjectSettings.GetSetting("application/run/max_fps")).AsInt32();
 
-	}
+		DisplayServer.VSyncMode vsyncMode = UTMXRuntimeProjectConfig.Instance.TryGetDefault("application/vsync",
+			DisplayServer.WindowGetVsyncMode() != DisplayServer.VSyncMode.Disabled)
+			? DisplayServer.VSyncMode.Enabled : DisplayServer.VSyncMode.Disabled;
+        DisplayServer.WindowSetVsyncMode((DisplayServer.VSyncMode)vsyncMode);
+
+    }
 
 	public override bool _Process(double delta)
 	{

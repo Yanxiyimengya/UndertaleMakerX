@@ -14,7 +14,7 @@ public partial class BattleEndState : StateNode
 	public override async void _EnterState()
 	{
 		await MenuManager.OpenMenu("EncounterTextMenu");
-		BattleButtonManager.ReleaseAllButton();
+		BattleButtonManager.ResetAllBattleButton();
 		if (GetTree().CurrentScene is EncounterBattle enc)
 		{
 			TextMenu.ShowEncounterText(BattleManager.Instance.EndText);

@@ -18,7 +18,7 @@ public partial class BattleStatusBar : Control
 	[Export]
 	public Label NameLvLabel;
 	[Export]
-	public ProgressBar HpProgressBarLabel;
+	public StatueBarHpProgressBar HpProgressBar;
 	[Export]
 	public Label HpLabel;
 
@@ -56,14 +56,11 @@ public partial class BattleStatusBar : Control
 	}
 	private void updateHp()
 	{
-		if (HpProgressBarLabel != null)
+		if (HpProgressBar != null)
 		{
-			HpProgressBarLabel.MaxValue = _playerMaxHp;
-			HpProgressBarLabel.Value = _playerHp;
-			HpProgressBarLabel.CustomMinimumSize = new Vector2(
-				(float)Math.Round(_playerMaxHp * 1.2F) + 1.0F, 21.0F);
+			HpProgressBar.MaxValue = _playerMaxHp;
+			HpProgressBar.Value = _playerHp;
 			HpLabel.Text = $"{_playerHp} / {_playerMaxHp}";
-
 		}
 	}
 }

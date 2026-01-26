@@ -2,5 +2,5 @@ using System;
 
 public class ScriptBoot
 {
-	ScriptBridge bridge;
+	ScriptBridge bridge = new JavaScriptBridge();
 }

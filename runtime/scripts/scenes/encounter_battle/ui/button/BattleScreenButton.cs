@@ -1,22 +1,25 @@
 using Godot;
 using System;
 
+[GlobalClass]
 public partial class BattleScreenButton : Node2D
 {
+	[Signal]
+	delegate void ButtonPressedEventHandler();
+
 	[Export]
-	public bool Pressed
+	public bool Hover
 	{
-		get => pressed;
+		get => _hover;
 		set 
 		{
-			pressed = value;
+			_hover = value;
 			if (buttonSprite != null)
 			{
 				buttonSprite.Texture = value ? buttonPressedTexture : buttonTexture;
 			}
 		}
 	}
-	private bool pressed;
 	[Export]
 	public Texture2D buttonTexture;
 	[Export]
@@ -28,15 +31,26 @@ public partial class BattleScreenButton : Node2D
 	[Export]
 	public Marker2D soulMarker;
 
+	public string ButtonFocusNeighborLeftId = "";
+	public string ButtonFocusNeighborRightId = "";
+	public string ButtonFocusNeighborUpId = "";
+	public string ButtonFocusNeighborDownId = "";
+
+	private bool _hover;
 
 	public override void _Ready()
 	{
-		Pressed = false;
+		Hover = false;
 	}
 
 	public Transform2D GetSoulTransform()
 	{
 		return soulMarker.GlobalTransform;
+	}
+
+	public virtual void PressButton()
+	{
+		this.EmitSignal(BattleScreenButton.SignalName.ButtonPressed, []);
 	}
 
 }

@@ -15,7 +15,7 @@ public partial class EncounterTextMenu : BaseEncounterMenu
 	
 	public override void _Ready()
 	{
-		_defaultVoice = GlobalStreamPlayer.Instance.GetStream("TEXT_TYPER_VOICE");
+		_defaultVoice = GlobalStreamPlayer.Instance.GetStreamFormLibrary("TEXT_TYPER_VOICE");
 	}
 	
 	public override void _Process(double delta)
