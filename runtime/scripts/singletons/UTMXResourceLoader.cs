@@ -37,4 +37,37 @@ internal partial class UTMXResourceLoader
 		return null;
 	}
 
+	public FileAccess OpenFile(string filePath, FileAccess.ModeFlags flags)
+	{
+        if (string.IsNullOrEmpty(filePath)) return null;
+        if (filePath.StartsWith("res://"))
+        {
+			if (FileAccess.FileExists(filePath))
+				return FileAccess.Open(filePath, flags);
+        }
+        else
+        {
+            string resNewPath = $"res://{EngineProperties.DATAPACK_RESOURCE_PATH}/{filePath}";
+            if (FileAccess.FileExists(resNewPath))
+            {
+                return FileAccess.Open(resNewPath, flags);
+            }
+            resNewPath = $"res://{filePath}";
+            if (FileAccess.FileExists(resNewPath))
+            {
+                return FileAccess.Open(resNewPath, flags);
+            }
+        }
+        return null;
+    }
+
+	public static string ResolvePath(string path)
+    {
+        if (string.IsNullOrEmpty(path)) return null;
+        string resPackPath = $"res://{EngineProperties.DATAPACK_RESOURCE_PATH}/{path}";
+        if (FileAccess.FileExists(resPackPath))
+            return resPackPath;
+        return path;
+    }
+
 }

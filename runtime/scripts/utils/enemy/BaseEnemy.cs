@@ -13,7 +13,7 @@ public partial class BaseEnemy : Node2D
 	public float MaxHp = 100.0F;
     public int EnemyIndex = 0;
     public bool AllowSpare = true;
-	public bool CanSpare = true;
+	public bool CanSpare = false;
     public string MissText = "MISS";
     public Vector2 CenterPosition = new Vector2(0.0F, -80.0F);
 

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Godot.NET.Sdk/4.6.0">
+﻿<Project Sdk="Godot.NET.Sdk/4.5.1">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net9.0</TargetFramework>
@@ -7,8 +7,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="scripts\interface\" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Jint" Version="4.5.0" />
+    <Folder Include="scripts\singletons\script_boot\script_object\" />
   </ItemGroup>
 </Project>

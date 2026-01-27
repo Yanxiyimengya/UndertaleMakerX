@@ -4,7 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// 与脚本语言的桥接层
+// 若希望自定义脚本语言，必须实现以下方法
 public abstract class ScriptBridge
 {
-    //public abstract string ExecuteString(string str);
+	public abstract ScriptClass ExecuteString(string code);
+	public abstract object GetValue(ScriptClass obj, string code);
+	public abstract void SetValue(ScriptClass obj, string valueName, object value);
 }

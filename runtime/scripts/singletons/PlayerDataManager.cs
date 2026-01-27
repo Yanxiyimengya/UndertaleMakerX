@@ -30,8 +30,9 @@ public partial class PlayerDataManager
         new BaseItem(),
     };
 	public BaseWeapon Weapon = new BaseWeapon();
+    public BaseArmor Armor = new BaseArmor();
 
-	public int GetItemCount()
+    public int GetItemCount()
 	{
 		return Items.Count;
 	}

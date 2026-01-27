@@ -66,10 +66,18 @@ public partial class BattleManager : Node
 
 	public void EncounterBattleStart()
 	{
+        SceneManager.Instance.ChangeSceneToFile(SceneManager.Instance.EncounterBattleScenePath);
+    }
+    public void EncounterBattleEnd()
+    {
+		if (_encounterBattle != null)
+		{
+			_encounterBattle._BattleEnd();
+        }
+		UninitializeBattle();
+    }
 
-	}
-
-	public void InitializeBattle(EncounterBattle battleRoot, BattlePlayerSoul soul, BattleMainArenaExpand mainArena)
+    public void InitializeBattle(EncounterBattle battleRoot, BattlePlayerSoul soul, BattleMainArenaExpand mainArena)
 	{
 		_encounterBattle = battleRoot;
 		_playerSoul = soul;
@@ -95,7 +103,6 @@ public partial class BattleManager : Node
 			SceneManager.Instance.ChangeSceneToFile(SceneManager.Instance.GameoverScenePath);
 		}
 	}
-
 
 	public bool IsInBattle() { return _isInBattle; }
 	public BattlePlayerSoul GetPlayerSoul() { return _playerSoul; }

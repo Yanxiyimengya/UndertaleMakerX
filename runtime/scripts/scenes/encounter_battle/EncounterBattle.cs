@@ -14,11 +14,6 @@ public partial class EncounterBattle : Node
 	[Export]
 	public Node2D EnemysNode;
 
-	public override void _ExitTree()
-	{
-		BattleManager.Instance.UninitializeBattle();
-	}
-
 	public override void _Ready()
 	{
 		for (int i = 0; i < BattleManager.Instance.GetEnemysCount(); i++)
@@ -32,5 +27,15 @@ public partial class EncounterBattle : Node
 		}
 		BattleManager.Instance.InitializeBattle(this, PlayerSoul, MainArena);
 		BattleStateMachine.SwitchToState(BattleManager.Instance.Config.EncounterBattleFirstState);
+		_BattleStart();
+	}
+
+	public void _BattleStart()
+	{
+
+	}
+	public void _BattleEnd()
+	{
+		
 	}
 }

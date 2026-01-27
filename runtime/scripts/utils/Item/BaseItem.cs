@@ -16,11 +16,9 @@ public partial class BaseItem : Resource
 
     public virtual void OnDropSelected()
     {
-
     }
 
     public virtual void OnInfoSelected()
     {
-
     }
 }

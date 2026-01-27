@@ -22,6 +22,5 @@ public partial class BattleTurn : RefCounted
     }
     public void Update()
     {
-        BattleManager.Instance.GetPlayerSoul().Hurt(1);
     }
 }
