@@ -5,8 +5,8 @@ using System.Linq;
 public partial class BootSplash : Control
 {
 	[Export(PropertyHint.File, "*.tscn")]
-	public string firstScene;
-	public string anim = "boot";
+	public string FirstScene = "";
+	public string TargetAnim = "boot";
 
 	[Export]
 	public Label bootAnimationLabelBack;
@@ -21,13 +21,20 @@ public partial class BootSplash : Control
 	
 	public override void _Ready()
 	{
-		if (!UTMXRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/enabled", (Variant)true).AsBool())
+
+		FirstScene = UTMXResourceLoader.ResolvePath(
+			(string)UTMXRuntimeProjectConfig.Instance.TryGetDefault("application/main_scene", FirstScene)
+			);
+
+		var a = UTMXRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/enabled", (Variant)true).AsBool();
+
+        if (!UTMXRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/enabled", (Variant)true).AsBool())
 		{
 			CallDeferred("Finished");
 			return;
 		}
 
-		bootAnimationPlayer.Play(anim);
+		bootAnimationPlayer.Play(TargetAnim);
 		bootAnimationPlayer.SpeedScale = (float)UTMXRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/speed_scale",
 			bootAnimationPlayer.SpeedScale);
 		string displayText = (string)UTMXRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/display_text",
@@ -45,7 +52,7 @@ public partial class BootSplash : Control
 
 	private void OnIntroAnimationPlayerAnimationFinished(StringName animName)
 	{
-		if (anim != animName) return;
+		if (TargetAnim != animName) return;
 		if (! string.IsNullOrEmpty(animName))
 		{
 			Finished();
@@ -54,6 +61,6 @@ public partial class BootSplash : Control
 
 	private void Finished()
 	{
-		GetTree().ChangeSceneToFile(firstScene);
+		GetTree().ChangeSceneToFile(FirstScene);
 	}
 }

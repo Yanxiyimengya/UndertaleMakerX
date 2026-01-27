@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://7kjp05svklmo"]
+[gd_scene format=3 uid="uid://7kjp05svklmo"]
 
 [ext_resource type="Script" uid="uid://ek5fye1ues0f" path="res://scripts/scenes/boot_splash/BootSplash.cs" id="1_vsr1g"]
 [ext_resource type="Texture2D" uid="uid://bpiib7svxf677" path="res://assets/icons/utmx-icon-256.svg" id="2_plq4m"]
@@ -66,7 +66,7 @@ _data = {
 &"boot": SubResource("Animation_qeukb")
 }
 
-[node name="BootSplash" type="Control" node_paths=PackedStringArray("bootAnimationLabelBack", "bootAnimationLabelFore", "backgroundColorRect", "bootAnimationPlayer")]
+[node name="BootSplash" type="Control" unique_id=117193945 node_paths=PackedStringArray("bootAnimationLabelBack", "bootAnimationLabelFore", "backgroundColorRect", "bootAnimationPlayer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -74,13 +74,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_vsr1g")
-firstScene = "uid://o3ubysucd5hn"
 bootAnimationLabelBack = NodePath("StartSpriteLocation/LogoSprite2D/LogoLabel")
 bootAnimationLabelFore = NodePath("StartSpriteLocation/LogoSprite2D/LogoLabel/Fore")
 backgroundColorRect = NodePath("BackgroundColorRect")
 bootAnimationPlayer = NodePath("BootAnimationPlayer")
 
-[node name="BackgroundColorRect" type="ColorRect" parent="."]
+[node name="BackgroundColorRect" type="ColorRect" parent="." unique_id=2013225787]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -89,7 +88,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="StartSpriteLocation" type="Control" parent="."]
+[node name="StartSpriteLocation" type="Control" parent="." unique_id=1086448277]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -101,11 +100,11 @@ offset_bottom = -29.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="LogoSprite2D" type="Sprite2D" parent="StartSpriteLocation"]
+[node name="LogoSprite2D" type="Sprite2D" parent="StartSpriteLocation" unique_id=1744293471]
 scale = Vector2(0.7, 0.7)
 texture = ExtResource("2_plq4m")
 
-[node name="LogoLabel" type="Label" parent="StartSpriteLocation/LogoSprite2D"]
+[node name="LogoLabel" type="Label" parent="StartSpriteLocation/LogoSprite2D" unique_id=1750341160]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -126,7 +125,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_trim_flags = 128
 
-[node name="Fore" type="Label" parent="StartSpriteLocation/LogoSprite2D/LogoLabel"]
+[node name="Fore" type="Label" parent="StartSpriteLocation/LogoSprite2D/LogoLabel" unique_id=177722183]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -147,8 +146,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_trim_flags = 128
 
-[node name="BootAnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_teox7")
-}
-autoplay = "boot"
+[node name="BootAnimationPlayer" type="AnimationPlayer" parent="." unique_id=290643289]
+libraries/ = SubResource("AnimationLibrary_teox7")
+autoplay = &"boot"

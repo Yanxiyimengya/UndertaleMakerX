@@ -18,11 +18,10 @@ public class JavaScriptBridge : ScriptBridge
 		MainEngine = new Jint.Engine((options) =>
 		{
 			options.EnableModules(new JavaScriptModuleResolver());
-			//options.AllowClr();
 		});
 
 		MainEngine.Modules.Add("UTMX", builder => builder
-			.ExportType<JavaScriptLib>("Core")
+			.ExportType<JavaScriptGlobalInterface>("Core")
 		);
 	}
 
@@ -61,13 +60,5 @@ public class JavaScriptBridge : ScriptBridge
 	public override void SetValue(ScriptClass obj, string valueName, object value)
 	{
 		throw new NotImplementedException();
-	}
-}
-
-public class JavaScriptLib()
-{
-	public static void Print(string message)
-	{
-		GD.Print(message);
 	}
 }

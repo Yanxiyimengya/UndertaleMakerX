@@ -32,6 +32,13 @@ public partial class PlayerDataManager
 	public BaseWeapon Weapon = new BaseWeapon();
     public BaseArmor Armor = new BaseArmor();
 
+    public void AddItem(BaseItem item)
+    {
+        if (item != null)
+        {
+            Items.Add(item);
+        }
+    }
     public int GetItemCount()
 	{
 		return Items.Count;
@@ -53,12 +60,4 @@ public partial class PlayerDataManager
         item.Slot = slot;
         item.OnUseSelected();
     }
-
-    public void AddItem(BaseItem item)
-	{
-		if (item != null)
-		{
-			Items.Add(item);
-		}
-	}
 }

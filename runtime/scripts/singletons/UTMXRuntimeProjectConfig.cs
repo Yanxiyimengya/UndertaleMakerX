@@ -55,7 +55,7 @@ public partial class UTMXRuntimeProjectConfig
         try
         {
             file = FileAccess.Open(configFilePath, FileAccess.ModeFlags.Read);
-            string configString = file.GetAsText();
+            string configString = file.GetBuffer((long)file.GetLength()).GetStringFromUtf8();
             file.Close();
 
             Variant configVariant = Json.ParseString(configString);
@@ -67,7 +67,6 @@ public partial class UTMXRuntimeProjectConfig
         }
         catch (Exception)
         {
-            // 可添加日志输出
         }
         finally
         {
@@ -78,11 +77,6 @@ public partial class UTMXRuntimeProjectConfig
         }
     }
 
-    /// <summary>
-    /// 递归遍历字典，生成 path/key 格式的扁平键值对
-    /// </summary>
-    /// <param name="dict">当前遍历的字典</param>
-    /// <param name="parentPath">父级路径，空字符串代表根节点</param>
     private void TraverseDict(Dictionary dict, string parentPath)
     {
         foreach (var keyValue in dict)

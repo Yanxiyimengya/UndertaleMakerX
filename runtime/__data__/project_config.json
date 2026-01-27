@@ -4,6 +4,7 @@
 		"author" : "烟汐忆梦_YM",
 		"max_fps" : 60,
 		"vsync" : true,
+		"main_scene" : "scenes/main_scene.tscn",
 	},
 	"window" : {
 		"width": 640,
@@ -16,6 +17,6 @@
 		"enabled" : false,
 		"display_text" : "UNDERTALE MAKER\nX",
 		"speed_scale" : 1.0,
-		"background_color" : "#101020"
+		"background_color" : "#101020",
 	}
 }

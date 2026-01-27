@@ -10,14 +10,13 @@ public partial class UTMXMainLoop : SceneTree
 		// 加载资源包
 		var datapackLoader = DatapackLoader.GetDatapackLoader(OS.GetName());
 		datapackLoader.LoadPack();
-
-		// 加载资源包配置项
-		UTMXRuntimeProjectConfig.Instance.LoadConfiguration($"{EngineProperties.DATAPACK_RESOURCE_PATH}/project_config.json");
-
 	}
 	public override void _Initialize()
-	{
-		_cmdArgs = ParseCmdlineArgs();
+    {
+        // 加载资源包配置项
+        UTMXRuntimeProjectConfig.Instance.LoadConfiguration($"{EngineProperties.DATAPACK_RESOURCE_PATH}/project_config.json");
+
+        _cmdArgs = ParseCmdlineArgs();
 		InitializeWindow();
 
 		Engine.MaxFps = UTMXRuntimeProjectConfig.Instance.TryGetDefault("application/max_fps",
@@ -27,7 +26,6 @@ public partial class UTMXMainLoop : SceneTree
 			DisplayServer.WindowGetVsyncMode() != DisplayServer.VSyncMode.Disabled)
 			? DisplayServer.VSyncMode.Enabled : DisplayServer.VSyncMode.Disabled;
         DisplayServer.WindowSetVsyncMode((DisplayServer.VSyncMode)vsyncMode);
-
     }
 
 	public override bool _Process(double delta)

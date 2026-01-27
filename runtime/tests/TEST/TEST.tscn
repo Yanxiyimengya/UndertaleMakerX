@@ -4,6 +4,21 @@
 [ext_resource type="Script" uid="uid://dl6w8xq6lqsx3" path="res://tests/TEST/Test.cs" id="1_eplnt"]
 [ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="2_i1yiq"]
 
+[sub_resource type="GDScript" id="GDScript_eplnt"]
+script/source = "extends Control
+
+
+const PROJECT_CONFIG = preload(\"res://__data__/project_config.json\")
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	print(PROJECT_CONFIG);
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
+
 [sub_resource type="LabelSettings" id="LabelSettings_i1yiq"]
 font = ExtResource("1_5bhgw")
 font_size = 14
@@ -16,6 +31,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+script = SubResource("GDScript_eplnt")
 
 [node name="Label" type="Label" parent="." unique_id=1104635272]
 offset_right = 40.0
