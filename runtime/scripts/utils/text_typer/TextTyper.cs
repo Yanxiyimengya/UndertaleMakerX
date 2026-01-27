@@ -290,7 +290,7 @@ public partial class TextTyper : Godot.RichTextLabel
 			case "font":
 				if (args.TryGetValue("value", out string fontPath) || args.Count > 0)
 				{
-					Font fnt = UTMXResourceLoader.Load(fontPath) as Font;
+					Font fnt = UtmxResourceLoader.Load(fontPath) as Font;
 					if (fnt != null)
 					{
 						PushFont(fnt);
@@ -320,7 +320,7 @@ public partial class TextTyper : Godot.RichTextLabel
 			case "img":
 				if (args.TryGetValue("path", out string imgPath) && !string.IsNullOrEmpty(imgPath))
 				{
-					Texture2D texture = UTMXResourceLoader.Load(imgPath) as Texture2D;
+					Texture2D texture = UtmxResourceLoader.Load(imgPath) as Texture2D;
 					if (texture != null)
 					{
 						int width = 0, height = 0;
@@ -353,7 +353,7 @@ public partial class TextTyper : Godot.RichTextLabel
 						Voice = null;
 						break;
 					}
-					AudioStream voiceStream = UTMXResourceLoader.Load(voicePath) as AudioStream;
+					AudioStream voiceStream = UtmxResourceLoader.Load(voicePath) as AudioStream;
 					if (voiceStream != null)
 					{
 						Voice = voiceStream;
@@ -365,7 +365,7 @@ public partial class TextTyper : Godot.RichTextLabel
 				if (Instant) return true;
 				if (args.TryGetValue("value", out string soundPath) && !string.IsNullOrEmpty(soundPath))
 				{
-					AudioStream voidStream = UTMXResourceLoader.Load(soundPath) as AudioStream;
+					AudioStream voidStream = UtmxResourceLoader.Load(soundPath) as AudioStream;
 					if (voidStream != null)
 					{
 						GlobalStreamPlayer.Instance.PlaySound(voidStream);

@@ -50,8 +50,8 @@ public partial class GameoverScene : Node
 		GlobalStreamPlayer.Instance.StopAll();
 		SoulSprite2D.Visible = true;
 		GameoverTextTyper.Visible = false;
-		SoulPositionNode.Modulate = BattleManager.Instance.PlayerSoulColor;
-		SoulPositionNode.GlobalPosition = BattleManager.Instance.PlayerSoulPosition;
+		SoulPositionNode.Modulate = GlobalBattleManager.Instance.PlayerSoulColor;
+		SoulPositionNode.GlobalPosition = GlobalBattleManager.Instance.PlayerSoulPosition;
 		GameoverBg.Modulate = Color.Color8(255, 255, 255, 0);
 		await ToSignal(GetTree().CreateTimer(0.67), Timer.SignalName.Timeout);
 
@@ -74,7 +74,7 @@ public partial class GameoverScene : Node
 		await ToSignal(_tween, Tween.SignalName.Finished);
 
 		GameoverTextTyper.Visible = true;
-		GameoverTextTyper.Start(BattleManager.Instance.DeathText);
+		GameoverTextTyper.Start(GlobalBattleManager.Instance.DeathText);
 		_inputAcceptable = true;
 	}
 

@@ -83,6 +83,12 @@ public partial class BattlePlayerSoul : CharacterBody2D
 	public const float Speed = 145.0f;
 	public const float JumpVelocity = -400.0f;
 
+	public BattlePlayerSoul()
+	{
+		CollisionLayer = (int)GlobalBattleManager.BattleCollisionLayers.Player;
+        CollisionMask = (int)GlobalBattleManager.BattleCollisionLayers.Player;
+    }
+
 	public override void _Ready()
 	{
 		int count = 8;
@@ -153,7 +159,7 @@ public partial class BattlePlayerSoul : CharacterBody2D
 		GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStreamFormLibrary("HURT"));
 		if (PlayerDataManager.Instance.PlayerHp <= 0)
 		{
-			BattleManager.Instance.GameOver();
+			GlobalBattleManager.Instance.GameOver();
 		}
 	}
 }

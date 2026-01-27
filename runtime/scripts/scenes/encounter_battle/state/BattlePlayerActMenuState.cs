@@ -14,15 +14,9 @@ public partial class BattlePlayerActMenuState : StateNode
 
 	public int EnemyChoice = 0;
 	public int ActChoice = 0;
-	private EncounterBattle _encounterBattle;
 	private bool _selected = false;
 	private int _prevActChoice = 0;
-
-	public override void _Ready()
-	{
-		_encounterBattle = GetTree().CurrentScene as EncounterBattle;
-	}
-
+	
 	public override async void _Process(double delta)
 	{
 		if (_selected)
@@ -114,12 +108,12 @@ public partial class BattlePlayerActMenuState : StateNode
 			}
 			else if (Input.IsActionJustPressed("down"))
 			{
-				if (_encounterBattle != null && BattleManager.Instance.GetEnemysCount() > 0)
+				if (GlobalBattleManager.Instance.GetEnemysCount() > 0)
 				{
 					EnemyChoice += 1;
-					if (EnemyChoice >= BattleManager.Instance.GetEnemysCount())
+					if (EnemyChoice >= GlobalBattleManager.Instance.GetEnemysCount())
 					{
-						EnemyChoice = BattleManager.Instance.GetEnemysCount() - 1;
+						EnemyChoice = GlobalBattleManager.Instance.GetEnemysCount() - 1;
 					}
 					else
 					{
@@ -130,7 +124,7 @@ public partial class BattlePlayerActMenuState : StateNode
 			}
 			else if (Input.IsActionJustPressed("cancel"))
 			{
-				EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerChoiceActionState"]);
+				SwitchState("BattlePlayerChoiceActionState");
 			}
 			else if (Input.IsActionJustPressed("confirm"))
 			{
@@ -142,7 +136,7 @@ public partial class BattlePlayerActMenuState : StateNode
 
 	private async Task _OpenActMenu()
 	{
-		if (BattleManager.Instance.EnemysList[EnemyChoice].Actions.Count > 0)
+		if (GlobalBattleManager.Instance.EnemysList[EnemyChoice].Actions.Count > 0)
 		{
 			_selected = true;
 			await MenuManager.OpenMenu("EncounterActPageMenu");
@@ -160,10 +154,10 @@ public partial class BattlePlayerActMenuState : StateNode
 
 	private void _NextState()
 	{
-        string actionCommand = encounterActPageMenu.GetChoicedDisplayName();
-        BattleManager.Instance.EnemysList[EnemyChoice].HandleAction(actionCommand);
-        EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerDialogState"]);
-    }
+		string actionCommand = encounterActPageMenu.GetChoicedDisplayName();
+		GlobalBattleManager.Instance.EnemysList[EnemyChoice].HandleAction(actionCommand);
+		SwitchState("BattlePlayerDialogState");
+	}
 
 	public override async void _EnterState()
 	{
@@ -173,8 +167,8 @@ public partial class BattlePlayerActMenuState : StateNode
 	public override void _ExitState()
 	{
 	}
-    public override bool _CanEnterState()
-    {
-		return BattleManager.Instance.GetEnemysCount() > 0;
-    }
+	public override bool _CanEnterState()
+	{
+		return GlobalBattleManager.Instance.GetEnemysCount() > 0;
+	}
 }

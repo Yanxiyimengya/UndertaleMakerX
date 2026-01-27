@@ -17,7 +17,7 @@ public partial class BattlePolygonArenaCulling : BattleArenaCulling
 			{
 				_vertices = value;
 				IsDirty = true;
-				_borderVertices = ArenaPolygonBorderTool.GetBorderPolygon(_vertices, BorderWidth);
+				_borderVertices = PolygonBuildTool.ExpandPolygon(_vertices, BorderWidth);
 				UpdateCollisionShape(_shape);
 			}
 		}

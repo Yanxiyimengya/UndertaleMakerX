@@ -23,8 +23,10 @@ public partial class JavaScriptObjectInstance : ScriptObjectInstance
 
 	public override object Invoke(string method, object[] args)
 	{
+		if (string.IsNullOrEmpty(method)) return null;
+
 		JsInstance.TryGetValue(method, out JsValue methodValue);
-		if (! methodValue.IsNull())
+		if (!methodValue.IsUndefined() && !methodValue.IsNull())
 		{
 			JavaScriptBridge bridge = ScriptBoot.Instance.GetBridge<JavaScriptBridge>();
 			JsValue[] jsValues = new JsValue[args.Length];

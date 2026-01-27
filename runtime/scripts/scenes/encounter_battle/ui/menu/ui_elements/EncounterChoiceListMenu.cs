@@ -60,7 +60,7 @@ public partial class EncounterChoiceListMenu : EncounterChoiceMenu
 		if (soulSelectIndex < 3)
 		{
 			var menuItem = MenuItems[soulSelectIndex];
-            BattleManager.Instance.GetPlayerSoul().GlobalTransform = menuItem.GetSoulTransform();
+            GlobalBattleManager.Instance.GetPlayerSoul().GlobalTransform = menuItem.GetSoulTransform();
 		}
 	}
 }

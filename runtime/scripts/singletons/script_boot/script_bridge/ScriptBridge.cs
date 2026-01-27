@@ -9,6 +9,6 @@ using System.Threading.Tasks;
 public abstract class ScriptBridge
 {
 	public abstract ScriptClass ExecuteString(string code);
-	public abstract object GetValue(ScriptClass obj, string code);
-	public abstract void SetValue(ScriptClass obj, string valueName, object value);
+	public abstract object GetValue(string value);
+	public abstract void SetValue(string valueName, object value);
 }

@@ -3,12 +3,12 @@ using Godot.Collections;
 using System;
 
 // 引擎配置文件读取类
-public partial class UTMXRuntimeProjectConfig
+public partial class UtmxRuntimeProjectConfig
 {
-    private static readonly Lazy<UTMXRuntimeProjectConfig> _instance =
-        new Lazy<UTMXRuntimeProjectConfig>(() => new UTMXRuntimeProjectConfig());
-    private UTMXRuntimeProjectConfig() { }
-    public static UTMXRuntimeProjectConfig Instance => _instance.Value;
+    private static readonly Lazy<UtmxRuntimeProjectConfig> _instance =
+        new Lazy<UtmxRuntimeProjectConfig>(() => new UtmxRuntimeProjectConfig());
+    private UtmxRuntimeProjectConfig() { }
+    public static UtmxRuntimeProjectConfig Instance => _instance.Value;
 
     public Dictionary<string, Variant> FlatConfigDict { get; private set; } = new Dictionary<string, Variant>();
 

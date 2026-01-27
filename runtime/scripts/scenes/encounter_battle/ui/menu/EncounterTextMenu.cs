@@ -37,8 +37,7 @@ public partial class EncounterTextMenu : BaseEncounterMenu
 		encounterTextTyper.TyperSize = 24;
 		encounterTextTyper.Voice = _defaultVoice;
 		encounterTextTyper.Instant = false;
-		if (GetTree().CurrentScene is EncounterBattle enc) 
-			encounterTextTyper.Start(text);
+		encounterTextTyper.Start(text);
 	}
 
 	public bool IsTextTyperFinished()

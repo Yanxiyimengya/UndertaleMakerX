@@ -23,7 +23,6 @@ public partial class BattlePlayerFightMenuState : StateNode
 	#endregion
 
 	private int _enemyChoice = 0; 
-	private EncounterBattle _encounterBattle; // 当前战斗场景引用
 	private int _state = 0; // 状态机：0-选择敌人 1-攻击计量条 2-显示伤害文本
 	private float _damage = 0f; // 计算出的伤害
 	private bool _isTargetMiss = false; // 是否未命中
@@ -37,7 +36,6 @@ public partial class BattlePlayerFightMenuState : StateNode
 	#region 生命周期方法
 	public override void _Ready()
 	{
-		_encounterBattle = GetTree().CurrentScene as EncounterBattle;
 		GaugeBar?.Connect(
 			EncounterAttackGaugeBarMenu.SignalName.Hitted,
 			Callable.From((bool missed, float hitValue) => OnGaugeBarHitted(missed, hitValue)));
@@ -108,8 +106,8 @@ public partial class BattlePlayerFightMenuState : StateNode
 
 	private BaseEnemy GetTargetEnemy()
 	{
-		_enemyChoice = Math.Clamp(_enemyChoice, 0, BattleManager.Instance.GetEnemysCount() - 1);
-		return BattleManager.Instance.EnemysList[_enemyChoice];
+		_enemyChoice = Math.Clamp(_enemyChoice, 0, GlobalBattleManager.Instance.GetEnemysCount() - 1);
+		return GlobalBattleManager.Instance.EnemysList[_enemyChoice];
 	}
 	#endregion
 
@@ -145,10 +143,10 @@ public partial class BattlePlayerFightMenuState : StateNode
 		}
 		else if (Input.IsActionJustPressed("down"))
 		{
-			if (BattleManager.Instance.GetEnemysCount() == 0) return;
+			if (GlobalBattleManager.Instance.GetEnemysCount() == 0) return;
 
 			int previousChoice = _enemyChoice;
-			_enemyChoice = Math.Min(_enemyChoice + 1, BattleManager.Instance.GetEnemysCount() - 1);
+			_enemyChoice = Math.Min(_enemyChoice + 1, GlobalBattleManager.Instance.GetEnemysCount() - 1);
 
 			if (previousChoice != _enemyChoice)
 			{
@@ -165,7 +163,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 		}
 		else if (Input.IsActionJustPressed("cancel"))
 		{
-			EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerChoiceActionState"]);
+			SwitchState("BattlePlayerChoiceActionState");
 		}
 	}
 
@@ -179,8 +177,8 @@ public partial class BattlePlayerFightMenuState : StateNode
 
 	private async Task OpenAttackGaugeMenu()
 	{
-        BattleManager.Instance.GetPlayerSoul().Visible = false;
-        await MenuManager.OpenMenu("EncounterAttackGaugeBarMenu");
+		GlobalBattleManager.Instance.GetPlayerSoul().Visible = false;
+		await MenuManager.OpenMenu("EncounterAttackGaugeBarMenu");
 		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 		BattleButtonManager.ResetAllBattleButton();
 	}
@@ -197,7 +195,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 
 	private void _NextState()
 	{
-		EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerDialogState"]);
+		SwitchState("BattlePlayerDialogState");
 	}
 
 	private async Task OpenEnemyChoiceMenu()
@@ -206,12 +204,12 @@ public partial class BattlePlayerFightMenuState : StateNode
 	}
 
 	public override void _ExitState() {
-		BattleManager.Instance.GetPlayerSoul().Visible = true;
+		GlobalBattleManager.Instance.GetPlayerSoul().Visible = true;
 
-    }
-    public override bool _CanEnterState()
-    {
-        return BattleManager.Instance.GetEnemysCount() > 0;
-    }
-    #endregion
+	}
+	public override bool _CanEnterState()
+	{
+		return GlobalBattleManager.Instance.GetEnemysCount() > 0;
+	}
+	#endregion
 }

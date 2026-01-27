@@ -49,16 +49,19 @@ public class JavaScriptBridge : ScriptBridge
 			scriptObj.JsConstructor = defaultValue;
 			return scriptObj;
 		}
+		else
+		{
+		}
 		return null;
 	}
 
-	public override object GetValue(ScriptClass obj, string code)
+	public override object GetValue(string value)
 	{
-		throw new NotImplementedException();
+		return MainEngine.Evaluate(value).ToObject();
 	}
 
-	public override void SetValue(ScriptClass obj, string valueName, object value)
+	public override void SetValue(string valueName, object value)
 	{
-		throw new NotImplementedException();
+		MainEngine.SetValue(valueName, value);
 	}
 }

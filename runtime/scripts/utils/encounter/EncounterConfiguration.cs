@@ -5,7 +5,7 @@ using System;
 public partial class EncounterConfiguration : Resource
 {
 	[Export(PropertyHint.MultilineText)]
-	public string DefaultEncounterText = "* UndertaleMaker[color=aqua]X[/color]!";
+	public string EncounterText = "* UndertaleMaker[color=aqua]X[/color]!";
     [Export(PropertyHint.MultilineText)]
     public string FreeText = "";
     [Export(PropertyHint.MultilineText)]

@@ -10,7 +10,6 @@ public partial class BattleEnemyDialogueState : StateNode
 	[Export]
 	public BattleMenuManager MenuManager;
 
-	private EncounterBattle _encounterBattle;
 	private List<SpeechBubble> _speechBubbleList = new();
 
 	private Tween _tween;
@@ -36,9 +35,9 @@ public partial class BattleEnemyDialogueState : StateNode
 	public override void _EnterState()
 	{
 		MenuManager.CloseAllMenu();
-		BattleMainArenaExpand _battleMainArena = BattleManager.Instance.GetMainArena();
-		BattleTurn currentTurn = BattleManager.Instance.GetCurrentTurn();
-		BattlePlayerSoul soul = BattleManager.Instance.GetPlayerSoul();
+		BattleMainArenaExpand _battleMainArena = GlobalBattleManager.Instance.GetMainArena();
+		BattleTurn currentTurn = GlobalBattleManager.Instance.GetCurrentTurn();
+		BattlePlayerSoul soul = GlobalBattleManager.Instance.GetPlayerSoul();
 		currentTurn.Initialize();
 		soul.GlobalPosition = currentTurn.SoulPosition;
 		soul.Movable = false;
@@ -51,7 +50,7 @@ public partial class BattleEnemyDialogueState : StateNode
 		_tween.TweenProperty(_battleMainArena, "Size", currentTurn.ArenaSize, 0.4);
 		NextStep();
 
-    }
+	}
 
 	public override void _ExitState()
 	{
@@ -74,9 +73,9 @@ public partial class BattleEnemyDialogueState : StateNode
 			{
 				foreach (KeyValuePair<int, DialogueQueueManager.Dialogue> pair in dialogue)
 				{
-					if (pair.Key >= 0 && pair.Key < BattleManager.Instance.GetEnemysCount())
+					if (pair.Key >= 0 && pair.Key < GlobalBattleManager.Instance.GetEnemysCount())
 					{
-						BaseEnemy enemy = BattleManager.Instance.EnemysList[pair.Key];
+						BaseEnemy enemy = GlobalBattleManager.Instance.EnemysList[pair.Key];
 						Node inst = DialogueSpeechBubblePackedScene.Instantiate();
 						if (inst is SpeechBubble bubble)
 						{
@@ -101,6 +100,6 @@ public partial class BattleEnemyDialogueState : StateNode
 			}
 		}
 		else
-			EmitSignal(SignalName.RequestSwitchState, ["BattleEnemyState"]);
+			SwitchState("BattleEnemyState");
 	}
 }

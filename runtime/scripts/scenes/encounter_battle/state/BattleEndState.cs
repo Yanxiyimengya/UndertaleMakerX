@@ -15,14 +15,11 @@ public partial class BattleEndState : StateNode
 	{
 		await MenuManager.OpenMenu("EncounterTextMenu");
 		BattleButtonManager.ResetAllBattleButton();
-		if (GetTree().CurrentScene is EncounterBattle enc)
-		{
-			TextMenu.ShowEncounterText(BattleManager.Instance.EndText);
-		}
+		TextMenu.ShowEncounterText(GlobalBattleManager.Instance.EndText);
 	}
 
 	public override void _ExitState()
 	{
-		BattleManager.Instance.GetPlayerSoul().Visible = true;
+		GlobalBattleManager.Instance.GetPlayerSoul().Visible = true;
 	}
 }

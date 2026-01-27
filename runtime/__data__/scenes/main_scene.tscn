@@ -1,7 +1,5 @@
 [gd_scene format=3 uid="uid://cpr8kvtiftd8x"]
 
-[ext_resource type="Script" uid="uid://d1f5egxw1ec8r" path="res://scripts/singletons/script_boot/js/JavaScriptNode.cs" id="1_g35mx"]
-
 [node name="MainScene" type="Node" unique_id=1564766757]
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1461692637]
@@ -11,13 +9,3 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.43776295, 0.43776292, 0.4377629, 1)
-
-[node name="JavaScriptNode" type="Node" parent="." unique_id=1598386115]
-script = ExtResource("1_g35mx")
-JavaScriptFile = "res://__data__/js/myjs.js"
-metadata/_custom_type_script = "uid://d1f5egxw1ec8r"
-
-[node name="JavaScriptNode2" type="Node" parent="." unique_id=687585813]
-script = ExtResource("1_g35mx")
-JavaScriptFile = "res://__data__/js/myjs.js"
-metadata/_custom_type_script = "uid://d1f5egxw1ec8r"

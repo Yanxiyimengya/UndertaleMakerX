@@ -6,9 +6,9 @@
     <RootNamespace>UTMXRuntime</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="scripts\interface\" />
+    <PackageReference Include="Jint" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Jint" Version="4.5.0" />
+    <Folder Include="scripts\interface\javascript\battle\" />
   </ItemGroup>
 </Project>

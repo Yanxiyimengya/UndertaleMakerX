@@ -4,7 +4,7 @@
 		"author" : "烟汐忆梦_YM",
 		"max_fps" : 60,
 		"vsync" : true,
-		"main_scene" : "scenes/main_scene.tscn",
+		"main_scene" : "",
 	},
 	"window" : {
 		"width": 640,

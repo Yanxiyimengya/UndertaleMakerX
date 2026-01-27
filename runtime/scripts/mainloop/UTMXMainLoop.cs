@@ -2,11 +2,11 @@ using Godot;
 using System;
 
 [GlobalClass]
-public partial class UTMXMainLoop : SceneTree
+public partial class UtmxMainLoop : SceneTree
 {
 	private Godot.Collections.Dictionary<string, string> _cmdArgs = new Godot.Collections.Dictionary<string, string>();
 	
-	public UTMXMainLoop() {
+	public UtmxMainLoop() {
 		// 加载资源包
 		var datapackLoader = DatapackLoader.GetDatapackLoader(OS.GetName());
 		datapackLoader.LoadPack();
@@ -14,15 +14,15 @@ public partial class UTMXMainLoop : SceneTree
 	public override void _Initialize()
     {
         // 加载资源包配置项
-        UTMXRuntimeProjectConfig.Instance.LoadConfiguration($"{EngineProperties.DATAPACK_RESOURCE_PATH}/project_config.json");
+        UtmxRuntimeProjectConfig.Instance.LoadConfiguration($"{EngineProperties.DATAPACK_RESOURCE_PATH}/project_config.json");
 
         _cmdArgs = ParseCmdlineArgs();
 		InitializeWindow();
 
-		Engine.MaxFps = UTMXRuntimeProjectConfig.Instance.TryGetDefault("application/max_fps",
+		Engine.MaxFps = UtmxRuntimeProjectConfig.Instance.TryGetDefault("application/max_fps",
 			ProjectSettings.GetSetting("application/run/max_fps")).AsInt32();
 
-		DisplayServer.VSyncMode vsyncMode = UTMXRuntimeProjectConfig.Instance.TryGetDefault("application/vsync",
+		DisplayServer.VSyncMode vsyncMode = UtmxRuntimeProjectConfig.Instance.TryGetDefault("application/vsync",
 			DisplayServer.WindowGetVsyncMode() != DisplayServer.VSyncMode.Disabled)
 			? DisplayServer.VSyncMode.Enabled : DisplayServer.VSyncMode.Disabled;
         DisplayServer.WindowSetVsyncMode((DisplayServer.VSyncMode)vsyncMode);
@@ -72,25 +72,25 @@ public partial class UTMXMainLoop : SceneTree
 	private void InitializeWindow()
 	{
 		Vector2I windowSize = new Vector2I(
-			UTMXRuntimeProjectConfig.Instance.TryGetDefault("window/width",
+			UtmxRuntimeProjectConfig.Instance.TryGetDefault("window/width",
 				ProjectSettings.GetSetting("display/window/size/viewport_width")).AsInt32(),
-			UTMXRuntimeProjectConfig.Instance.TryGetDefault("window/height",
+			UtmxRuntimeProjectConfig.Instance.TryGetDefault("window/height",
 				ProjectSettings.GetSetting("display/window/size/viewport_height")).AsInt32());
 
-		bool resizable = UTMXRuntimeProjectConfig.Instance.TryGetDefault<bool>(
+		bool resizable = UtmxRuntimeProjectConfig.Instance.TryGetDefault<bool>(
 			"window/resizable",
 			(bool)ProjectSettings.GetSetting("display/window/size/resizable")
 			);
-		bool fullscreen = UTMXRuntimeProjectConfig.Instance.TryGetDefault<bool>(
+		bool fullscreen = UtmxRuntimeProjectConfig.Instance.TryGetDefault<bool>(
 			"window/fullscreen",
 			(ProjectSettings.GetSetting("display/window/size/mode").AsInt32() == (uint)DisplayServer.WindowMode.Fullscreen)
 			);
-		bool boderless = UTMXRuntimeProjectConfig.Instance.TryGetDefault<bool>(
+		bool boderless = UtmxRuntimeProjectConfig.Instance.TryGetDefault<bool>(
 			"window/boderless",
 			(ProjectSettings.GetSetting("display/window/size/borderless").AsBool())
 			);
 
-		string appName = UTMXRuntimeProjectConfig.Instance.TryGetDefault("application/name",
+		string appName = UtmxRuntimeProjectConfig.Instance.TryGetDefault("application/name",
 				ProjectSettings.GetSetting("application/config/name")).AsString();
 
 		Root.Connect(Window.SignalName.Ready, Callable.From(delegate() {

@@ -1,9 +1,9 @@
 using Godot;  
 using System;  
   
-public static class ArenaPolygonBorderTool  
+public static class PolygonBuildTool  
 {
-	public static float GetSignedArea(Vector2[] polygon)  
+	public static float GetPolygonSignedArea(Vector2[] polygon)  
 	{  
 		float area = 0.0f;  
 		int n = polygon.Length;  
@@ -18,10 +18,10 @@ public static class ArenaPolygonBorderTool
 		return area / 2.0f;  
 	}  
 	
-	public static Vector2[] GetBorderPolygon(Vector2[] polygon, float weight)  
+	public static Vector2[] ExpandPolygon(Vector2[] polygon, float weight)  
 	{  
 		var result = new Vector2[polygon.Length];  
-		bool isCw = GetSignedArea(polygon) > 0.0f;  
+		bool isCw = GetPolygonSignedArea(polygon) > 0.0f;  
 		  
 		for (int i = 0; i < polygon.Length; i++)  
 		{  
@@ -48,5 +48,5 @@ public static class ArenaPolygonBorderTool
 		}  
 		  
 		return result;  
-	}  
+	}
 }

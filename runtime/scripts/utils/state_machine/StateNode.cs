@@ -47,4 +47,10 @@ public abstract partial class StateNode : Node
 	{
 		return true;
 	}
+
+	public void SwitchState(string stateName)
+	{
+		if (string.IsNullOrEmpty(stateName)) return;
+        EmitSignal(SignalName.RequestSwitchState, stateName);
+    }
 }

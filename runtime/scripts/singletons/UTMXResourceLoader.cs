@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-internal partial class UTMXResourceLoader
+internal partial class UtmxResourceLoader
 {
 
-	private static readonly Lazy<UTMXResourceLoader> _instance =
-		new Lazy<UTMXResourceLoader>(() => new UTMXResourceLoader());
-	private UTMXResourceLoader() { }
-	public static UTMXResourceLoader Instance => _instance.Value;
+	private static readonly Lazy<UtmxResourceLoader> _instance =
+		new Lazy<UtmxResourceLoader>(() => new UtmxResourceLoader());
+	private UtmxResourceLoader() { }
+	public static UtmxResourceLoader Instance => _instance.Value;
 
 	public static Resource Load(string resPath)
 	{

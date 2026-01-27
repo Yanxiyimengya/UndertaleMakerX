@@ -12,7 +12,6 @@ public partial class BootSplash : Control
 	public Label bootAnimationLabelBack;
 	[Export]
 	public Label bootAnimationLabelFore;
-	
 	[Export]
 	public ColorRect backgroundColorRect;
 	
@@ -22,27 +21,28 @@ public partial class BootSplash : Control
 	public override void _Ready()
 	{
 
-		FirstScene = UTMXResourceLoader.ResolvePath(
-			(string)UTMXRuntimeProjectConfig.Instance.TryGetDefault("application/main_scene", FirstScene)
+		string mainScene = UtmxResourceLoader.ResolvePath(
+			(string)UtmxRuntimeProjectConfig.Instance.TryGetDefault("application/main_scene", string.Empty)
 			);
+		FirstScene = (string.IsNullOrEmpty(mainScene)) ? FirstScene : mainScene;
 
-		var a = UTMXRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/enabled", (Variant)true).AsBool();
+		var a = UtmxRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/enabled", (Variant)true).AsBool();
 
-        if (!UTMXRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/enabled", (Variant)true).AsBool())
+		if (!UtmxRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/enabled", (Variant)true).AsBool())
 		{
 			CallDeferred("Finished");
 			return;
 		}
 
 		bootAnimationPlayer.Play(TargetAnim);
-		bootAnimationPlayer.SpeedScale = (float)UTMXRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/speed_scale",
+		bootAnimationPlayer.SpeedScale = (float)UtmxRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/speed_scale",
 			bootAnimationPlayer.SpeedScale);
-		string displayText = (string)UTMXRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/display_text",
+		string displayText = (string)UtmxRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/display_text",
 			bootAnimationLabelBack.Text);
 		bootAnimationLabelBack.Text = displayText;
 		bootAnimationLabelFore.Text = displayText;
 		backgroundColorRect.Color = Color.FromString(
-			(string)UTMXRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/background_color", ""),
+			(string)UtmxRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/background_color", ""),
 			 backgroundColorRect.Color);
 		// 初始化画面元素
 
@@ -61,6 +61,6 @@ public partial class BootSplash : Control
 
 	private void Finished()
 	{
-		GetTree().ChangeSceneToFile(FirstScene);
+		SceneManager.Instance.ChangeSceneToFile(FirstScene);
 	}
 }

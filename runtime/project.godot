@@ -16,7 +16,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 config/name="UTMX-Runtime"
 run/main_scene="uid://7kjp05svklmo"
-run/main_loop_type="UTMXMainLoop"
+run/main_loop_type="UtmxMainLoop"
 config/features=PackedStringArray("4.6", "C#", "Mobile")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
@@ -42,7 +42,7 @@ project/assembly_name="UTMX-Runtime"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/js_importer/plugin.cfg", "res://addons/js_shower/plugin.cfg")
+enabled=PackedStringArray("res://addons/js_shower/plugin.cfg")
 
 [file_customization]
 

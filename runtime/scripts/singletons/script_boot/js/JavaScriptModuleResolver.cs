@@ -58,7 +58,7 @@ public class JavaScriptModuleResolver : IModuleLoader
 
 	private string ResolvePath(string referencingModuleLocation, string specifier)
 	{
-		string resolvedPath = UTMXResourceLoader.ResolvePath(specifier);
+		string resolvedPath = UtmxResourceLoader.ResolvePath(specifier);
 		if (! resolvedPath.EndsWith(".js"))
 		{
 			resolvedPath += ".js";

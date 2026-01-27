@@ -68,7 +68,7 @@ public partial class BattlePlayerMercyMenuState : StateNode
 			}
 			else if (Input.IsActionJustPressed("cancel"))
 			{
-				EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerChoiceActionState"]);
+				SwitchState("BattlePlayerChoiceActionState");
 			}
 			else if (Input.IsActionJustPressed("confirm"))
 			{
@@ -76,14 +76,11 @@ public partial class BattlePlayerMercyMenuState : StateNode
 				string choiced = (string)MercyChoiceMenu.GetChoicedItemId();
 				if (choiced == "SPARE")
 				{
-					if (GetTree().CurrentScene is EncounterBattle enc)
+					foreach (BaseEnemy enemy in GlobalBattleManager.Instance.EnemysList)
 					{
-						foreach (BaseEnemy enemy in BattleManager.Instance.EnemysList)
+						if (enemy.AllowSpare && enemy.CanSpare)
 						{
-							if (enemy.AllowSpare && enemy.CanSpare)
-							{
-								enemy.OnSpare();
-							}
+							enemy.OnSpare();
 						}
 					}
 				}
@@ -115,12 +112,12 @@ public partial class BattlePlayerMercyMenuState : StateNode
 	private void _Free()
 	{ 
 		_freed = true;
-		BattleManager.Instance.Endded = true;
-		_playerSoul = BattleManager.Instance.GetPlayerSoul();
+		GlobalBattleManager.Instance.Endded = true;
+		_playerSoul = GlobalBattleManager.Instance.GetPlayerSoul();
 		_playerSoul.Freed = true;
 		_playerSoul.Visible = true;
 		_OpenTextMenu();
-		TextMenu.ShowEncounterText(BattleManager.Instance.FreeText);
+		TextMenu.ShowEncounterText(GlobalBattleManager.Instance.FreeText);
 		BattleButtonManager.ResetAllBattleButton();
 		GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStreamFormLibrary("ESCAPED"));
 	}

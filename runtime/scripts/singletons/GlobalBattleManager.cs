@@ -2,8 +2,14 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class BattleManager : Node
+public partial class GlobalBattleManager : Node
 {
+    public enum BattleCollisionLayers
+    {
+        Player = 1 << 1,
+        Projectile = 1 << 2,
+    };
+
 	public string EncounterText { get => _encounterText; set => _encounterText = value; }
 	public string FreeText { get => _freeText; set => _freeText = value; }
 	public string DeathText { get => _deathText; set => _deathText = value; }
@@ -17,7 +23,6 @@ public partial class BattleManager : Node
 	public Vector2 PlayerSoulPosition { get => _playerSoulPosition; set => _playerSoulPosition = value; }
 	public Color PlayerSoulColor { get => _playerSoulColor; set => _playerSoulColor = value; }
 
-	public EncounterBattle Battle => _encounterBattle;
 	public BattlePlayerSoul Soul => _playerSoul;
 	public BattleMainArenaExpand MainArena => _mainArena;
 
@@ -28,7 +33,7 @@ public partial class BattleManager : Node
 		{
 			_encounterConfig = value;
 			_canFree = _encounterConfig.CanFree;
-			_encounterText = _encounterConfig.DefaultEncounterText;
+			_encounterText = _encounterConfig.EncounterText;
 			_freeText = _encounterConfig.FreeText;
 			_deathText = _encounterConfig.DeathText;
 			_endText = _encounterConfig.EndText;
@@ -37,7 +42,7 @@ public partial class BattleManager : Node
 
 	private bool _isInBattle;
 	public EncounterConfiguration _encounterConfig = new EncounterConfiguration();
-	private EncounterBattle _encounterBattle;
+	private StateMachine _battleStateMachine;
 	private BattlePlayerSoul _playerSoul;
 	private BattleMainArenaExpand _mainArena;
 	private string _encounterText = "";
@@ -56,30 +61,26 @@ public partial class BattleManager : Node
 	private Vector2 _playerSoulPosition = Vector2.Zero;
 	private Color _playerSoulColor = Colors.Red;
 
-	private static readonly Lazy<BattleManager> _instance =
-		new Lazy<BattleManager>(() => new BattleManager());
-	private BattleManager()
+	private static readonly Lazy<GlobalBattleManager> _instance =
+		new Lazy<GlobalBattleManager>(() => new GlobalBattleManager());
+	private GlobalBattleManager()
 	{
 		Config = new EncounterConfiguration();
 	}
-	public static BattleManager Instance => _instance.Value;
+	public static GlobalBattleManager Instance => _instance.Value;
 
 	public void EncounterBattleStart()
 	{
-        SceneManager.Instance.ChangeSceneToFile(SceneManager.Instance.EncounterBattleScenePath);
-    }
-    public void EncounterBattleEnd()
-    {
-		if (_encounterBattle != null)
-		{
-			_encounterBattle._BattleEnd();
-        }
-		UninitializeBattle();
-    }
-
-    public void InitializeBattle(EncounterBattle battleRoot, BattlePlayerSoul soul, BattleMainArenaExpand mainArena)
+		SceneManager.Instance.ChangeSceneToFile(SceneManager.Instance.EncounterBattleScenePath);
+	}
+	public void EncounterBattleEnd()
 	{
-		_encounterBattle = battleRoot;
+		UninitializeBattle();
+	}
+
+	public void InitializeBattle(StateMachine stateMachine, BattlePlayerSoul soul, BattleMainArenaExpand mainArena)
+	{
+		_battleStateMachine = stateMachine;
 		_playerSoul = soul;
 		_mainArena = mainArena;
 		_isInBattle = true;
@@ -87,7 +88,7 @@ public partial class BattleManager : Node
 
 	public void UninitializeBattle()
 	{
-		_encounterBattle = null;
+		_battleStateMachine = null;
 		_playerSoul = null;
 		_mainArena = null;
 		_isInBattle = false;
@@ -111,14 +112,14 @@ public partial class BattleManager : Node
 
 	public void SwitchBattleState(string stateId)
 	{
-		_encounterBattle.BattleStateMachine.SwitchToState(stateId);
+		_battleStateMachine.SwitchToState(stateId);
 	}
 
 	public void NextTurn()
 	{
-		if (BattleManager.Instance.TurnList.Count > _turnCounter)
+		if (GlobalBattleManager.Instance.TurnList.Count > _turnCounter)
 		{
-			_currentTurn = BattleManager.Instance.TurnList[_turnCounter];
+			_currentTurn = GlobalBattleManager.Instance.TurnList[_turnCounter];
 			_turnCounter += 1;
 		}
 	}

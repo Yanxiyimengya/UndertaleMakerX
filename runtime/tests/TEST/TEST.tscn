@@ -3,6 +3,8 @@
 [ext_resource type="FontFile" uid="uid://e0isplnd10cj" path="res://__data__/built-in-resources/fonts/UndertaleDialogue.ttf" id="1_5bhgw"]
 [ext_resource type="Script" uid="uid://dl6w8xq6lqsx3" path="res://tests/TEST/Test.cs" id="1_eplnt"]
 [ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="2_i1yiq"]
+[ext_resource type="Script" uid="uid://xpf1sduh0mgj" path="res://scripts/scenes/encounter_battle/projectile/BaseBattleProjectile.cs" id="4_rs6m0"]
+[ext_resource type="Texture2D" uid="uid://dn7mja0oxdkj4" path="res://__data__/built-in-resources/textures/a.png" id="5_rs6m0"]
 
 [sub_resource type="GDScript" id="GDScript_eplnt"]
 script/source = "extends Control
@@ -12,16 +14,25 @@ const PROJECT_CONFIG = preload(\"res://__data__/project_config.json\")
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	print(PROJECT_CONFIG);
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
 "
 
 [sub_resource type="LabelSettings" id="LabelSettings_i1yiq"]
 font = ExtResource("1_5bhgw")
 font_size = 14
+
+[sub_resource type="GDScript" id="GDScript_w8t8k"]
+script/source = "extends Area2D;
+
+
+func _process(_delta: float) -> void:
+	global_position = get_global_mouse_position();
+
+func _on_area_entered(area: Area2D) -> void:
+	print(area);
+"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_joesq"]
+radius = 5.3851647
 
 [node name="TEST" type="Node" unique_id=399590034]
 script = ExtResource("1_eplnt")
@@ -49,3 +60,19 @@ bbcode_enabled = true
 scroll_active = false
 script = ExtResource("2_i1yiq")
 metadata/_custom_type_script = "uid://dmq4qew4auuss"
+
+[node name="BaseBattleProjectile" type="Area2D" parent="." unique_id=741905409]
+position = Vector2(304, 218)
+script = ExtResource("4_rs6m0")
+Texture = ExtResource("5_rs6m0")
+metadata/_custom_type_script = "uid://xpf1sduh0mgj"
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1755430120]
+collision_layer = 0
+collision_mask = 4
+script = SubResource("GDScript_w8t8k")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=2146103396]
+shape = SubResource("CircleShape2D_joesq")
+
+[connection signal="area_entered" from="Area2D" to="Area2D" method="_on_area_entered"]

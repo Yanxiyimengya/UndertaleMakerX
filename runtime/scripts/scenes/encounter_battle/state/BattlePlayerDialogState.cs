@@ -30,12 +30,12 @@ public partial class BattlePlayerDialogState : StateNode
 
 	public override void _ExitState()
 	{
-		BattleManager.Instance.GetPlayerSoul().Visible = true;
+		GlobalBattleManager.Instance.GetPlayerSoul().Visible = true;
 	}
 
 	private void NextStep()
 	{
-		BattlePlayerSoul soul = BattleManager.Instance.GetPlayerSoul();
+		BattlePlayerSoul soul = GlobalBattleManager.Instance.GetPlayerSoul();
 		soul.Visible = false;
 		if (DialogueQueueManager.Instance.DialogueCount() > 0)
 		{
@@ -44,8 +44,8 @@ public partial class BattlePlayerDialogState : StateNode
 		}
 		else
 		{
-			if (!BattleManager.Instance.Endded)
-				EmitSignal(SignalName.RequestSwitchState, ["BattleEnemyDialogueState"]);
+			if (!GlobalBattleManager.Instance.Endded)
+				SwitchState("BattleEnemyDialogueState");
 		}
 	}
 }

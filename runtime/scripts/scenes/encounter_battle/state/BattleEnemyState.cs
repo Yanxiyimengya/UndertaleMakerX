@@ -15,9 +15,9 @@ public partial class BattleEnemyState : StateNode
 	{
 		turnEnded = false;
 		turnTimer = 0.0;
-		_battleMainArena = BattleManager.Instance.GetMainArena();
-		turn = BattleManager.Instance.GetCurrentTurn();
-		BattlePlayerSoul soul = BattleManager.Instance.GetPlayerSoul();
+		_battleMainArena = GlobalBattleManager.Instance.GetMainArena();
+		turn = GlobalBattleManager.Instance.GetCurrentTurn();
+		BattlePlayerSoul soul = GlobalBattleManager.Instance.GetPlayerSoul();
 		soul.Movable = true;
 		if (turn == null)
 		{
@@ -27,14 +27,11 @@ public partial class BattleEnemyState : StateNode
 
 	public override void _ExitState()
 	{
-		BattlePlayerSoul soul = BattleManager.Instance.GetPlayerSoul();
-		if (GetTree().CurrentScene is EncounterBattle enc)
-		{
-			turn.End();
-			BattleManager.Instance.NextTurn();
-			soul.Movable = true;
-			soul.Visible = true;
-		}
+		BattlePlayerSoul soul = GlobalBattleManager.Instance.GetPlayerSoul();
+		turn.End();
+		GlobalBattleManager.Instance.NextTurn();
+		soul.Movable = true;
+		soul.Visible = true;
 	}
 
 	public override void _Process(double delta)
@@ -49,7 +46,7 @@ public partial class BattleEnemyState : StateNode
 
 	private async void EndEnemyTurn()
 	{
-		BattlePlayerSoul soul = BattleManager.Instance.GetPlayerSoul();
+		BattlePlayerSoul soul = GlobalBattleManager.Instance.GetPlayerSoul();
 		soul.Visible = false;
 		soul.Movable = false;
 		turnEnded = true;
@@ -60,6 +57,6 @@ public partial class BattleEnemyState : StateNode
 		_tween = GetTree().CreateTween();
 		_tween.TweenProperty(_battleMainArena, "Size", new Vector2(565, 130), 0.4);
 		await ToSignal(_tween, Tween.SignalName.Finished);
-		EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerChoiceActionState"]);
+		SwitchState("BattlePlayerChoiceActionState");
 	}
 }

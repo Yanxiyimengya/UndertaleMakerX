@@ -31,7 +31,7 @@ public partial class BattlePlayerChoiceActionState : StateNode
 			GlobalStreamPlayer.Instance.PlaySound(GlobalStreamPlayer.Instance.GetStreamFormLibrary("SELECT"));
 		}
 
-		BattlePlayerSoul soul = BattleManager.Instance.GetPlayerSoul();
+		BattlePlayerSoul soul = GlobalBattleManager.Instance.GetPlayerSoul();
 		if (BattleButtonManager.GetBattleButton(BattleButtonManager.GetCurrentHoverdBattleButtonId(), 
 			out BattleScreenButton btn))
 		{
@@ -41,8 +41,8 @@ public partial class BattlePlayerChoiceActionState : StateNode
 	public override async void _EnterState()
 	{
 		await MenuManager.OpenMenu("EncounterTextMenu");
-		TextMenu.ShowEncounterText(BattleManager.Instance.EncounterText);
-		BattlePlayerSoul soul = BattleManager.Instance.GetPlayerSoul();
+		TextMenu.ShowEncounterText(GlobalBattleManager.Instance.EncounterText);
+		BattlePlayerSoul soul = GlobalBattleManager.Instance.GetPlayerSoul();
 		soul.Movable = false;
 		soul.Show();
 

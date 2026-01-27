@@ -28,45 +28,43 @@ public partial class EncounterChoicePageMenu : EncounterChoiceMenu
 		}
 		int page = choice / MenuItems.Count;
 		_currentChoice = choice;
-		if (GetTree().CurrentScene is EncounterBattle enc)
+		
+		if (GetItemCount() > MenuItems.Count)
 		{
-			if (GetItemCount() > MenuItems.Count)
+			PageTextTyper.Start($"PAGE {page + 1}");
+			PageTextTyper.Visible = true;
+		}
+		else
+		{
+			PageTextTyper.Visible = false;
+		}
+		
+		for (var i = 0; i < MenuItems.Count; i++)
+		{
+			int slot = (page * MenuItems.Count) + i;
+			EncounterChoiceMenuItem menuItem = MenuItems[i];
+			if (slot >= GetItemCount())
 			{
-				PageTextTyper.Start($"PAGE {page + 1}");
-				PageTextTyper.Visible = true;
+				menuItem.Visible = false;
+				continue;
 			}
-			else
+			ChoiceItem choiceItem = GetItem(slot);
+			menuItem.Visible = true;
+			menuItem.Text = choiceItem.ItemDisplayName;
+			if (menuItem.ProgressVisible)
 			{
-				PageTextTyper.Visible = false;
+				menuItem.ProgressMaxValue = choiceItem.MaxValue;
+				menuItem.ProgressValue = choiceItem.Value;
 			}
-			
-			for (var i = 0; i < MenuItems.Count; i++)
-			{
-				int slot = (page * MenuItems.Count) + i;
-				EncounterChoiceMenuItem menuItem = MenuItems[i];
-				if (slot >= GetItemCount())
-				{
-					menuItem.Visible = false;
-					continue;
-				}
-				ChoiceItem choiceItem = GetItem(slot);
-				menuItem.Visible = true;
-				menuItem.Text = choiceItem.ItemDisplayName;
-				if (menuItem.ProgressVisible)
-				{
-					menuItem.ProgressMaxValue = choiceItem.MaxValue;
-					menuItem.ProgressValue = choiceItem.Value;
-				}
-			}
+		}
 
-			
-			await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
-			int soulSelectIndex = choice - (page * MenuItems.Count);
-			if (soulSelectIndex < 3)
-			{
-				var menuItem = MenuItems[soulSelectIndex];
-                BattleManager.Instance.GetPlayerSoul().GlobalTransform = menuItem.GetSoulTransform();
-			}
+		
+		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+		int soulSelectIndex = choice - (page * MenuItems.Count);
+		if (soulSelectIndex < 3)
+		{
+			var menuItem = MenuItems[soulSelectIndex];
+			GlobalBattleManager.Instance.GetPlayerSoul().GlobalTransform = menuItem.GetSoulTransform();
 		}
 	}
 }

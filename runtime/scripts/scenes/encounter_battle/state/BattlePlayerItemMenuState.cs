@@ -42,13 +42,13 @@ public partial class BattlePlayerItemMenuState : StateNode
 		}
 		else if (Input.IsActionJustPressed("cancel"))
 		{
-			EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerChoiceActionState"]);
+			SwitchState("BattlePlayerChoiceActionState");
 		}
 		else if (Input.IsActionJustPressed("confirm"))
 		{
 			int itemChoiced = (int)ItemChoiceMenu.GetChoicedItemId();
 			PlayerDataManager.Instance.UseItem(itemChoiced);
-			EmitSignal(SignalName.RequestSwitchState, ["BattlePlayerDialogState"]);
+			SwitchState("BattlePlayerDialogState");
 		}
 	}
 

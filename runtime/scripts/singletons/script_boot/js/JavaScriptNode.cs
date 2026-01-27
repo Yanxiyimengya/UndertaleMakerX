@@ -13,13 +13,23 @@ public partial class JavaScriptNode : Node
 		{
 			JavaScriptClass javaScriptClass = ScriptBoot.Instance.GetBridge<JavaScriptBridge>().FromFile(JavaScriptFile);
 			_instance = javaScriptClass.New();
-			_instance?.Invoke("_enter_tree", []);
 		}
+	}
+
+	public override void _Ready()
+	{
+		base._Ready();
+		_instance?.Invoke("start", []);
+	}
+
+	~JavaScriptNode()
+	{
+		_instance?.Invoke("destroy", []);
 	}
 
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
-		_instance?.Invoke("_process", []);
+		_instance?.Invoke("update", []);
 	}
 }
