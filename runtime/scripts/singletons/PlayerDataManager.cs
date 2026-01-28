@@ -17,7 +17,7 @@ public partial class PlayerDataManager
     public float PlayerMaxHp = 92F;
     public float PlayerAttack = 0F;
     public float PlayerDefence = 0F;
-    public float PlayerInvincibleTime = 0.005F;
+    public float PlayerInvincibleTime = 0.025F * 30F;
 
     public List<BaseItem> Items = new List<BaseItem>()
     {

@@ -78,7 +78,7 @@ public partial class BattlePlayerActMenuState : StateNode
                 ActChoice = Math.Clamp(ActChoice, 0, encounterActPageMenu.GetItemCount() - 1);
                 encounterActPageMenu.SetChoice(ActChoice);
                 _prevActChoice = ActChoice;
-                UtmxGlobalStreamPlayer.Instance.PlaySound(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
+                UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
             }
 
             if (Input.IsActionJustPressed("cancel"))
@@ -102,7 +102,7 @@ public partial class BattlePlayerActMenuState : StateNode
                 }
                 else
                 {
-                    UtmxGlobalStreamPlayer.Instance.PlaySound(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
+                    UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
                 }
                 encounterChoiceEnemyMenu.SetChoice(EnemyChoice);
             }
@@ -117,7 +117,7 @@ public partial class BattlePlayerActMenuState : StateNode
                     }
                     else
                     {
-                        UtmxGlobalStreamPlayer.Instance.PlaySound(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
+                        UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
                     }
                     encounterChoiceEnemyMenu.SetChoice(EnemyChoice);
                 }
@@ -129,7 +129,7 @@ public partial class BattlePlayerActMenuState : StateNode
             else if (Input.IsActionJustPressed("confirm"))
             {
                 await _OpenActMenu();
-                UtmxGlobalStreamPlayer.Instance.PlaySound(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SELECT"));
+                UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SELECT"));
             }
         }
     }

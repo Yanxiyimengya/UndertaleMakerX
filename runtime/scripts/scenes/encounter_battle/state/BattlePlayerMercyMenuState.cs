@@ -48,7 +48,7 @@ public partial class BattlePlayerMercyMenuState : StateNode
                 }
                 else
                 {
-                    UtmxGlobalStreamPlayer.Instance.PlaySound(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
+                    UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
                 }
                 MercyChoiceMenu.SetChoice(MercyChoice);
             }
@@ -61,7 +61,7 @@ public partial class BattlePlayerMercyMenuState : StateNode
                 }
                 else
                 {
-                    UtmxGlobalStreamPlayer.Instance.PlaySound(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
+                    UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
                 }
 
                 MercyChoiceMenu.SetChoice(MercyChoice);
@@ -72,7 +72,7 @@ public partial class BattlePlayerMercyMenuState : StateNode
             }
             else if (Input.IsActionJustPressed("confirm"))
             {
-                UtmxGlobalStreamPlayer.Instance.PlaySound(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SELECT"));
+                UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SELECT"));
                 string choiced = (string)MercyChoiceMenu.GetChoicedItemId();
                 if (choiced == "SPARE")
                 {
@@ -119,6 +119,6 @@ public partial class BattlePlayerMercyMenuState : StateNode
         _OpenTextMenu();
         TextMenu.ShowEncounterText(GlobalBattleManager.Instance.FreeText);
         BattleButtonManager.ResetAllBattleButton();
-        UtmxGlobalStreamPlayer.Instance.PlaySound(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("ESCAPED"));
+        UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("ESCAPED"));
     }
 }

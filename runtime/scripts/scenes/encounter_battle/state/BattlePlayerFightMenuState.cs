@@ -137,7 +137,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 
             if (previousChoice != _enemyChoice)
             {
-                UtmxGlobalStreamPlayer.Instance.PlaySound(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
+                UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
             }
 
             EncounterChoiceEnemyMenu?.SetChoice(_enemyChoice);
@@ -151,7 +151,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 
             if (previousChoice != _enemyChoice)
             {
-                UtmxGlobalStreamPlayer.Instance.PlaySound(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
+                UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
             }
 
             EncounterChoiceEnemyMenu?.SetChoice(_enemyChoice);
@@ -160,7 +160,7 @@ public partial class BattlePlayerFightMenuState : StateNode
         {
             await OpenAttackGaugeMenu();
             _state = STATE_ATTACK_GAUGE;
-            UtmxGlobalStreamPlayer.Instance.PlaySound(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SELECT"));
+            UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SELECT"));
         }
         else if (Input.IsActionJustPressed("cancel"))
         {

@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://q1ypfunuuve4"]
+
+[ext_resource type="Script" uid="uid://bb5vq8rp88wrh" path="res://scripts/singletons/UtmxInputManager.cs" id="1_6dxkd"]
+
+[node name="UtmxInputManager" type="Node" unique_id=2096725957]
+script = ExtResource("1_6dxkd")
+

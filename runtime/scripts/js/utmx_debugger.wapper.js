@@ -2,7 +2,7 @@ import {__logger} from "__UTMX";
 
 export class UtmxDebugger 
 {
-	static print(message)
+	static print(...message)
 	{
 		return __logger.Log(message);
 	}

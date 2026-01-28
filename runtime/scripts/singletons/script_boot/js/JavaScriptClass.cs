@@ -17,14 +17,10 @@ public partial class JavaScriptClass : ScriptClass
     {
         try
         {
-            JavaScriptBridge bridge = ScriptBoot.Instance.GetBridge<JavaScriptBridge>();
-            if (bridge != null)
+            JsValue jsInstance = JavaScriptBridge.MainEngine.Construct(JsConstructor);
+            if (jsInstance.Type == Jint.Runtime.Types.Object)
             {
-                JsValue jsInstance = bridge.MainEngine.Construct(JsConstructor);
-                if (jsInstance.Type == Jint.Runtime.Types.Object)
-                {
-                    return new JavaScriptObjectInstance((JsObject)jsInstance);
-                }
+                return new JavaScriptObjectInstance((JsObject)jsInstance);
             }
         }
         catch (JavaScriptException jsEx)

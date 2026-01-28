@@ -5,15 +5,16 @@
 [ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="2_i1yiq"]
 [ext_resource type="Script" uid="uid://xpf1sduh0mgj" path="res://scripts/scenes/encounter_battle/projectile/BaseBattleProjectile.cs" id="4_rs6m0"]
 [ext_resource type="Texture2D" uid="uid://dn7mja0oxdkj4" path="res://__data__/built-in-resources/textures/a.png" id="5_rs6m0"]
+[ext_resource type="Script" uid="uid://d1f5egxw1ec8r" path="res://scripts/singletons/script_boot/js/JavaScriptNode.cs" id="6_otw5d"]
 
 [sub_resource type="GDScript" id="GDScript_eplnt"]
 script/source = "extends Control
+@onready var java_script_node: JavaScriptNode = $\"../JavaScriptNode\"
 
-
-const PROJECT_CONFIG = preload(\"res://__data__/project_config.json\")
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	print(PROJECT_CONFIG);
+	var c : Variant = java_script_node.get(\"playMusic\");
+	print(c);
+	
 "
 
 [sub_resource type="LabelSettings" id="LabelSettings_i1yiq"]
@@ -74,5 +75,10 @@ script = SubResource("GDScript_w8t8k")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=2146103396]
 shape = SubResource("CircleShape2D_joesq")
+
+[node name="JavaScriptNode" type="Node" parent="." unique_id=1790400775]
+script = ExtResource("6_otw5d")
+JavaScriptFile = "res://__data__/js/myjs.js"
+metadata/_custom_type_script = "uid://d1f5egxw1ec8r"
 
 [connection signal="area_entered" from="Area2D" to="Area2D" method="_on_area_entered"]

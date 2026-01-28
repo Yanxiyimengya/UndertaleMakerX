@@ -28,9 +28,6 @@ public class JavaScriptModuleResolver : IModuleLoader
     {
         string specifier = moduleRequest.Specifier;
         string path = ResolvePath(specifier, referencingModuleLocation);
-        GD.Print("包源路径:", specifier, "|引用文件路径:", referencingModuleLocation);
-        GD.Print("解析路径", path);
-        GD.Print("=-=-=-");
         Uri resolved;
         if (Uri.TryCreate(path, UriKind.Absolute, out var uri))
         {

@@ -22,7 +22,7 @@ public partial class BattlePlayerItemMenuState : StateNode
             }
             else
             {
-                UtmxGlobalStreamPlayer.Instance.PlaySound(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
+                UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
             }
             ItemChoiceMenu.SetChoice(ItemChoice);
 
@@ -36,7 +36,7 @@ public partial class BattlePlayerItemMenuState : StateNode
             }
             else
             {
-                UtmxGlobalStreamPlayer.Instance.PlaySound(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
+                UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
             }
             ItemChoiceMenu.SetChoice(ItemChoice);
         }

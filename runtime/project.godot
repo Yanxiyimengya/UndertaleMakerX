@@ -24,10 +24,15 @@ boot_splash/stretch_mode=0
 boot_splash/use_filter=false
 config/icon="uid://ddfgd4qs5sg3p"
 
+[audio]
+
+buses/default_bus_layout="uid://e6mpj4t2g6d3"
+
 [autoload]
 
-SceneManager="*res://scenes/singletons/scene_manager/scene_manager.tscn"
-GlobalSoundPlayer="*res://scenes/singletons/utmx_global_stream_player/utmx_global_stream_player.tscn"
+GlobalSceneManager="*uid://bv5lqycuw7h5y"
+GlobalInputManager="*uid://q1ypfunuuve4"
+GlobalStreamPlayer="*uid://q1c4vbqaqvho"
 
 [display]
 

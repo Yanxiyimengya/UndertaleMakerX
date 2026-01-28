@@ -61,6 +61,6 @@ public partial class BootSplash : Control
 
     private void Finished()
     {
-        SceneManager.Instance.ChangeSceneToFile(FirstScene);
+        UtmxSceneManager.Instance.ChangeSceneToFile(FirstScene);
     }
 }

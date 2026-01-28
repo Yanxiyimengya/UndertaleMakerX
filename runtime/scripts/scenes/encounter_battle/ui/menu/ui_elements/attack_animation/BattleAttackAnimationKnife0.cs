@@ -10,7 +10,7 @@ public partial class BattleAttackAnimationKnife0 : BattleAttackAnimation
 
     public override void _Ready()
     {
-        UtmxGlobalStreamPlayer.Instance.PlaySound(attackSound);
+        UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(attackSound);
         animSprite2D.Play();
         animSprite2D.Connect(AnimatedSprite2D.SignalName.AnimationFinished,
             Callable.From(() =>

@@ -4,44 +4,45 @@ using Jint;
 
 public partial class JavaScriptObjectInstance : ScriptObjectInstance
 {
-    public JsObject JsInstance;
+	public JsObject JsInstance;
 
-    public JavaScriptObjectInstance(JsObject ins)
-    {
-        JsInstance = ins;
-    }
+	public JavaScriptObjectInstance(JsObject ins)
+	{
+		JsInstance = ins;
+		JsInstance.Set("this", JsValue.FromObject(JavaScriptBridge.MainEngine, this));
+	}
 
-    public override object Get(string key)
-    {
-        return JsInstance.Get(key);
-    }
+	public override object Get(string propertyName)
+	{
+		JsValue jsValue = JsInstance.Get(propertyName);
+		return JavaScriptBridge.ConvertToObject(jsValue);
+	}
 
-    public override object Invoke(string method, object[] args)
-    {
-        if (string.IsNullOrEmpty(method)) return null;
+	public override bool Has(string propertyName)
+	{
+		return JsInstance.HasProperty(propertyName);
+	}
 
-        JsInstance.TryGetValue(method, out JsValue methodValue);
-        if (!methodValue.IsUndefined() && !methodValue.IsNull())
-        {
-            JavaScriptBridge bridge = ScriptBoot.Instance.GetBridge<JavaScriptBridge>();
-            JsValue[] jsValues = new JsValue[args.Length];
-            for (int i = 0; i < args.Length; i++)
-            {
-                jsValues[i] = JsValue.FromObject(bridge.MainEngine, args[i]);
-            }
+	public override object Invoke(string method, object[] args)
+	{
+		if (string.IsNullOrEmpty(method)) return null;
+		JsInstance.TryGetValue(method, out JsValue methodValue);
+		if (!methodValue.IsUndefined() && !methodValue.IsNull())
+		{
+			JsValue[] jsValues = new JsValue[args.Length];
+			for (int i = 0; i < args.Length; i++)
+			{
+				jsValues[i] = JsValue.FromObject(JavaScriptBridge.MainEngine, args[i]);
+			}
 
-            JsValue result = methodValue.Call(JsInstance, jsValues);
-            return result.ToObject();
-        }
-        return null;
-    }
+			JsValue result = methodValue.Call(JsInstance, jsValues);
+			return result.ToObject();
+		}
+		return null;
+	}
 
-    public override void Set(string key, object value)
-    {
-        JavaScriptBridge bridge = ScriptBoot.Instance.GetBridge<JavaScriptBridge>();
-        if (bridge != null)
-        {
-            JsInstance.Set(key, JsValue.FromObject(bridge.MainEngine, value));
-        }
-    }
+	public override void Set(string key, object value)
+	{
+		JsInstance.Set(key, JsValue.FromObject(JavaScriptBridge.MainEngine, value));
+	}
 }

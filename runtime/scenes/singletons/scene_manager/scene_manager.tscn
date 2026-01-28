@@ -1,9 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bv5lqycuw7h5y"]
-
-[ext_resource type="Script" uid="uid://ih4f4ldvvq1d" path="res://scripts/singletons/SceneManager.cs" id="1_nxkc4"]
-
-[node name="SceneManager" type="CanvasLayer"]
-script = ExtResource("1_nxkc4")
-EncounterBattleScenePath = "uid://o3ubysucd5hn"
-GameoverScenePath = "uid://bhklw8angg12w"
-metadata/_custom_type_script = "uid://ih4f4ldvvq1d"

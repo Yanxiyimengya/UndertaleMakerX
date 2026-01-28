@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://fg7a0q46v718"]
+[gd_scene format=3 uid="uid://fg7a0q46v718"]
 
 [ext_resource type="Script" uid="uid://creftm2k8k0aw" path="res://scripts/scenes/encounter_battle/battle_player_soul/BattlePlayerSoul.cs" id="1_4pjqo"]
 [ext_resource type="Texture2D" uid="uid://bi04oi56jlyi3" path="res://__data__/built-in-resources/textures/soul/spr_soul_battle-0.png" id="2_4feig"]
 [ext_resource type="Texture2D" uid="uid://dfxhcfd8upbf7" path="res://__data__/built-in-resources/textures/soul/spr_heartgtfo/spr_heartgtfo_0-Sheet.png" id="3_4feig"]
+[ext_resource type="Script" uid="uid://8fxros6kah3m" path="res://scripts/scenes/encounter_battle/battle_player_soul/BattlePlayerSoulHitBox.cs" id="4_x7lr4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_x7lr4"]
 atlas = ExtResource("3_4feig")
@@ -34,6 +35,9 @@ animations = [{
 "speed": 8.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4h8dk"]
+size = Vector2(8, 10)
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_4pjqo"]
 radius = 8.0
 
@@ -54,7 +58,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_x7lr4"]
 resource_name = "hurt"
-length = 0.25
+length = 0.5
 loop_mode = 1
 step = 0.0625
 tracks/0/type = "value"
@@ -64,10 +68,10 @@ tracks/0/path = NodePath("Sprite2D:self_modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.125, 0.25),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.125, 0.24932785, 0.375),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [Color(0.49803922, 0.49803922, 0.49803922, 1), Color(1, 1, 1, 1)]
+"values": [Color(0.49803922, 0.49803922, 0.49803922, 1), Color(1, 1, 1, 1), Color(0.49803922, 0.49803922, 0.49803922, 1), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_00thf"]
@@ -76,22 +80,30 @@ _data = {
 &"hurt": SubResource("Animation_x7lr4")
 }
 
-[node name="BattlePlayerSoul" type="CharacterBody2D" node_paths=PackedStringArray("animSprite2d", "animPlayer")]
+[node name="BattlePlayerSoul" type="CharacterBody2D" unique_id=1005979490 node_paths=PackedStringArray("animSprite2d", "animPlayer", "HitBox")]
 modulate = Color(1, 0, 0, 1)
 script = ExtResource("1_4pjqo")
 CollisionRadius = 7.5
 animSprite2d = NodePath("Sprite2D")
 animPlayer = NodePath("AnimationPlayer")
+HitBox = NodePath("HitBox")
 
-[node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+[node name="Sprite2D" type="AnimatedSprite2D" parent="." unique_id=1726302119]
 sprite_frames = SubResource("SpriteFrames_00thf")
 autoplay = "default"
 frame_progress = 0.64733773
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="HitBox" type="Area2D" parent="." unique_id=749596674]
+monitoring = false
+script = ExtResource("4_x7lr4")
+metadata/_custom_type_script = "uid://8fxros6kah3m"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox" unique_id=242093311]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_4h8dk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1346916895]
 shape = SubResource("CircleShape2D_4pjqo")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_00thf")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1176570477]
+libraries/ = SubResource("AnimationLibrary_00thf")

@@ -21,14 +21,14 @@ public partial class BattlePlayerChoiceActionState : StateNode
             _prevInputVector = inputVector;
             if (BattleButtonManager.MoveButton(inputVector))
             {
-                UtmxGlobalStreamPlayer.Instance.PlaySound(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
+                UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
             }
         }
 
         if (Input.IsActionJustPressed("confirm"))
         {
             BattleButtonManager.PressBattleButton(BattleButtonManager.GetCurrentHoverdBattleButtonId());
-            UtmxGlobalStreamPlayer.Instance.PlaySound(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SELECT"));
+            UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SELECT"));
         }
 
         BattlePlayerSoul soul = GlobalBattleManager.Instance.GetPlayerSoul();

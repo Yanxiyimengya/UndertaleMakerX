@@ -9,18 +9,19 @@ using Jint.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text.Json.Nodes;
+using static Godot.HttpRequest;
 
 public class JavaScriptBridge : ScriptBridge
 {
-	public Jint.Engine MainEngine;
-
-	public JavaScriptBridge()
-	{
-		MainEngine = new Jint.Engine((options) =>
+	public static Jint.Engine MainEngine = 
+		new Jint.Engine((options) =>
 		{
 			options.EnableModules(new JavaScriptModuleResolver());
 		});
 
+	public JavaScriptBridge()
+	{
 		MainEngine.Modules.Add(JavaScriptCoreInterface.ModuleName, (builder) =>
 		{
 			Dictionary<string, Type> exportTypes = JavaScriptCoreInterface._GetCoreExportTypes();
@@ -101,17 +102,18 @@ public class JavaScriptBridge : ScriptBridge
 		}
 		catch (Exception ex) when (!(ex is JavaScriptException))
 		{
-			UtmxLogger.Error($"内部异常: {ex.GetType().FullName}");
-			UtmxLogger.Error($"错误消息: {ex.Message}");
-			UtmxLogger.Error($".NET堆栈:\n{ex.StackTrace}");
+			UtmxLogger.Error($"OuterException Type: {ex.GetType().FullName}");
+			UtmxLogger.Error($"OuterException Message: {ex.Message}");
+			UtmxLogger.Error($".NET StackTrace:\n{ex.StackTrace}");
+
 			if (ex.InnerException != null)
 			{
-				UtmxLogger.Error($"内部异常: {ex.InnerException.GetType().FullName}");
-				UtmxLogger.Error($"内部异常消息: {ex.InnerException.Message}");
-				UtmxLogger.Error($"内部异常堆栈:\n{ex.InnerException.StackTrace}");
+				UtmxLogger.Error($"InnerException Type: {ex.InnerException.GetType().FullName}");
+				UtmxLogger.Error($"InnerException Message: {ex.InnerException.Message}");
+				UtmxLogger.Error($"InnerException StackTrace:\n{ex.InnerException.StackTrace}");
 			}
+			return null;
 		}
-		return null;
 	}
 
 	public override object GetValue(string value)
@@ -123,4 +125,54 @@ public class JavaScriptBridge : ScriptBridge
 	{
 		MainEngine.SetValue(valueName, value);
 	}
+
+	public static object ConvertToObject(JsValue jsValue)
+	{
+		if (jsValue is Function)
+		{
+			return ((Function)jsValue).ToObject();
+		}
+		if (jsValue is JsObject)
+		{
+			Dictionary<string, object> dict = new();
+			ObjectInstance jsObject = jsValue.AsObject();
+			foreach (var entry in jsObject.GetOwnProperties())
+			{
+				dict[entry.Key.ToString()] = entry.Value.Value.ToObject();
+			}
+			return dict;
+		}
+		return jsValue.ToObject();
+	}
+
+	public static Variant ObjectConvertToVariant(object value)
+	{
+		if (value == null) return new Variant();
+		if (value is bool b) return Variant.From(b);
+		if (value is int i) return Variant.From(i);
+		if (value is double d) return Variant.From(d);
+		if (value is float f) return Variant.From(f);
+		if (value is string s) return Variant.From(s);
+		if (value is long l) return Variant.From(l);
+		if (value is object[] arr)
+		{
+			Godot.Collections.Array<Variant> result = new();
+			foreach (object obj in arr)
+			{
+				result.Add(ObjectConvertToVariant(obj));
+			}
+			return result;
+		}
+		if (value is Dictionary<string, object> dict)
+		{
+			Godot.Collections.Dictionary result = new();
+			foreach (KeyValuePair<string, object> pair in dict)
+			{
+				result.Add(pair.Key, ObjectConvertToVariant(pair.Value));
+			}
+			return result;
+		}
+		return value.ToString();
+	}
+
 }

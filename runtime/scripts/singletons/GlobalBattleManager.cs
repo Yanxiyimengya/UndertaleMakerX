@@ -71,7 +71,7 @@ public partial class GlobalBattleManager : Node
 
     public void EncounterBattleStart()
     {
-        SceneManager.Instance.ChangeSceneToFile(SceneManager.Instance.EncounterBattleScenePath);
+        UtmxSceneManager.Instance.ChangeSceneToFile(UtmxSceneManager.Instance.EncounterBattleScenePath);
     }
     public void EncounterBattleEnd()
     {
@@ -104,7 +104,7 @@ public partial class GlobalBattleManager : Node
             Camera2D camera = _playerSoul.GetViewport().GetCamera2D();
             PlayerSoulPosition = camera.GetCanvasTransform().BasisXform(_playerSoul.GlobalPosition);
             PlayerSoulColor = _playerSoul.Modulate;
-            SceneManager.Instance.ChangeSceneToFile(SceneManager.Instance.GameoverScenePath);
+            UtmxSceneManager.Instance.ChangeSceneToFile(UtmxSceneManager.Instance.GameoverScenePath);
         }
     }
 

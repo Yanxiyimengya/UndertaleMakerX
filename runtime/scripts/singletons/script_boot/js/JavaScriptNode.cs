@@ -1,4 +1,9 @@
 using Godot;
+using Jint;
+using Jint.Native;
+using Jint.Native.Object;
+using System;
+using System.Collections.Generic;
 
 [GlobalClass]
 public partial class JavaScriptNode : Node
@@ -23,6 +28,17 @@ public partial class JavaScriptNode : Node
 
 	private JavaScriptObjectInstance _instance;
 	public string _javaScriptFile;
+
+	public override Variant _Get(StringName property)
+	{
+		string propertyName = property.ToString();
+		if (_instance.Has(propertyName))
+		{
+			object dotNetObject = _instance.Get(property);
+			return JavaScriptBridge.ObjectConvertToVariant(dotNetObject);
+		}
+		return new Variant();
+	}
 	public override void _Ready()
 	{
 		base._Ready();

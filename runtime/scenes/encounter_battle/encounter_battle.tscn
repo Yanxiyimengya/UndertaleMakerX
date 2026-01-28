@@ -27,6 +27,8 @@
 [ext_resource type="Script" uid="uid://3iy182u0a5o5" path="res://scripts/scenes/encounter_battle/state/BattleEnemyDialogueState.cs" id="15_mdx4q"]
 [ext_resource type="Script" uid="uid://clyj12q3o6mo" path="res://scripts/scenes/encounter_battle/state/BattleEnemyState.cs" id="17_wibws"]
 [ext_resource type="Script" uid="uid://vrolycbhr1jt" path="res://scripts/scenes/encounter_battle/arena/BattleArenaGroup.cs" id="18_3wf68"]
+[ext_resource type="Script" uid="uid://xpf1sduh0mgj" path="res://scripts/scenes/encounter_battle/projectile/BaseBattleProjectile.cs" id="18_u6j2e"]
+[ext_resource type="Texture2D" uid="uid://c2tka0vqiiq14" path="res://__data__/js/Sprite-0001.png" id="19_knxdc"]
 [ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="19_taqgn"]
 [ext_resource type="Script" uid="uid://bpyxalubh243m" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterChoiceEnemyMenu.cs" id="19_vdmq1"]
 [ext_resource type="Script" uid="uid://7hd25hqmu3q2" path="res://scripts/scenes/encounter_battle/arena/BattleMainArenaExpand.cs" id="20_3wf68"]
@@ -40,6 +42,7 @@
 [ext_resource type="Script" uid="uid://chldlchltn3yg" path="res://scripts/scenes/encounter_battle/arena/BattleArenaMask.cs" id="26_r2q8g"]
 [ext_resource type="Script" uid="uid://dwg2ab3ixqu8g" path="res://scripts/scenes/encounter_battle/ui/button/BattleScreenActionButton.cs" id="33_q4xod"]
 [ext_resource type="PackedScene" uid="uid://3dmh7idg5rqu" path="res://scenes/encounter_battle/ui/speech_bubble/speech_bubble.tscn" id="39_1x56u"]
+[ext_resource type="Script" uid="uid://bs3racnhnplhk" path="res://scripts/scenes/battle_camera/BattleCamera.cs" id="43_knxdc"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3wf68"]
 
@@ -156,6 +159,15 @@ process_priority = 1
 clip_children = 1
 script = ExtResource("26_r2q8g")
 metadata/_custom_type_script = "uid://chldlchltn3yg"
+
+[node name="BaseBattleProjectile" type="Area2D" parent="BattleArenaGroup/BattleArenaMask" unique_id=33079208]
+position = Vector2(321, 322)
+script = ExtResource("18_u6j2e")
+Texture = ExtResource("19_knxdc")
+PreciseCollision = 2
+PreciseEpsilon = 0.01
+Damage = 20.0
+metadata/_custom_type_script = "uid://xpf1sduh0mgj"
 
 [node name="MainArena" type="Node2D" parent="BattleArenaGroup" unique_id=183940758]
 position = Vector2(320, 385)
@@ -286,6 +298,8 @@ ArenaGroup = NodePath("../../BattleArenaGroup")
 [node name="Enemys" type="Node2D" parent="." unique_id=490966930]
 position = Vector2(320, 240)
 
-[node name="MainCamera" type="Camera2D" parent="." unique_id=1983304517]
+[node name="MainCamera" type="Camera2D" parent="." unique_id=1963243818]
 position = Vector2(320, 240)
 ignore_rotation = false
+script = ExtResource("43_knxdc")
+metadata/_custom_type_script = "uid://bs3racnhnplhk"

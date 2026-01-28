@@ -22,4 +22,3 @@ HurtSoundStream = ExtResource("7_3c4hc")
 HeartBeatBreakSoundStream = ExtResource("8_vvd1d")
 HeartPlosionSoundStream = ExtResource("9_cohk7")
 GameOverMusicSoundStream = ExtResource("10_vvd1d")
-metadata/_custom_type_script = "uid://dglebtj8v4skj"

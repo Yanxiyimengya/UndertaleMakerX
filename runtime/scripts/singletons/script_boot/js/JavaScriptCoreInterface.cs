@@ -13,7 +13,7 @@ public class JavaScriptCoreInterface
         {
             { "__logger" , typeof(UtmxLogger)},
             { "__audio_player" , typeof(UtmxGlobalStreamPlayer) },
-            { "__input" , typeof(Input)},
+            { "__input" , typeof(UtmxInputManager)},
         };
     }
     public static Dictionary<string, string> _GetInterfaceExportScripts()

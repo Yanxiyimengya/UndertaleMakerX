@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bv5lqycuw7h5y"]
+
+[ext_resource type="Script" uid="uid://0sdlv16sg7gj" path="res://scripts/singletons/UtmxSceneManager.cs" id="1_si8st"]
+
+[node name="SceneManager" type="CanvasLayer" unique_id=1781991698]
+script = ExtResource("1_si8st")
+EncounterBattleScenePath = "uid://o3ubysucd5hn"
+GameoverScenePath = "uid://bhklw8angg12w"
