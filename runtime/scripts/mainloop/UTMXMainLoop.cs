@@ -5,18 +5,19 @@ using System;
 public partial class UtmxMainLoop : SceneTree
 {
 	private Godot.Collections.Dictionary<string, string> _cmdArgs = new Godot.Collections.Dictionary<string, string>();
-	
-	public UtmxMainLoop() {
+
+	public UtmxMainLoop()
+	{
 		// 加载资源包
 		var datapackLoader = DatapackLoader.GetDatapackLoader(OS.GetName());
 		datapackLoader.LoadPack();
 	}
 	public override void _Initialize()
-    {
-        // 加载资源包配置项
-        UtmxRuntimeProjectConfig.Instance.LoadConfiguration($"{EngineProperties.DATAPACK_RESOURCE_PATH}/project_config.json");
+	{
+		// 加载资源包配置项
+		UtmxRuntimeProjectConfig.Instance.LoadConfiguration($"{EngineProperties.DATAPACK_RESOURCE_PATH}/project_config.json");
 
-        _cmdArgs = ParseCmdlineArgs();
+		_cmdArgs = ParseCmdlineArgs();
 		InitializeWindow();
 
 		Engine.MaxFps = UtmxRuntimeProjectConfig.Instance.TryGetDefault("application/max_fps",
@@ -25,8 +26,8 @@ public partial class UtmxMainLoop : SceneTree
 		DisplayServer.VSyncMode vsyncMode = UtmxRuntimeProjectConfig.Instance.TryGetDefault("application/vsync",
 			DisplayServer.WindowGetVsyncMode() != DisplayServer.VSyncMode.Disabled)
 			? DisplayServer.VSyncMode.Enabled : DisplayServer.VSyncMode.Disabled;
-        DisplayServer.WindowSetVsyncMode((DisplayServer.VSyncMode)vsyncMode);
-    }
+		DisplayServer.WindowSetVsyncMode((DisplayServer.VSyncMode)vsyncMode);
+	}
 
 	public override bool _Process(double delta)
 	{
@@ -93,7 +94,8 @@ public partial class UtmxMainLoop : SceneTree
 		string appName = UtmxRuntimeProjectConfig.Instance.TryGetDefault("application/name",
 				ProjectSettings.GetSetting("application/config/name")).AsString();
 
-		Root.Connect(Window.SignalName.Ready, Callable.From(delegate() {
+		Root.Connect(Window.SignalName.Ready, Callable.From(delegate ()
+		{
 			int currentScreen = DisplayServer.WindowGetCurrentScreen();
 			Rect2I screenRect = DisplayServer.ScreenGetUsableRect(currentScreen);
 			Vector2I centerPosition = screenRect.Position + (screenRect.Size - windowSize) / 2;
@@ -102,14 +104,13 @@ public partial class UtmxMainLoop : SceneTree
 			Root.Borderless = boderless;
 
 			Root.Unresizable = !resizable;
-			if (! string.IsNullOrEmpty(appName)) 
+			if (!string.IsNullOrEmpty(appName))
 				Root.Title = appName;
-			if (fullscreen) 
+			if (fullscreen)
 				Root.Mode = Window.ModeEnum.Fullscreen;
 		}), (int)GodotObject.ConnectFlags.OneShot);
 		ProjectSettings.SetSetting("application/config/name", appName);
 		ProjectSettings.SetSetting("display/window/size/viewport_width", windowSize.X);
 		ProjectSettings.SetSetting("display/window/size/viewport_height", windowSize.Y);
-
 	}
 }

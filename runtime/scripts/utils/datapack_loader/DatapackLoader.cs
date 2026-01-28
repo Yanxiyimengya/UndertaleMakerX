@@ -1,6 +1,4 @@
 using Godot;
-using Godot.Collections;
-using System;
 
 public abstract class DatapackLoader
 {
@@ -8,29 +6,29 @@ public abstract class DatapackLoader
     public const uint GODOT_PACK_HEADER_MAGIC = 0x43504447;
     public abstract bool LoadPack();
 
-	public static DatapackLoader GetDatapackLoader(string platform)
-	{
-		switch (platform)
-		{
-			case "Windows":
-				{
-					return new DatapackLoaderWindows();
-				}
-				;
-			case "Android":
-				{
-					return new DatapackLoaderAndroid();
-				}
-				;
-			default:
-				return null;
-		}
-	}
+    public static DatapackLoader GetDatapackLoader(string platform)
+    {
+        switch (platform)
+        {
+            case "Windows":
+                {
+                    return new DatapackLoaderWindows();
+                }
+                ;
+            case "Android":
+                {
+                    return new DatapackLoaderAndroid();
+                }
+                ;
+            default:
+                return null;
+        }
+    }
 
-	protected bool LoadResourcePack(string pck, int offset = 0)
-	{
-		return ProjectSettings.LoadResourcePack(pck, true, offset);
-	}
+    protected bool LoadResourcePack(string pck, int offset = 0)
+    {
+        return ProjectSettings.LoadResourcePack(pck, true, offset);
+    }
 }
 
 /*

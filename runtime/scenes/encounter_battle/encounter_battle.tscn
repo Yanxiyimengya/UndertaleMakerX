@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://o3ubysucd5hn"]
 
+[ext_resource type="Script" uid="uid://d1f5egxw1ec8r" path="res://scripts/singletons/script_boot/js/JavaScriptNode.cs" id="2_3wf68"]
 [ext_resource type="Texture2D" uid="uid://cpt8lkhth2ikc" path="res://__data__/built-in-resources/textures/ui/battle_screen/bg/spr_battlebg_0.png" id="2_4xtxd"]
 [ext_resource type="Script" uid="uid://cctn2p527r38" path="res://scripts/utils/state_machine/StateMachine.cs" id="2_62htl"]
-[ext_resource type="Script" uid="uid://beqqcxbxsdem6" path="res://scenes/encounter_battle/controllers/BattleController.cs" id="2_mdx4q"]
+[ext_resource type="Script" uid="uid://beqqcxbxsdem6" path="res://scripts/scenes/encounter_battle/controllers/BattleController.cs" id="2_mdx4q"]
 [ext_resource type="Script" uid="uid://c0ouwp06q4136" path="res://scripts/scenes/encounter_battle/state/BattlePlayerChoiceActionState.cs" id="3_18p8v"]
 [ext_resource type="PackedScene" uid="uid://cee05uq5s87yp" path="res://scenes/encounter_battle/ui/status_bar/battle_status_bar.tscn" id="4_18p8v"]
 [ext_resource type="PackedScene" uid="uid://cfmmgpj17a2fc" path="res://scenes/encounter_battle/ui/button/battle_screen_button.tscn" id="5_wxkx7"]
@@ -25,10 +26,10 @@
 [ext_resource type="Script" uid="uid://dxmt2vmf5f8bi" path="res://scripts/scenes/encounter_battle/state/BattleEndState.cs" id="14_1x56u"]
 [ext_resource type="Script" uid="uid://3iy182u0a5o5" path="res://scripts/scenes/encounter_battle/state/BattleEnemyDialogueState.cs" id="15_mdx4q"]
 [ext_resource type="Script" uid="uid://clyj12q3o6mo" path="res://scripts/scenes/encounter_battle/state/BattleEnemyState.cs" id="17_wibws"]
-[ext_resource type="Script" uid="uid://vrolycbhr1jt" path="res://scripts/utils/arena/BattleArenaGroup.cs" id="18_3wf68"]
+[ext_resource type="Script" uid="uid://vrolycbhr1jt" path="res://scripts/scenes/encounter_battle/arena/BattleArenaGroup.cs" id="18_3wf68"]
 [ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="19_taqgn"]
 [ext_resource type="Script" uid="uid://bpyxalubh243m" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterChoiceEnemyMenu.cs" id="19_vdmq1"]
-[ext_resource type="Script" uid="uid://7hd25hqmu3q2" path="res://scripts/utils/arena/BattleMainArenaExpand.cs" id="20_3wf68"]
+[ext_resource type="Script" uid="uid://7hd25hqmu3q2" path="res://scripts/scenes/encounter_battle/arena/BattleMainArenaExpand.cs" id="20_3wf68"]
 [ext_resource type="Script" uid="uid://c2nsgymkcwbb6" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterItemMenu.cs" id="23_0mx1x"]
 [ext_resource type="FontFile" uid="uid://butt4gvjxibtq" path="res://__data__/built-in-resources/fonts/FZXS12.ttf" id="23_3wf68"]
 [ext_resource type="PackedScene" uid="uid://b4s2vi1x468nj" path="res://scenes/encounter_battle/ui/ui_elements/choice_menu/encounter_choice_list_menu.tscn" id="24_noyau"]
@@ -36,7 +37,7 @@
 [ext_resource type="Script" uid="uid://cq7rq1smnlytk" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterActPageMenu.cs" id="25_q4xod"]
 [ext_resource type="PackedScene" uid="uid://dtiq2nxayrrbj" path="res://scenes/encounter_battle/ui/ui_elements/battle_attack_gauge_bar/battle_attack_gauge_bar.tscn" id="26_du4b0"]
 [ext_resource type="Script" uid="uid://ic16gwu4kje7" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterMercyMenu.cs" id="26_noyau"]
-[ext_resource type="Script" uid="uid://chldlchltn3yg" path="res://scripts/utils/arena/BattleArenaMask.cs" id="26_r2q8g"]
+[ext_resource type="Script" uid="uid://chldlchltn3yg" path="res://scripts/scenes/encounter_battle/arena/BattleArenaMask.cs" id="26_r2q8g"]
 [ext_resource type="Script" uid="uid://dwg2ab3ixqu8g" path="res://scripts/scenes/encounter_battle/ui/button/BattleScreenActionButton.cs" id="33_q4xod"]
 [ext_resource type="PackedScene" uid="uid://3dmh7idg5rqu" path="res://scenes/encounter_battle/ui/speech_bubble/speech_bubble.tscn" id="39_1x56u"]
 
@@ -52,7 +53,11 @@ PlayerSoul = NodePath("../../Players/BattlePlayerSoul")
 MainArena = NodePath("../../BattleArenaGroup/MainArena")
 BattleStateMachine = NodePath("../../BattleStateMachine")
 EnemysNode = NodePath("../../Enemys")
-metadata/_custom_type_script = "uid://beqqcxbxsdem6"
+
+[node name="JavaScriptNode" type="Node" parent="BattleControllers" unique_id=1413107453]
+script = ExtResource("2_3wf68")
+JavaScriptFile = "res://__data__/js/myjs.js"
+metadata/_custom_type_script = "uid://d1f5egxw1ec8r"
 
 [node name="BattleStateMachine" type="Node" parent="." unique_id=261701519]
 script = ExtResource("2_62htl")

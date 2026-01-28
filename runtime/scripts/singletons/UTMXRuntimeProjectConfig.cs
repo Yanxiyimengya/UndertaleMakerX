@@ -10,7 +10,7 @@ public partial class UtmxRuntimeProjectConfig
     private UtmxRuntimeProjectConfig() { }
     public static UtmxRuntimeProjectConfig Instance => _instance.Value;
 
-    public Dictionary<string, Variant> FlatConfigDict { get; private set; } = new Dictionary<string, Variant>();
+    public System.Collections.Generic.Dictionary<string, Variant> FlatConfigDict { get; private set; } = new();
 
     public Variant TryGetDefault(string key, Variant defValue = default)
     {

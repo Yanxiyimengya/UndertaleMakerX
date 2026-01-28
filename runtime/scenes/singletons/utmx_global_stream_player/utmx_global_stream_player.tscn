@@ -1,25 +1,25 @@
-[gd_scene load_steps=11 format=3 uid="uid://1lsxtliaynw4"]
+[gd_scene format=3 uid="uid://q1c4vbqaqvho"]
 
-[ext_resource type="Script" uid="uid://unedikdlntim" path="res://scripts/singletons/GlobalStreamPlayer.cs" id="1_811sd"]
+[ext_resource type="Script" uid="uid://dglebtj8v4skj" path="res://scripts/singletons/UtmxGlobalStreamPlayer.cs" id="1_rytsd"]
 [ext_resource type="AudioStream" uid="uid://coq8miphysprd" path="res://__data__/built-in-resources/sounds/sfx/snd_select.wav" id="2_uvksp"]
 [ext_resource type="AudioStream" uid="uid://bqarl4v1658o" path="res://__data__/built-in-resources/sounds/sfx/snd_squeak.wav" id="3_wojre"]
 [ext_resource type="AudioStream" uid="uid://cdgcsi75ifjss" path="res://__data__/built-in-resources/sounds/sfx/snd_escaped.wav" id="4_yuuso"]
-[ext_resource type="AudioStream" uid="uid://dmtjjdohc4f7u" path="res://__data__/built-in-resources/sounds/voice/snd_text2.wav" id="5_yuuso"]
+[ext_resource type="AudioStream" uid="uid://dmtjjdohc4f7u" path="res://__data__/built-in-resources/sounds/voice/snd_texttyper.wav" id="5_yuuso"]
 [ext_resource type="AudioStream" uid="uid://d2u6tsm4bxsnh" path="res://__data__/built-in-resources/sounds/voice/snd_text.wav" id="6_8rblb"]
-[ext_resource type="AudioStream" uid="uid://g3f3hmwbsfsb" path="res://__data__/built-in-resources/sounds/sfx/snd_hurt1.wav" id="7_ti6hq"]
+[ext_resource type="AudioStream" uid="uid://g3f3hmwbsfsb" path="res://__data__/built-in-resources/sounds/sfx/snd_hurt.wav" id="7_3c4hc"]
 [ext_resource type="AudioStream" uid="uid://f57cj4gwas2l" path="res://__data__/built-in-resources/sounds/sfx/snd_break1.wav" id="8_vvd1d"]
 [ext_resource type="AudioStream" uid="uid://c05nk5k8k24jr" path="res://__data__/built-in-resources/sounds/sfx/snd_break2.wav" id="9_cohk7"]
 [ext_resource type="AudioStream" uid="uid://g5o72g1unno0" path="res://__data__/built-in-resources/sounds/bgm/mus_gameover.ogg" id="10_vvd1d"]
 
-[node name="GlobalStreamPlayer" type="Node"]
-script = ExtResource("1_811sd")
+[node name="UtmxGlobalStreamPlayer" type="Node" unique_id=1127036722]
+script = ExtResource("1_rytsd")
 SelectSoundStream = ExtResource("2_uvksp")
 SqueakSoundStream = ExtResource("3_wojre")
 EscapedSoundStream = ExtResource("4_yuuso")
-TextSoundStream = ExtResource("5_yuuso")
+TextTyperSoundStream = ExtResource("5_yuuso")
 EnemyDialogueSoundStream = ExtResource("6_8rblb")
-HurtSoundStream = ExtResource("7_ti6hq")
+HurtSoundStream = ExtResource("7_3c4hc")
 HeartBeatBreakSoundStream = ExtResource("8_vvd1d")
 HeartPlosionSoundStream = ExtResource("9_cohk7")
 GameOverMusicSoundStream = ExtResource("10_vvd1d")
-metadata/_custom_type_script = "uid://unedikdlntim"
+metadata/_custom_type_script = "uid://dglebtj8v4skj"

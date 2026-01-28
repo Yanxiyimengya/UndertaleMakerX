@@ -1,13 +1,11 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 public partial class GameRegisterDB : Node
 {
-    private GameRegisterDB() { 
+    private GameRegisterDB()
+    {
     }
 
     private static readonly Lazy<GameRegisterDB> _instance =

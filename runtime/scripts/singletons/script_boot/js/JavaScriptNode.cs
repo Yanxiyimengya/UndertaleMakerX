@@ -1,21 +1,28 @@
 using Godot;
-using System;
 
 [GlobalClass]
 public partial class JavaScriptNode : Node
 {
 	[Export(PropertyHint.FilePath, "*.js")]
-	public string JavaScriptFile;
-	private JavaScriptObjectInstance _instance;
-	public override void _EnterTree()
+	public string JavaScriptFile
 	{
-		if (! string.IsNullOrEmpty(JavaScriptFile))
+		get => _javaScriptFile;
+		set
 		{
-			JavaScriptClass javaScriptClass = ScriptBoot.Instance.GetBridge<JavaScriptBridge>().FromFile(JavaScriptFile);
-			_instance = javaScriptClass.New();
+			_javaScriptFile = value;
+			if (!string.IsNullOrEmpty(_javaScriptFile))
+			{
+				JavaScriptClass javaScriptClass = ScriptBoot.Instance.GetBridge<JavaScriptBridge>().FromFile(_javaScriptFile);
+				if (javaScriptClass != null)
+				{
+					_instance = javaScriptClass.New();
+				}
+			}
 		}
 	}
 
+	private JavaScriptObjectInstance _instance;
+	public string _javaScriptFile;
 	public override void _Ready()
 	{
 		base._Ready();
@@ -30,6 +37,6 @@ public partial class JavaScriptNode : Node
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
-		_instance?.Invoke("update", []);
+		_instance?.Invoke("update", [delta]);
 	}
 }

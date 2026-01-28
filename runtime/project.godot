@@ -26,8 +26,8 @@ config/icon="uid://ddfgd4qs5sg3p"
 
 [autoload]
 
-GlobalStreamPlayer="*res://scenes/singletons/global_stream_player/global_stream_player.tscn"
 SceneManager="*res://scenes/singletons/scene_manager/scene_manager.tscn"
+GlobalSoundPlayer="*res://scenes/singletons/utmx_global_stream_player/utmx_global_stream_player.tscn"
 
 [display]
 

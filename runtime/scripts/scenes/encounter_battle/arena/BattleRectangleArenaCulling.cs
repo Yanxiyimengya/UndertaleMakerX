@@ -24,17 +24,17 @@ public partial class BattleRectangleArenaCulling : BattleArenaCulling
     private Vector2 _size = new Vector2(140, 140);
 
     public override void DrawFrame(Rid borderRenderingItem, Rid maskRenderingItem,
-		Rid borderCullingCanvasItem, Rid maskCullingCanvasItem)
-	{
-		Vector2 borderSize = Vector2.One * BorderWidth;
-		Rect2 _rect;
+        Rid borderCullingCanvasItem, Rid maskCullingCanvasItem)
+    {
+        Vector2 borderSize = Vector2.One * BorderWidth;
+        Rect2 _rect;
 
-		_rect = new Rect2(-_size * 0.5F - borderSize, _size + borderSize * 2F);
-		RenderingServer.CanvasItemAddRect(maskCullingCanvasItem, _rect, Colors.White);
+        _rect = new Rect2(-_size * 0.5F - borderSize, _size + borderSize * 2F);
+        RenderingServer.CanvasItemAddRect(maskCullingCanvasItem, _rect, Colors.White);
 
-		_rect = new Rect2(-_size * 0.5F, _size);
-		RenderingServer.CanvasItemAddRect(borderCullingCanvasItem, _rect, Colors.Black);
-	}
+        _rect = new Rect2(-_size * 0.5F, _size);
+        RenderingServer.CanvasItemAddRect(borderCullingCanvasItem, _rect, Colors.Black);
+    }
 
     protected override Rid GenerateCollisionShape()
     {
@@ -44,6 +44,6 @@ public partial class BattleRectangleArenaCulling : BattleArenaCulling
     protected override void UpdateCollisionShape(Rid shape)
     {
         Vector2 borderSize = Vector2.One * BorderWidth * 2F;
-        PhysicsServer2D.ShapeSetData(shape, (_size+borderSize) / 2F);
+        PhysicsServer2D.ShapeSetData(shape, (_size + borderSize) / 2F);
     }
 }

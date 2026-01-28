@@ -5,15 +5,15 @@ using System;
 [GlobalClass]
 public partial class BaseEnemy : Node2D
 {
-	public string DisplayName = "ENEMY";
+    public string DisplayName = "ENEMY";
 
-	public float Attack = 0.0F;
-	public float Defence = 0.0F;
-	public float Hp = 100.0F;
-	public float MaxHp = 100.0F;
+    public float Attack = 0.0F;
+    public float Defence = 0.0F;
+    public float Hp = 100.0F;
+    public float MaxHp = 100.0F;
     public int EnemyIndex = 0;
     public bool AllowSpare = true;
-	public bool CanSpare = false;
+    public bool CanSpare = false;
     public string MissText = "MISS";
     public Vector2 CenterPosition = new Vector2(0.0F, -80.0F);
 
@@ -39,9 +39,9 @@ public partial class BaseEnemy : Node2D
         AppendDialogue("我要揍你！！！");
     }
 
-    public void AppendDialogue(string dialogueMessage ,Vector2? offset = null, bool hideSpike = false, int dir = 2)
+    public void AppendDialogue(string dialogueMessage, Vector2? offset = null, bool hideSpike = false, int dir = 2)
     {
-        if (offset == null) 
+        if (offset == null)
             offset = new Vector2(30, 0);
         DialogueQueueManager.Instance.AppendBattleEnemyDialogue(EnemyIndex, dialogueMessage, (Vector2)offset, hideSpike);
     }

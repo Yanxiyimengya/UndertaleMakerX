@@ -4,63 +4,63 @@ using System.Linq;
 
 public partial class BootSplash : Control
 {
-	[Export(PropertyHint.File, "*.tscn")]
-	public string FirstScene = "";
-	public string TargetAnim = "boot";
+    [Export(PropertyHint.File, "*.tscn")]
+    public string FirstScene = "";
+    public string TargetAnim = "boot";
 
-	[Export]
-	public Label bootAnimationLabelBack;
-	[Export]
-	public Label bootAnimationLabelFore;
-	[Export]
-	public ColorRect backgroundColorRect;
-	
-	[Export]
-	public AnimationPlayer bootAnimationPlayer;
-	
-	public override void _Ready()
-	{
+    [Export]
+    public Label bootAnimationLabelBack;
+    [Export]
+    public Label bootAnimationLabelFore;
+    [Export]
+    public ColorRect backgroundColorRect;
 
-		string mainScene = UtmxResourceLoader.ResolvePath(
-			(string)UtmxRuntimeProjectConfig.Instance.TryGetDefault("application/main_scene", string.Empty)
-			);
-		FirstScene = (string.IsNullOrEmpty(mainScene)) ? FirstScene : mainScene;
+    [Export]
+    public AnimationPlayer bootAnimationPlayer;
 
-		var a = UtmxRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/enabled", (Variant)true).AsBool();
+    public override void _Ready()
+    {
 
-		if (!UtmxRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/enabled", (Variant)true).AsBool())
-		{
-			CallDeferred("Finished");
-			return;
-		}
+        string mainScene = UtmxResourceLoader.ResolvePath(
+            (string)UtmxRuntimeProjectConfig.Instance.TryGetDefault("application/main_scene", string.Empty)
+            );
+        FirstScene = (string.IsNullOrEmpty(mainScene)) ? FirstScene : mainScene;
 
-		bootAnimationPlayer.Play(TargetAnim);
-		bootAnimationPlayer.SpeedScale = (float)UtmxRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/speed_scale",
-			bootAnimationPlayer.SpeedScale);
-		string displayText = (string)UtmxRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/display_text",
-			bootAnimationLabelBack.Text);
-		bootAnimationLabelBack.Text = displayText;
-		bootAnimationLabelFore.Text = displayText;
-		backgroundColorRect.Color = Color.FromString(
-			(string)UtmxRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/background_color", ""),
-			 backgroundColorRect.Color);
-		// 初始化画面元素
+        var a = UtmxRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/enabled", (Variant)true).AsBool();
 
-		bootAnimationPlayer.Connect(AnimationPlayer.SignalName.AnimationFinished,
-			new Callable(this, nameof(OnIntroAnimationPlayerAnimationFinished)));
-	}
+        if (!UtmxRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/enabled", (Variant)true).AsBool())
+        {
+            CallDeferred("Finished");
+            return;
+        }
 
-	private void OnIntroAnimationPlayerAnimationFinished(StringName animName)
-	{
-		if (TargetAnim != animName) return;
-		if (! string.IsNullOrEmpty(animName))
-		{
-			Finished();
-		}
-	}
+        bootAnimationPlayer.Play(TargetAnim);
+        bootAnimationPlayer.SpeedScale = (float)UtmxRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/speed_scale",
+            bootAnimationPlayer.SpeedScale);
+        string displayText = (string)UtmxRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/display_text",
+            bootAnimationLabelBack.Text);
+        bootAnimationLabelBack.Text = displayText;
+        bootAnimationLabelFore.Text = displayText;
+        backgroundColorRect.Color = Color.FromString(
+            (string)UtmxRuntimeProjectConfig.Instance.TryGetDefault("boot_splash/background_color", ""),
+             backgroundColorRect.Color);
+        // 初始化画面元素
 
-	private void Finished()
-	{
-		SceneManager.Instance.ChangeSceneToFile(FirstScene);
-	}
+        bootAnimationPlayer.Connect(AnimationPlayer.SignalName.AnimationFinished,
+            new Callable(this, nameof(OnIntroAnimationPlayerAnimationFinished)));
+    }
+
+    private void OnIntroAnimationPlayerAnimationFinished(StringName animName)
+    {
+        if (TargetAnim != animName) return;
+        if (!string.IsNullOrEmpty(animName))
+        {
+            Finished();
+        }
+    }
+
+    private void Finished()
+    {
+        SceneManager.Instance.ChangeSceneToFile(FirstScene);
+    }
 }

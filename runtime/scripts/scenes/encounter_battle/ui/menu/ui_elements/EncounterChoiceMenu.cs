@@ -1,75 +1,73 @@
 using Godot;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 public partial class EncounterChoiceMenu : BaseEncounterMenu
 {
 
-	[Export]
-	public Godot.Collections.Array<EncounterChoiceMenuItem> MenuItems;
+    [Export]
+    public Godot.Collections.Array<EncounterChoiceMenuItem> MenuItems;
 
     public partial class ChoiceItem : GodotObject
-	{
-		public object ItemId;
-		public string ItemDisplayName;
-		public float MaxValue = 1;
-		public float Value = 1;
-		public ChoiceItem(object id)
-		{
-			ItemId = id;
-		}
+    {
+        public object ItemId;
+        public string ItemDisplayName;
+        public float MaxValue = 1;
+        public float Value = 1;
+        public ChoiceItem(object id)
+        {
+            ItemId = id;
+        }
 
-		public ChoiceItem SetValue(float v)
-		{
-			Value = v;
-			return this;
-		}
-		public ChoiceItem SetMaxValue(float v)
-		{
-			MaxValue = v;
-			return this;
-		}
-		public ChoiceItem SetDisplayName(string displayName)
-		{
-			ItemDisplayName = displayName;
-			return this;
-		}
-	}
+        public ChoiceItem SetValue(float v)
+        {
+            Value = v;
+            return this;
+        }
+        public ChoiceItem SetMaxValue(float v)
+        {
+            MaxValue = v;
+            return this;
+        }
+        public ChoiceItem SetDisplayName(string displayName)
+        {
+            ItemDisplayName = displayName;
+            return this;
+        }
+    }
 
-	protected int _currentChoice = 0; // 当前选择
-	private List<ChoiceItem> _items = [];
+    protected int _currentChoice = 0; // 当前选择
+    private List<ChoiceItem> _items = [];
 
-	~EncounterChoiceMenu()
-	{
-		ClearItem();
-	}
+    ~EncounterChoiceMenu()
+    {
+        ClearItem();
+    }
 
 
     public override void UIVisible() { }
-	public override void UIHidden() { }
+    public override void UIHidden() { }
 
-	public virtual void AddItem(object itemId, string displayName, float value = 1, float maxValue = 1)
-	{
+    public virtual void AddItem(object itemId, string displayName, float value = 1, float maxValue = 1)
+    {
         _items.Add(new ChoiceItem(itemId).SetDisplayName(displayName).SetValue(value).SetMaxValue(maxValue));
-	}
-	public virtual void RemoveItem(int i)
-	{
-		if (i > -1 && i < GetItemCount())
-		{
-			_items[i].Free();
+    }
+    public virtual void RemoveItem(int i)
+    {
+        if (i > -1 && i < GetItemCount())
+        {
+            _items[i].Free();
             _items.RemoveAt(i);
         }
-	}
+    }
 
-	public ChoiceItem GetItem(int index)
-	{
-		return _items[index];
-	}
+    public ChoiceItem GetItem(int index)
+    {
+        return _items[index];
+    }
 
     public object GetChoicedItemId()
-	{
-		return _items[_currentChoice].ItemId;
+    {
+        return _items[_currentChoice].ItemId;
     }
     public string GetChoicedDisplayName()
     {
@@ -77,25 +75,25 @@ public partial class EncounterChoiceMenu : BaseEncounterMenu
     }
 
     public void ClearItem()
-	{
+    {
         foreach (ChoiceItem item in _items)
-		{
-			item.Free();
-		}
+        {
+            item.Free();
+        }
         _items.Clear();
-	}
+    }
 
-	public int GetItemCount()
-	{
-		return _items.Count;
-	}
+    public int GetItemCount()
+    {
+        return _items.Count;
+    }
 
-	public virtual void SetChoice(int Choice)
-	{
-		if (Choice >= GetItemCount())
-		{
-			return;
-		}
-		_currentChoice = Choice;
-	}
+    public virtual void SetChoice(int Choice)
+    {
+        if (Choice >= GetItemCount())
+        {
+            return;
+        }
+        _currentChoice = Choice;
+    }
 }

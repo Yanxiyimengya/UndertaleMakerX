@@ -8,401 +8,402 @@ using System.Text;
 [GlobalClass]
 public partial class TextTyper : Godot.RichTextLabel
 {
-	[Export(PropertyHint.MultilineText)]
-	public string TyperText = "";
-	[Export]
-	public double TyperSpeed = 0.05;
-	[Export]
-	public int TyperSize
-	{
-		get => _typerSize;
-		set
-		{
-			_typerSize = value;
-			PushFontSize(value);
-		}
-	}
-	[Export]
-	public Color TyperColor
-	{
-		get => _typerColor;
-		set
-		{
-			_typerColor = value;
-			PushColor(value);
-		}
-	}
-	[Export]
-	public Font TyperFont
-	{
-		get => _typerFont;
-		set
-		{
-			_typerFont = value;
-			if (value != null)
-				PushFont(value, TyperSize);
-		}
-	}
-	[Export]
-	public bool Instant = false;
-	[Export]
-	public bool NoSkip = false;
+    [Export(PropertyHint.MultilineText)]
+    public string TyperText = "";
+    [Export]
+    public double TyperSpeed = 0.05;
+    [Export]
+    public int TyperSize
+    {
+        get => _typerSize;
+        set
+        {
+            _typerSize = value;
+            PushFontSize(value);
+        }
+    }
+    [Export]
+    public Color TyperColor
+    {
+        get => _typerColor;
+        set
+        {
+            _typerColor = value;
+            PushColor(value);
+        }
+    }
+    [Export]
+    public Font TyperFont
+    {
+        get => _typerFont;
+        set
+        {
+            _typerFont = value;
+            if (value != null)
+                PushFont(value, TyperSize);
+        }
+    }
+    [Export]
+    public bool Instant = false;
+    [Export]
+    public bool NoSkip = false;
 
-	[Export]
-	public AudioStream Voice = null;
+    [Export]
+    public AudioStream Voice = null;
 
-	private double _typerTimer = 0.0;
-	private int _typerSize = 16;
-	private double _typerWattingTimer = 0.0;
-	private int _typerProgress = 0;
-	private Font _typerFont = ThemeDB.FallbackFont;
-	private Color _typerColor = Colors.White;
-	private object _waitForKeyAction = null;
+    private double _typerTimer = 0.0;
+    private int _typerSize = 16;
+    private double _typerWattingTimer = 0.0;
+    private int _typerProgress = 0;
+    private Font _typerFont = ThemeDB.FallbackFont;
+    private Color _typerColor = Colors.White;
+    private object _waitForKeyAction = null;
 
-	public TextTyper()
-	{
-		BbcodeEnabled = true;
-		ScrollActive = false;
-	}
+    public TextTyper()
+    {
+        BbcodeEnabled = true;
+        ScrollActive = false;
+    }
 
-	public override void _Process(double delta)
-	{
-		if (!_CanRunning())
-		{
-			if (_waitForKeyAction != null)
-			{
-				if (_waitForKeyAction is string actString && Input.IsActionPressed(actString) ||
-					_waitForKeyAction is Key actKey && Input.IsKeyPressed(actKey)
-					)
-					_waitForKeyAction = null;
-			}
-		}
-		else
-		{
-			if (!NoSkip && !Instant && !Engine.IsEditorHint())
-			{
-				if (Input.IsActionJustPressed("cancel"))
-				{
-					Instant = true;
-				}
-			}
-			if (_typerWattingTimer > 0.0) _typerWattingTimer -= delta;
-			else
-			{
-				if (_typerTimer > 0.0)_typerTimer -= delta;
-				else
-				{
-					_typerTimer = TyperSpeed;
-					_ProcessText();
-				}
-			}
-		}
-	}
+    public override void _Process(double delta)
+    {
+        if (!_CanRunning())
+        {
+            if (_waitForKeyAction != null)
+            {
+                if (_waitForKeyAction is string actString && Input.IsActionPressed(actString) ||
+                    _waitForKeyAction is Key actKey && Input.IsKeyPressed(actKey)
+                    )
+                    _waitForKeyAction = null;
+            }
+        }
+        else
+        {
+            if (!NoSkip && !Instant && !Engine.IsEditorHint())
+            {
+                if (Input.IsActionJustPressed("cancel"))
+                {
+                    Instant = true;
+                }
+            }
+            if (_typerWattingTimer > 0.0) _typerWattingTimer -= delta;
+            else
+            {
+                if (_typerTimer > 0.0) _typerTimer -= delta;
+                else
+                {
+                    _typerTimer = TyperSpeed;
+                    _ProcessText();
+                }
+            }
+        }
+    }
 
-	private void _ProcessText()
-	{
-		while (_CanRunning())
-		{
-			char c = TyperText[_typerProgress];
-			_typerProgress += 1;
-			while (c == '[')
-			{
-				int locate = TyperText.FindN("]", _typerProgress);
-				if (locate != -1)
-				{
-					string content = TyperText.Substring(_typerProgress, locate - _typerProgress);
-					if (!string.IsNullOrEmpty(content))
-					{
-						if (_ParseBBCodeTag(content, out string cmdName, out Dictionary<string, string> directParameters))
-						{
-							if (!_ProcessCmd(cmdName, directParameters))
-							{
-								AppendText($"[{content}]");
-							}
-						}
-					}
-					_typerProgress = locate + 1;
-				}
-				if (!_CanRunning()) return;
-				c = TyperText[_typerProgress];
-				_typerProgress += 1;
-			}
+    private void _ProcessText()
+    {
+        while (_CanRunning())
+        {
+            char c = TyperText[_typerProgress];
+            _typerProgress += 1;
+            while (c == '[')
+            {
+                int locate = TyperText.FindN("]", _typerProgress);
+                if (locate != -1)
+                {
+                    string content = TyperText.Substring(_typerProgress, locate - _typerProgress);
+                    if (!string.IsNullOrEmpty(content))
+                    {
+                        if (_ParseBBCodeTag(content, out string cmdName, out Dictionary<string, string> directParameters))
+                        {
+                            if (!_ProcessCmd(cmdName, directParameters))
+                            {
+                                AppendText($"[{content}]");
+                            }
+                        }
+                    }
+                    _typerProgress = locate + 1;
+                }
+                if (!_CanRunning()) return;
+                c = TyperText[_typerProgress];
+                _typerProgress += 1;
+            }
 
-			while (c == '\r' || c == '\n')
-			{
-				c = TyperText[_typerProgress];
-				_typerProgress += 1;
-				Newline();
-			}
+            while (c == '\r' || c == '\n')
+            {
+                c = TyperText[_typerProgress];
+                _typerProgress += 1;
+                Newline();
+            }
 
-			if (_typerWattingTimer <= 0.0)
-			{
-				AddText(c.ToString());
-			}
+            if (_typerWattingTimer <= 0.0)
+            {
+                AddText(c.ToString());
+            }
             if (!Instant)
             {
                 if (Voice != null && !Engine.IsEditorHint())
                 {
-                    GlobalStreamPlayer.Instance.PlaySound(Voice);
+                    UtmxGlobalStreamPlayer.Instance.PlaySound(Voice);
                 }
                 break;
             }
         }
-	}
-	private bool _ParseBBCodeTag(string content, out string cmdName, out Dictionary<string, string> directParameters)
-	{
-		cmdName = string.Empty;
-		directParameters = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+    }
+    private bool _ParseBBCodeTag(string content, out string cmdName, out Dictionary<string, string> directParameters)
+    {
+        cmdName = string.Empty;
+        directParameters = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-		var tokens = new List<string>();
-		bool inQuotes = false;
-		StringBuilder currentToken = new StringBuilder();
+        var tokens = new List<string>();
+        bool inQuotes = false;
+        StringBuilder currentToken = new StringBuilder();
 
-		for (int i = 0; i < content.Length; i++)
-		{
-			char c = content[i];
-			if (c == '"')
-			{
-				inQuotes = !inQuotes;
-				continue;
-			}
-			if (c == ' ' && !inQuotes)
-			{
-				if (currentToken.Length > 0)
-				{
-					tokens.Add(currentToken.ToString());
-					currentToken.Clear();
-				}
-				continue;
-			}
-			currentToken.Append(c);
-		}
+        for (int i = 0; i < content.Length; i++)
+        {
+            char c = content[i];
+            if (c == '"')
+            {
+                inQuotes = !inQuotes;
+                continue;
+            }
+            if (c == ' ' && !inQuotes)
+            {
+                if (currentToken.Length > 0)
+                {
+                    tokens.Add(currentToken.ToString());
+                    currentToken.Clear();
+                }
+                continue;
+            }
+            currentToken.Append(c);
+        }
 
-		if (currentToken.Length > 0)
-		{
-			tokens.Add(currentToken.ToString());
-		}
+        if (currentToken.Length > 0)
+        {
+            tokens.Add(currentToken.ToString());
+        }
 
-		if (tokens.Count == 0) return false;
+        if (tokens.Count == 0) return false;
 
-		string firstToken = tokens[0];
+        string firstToken = tokens[0];
 
-		if (firstToken.Contains('='))
-		{
-			var parts = SplitToken(firstToken);
-			if (parts.Length == 2)
-			{
-				string paramName = parts[0].Trim();
-				string paramValue = parts[1].Trim();
-				cmdName = paramName;
-				directParameters["value"] = paramValue;
-				return true;
-			}
-		}
-		else
-		{
-			cmdName = firstToken;
-			for (int i = 1; i < tokens.Count; i++)
-			{
-				string token = tokens[i];
+        if (firstToken.Contains('='))
+        {
+            var parts = SplitToken(firstToken);
+            if (parts.Length == 2)
+            {
+                string paramName = parts[0].Trim();
+                string paramValue = parts[1].Trim();
+                cmdName = paramName;
+                directParameters["value"] = paramValue;
+                return true;
+            }
+        }
+        else
+        {
+            cmdName = firstToken;
+            for (int i = 1; i < tokens.Count; i++)
+            {
+                string token = tokens[i];
 
-				if (token.Contains('='))
-				{
-					var parts = SplitToken(token);
-					if (parts.Length >= 2)
-					{
-						string paramName = parts[0].Trim();
-						string paramValue = string.Join("=", parts.Skip(1)).Trim();
+                if (token.Contains('='))
+                {
+                    var parts = SplitToken(token);
+                    if (parts.Length >= 2)
+                    {
+                        string paramName = parts[0].Trim();
+                        string paramValue = string.Join("=", parts.Skip(1)).Trim();
 
-						directParameters[paramName] = paramValue;
-					}
-				}
-			}
-			return true;
-		}
-		return false;
-	}
+                        directParameters[paramName] = paramValue;
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 
-	private string[] SplitToken(string token)
-	{
-		int equalsIndex = token.IndexOf('=');
-		if (equalsIndex > 0)
-		{
-			return new string[]
-			{
-			token.Substring(0, equalsIndex),
-			token.Substring(equalsIndex + 1)
-			};
-		}
-		return new string[] { token };
-	}
+    private string[] SplitToken(string token)
+    {
+        int equalsIndex = token.IndexOf('=');
+        if (equalsIndex > 0)
+        {
+            return new string[]
+            {
+            token.Substring(0, equalsIndex),
+            token.Substring(equalsIndex + 1)
+            };
+        }
+        return new string[] { token };
+    }
 
-	private bool _ProcessCmd(string cmd, Dictionary<string, string> args)
-	{
-		switch (cmd)
-		{
-			case "waitfor":
-				if (args.TryGetValue("value", out string keyValue))
-				{
-					if (string.IsNullOrEmpty(keyValue)) break;
-					if (InputMap.HasAction(keyValue))
-					{
-						_waitForKeyAction = keyValue;
-					}
-					else
-					{
-						Key key = OS.FindKeycodeFromString(keyValue);
-						if (key != Key.None) {
-							_waitForKeyAction = key;
-						}
-					}
-				}
-				break;
+    private bool _ProcessCmd(string cmd, Dictionary<string, string> args)
+    {
+        switch (cmd)
+        {
+            case "waitfor":
+                if (args.TryGetValue("value", out string keyValue))
+                {
+                    if (string.IsNullOrEmpty(keyValue)) break;
+                    if (InputMap.HasAction(keyValue))
+                    {
+                        _waitForKeyAction = keyValue;
+                    }
+                    else
+                    {
+                        Key key = OS.FindKeycodeFromString(keyValue);
+                        if (key != Key.None)
+                        {
+                            _waitForKeyAction = key;
+                        }
+                    }
+                }
+                break;
 
-			case "wait":
-				if (args.TryGetValue("value", out string waitTime) && float.TryParse(waitTime, out float time))
-				{
-					_typerWattingTimer = time;
-				}
-				break;
+            case "wait":
+                if (args.TryGetValue("value", out string waitTime) && float.TryParse(waitTime, out float time))
+                {
+                    _typerWattingTimer = time;
+                }
+                break;
 
-			case "blend":
-				if (args.TryGetValue("value", out string blendColor))
-				{
-					Modulate = Color.FromString(blendColor, Modulate);
-				}
-				break;
+            case "blend":
+                if (args.TryGetValue("value", out string blendColor))
+                {
+                    Modulate = Color.FromString(blendColor, Modulate);
+                }
+                break;
 
-			case "speed":
-				if (args.TryGetValue("value", out string spdValue) && float.TryParse(spdValue, out float spd))
-				{
-					TyperSpeed = (float)spd;
-				}
-				break;
+            case "speed":
+                if (args.TryGetValue("value", out string spdValue) && float.TryParse(spdValue, out float spd))
+                {
+                    TyperSpeed = (float)spd;
+                }
+                break;
 
-			case "size":
-				if (args.TryGetValue("value", out string sizeValue) && float.TryParse(sizeValue, out float fntSize))
-				{
-					TyperSize = (int)fntSize;
-				}
-				break;
+            case "size":
+                if (args.TryGetValue("value", out string sizeValue) && float.TryParse(sizeValue, out float fntSize))
+                {
+                    TyperSize = (int)fntSize;
+                }
+                break;
 
-			case "font":
-				if (args.TryGetValue("value", out string fontPath) || args.Count > 0)
-				{
-					Font fnt = UtmxResourceLoader.Load(fontPath) as Font;
-					if (fnt != null)
-					{
-						PushFont(fnt);
-					}
-				}
-				break;
+            case "font":
+                if (args.TryGetValue("value", out string fontPath) || args.Count > 0)
+                {
+                    Font fnt = UtmxResourceLoader.Load(fontPath) as Font;
+                    if (fnt != null)
+                    {
+                        PushFont(fnt);
+                    }
+                }
+                break;
 
-			case "instant":
-				if (args.TryGetValue("value", out string instantValue) && bool.TryParse(instantValue, out bool _ins))
-				{
-					Instant = _ins;
-				}
-				else
-				{
-					Instant = !Instant;
-				}
-				break;
+            case "instant":
+                if (args.TryGetValue("value", out string instantValue) && bool.TryParse(instantValue, out bool _ins))
+                {
+                    Instant = _ins;
+                }
+                else
+                {
+                    Instant = !Instant;
+                }
+                break;
 
-			case "clear":
-				Clear();
-				TyperColor = TyperColor;
-				TyperFont = TyperFont;
-				TyperSize = TyperSize;
-				Instant = false;
-				break;
+            case "clear":
+                Clear();
+                TyperColor = TyperColor;
+                TyperFont = TyperFont;
+                TyperSize = TyperSize;
+                Instant = false;
+                break;
 
-			case "img":
-				if (args.TryGetValue("path", out string imgPath) && !string.IsNullOrEmpty(imgPath))
-				{
-					Texture2D texture = UtmxResourceLoader.Load(imgPath) as Texture2D;
-					if (texture != null)
-					{
-						int width = 0, height = 0;
-						Color col = Colors.White;
-						if (args.TryGetValue("width", out string argWidth))
-						{
-							int.TryParse(argWidth, out width);
-						}
-						if (args.TryGetValue("height", out string argHeight))
-						{
-							int.TryParse(argHeight, out height);
-						}
-						if (args.TryGetValue("color", out string argColor))
-						{
-							col = Color.FromString(argColor, col);
-						}
-						AddImage(texture, width, height, col);
-					}
-				}
-				break;
+            case "img":
+                if (args.TryGetValue("path", out string imgPath) && !string.IsNullOrEmpty(imgPath))
+                {
+                    Texture2D texture = UtmxResourceLoader.Load(imgPath) as Texture2D;
+                    if (texture != null)
+                    {
+                        int width = 0, height = 0;
+                        Color col = Colors.White;
+                        if (args.TryGetValue("width", out string argWidth))
+                        {
+                            int.TryParse(argWidth, out width);
+                        }
+                        if (args.TryGetValue("height", out string argHeight))
+                        {
+                            int.TryParse(argHeight, out height);
+                        }
+                        if (args.TryGetValue("color", out string argColor))
+                        {
+                            col = Color.FromString(argColor, col);
+                        }
+                        AddImage(texture, width, height, col);
+                    }
+                }
+                break;
 
 
-			// INLINE COMMANDS
-			case "voice":
-				if (Instant) return true;
-				if (args.TryGetValue("value", out string voicePath) && !string.IsNullOrEmpty(voicePath))
-				{
-					if (voicePath == "null")
-					{
-						Voice = null;
-						break;
-					}
-					AudioStream voiceStream = UtmxResourceLoader.Load(voicePath) as AudioStream;
-					if (voiceStream != null)
-					{
-						Voice = voiceStream;
-					}
-				}
-				break;
+            // INLINE COMMANDS
+            case "voice":
+                if (Instant) return true;
+                if (args.TryGetValue("value", out string voicePath) && !string.IsNullOrEmpty(voicePath))
+                {
+                    if (voicePath == "null")
+                    {
+                        Voice = null;
+                        break;
+                    }
+                    AudioStream voiceStream = UtmxResourceLoader.Load(voicePath) as AudioStream;
+                    if (voiceStream != null)
+                    {
+                        Voice = voiceStream;
+                    }
+                }
+                break;
 
-			case "sound":
-				if (Instant) return true;
-				if (args.TryGetValue("value", out string soundPath) && !string.IsNullOrEmpty(soundPath))
-				{
-					AudioStream voidStream = UtmxResourceLoader.Load(soundPath) as AudioStream;
-					if (voidStream != null)
-					{
-						GlobalStreamPlayer.Instance.PlaySound(voidStream);
-					}
-				}
-				break;
-			default:
-				return false;
-		}
-		return true;
-	}
+            case "sound":
+                if (Instant) return true;
+                if (args.TryGetValue("value", out string soundPath) && !string.IsNullOrEmpty(soundPath))
+                {
+                    AudioStream voidStream = UtmxResourceLoader.Load(soundPath) as AudioStream;
+                    if (voidStream != null)
+                    {
+                        UtmxGlobalStreamPlayer.Instance.PlaySound(voidStream);
+                    }
+                }
+                break;
+            default:
+                return false;
+        }
+        return true;
+    }
 
-	private bool _CanRunning()
-	{
-		return (_waitForKeyAction == null) && (!IsFinished());
-	}
-	public void Start(string text = null)
-	{
-		Clear();
-		ResetData();
-		if (text == null) return;
-		TyperText = text;
-	}
+    private bool _CanRunning()
+    {
+        return (_waitForKeyAction == null) && (!IsFinished());
+    }
+    public void Start(string text = null)
+    {
+        Clear();
+        ResetData();
+        if (text == null) return;
+        TyperText = text;
+    }
 
-	public new bool IsFinished()
-	{
-		return _typerProgress >= TyperText.Length;
-	}
+    public new bool IsFinished()
+    {
+        return _typerProgress >= TyperText.Length;
+    }
 
-	public void ResetData()
-	{
-		_typerProgress = 0;
-		_typerTimer = 0.0;
-		_typerWattingTimer = 0.0;
-		TyperFont = TyperFont;
-		TyperSize = TyperSize;
-		TyperColor = TyperColor;
-	}
+    public void ResetData()
+    {
+        _typerProgress = 0;
+        _typerTimer = 0.0;
+        _typerWattingTimer = 0.0;
+        TyperFont = TyperFont;
+        TyperSize = TyperSize;
+        TyperColor = TyperColor;
+    }
 
 }

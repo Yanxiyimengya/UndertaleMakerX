@@ -1,10 +1,8 @@
-using Godot;
-using System;
 using System.Collections.Generic;
-using System.IO;
+using Godot;
 
 [GlobalClass]
-public partial class GlobalStreamPlayer : Node
+public partial class UtmxGlobalStreamPlayer : Node
 {
 	[Export]
 	public AudioStream SelectSoundStream;
@@ -13,7 +11,7 @@ public partial class GlobalStreamPlayer : Node
 	[Export]
 	public AudioStream EscapedSoundStream;
 	[Export]
-	public AudioStream TextSoundStream;
+	public AudioStream TextTyperSoundStream;
 	[Export]
 	public AudioStream EnemyDialogueSoundStream;
 	[Export]
@@ -26,13 +24,13 @@ public partial class GlobalStreamPlayer : Node
 	[Export]
 	public AudioStream GameOverMusicSoundStream;
 
-	public static GlobalStreamPlayer Instance;
+	public static UtmxGlobalStreamPlayer Instance;
 	private AudioStreamPlayer soundPlayer = null;
 	private Dictionary<string, AudioStreamPlayer> bgmPlayers = new Dictionary<string, AudioStreamPlayer>();
 	private Queue<AudioStreamPlayer> bgmPlayersPool = new Queue<AudioStreamPlayer>();
 	private Dictionary<string, AudioStream> _streamLibrary = new Dictionary<string, AudioStream>();
 
-	public GlobalStreamPlayer()
+	public UtmxGlobalStreamPlayer()
 	{
 		soundPlayer = new AudioStreamPlayer();
 		soundPlayer.Stream = new AudioStreamPolyphonic();
@@ -41,11 +39,11 @@ public partial class GlobalStreamPlayer : Node
 	{
 		Instance = this;
 		AddChild(soundPlayer);
-		
+
 		AppendStreamToLibrary("SELECT", SelectSoundStream);
 		AppendStreamToLibrary("SQUEAK", SqueakSoundStream);
 		AppendStreamToLibrary("ESCAPED", EscapedSoundStream);
-		AppendStreamToLibrary("TEXT_TYPER_VOICE", TextSoundStream);
+		AppendStreamToLibrary("TEXT_TYPER_VOICE", TextTyperSoundStream);
 		AppendStreamToLibrary("ENEMY_VOICE", EnemyDialogueSoundStream);
 		AppendStreamToLibrary("HURT", HurtSoundStream);
 
@@ -64,6 +62,20 @@ public partial class GlobalStreamPlayer : Node
 		}
 		return -1;
 	}
+	public long PlaySoundFromPath(string path)
+	{
+		Resource res = UtmxResourceLoader.Load(path);
+		if (res != null && res is AudioStream stream)
+		{
+			if (!soundPlayer.Playing) soundPlayer.Play();
+			if (soundPlayer.GetStreamPlayback() is AudioStreamPlaybackPolyphonic playback)
+			{
+				return playback.PlayStream(stream);
+			}
+		}
+		return -1;
+	}
+
 
 	public void PlayBGM(string bgmId, AudioStream stream, bool loop = false)
 	{
@@ -150,7 +162,7 @@ public partial class GlobalStreamPlayer : Node
 		if (stream == null) return;
 		if (!_streamLibrary.TryGetValue(id, out _))
 		{
-			_streamLibrary[id] = stream; 
+			_streamLibrary[id] = stream;
 		}
 	}
 

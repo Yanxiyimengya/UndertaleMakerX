@@ -1,15 +1,18 @@
-import {Core} from 'UTMX';
+import {UTMX} from "UTMX";
 
-export default class MyClass {
-	invoke_count = 0;
-	
+
+export default class MyClass
+{
 	constructor()
 	{
-		Core.Print("JS构造函数被触发");
+		UTMX.debug.print("Hello, UndertaleMakerX");
 	}
-	
-	_enter_tree()
+
+	update(delta)
 	{
-		Core.Print("JS _EnterTree函数被触发");
+		if (UTMX.input.getAction("ui_accept"))
+		{
+			UTMX.audio.playSound("built-in-resources/sounds/sfx/snd_laz.wav");
+		}
 	}
 }
