@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
-[Tool]
 [GlobalClass]
 public partial class TextTyper : Godot.RichTextLabel
 {
@@ -102,10 +102,10 @@ public partial class TextTyper : Godot.RichTextLabel
 	private void _ProcessText()
 	{
 		while (_CanRunning())
-		{
+        {
 			char c = TyperText[_typerProgress];
-			_typerProgress += 1;
-			while (c == '[')
+            _typerProgress += 1;
+            while (c == '[')
 			{
 				int locate = TyperText.FindN("]", _typerProgress);
 				if (locate != -1)
@@ -115,27 +115,39 @@ public partial class TextTyper : Godot.RichTextLabel
 					{
 						if (_ParseBBCodeTag(content, out string cmdName, out Dictionary<string, string> directParameters))
 						{
-							if (!_ProcessCmd(cmdName, directParameters))
+							try
 							{
-								AppendText($"[{content}]");
+								if (!_ProcessCmd(cmdName, directParameters))
+								{
+									AppendText($"[{content}]");
+								}
+							}
+							catch (Exception e) {
+								UtmxLogger.Error(e.Message);
 							}
 						}
 					}
-					_typerProgress = locate + 1;
+                    _typerProgress = locate + 1;
+                }
+                if (!_CanRunning())
+                {
+					return;
 				}
-				if (!_CanRunning()) return;
-				c = TyperText[_typerProgress];
-				_typerProgress += 1;
-			}
+				else
+				{
+					c = TyperText[_typerProgress];
+					_typerProgress += 1;
+				}
+            }
 
 			while (c == '\r' || c == '\n')
 			{
-				c = TyperText[_typerProgress];
 				_typerProgress += 1;
+				c = TyperText[_typerProgress];
 				Newline();
 			}
 
-			if (_typerWattingTimer <= 0.0)
+            if (_typerWattingTimer <= 0.0)
 			{
 				AddText(c.ToString());
 			}
@@ -149,24 +161,24 @@ public partial class TextTyper : Godot.RichTextLabel
 			}
 		}
 	}
-	private bool _ParseBBCodeTag(string content, out string cmdName, out Dictionary<string, string> directParameters)
+	private bool _ParseBBCodeTag(string content, out string cmdName, out System.Collections.Generic.Dictionary<string, string> directParameters)
 	{
 		cmdName = string.Empty;
 		directParameters = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-		var tokens = new List<string>();
+		var tokens = new System.Collections.Generic.List<string>();
 		bool inQuotes = false;
 		StringBuilder currentToken = new StringBuilder();
 
 		for (int i = 0; i < content.Length; i++)
 		{
 			char c = content[i];
-			if (c == '"')
+			if (c == '\"' || c == '\'')
 			{
 				inQuotes = !inQuotes;
 				continue;
 			}
-			if (c == ' ' && !inQuotes)
+			if ((c == ' ' || c == ',') && !inQuotes)
 			{
 				if (currentToken.Length > 0)
 				{
@@ -182,11 +194,9 @@ public partial class TextTyper : Godot.RichTextLabel
 		{
 			tokens.Add(currentToken.ToString());
 		}
-
 		if (tokens.Count == 0) return false;
 
 		string firstToken = tokens[0];
-
 		if (firstToken.Contains('='))
 		{
 			var parts = SplitToken(firstToken);
@@ -205,7 +215,6 @@ public partial class TextTyper : Godot.RichTextLabel
 			for (int i = 1; i < tokens.Count; i++)
 			{
 				string token = tokens[i];
-
 				if (token.Contains('='))
 				{
 					var parts = SplitToken(token);
@@ -230,8 +239,8 @@ public partial class TextTyper : Godot.RichTextLabel
 		{
 			return new string[]
 			{
-			token.Substring(0, equalsIndex),
-			token.Substring(equalsIndex + 1)
+				token.Substring(0, equalsIndex),
+				token.Substring(equalsIndex + 1)
 			};
 		}
 		return new string[] { token };
@@ -242,6 +251,7 @@ public partial class TextTyper : Godot.RichTextLabel
 		switch (cmd)
 		{
 			case "waitfor":
+			{
 				if (args.TryGetValue("value", out string keyValue))
 				{
 					if (string.IsNullOrEmpty(keyValue)) break;
@@ -259,36 +269,46 @@ public partial class TextTyper : Godot.RichTextLabel
 					}
 				}
 				break;
+			}
 
 			case "wait":
+			{
 				if (args.TryGetValue("value", out string waitTime) && float.TryParse(waitTime, out float time))
 				{
 					_typerWattingTimer = time;
 				}
 				break;
+			}
 
 			case "blend":
+			{
 				if (args.TryGetValue("value", out string blendColor))
 				{
 					Modulate = Color.FromString(blendColor, Modulate);
 				}
 				break;
+			}
 
 			case "speed":
+			{
 				if (args.TryGetValue("value", out string spdValue) && float.TryParse(spdValue, out float spd))
 				{
 					TyperSpeed = (float)spd;
 				}
 				break;
+			}
 
 			case "size":
+			{
 				if (args.TryGetValue("value", out string sizeValue) && float.TryParse(sizeValue, out float fntSize))
 				{
 					TyperSize = (int)fntSize;
 				}
 				break;
+			}
 
 			case "font":
+			{
 				if (args.TryGetValue("value", out string fontPath) || args.Count > 0)
 				{
 					Font fnt = UtmxResourceLoader.Load(fontPath) as Font;
@@ -298,8 +318,10 @@ public partial class TextTyper : Godot.RichTextLabel
 					}
 				}
 				break;
+			}
 
 			case "instant":
+			{
 				if (args.TryGetValue("value", out string instantValue) && bool.TryParse(instantValue, out bool _ins))
 				{
 					Instant = _ins;
@@ -309,16 +331,20 @@ public partial class TextTyper : Godot.RichTextLabel
 					Instant = !Instant;
 				}
 				break;
+			}
 
 			case "clear":
+			{
 				Clear();
 				TyperColor = TyperColor;
 				TyperFont = TyperFont;
 				TyperSize = TyperSize;
 				Instant = false;
 				break;
+			}
 
 			case "img":
+			{
 				if (args.TryGetValue("path", out string imgPath) && !string.IsNullOrEmpty(imgPath))
 				{
 					Texture2D texture = UtmxResourceLoader.Load(imgPath) as Texture2D;
@@ -342,6 +368,7 @@ public partial class TextTyper : Godot.RichTextLabel
 					}
 				}
 				break;
+			}
 
 
 			// INLINE COMMANDS
@@ -362,18 +389,65 @@ public partial class TextTyper : Godot.RichTextLabel
 				}
 				break;
 
-			case "sound":
+			case "play_sound":
+			{
 				if (Instant) return true;
 				if (args.TryGetValue("value", out string soundPath) && !string.IsNullOrEmpty(soundPath))
 				{
-					AudioStream voidStream = UtmxResourceLoader.Load(soundPath) as AudioStream;
-					if (voidStream != null)
+					AudioStream soundStream = UtmxResourceLoader.Load(soundPath) as AudioStream;
+					if (soundStream != null)
 					{
-						UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(voidStream);
+						UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(soundStream);
 					}
 				}
 				break;
-			default:
+			}
+
+            case "play_bgm":
+			{
+				if (Instant) return true;
+				if (args.TryGetValue("path", out string bgmPath) && !string.IsNullOrEmpty(bgmPath))
+				{
+					args.TryGetValue("id", out string bgmId);
+					if (string.IsNullOrEmpty(bgmId)) bgmId = "_TYPER_BGM";
+
+					AudioStream bgmStream = UtmxResourceLoader.Load(bgmPath) as AudioStream;
+					if (bgmStream == null) break;
+
+					bool loop = false;
+					if (args.TryGetValue("loop", out string bgmLoopStr)) bool.TryParse(bgmLoopStr, out loop);
+
+					UtmxGlobalStreamPlayer.Instance.PlayBgmFormStream(bgmId, bgmStream, loop);
+
+					if (args.TryGetValue("pitch", out string bgmPitchStr) && float.TryParse(bgmPitchStr, out float bgmPitch))
+						UtmxGlobalStreamPlayer.Instance.SetBgmPitch(bgmId, bgmPitch);
+					if (args.TryGetValue("volume", out string bgmVolumeStr) && float.TryParse(bgmPitchStr, out float bgmVolume))
+						UtmxGlobalStreamPlayer.Instance.SetBgmVolume(bgmId, bgmVolume);
+				}
+				break;
+			}
+
+			case "stop_bgm":
+			{
+				if (Instant) return true;
+				string bgmId;
+				if (args.TryGetValue("value", out bgmId) && string.IsNullOrEmpty(bgmId))
+				{
+					UtmxGlobalStreamPlayer.Instance.StopBgm(bgmId);
+                }
+                else if (args.TryGetValue("id", out bgmId) && string.IsNullOrEmpty(bgmId))
+                {
+                    UtmxGlobalStreamPlayer.Instance.StopBgm(bgmId);
+                }
+				else
+				{
+                    UtmxGlobalStreamPlayer.Instance.StopBgm("_TYPER_BGM");
+                }
+				break;
+            }
+
+
+            default:
 				return false;
 		}
 		return true;

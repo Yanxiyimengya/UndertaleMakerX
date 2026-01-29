@@ -4,7 +4,8 @@
 		"author" : "烟汐忆梦_YM",
 		"max_fps" : 60,
 		"vsync" : true,
-		"main_scene" : "",
+		"main_scene" : "res://tests/TEST/TEST.tscn",
+		"main_script" : "main.js",
 	},
 	"window" : {
 		"width": 640,

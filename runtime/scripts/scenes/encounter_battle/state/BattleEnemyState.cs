@@ -15,9 +15,9 @@ public partial class BattleEnemyState : StateNode
     {
         turnEnded = false;
         turnTimer = 0.0;
-        _battleMainArena = GlobalBattleManager.Instance.GetMainArena();
-        turn = GlobalBattleManager.Instance.GetCurrentTurn();
-        BattlePlayerSoul soul = GlobalBattleManager.Instance.GetPlayerSoul();
+        _battleMainArena = UtmxBattleManager.Instance.GetMainArena();
+        turn = UtmxBattleManager.Instance.GetCurrentTurn();
+        BattlePlayerSoul soul = UtmxBattleManager.Instance.GetPlayerSoul();
         soul.Movable = true;
         if (turn == null)
         {
@@ -27,9 +27,9 @@ public partial class BattleEnemyState : StateNode
 
     public override void _ExitState()
     {
-        BattlePlayerSoul soul = GlobalBattleManager.Instance.GetPlayerSoul();
+        BattlePlayerSoul soul = UtmxBattleManager.Instance.GetPlayerSoul();
         turn.End();
-        GlobalBattleManager.Instance.NextTurn();
+        UtmxBattleManager.Instance.NextTurn();
         soul.Movable = true;
         soul.Visible = true;
     }
@@ -46,7 +46,7 @@ public partial class BattleEnemyState : StateNode
 
     private async void EndEnemyTurn()
     {
-        BattlePlayerSoul soul = GlobalBattleManager.Instance.GetPlayerSoul();
+        BattlePlayerSoul soul = UtmxBattleManager.Instance.GetPlayerSoul();
         soul.Visible = false;
         soul.Movable = false;
         turnEnded = true;

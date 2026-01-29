@@ -15,12 +15,16 @@ public partial class JavaScriptNode : Node
 		set
 		{
 			_javaScriptFile = value;
+			_instance = null;
 			if (!string.IsNullOrEmpty(_javaScriptFile))
 			{
-				JavaScriptClass javaScriptClass = ScriptBoot.Instance.GetBridge<JavaScriptBridge>().FromFile(_javaScriptFile);
+				JavaScriptClass javaScriptClass = JavaScriptBridge.FromFile(_javaScriptFile);
 				if (javaScriptClass != null)
 				{
 					_instance = javaScriptClass.New();
+					if (_instance.Has(EngineProperties.JAVASCRIPT_CREATE_CALLBACK))
+						_instance.Invoke(EngineProperties.JAVASCRIPT_CREATE_CALLBACK, []);
+					_javaScriptCanUpdate = _instance.Has(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK);
 				}
 			}
 		}
@@ -28,6 +32,7 @@ public partial class JavaScriptNode : Node
 
 	private JavaScriptObjectInstance _instance;
 	public string _javaScriptFile;
+	public bool _javaScriptCanUpdate = false;
 
 	public override Variant _Get(StringName property)
 	{
@@ -41,18 +46,19 @@ public partial class JavaScriptNode : Node
 	}
 	public override void _Ready()
 	{
-		base._Ready();
-		_instance?.Invoke("start", []);
+		if (_instance.Has(EngineProperties.JAVASCRIPT_ACTIVE_CALLBACK))
+			_instance.Invoke(EngineProperties.JAVASCRIPT_ACTIVE_CALLBACK, []);
 	}
 
 	~JavaScriptNode()
 	{
-		_instance?.Invoke("destroy", []);
+		if (_instance.Has(EngineProperties.JAVASCRIPT_DESTROY_CALLBACK))
+			_instance.Invoke(EngineProperties.JAVASCRIPT_DESTROY_CALLBACK, []);
 	}
 
 	public override void _Process(double delta)
 	{
-		base._Process(delta);
-		_instance?.Invoke("update", [delta]);
+		if (_javaScriptCanUpdate) 
+			_instance.Invoke(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK, [delta]);
 	}
 }

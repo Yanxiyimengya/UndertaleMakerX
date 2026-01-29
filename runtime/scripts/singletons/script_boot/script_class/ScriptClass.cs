@@ -5,6 +5,6 @@ using Jint.Native;
 // 任何附带脚本的对象都必须继承于他
 public abstract partial class ScriptClass : RefCounted
 {
-    public abstract ScriptObjectInstance New();
+    public abstract ScriptObjectInstance New(params object[] arguments);
 }
 

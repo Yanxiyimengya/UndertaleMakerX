@@ -76,7 +76,7 @@ public partial class BattlePlayerMercyMenuState : StateNode
                 string choiced = (string)MercyChoiceMenu.GetChoicedItemId();
                 if (choiced == "SPARE")
                 {
-                    foreach (BaseEnemy enemy in GlobalBattleManager.Instance.EnemysList)
+                    foreach (BaseEnemy enemy in UtmxBattleManager.Instance.EnemysList)
                     {
                         if (enemy.AllowSpare && enemy.CanSpare)
                         {
@@ -97,6 +97,7 @@ public partial class BattlePlayerMercyMenuState : StateNode
         _freed = false;
         await MenuManager.OpenMenu("EncounterMercyMenu");
         await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+        MercyChoice = Math.Clamp(MercyChoice, 0, MercyChoiceMenu.GetItemCount() - 1);
         MercyChoiceMenu.SetChoice(MercyChoice);
     }
     public override void _ExitState()
@@ -105,19 +106,19 @@ public partial class BattlePlayerMercyMenuState : StateNode
 
     private async void _OpenTextMenu()
     {
-        DialogueQueueManager.Instance.AppendDialogue(_freeText);
+        UtmxDialogueQueueManager.Instance.AppendDialogue(_freeText);
         await MenuManager.OpenMenu("EncounterTextMenu");
     }
 
     private void _Free()
     {
         _freed = true;
-        GlobalBattleManager.Instance.Endded = true;
-        _playerSoul = GlobalBattleManager.Instance.GetPlayerSoul();
+        UtmxBattleManager.Instance.Endded = true;
+        _playerSoul = UtmxBattleManager.Instance.GetPlayerSoul();
         _playerSoul.Freed = true;
         _playerSoul.Visible = true;
         _OpenTextMenu();
-        TextMenu.ShowEncounterText(GlobalBattleManager.Instance.FreeText);
+        TextMenu.ShowEncounterText(UtmxBattleManager.Instance.FreeText);
         BattleButtonManager.ResetAllBattleButton();
         UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("ESCAPED"));
     }

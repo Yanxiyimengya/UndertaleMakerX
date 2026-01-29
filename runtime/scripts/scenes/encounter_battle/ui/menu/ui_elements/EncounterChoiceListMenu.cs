@@ -23,7 +23,7 @@ public partial class EncounterChoiceListMenu : EncounterChoiceMenu
 
     public async override void SetChoice(int choice)
     {
-        if (choice >= GetItemCount())
+        if (choice < 0 || choice >= GetItemCount())
         {
             return;
         }
@@ -58,7 +58,7 @@ public partial class EncounterChoiceListMenu : EncounterChoiceMenu
         if (soulSelectIndex < 3)
         {
             var menuItem = MenuItems[soulSelectIndex];
-            GlobalBattleManager.Instance.GetPlayerSoul().GlobalTransform = menuItem.GetSoulTransform();
+            UtmxBattleManager.Instance.GetPlayerSoul().GlobalTransform = menuItem.GetSoulTransform();
         }
     }
 }

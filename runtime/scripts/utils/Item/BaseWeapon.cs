@@ -10,7 +10,7 @@ public partial class BaseWeapon : BaseItem
 
     public virtual float _CalculateDamage(float value, BaseEnemy targetEnemy)
     {
-        float atk = PlayerDataManager.Instance.PlayerAttack + Attack;
+        float atk = UtmxPlayerDataManager.PlayerAttack + Attack;
         float def = targetEnemy.Defence;
         float damage = atk - def + GD.Randf() * 2;
         if (value <= 12)

@@ -18,9 +18,13 @@ public class JavaScriptBridge : ScriptBridge
 		new Jint.Engine((options) =>
 		{
 			options.EnableModules(new JavaScriptModuleResolver());
-		});
+			options.AllowClr();
+            options.Interop.AllowGetType = true;
+            options.Interop.AllowWrite = true;
 
-	public JavaScriptBridge()
+        });
+
+	static JavaScriptBridge()
 	{
 		MainEngine.Modules.Add(JavaScriptCoreInterface.ModuleName, (builder) =>
 		{
@@ -55,7 +59,7 @@ public class JavaScriptBridge : ScriptBridge
 		}
 	}
 
-	public JavaScriptClass FromFile(string path)
+	public static JavaScriptClass FromFile(string path)
 	{
 		if (Godot.FileAccess.FileExists(path))
 		{
@@ -68,7 +72,7 @@ public class JavaScriptBridge : ScriptBridge
 		return null;
 	}
 
-	public override JavaScriptClass ExecuteString(string code)
+	public static JavaScriptClass ExecuteString(string code)
 	{
 		string moduleId = code.Sha256Text();
 		MainEngine.Modules.Add(moduleId, code);
@@ -80,7 +84,7 @@ public class JavaScriptBridge : ScriptBridge
 		return null;
 	}
 
-	private JavaScriptClass _ConstructScriptObject(ObjectInstance jsNamespace)
+	private static JavaScriptClass _ConstructScriptObject(ObjectInstance jsNamespace)
 	{
 		JsValue defaultValue = jsNamespace.Get("default");
 		if (defaultValue.Type == Jint.Runtime.Types.Object)
@@ -93,7 +97,7 @@ public class JavaScriptBridge : ScriptBridge
 		return null;
 	}
 
-	private ObjectInstance ImportModule(string id)
+	private static ObjectInstance ImportModule(string id)
 	{
 		try
 		{
@@ -114,16 +118,6 @@ public class JavaScriptBridge : ScriptBridge
 			}
 			return null;
 		}
-	}
-
-	public override object GetValue(string value)
-	{
-		return MainEngine.Evaluate(value).ToObject();
-	}
-
-	public override void SetValue(string valueName, object value)
-	{
-		MainEngine.SetValue(valueName, value);
 	}
 
 	public static object ConvertToObject(JsValue jsValue)

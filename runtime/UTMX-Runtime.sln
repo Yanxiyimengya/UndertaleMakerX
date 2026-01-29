@@ -1,6 +1,6 @@
 ﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UTMX-Runtime", "UTMX-Runtime.csproj", "{22770A39-59AC-4ED8-8426-36151AEA71CB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UTMX-Runtime", "UTMX-Runtime.csproj", "{B05E44BB-8C0D-453F-B188-2BBE26D07592}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,11 +9,11 @@ Global
 	ExportRelease|Any CPU = ExportRelease|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{22770A39-59AC-4ED8-8426-36151AEA71CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{22770A39-59AC-4ED8-8426-36151AEA71CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{22770A39-59AC-4ED8-8426-36151AEA71CB}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
-		{22770A39-59AC-4ED8-8426-36151AEA71CB}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
-		{22770A39-59AC-4ED8-8426-36151AEA71CB}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
-		{22770A39-59AC-4ED8-8426-36151AEA71CB}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+		{B05E44BB-8C0D-453F-B188-2BBE26D07592}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B05E44BB-8C0D-453F-B188-2BBE26D07592}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B05E44BB-8C0D-453F-B188-2BBE26D07592}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{B05E44BB-8C0D-453F-B188-2BBE26D07592}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{B05E44BB-8C0D-453F-B188-2BBE26D07592}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{B05E44BB-8C0D-453F-B188-2BBE26D07592}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
 	EndGlobalSection
 EndGlobal

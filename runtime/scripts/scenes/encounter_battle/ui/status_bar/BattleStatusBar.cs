@@ -37,10 +37,10 @@ public partial class BattleStatusBar : Control
 
     public void UpdatePlayerData()
     {
-        _playerName = PlayerDataManager.Instance.PlayerName;
-        _playerLv = PlayerDataManager.Instance.PlayerLv;
-        _playerMaxHp = PlayerDataManager.Instance.PlayerMaxHp;
-        _playerHp = PlayerDataManager.Instance.PlayerHp;
+        _playerName = UtmxPlayerDataManager.PlayerName;
+        _playerLv = UtmxPlayerDataManager.PlayerLv;
+        _playerMaxHp = UtmxPlayerDataManager.PlayerMaxHp;
+        _playerHp = UtmxPlayerDataManager.PlayerHp;
         updateNameLvLabel();
         updateHp();
     }

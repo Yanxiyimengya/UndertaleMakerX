@@ -15,11 +15,11 @@ public partial class BattleEndState : StateNode
     {
         await MenuManager.OpenMenu("EncounterTextMenu");
         BattleButtonManager.ResetAllBattleButton();
-        TextMenu.ShowEncounterText(GlobalBattleManager.Instance.EndText);
+        TextMenu.ShowEncounterText(UtmxBattleManager.Instance.EndText);
     }
 
     public override void _ExitState()
     {
-        GlobalBattleManager.Instance.GetPlayerSoul().Visible = true;
+        UtmxBattleManager.Instance.GetPlayerSoul().Visible = true;
     }
 }

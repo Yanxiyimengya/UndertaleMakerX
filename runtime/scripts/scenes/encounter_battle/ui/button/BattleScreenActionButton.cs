@@ -16,6 +16,6 @@ public partial class BattleScreenActionButton : BattleScreenButton
 
     private void _OpenTargetMenu()
     {
-        GlobalBattleManager.Instance.SwitchBattleState(TargetaState);
+        UtmxBattleManager.Instance.SwitchBattleState(TargetaState);
     }
 }

@@ -12,14 +12,17 @@ public partial class BattlePlayerChoiceActionState : StateNode
     [Export]
     BattleMenuManager MenuManager;
 
-    private Vector2 _prevInputVector = Vector2.Zero;
     public override void _Process(double delta)
     {
-        Vector2 inputVector = Input.GetVector("left", "right", "up", "down");
-        if (inputVector != _prevInputVector)
+        if (Input.IsActionJustPressed("left") || Input.IsActionJustPressed("right"))
         {
-            _prevInputVector = inputVector;
-            if (BattleButtonManager.MoveButton(inputVector))
+            if (BattleButtonManager.MoveButton(new Vector2(Input.GetAxis("left", "right"), 0F)))
+            {
+                UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
+            }
+        } else if (Input.IsActionJustPressed("up") || Input.IsActionJustPressed("down"))
+        {
+            if (BattleButtonManager.MoveButton(new Vector2(0F, Input.GetAxis("up", "down"))))
             {
                 UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
             }
@@ -31,7 +34,7 @@ public partial class BattlePlayerChoiceActionState : StateNode
             UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SELECT"));
         }
 
-        BattlePlayerSoul soul = GlobalBattleManager.Instance.GetPlayerSoul();
+        BattlePlayerSoul soul = UtmxBattleManager.Instance.GetPlayerSoul();
         if (BattleButtonManager.GetBattleButton(BattleButtonManager.GetCurrentHoverdBattleButtonId(),
             out BattleScreenButton btn))
         {
@@ -41,8 +44,8 @@ public partial class BattlePlayerChoiceActionState : StateNode
     public override async void _EnterState()
     {
         await MenuManager.OpenMenu("EncounterTextMenu");
-        TextMenu.ShowEncounterText(GlobalBattleManager.Instance.EncounterText);
-        BattlePlayerSoul soul = GlobalBattleManager.Instance.GetPlayerSoul();
+        TextMenu.ShowEncounterText(UtmxBattleManager.Instance.EncounterText);
+        BattlePlayerSoul soul = UtmxBattleManager.Instance.GetPlayerSoul();
         soul.Movable = false;
         soul.Show();
 

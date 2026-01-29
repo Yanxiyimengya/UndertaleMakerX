@@ -30,9 +30,9 @@ public partial class BattlePlayerItemMenuState : StateNode
         else if (Input.IsActionJustPressed("down"))
         {
             ItemChoice += 1;
-            if (ItemChoice >= PlayerDataManager.Instance.GetItemCount())
+            if (ItemChoice >= UtmxPlayerDataManager.GetItemCount())
             {
-                ItemChoice = PlayerDataManager.Instance.GetItemCount() - 1;
+                ItemChoice = UtmxPlayerDataManager.GetItemCount() - 1;
             }
             else
             {
@@ -47,7 +47,7 @@ public partial class BattlePlayerItemMenuState : StateNode
         else if (Input.IsActionJustPressed("confirm"))
         {
             int itemChoiced = (int)ItemChoiceMenu.GetChoicedItemId();
-            PlayerDataManager.Instance.UseItem(itemChoiced);
+            UtmxPlayerDataManager.UseItem(itemChoiced);
             SwitchState("BattlePlayerDialogState");
         }
     }
@@ -55,6 +55,7 @@ public partial class BattlePlayerItemMenuState : StateNode
     public override async void _EnterState()
     {
         await MenuManager.OpenMenu("EncounterItemMenu");
+        ItemChoice = Math.Clamp(ItemChoice, 0, ItemChoiceMenu.GetItemCount() - 1);
         ItemChoiceMenu.SetChoice(ItemChoice);
     }
 
@@ -64,6 +65,6 @@ public partial class BattlePlayerItemMenuState : StateNode
 
     public override bool _CanEnterState()
     {
-        return PlayerDataManager.Instance.GetItemCount() > 0;
+        return UtmxPlayerDataManager.GetItemCount() > 0;
     }
 }

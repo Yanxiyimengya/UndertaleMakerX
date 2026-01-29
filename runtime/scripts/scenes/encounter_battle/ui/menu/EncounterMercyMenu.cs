@@ -8,7 +8,7 @@ public partial class EncounterMercyMenu : EncounterChoiceListMenu
         ClearItem();
         bool allowSpare = false;
         bool canSpare = false;
-        foreach (BaseEnemy enemy in GlobalBattleManager.Instance.EnemysList)
+        foreach (BaseEnemy enemy in UtmxBattleManager.Instance.EnemysList)
         {
             if (enemy.AllowSpare)
             {
@@ -18,7 +18,7 @@ public partial class EncounterMercyMenu : EncounterChoiceListMenu
         }
         if (allowSpare)
             AddItem("SPARE", $"{(canSpare ? "[blend=yellow]" : "")}Spare");
-        if (GlobalBattleManager.Instance.CanFree)
+        if (UtmxBattleManager.Instance.CanFree)
             AddItem("FREE", "Free");
         ScrollBarSetVisible(false);
     }

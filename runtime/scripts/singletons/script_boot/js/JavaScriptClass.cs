@@ -1,3 +1,4 @@
+using Godot;
 using Jint;
 using Jint.Native;
 using Jint.Native.Object;
@@ -7,20 +8,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Godot.HttpRequest;
 
 public partial class JavaScriptClass : ScriptClass
 {
     public ObjectInstance NamespaceObject;
     public JsValue JsConstructor;
 
-    public override JavaScriptObjectInstance New()
+    public override JavaScriptObjectInstance New(params object[] arguments)
     {
         try
         {
-            JsValue jsInstance = JavaScriptBridge.MainEngine.Construct(JsConstructor);
+            JsValue[] jsArgs = arguments.Select(arg => JsValue.FromObject(JavaScriptBridge.MainEngine, arg)).ToArray();
+            JsValue jsInstance = JavaScriptBridge.MainEngine.Construct(JsConstructor, jsArgs);
             if (jsInstance.Type == Jint.Runtime.Types.Object)
             {
-                return new JavaScriptObjectInstance((JsObject)jsInstance);
+                ObjectInstance jsObject = jsInstance.AsObject();
+                return new JavaScriptObjectInstance(jsObject);
             }
         }
         catch (JavaScriptException jsEx)

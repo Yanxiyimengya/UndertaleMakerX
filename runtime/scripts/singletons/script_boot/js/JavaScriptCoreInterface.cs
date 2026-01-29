@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-// JS全局主程序包
+// JS全局程序包模块
 public class JavaScriptCoreInterface
 {
     public static string ModuleName = "__UTMX";
@@ -14,6 +14,8 @@ public class JavaScriptCoreInterface
             { "__logger" , typeof(UtmxLogger)},
             { "__audio_player" , typeof(UtmxGlobalStreamPlayer) },
             { "__input" , typeof(UtmxInputManager)},
+
+            { "__UtmxItem" , typeof(JavaScriptProxyItem)},
         };
     }
     public static Dictionary<string, string> _GetInterfaceExportScripts()

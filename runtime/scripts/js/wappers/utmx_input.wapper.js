@@ -225,6 +225,31 @@ export class UtmxInput
 		SECTION: 167,       // §
 	});
 
+	static addAction(action)
+	{
+		return __input.AddAction(action);
+	}
+
+	static hasAction(action)
+	{
+		return __input.HasAction(action);
+	}
+
+	static eraseAction(action)
+	{
+		return __input.EraseAction(action);
+	}
+	
+	static actionAddKeyButton(action, key)
+	{
+		return __input.ActionAddKeyButton(action, key);
+	}
+	
+	static actionAddMouseButton(action, mouseButton)
+	{
+		return __input.ActionAddMouseButton(action, mouseButton);
+	}
+
 	static isActionHeld(action)
 	{
 		return __input.IsActionPressed(action);

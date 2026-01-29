@@ -6,17 +6,16 @@ using System;
 public partial class BaseEnemy : Node2D
 {
     public string DisplayName = "ENEMY";
+    public int EnemySlot = 0;
 
     public float Attack = 0.0F;
     public float Defence = 0.0F;
     public float Hp = 100.0F;
     public float MaxHp = 100.0F;
-    public int EnemyIndex = 0;
     public bool AllowSpare = true;
     public bool CanSpare = false;
     public string MissText = "MISS";
     public Vector2 CenterPosition = new Vector2(0.0F, -80.0F);
-
     public Array<string> Actions = ["CHECK"];
 
     public override void _Ready()
@@ -30,20 +29,15 @@ public partial class BaseEnemy : Node2D
 
     public virtual void HandleAction(string action)
     {
-        AppendDialogue("你看我干什么啊啊啊");
-        AppendDialogue("我要揍你！！！");
     }
     public virtual void HandleAttack(bool missed)
     {
-        AppendDialogue("你打我干什么啊啊啊");
-        AppendDialogue("我要揍你！！！");
     }
 
     public void AppendDialogue(string dialogueMessage, Vector2? offset = null, bool hideSpike = false, int dir = 2)
     {
         if (offset == null)
             offset = new Vector2(30, 0);
-        DialogueQueueManager.Instance.AppendBattleEnemyDialogue(EnemyIndex, dialogueMessage, (Vector2)offset, hideSpike);
+        UtmxDialogueQueueManager.Instance.AppendBattleEnemyDialogue(EnemySlot, dialogueMessage, (Vector2)offset, hideSpike);
     }
-
 }

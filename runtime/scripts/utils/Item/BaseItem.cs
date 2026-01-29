@@ -9,15 +9,20 @@ public partial class BaseItem : Resource
     [Export]
     public int Slot { get; set; }
 
-    public virtual void OnUseSelected()
+    public virtual void _OnUseSelected()
     {
     }
 
-    public virtual void OnDropSelected()
+    public virtual void _OnDropSelected()
     {
     }
 
-    public virtual void OnInfoSelected()
+    public virtual void _OnInfoSelected()
     {
+    }
+
+    public void RemoveSelf()
+    {
+        UtmxPlayerDataManager.RemoveItem(Slot);
     }
 }

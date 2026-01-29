@@ -1,18 +1,21 @@
 using Godot;
+using Godot.Collections;
 [GlobalClass]
-public partial class EncounterConfiguration : Resource
+public partial class BaseEncounterConfiguration : Resource
 {
     [Export(PropertyHint.MultilineText)]
-    public string EncounterText = "* UndertaleMaker[color=aqua]X[/color]!";
+    public string EncounterText = "";
     [Export(PropertyHint.MultilineText)]
     public string FreeText = "";
     [Export(PropertyHint.MultilineText)]
-    public string DeathText = "* 还不能放弃...[waitfor=confirm][clear]保持你的决心吧";
+    public string DeathText = "";
     [Export(PropertyHint.MultilineText)]
     public string EndText = "";
 
     [Export]
     public string EncounterBattleFirstState = "";
+    [Export]
+    public Array<string> EnemysList = new() {"BaseEnemy"};
     [Export]
     public bool CanFree = true;
 }

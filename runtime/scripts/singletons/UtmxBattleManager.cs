@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class GlobalBattleManager : Node
+public partial class UtmxBattleManager : Node
 {
     public enum BattleCollisionLayers
     {
@@ -26,25 +26,12 @@ public partial class GlobalBattleManager : Node
     public BattlePlayerSoul Soul => _playerSoul;
     public BattleMainArenaExpand MainArena => _mainArena;
 
-    public EncounterConfiguration Config
-    {
-        get => _encounterConfig;
-        set
-        {
-            _encounterConfig = value;
-            _canFree = _encounterConfig.CanFree;
-            _encounterText = _encounterConfig.EncounterText;
-            _freeText = _encounterConfig.FreeText;
-            _deathText = _encounterConfig.DeathText;
-            _endText = _encounterConfig.EndText;
-        }
-    }
-
     private bool _isInBattle;
-    public EncounterConfiguration _encounterConfig = new EncounterConfiguration();
+    public BaseEncounterConfiguration _encounterConfig = new();
     private StateMachine _battleStateMachine;
     private BattlePlayerSoul _playerSoul;
     private BattleMainArenaExpand _mainArena;
+    private string _firstState = "";
     private string _encounterText = "";
     private string _freeText = "";
     private string _deathText = "";
@@ -53,24 +40,39 @@ public partial class GlobalBattleManager : Node
     private bool _endded = false;
     private int _turnCounter = 0;
     private BattleTurn _currentTurn = new BattleTurn();
-    private List<BaseEnemy> _enemysList = [
-        new BaseEnemy()
-    ];
+    private List<BaseEnemy> _enemysList = [];
     private List<BattleTurn> _turnList = [
     ];
     private Vector2 _playerSoulPosition = Vector2.Zero;
     private Color _playerSoulColor = Colors.Red;
 
-    private static readonly Lazy<GlobalBattleManager> _instance =
-        new Lazy<GlobalBattleManager>(() => new GlobalBattleManager());
-    private GlobalBattleManager()
+    private static readonly Lazy<UtmxBattleManager> _instance =
+        new Lazy<UtmxBattleManager>(() => new UtmxBattleManager());
+    private UtmxBattleManager()
     {
-        Config = new EncounterConfiguration();
     }
-    public static GlobalBattleManager Instance => _instance.Value;
+    public static UtmxBattleManager Instance => _instance.Value;
 
-    public void EncounterBattleStart()
+    public void EncounterBattleStart(BaseEncounterConfiguration configuration)
     {
+        UtmxDialogueQueueManager.Instance.ClearDialogue();
+
+        _encounterText = configuration.EncounterText;
+        _freeText = configuration.FreeText;
+        _deathText = configuration.DeathText;
+        _endText = configuration.EndText;
+        _canFree = configuration.CanFree;
+        _firstState = configuration.EncounterBattleFirstState;
+
+        foreach (BaseEnemy enemy in _enemysList) enemy.QueueFree();
+        _enemysList.Clear();
+        foreach (string enemyId in configuration.EnemysList)
+        {
+            if (GameRegisterDB.TryGetEnemy(enemyId, out BaseEnemy enemy))
+            {
+                _enemysList.Add(enemy);
+            }
+        }
         UtmxSceneManager.Instance.ChangeSceneToFile(UtmxSceneManager.Instance.EncounterBattleScenePath);
     }
     public void EncounterBattleEnd()
@@ -117,12 +119,17 @@ public partial class GlobalBattleManager : Node
     {
         _battleStateMachine.SwitchToState(stateId);
     }
+    public string GetFirstBattleState()
+    {
+        return _firstState;
+    }
+
 
     public void NextTurn()
     {
-        if (GlobalBattleManager.Instance.TurnList.Count > _turnCounter)
+        if (UtmxBattleManager.Instance.TurnList.Count > _turnCounter)
         {
-            _currentTurn = GlobalBattleManager.Instance.TurnList[_turnCounter];
+            _currentTurn = UtmxBattleManager.Instance.TurnList[_turnCounter];
             _turnCounter += 1;
         }
     }

@@ -90,12 +90,11 @@ public partial class UtmxGlobalStreamPlayer : Node
 
 	public void PlayBgmFormStream(string bgmId, AudioStream stream, bool loop = false)
 	{
+		if (string.IsNullOrEmpty(bgmId)) return;
 		AudioStreamPlayer player;
-		if (bgmPlayers.ContainsKey(bgmId))
+		if (bgmPlayers.TryGetValue(bgmId, out player))
 		{
-			player = bgmPlayers[bgmId];
 			player.Stop();
-
 			if (player.HasMeta("volume_tween"))
 			{
 				Tween _tween = (Tween)player.GetMeta("volume_tween");
@@ -141,40 +140,26 @@ public partial class UtmxGlobalStreamPlayer : Node
 
 	public void PlayBgmFromPath(string bgmId, string path, bool loop = false)
 	{
+		if (string.IsNullOrEmpty(bgmId)) return;
 		Resource res = UtmxResourceLoader.Load(path);
 		if (res != null && res is AudioStream stream)
 		{
 			PlayBgmFormStream(bgmId, stream, loop);
 		}
 	}
-
-	public float StopBgm(string id)
+	public void StopBgm(string bgmId)
 	{
-		if (bgmPlayers.TryGetValue(id, out AudioStreamPlayer player))
+		if (string.IsNullOrEmpty(bgmId)) return;
+		if (bgmPlayers.TryGetValue(bgmId, out AudioStreamPlayer player))
 		{
-			return player.PitchScale;
-		}
-		throw new ArgumentException($"Bgm player with id '{id}' not found.");
-	}
-
-	public void SetBgmPaused(string id, bool paused)
-	{
-		if (bgmPlayers.TryGetValue(id, out AudioStreamPlayer player))
-		{
-			player.StreamPaused = paused;
+			bgmPlayers.Remove(bgmId);
+			bgmPlayersPool.Enqueue(player);
+			player.ProcessMode = ProcessModeEnum.Disabled;
+			player.Stop();
 			return;
 		}
-		throw new ArgumentException($"Bgm player with id '{id}' not found.");
+		throw new ArgumentException($"Bgm player with id '{bgmId}' not found.");
 	}
-	public bool GetBgmPaused(string id)
-	{
-		if (bgmPlayers.TryGetValue(id, out AudioStreamPlayer player))
-		{
-			return player.StreamPaused;
-		}
-		throw new ArgumentException($"Bgm player with id '{id}' not found.");
-	}
-
 	public void StopAll()
 	{
 		soundPlayer.Stop();
@@ -183,18 +168,37 @@ public partial class UtmxGlobalStreamPlayer : Node
 			StopBgm(playerId);
 		}
 	}
-	public float GetBgmVolume(string id)
+
+	public void SetBgmPaused(string bgmId, bool paused)
 	{
-		if (bgmPlayers.TryGetValue(id, out AudioStreamPlayer player))
+		if (bgmPlayers.TryGetValue(bgmId, out AudioStreamPlayer player))
+		{
+			player.StreamPaused = paused;
+			return;
+		}
+		throw new ArgumentException($"Bgm player with id '{bgmId}' not found.");
+	}
+	public bool GetBgmPaused(string bgmId)
+	{
+		if (bgmPlayers.TryGetValue(bgmId, out AudioStreamPlayer player))
+		{
+			return player.StreamPaused;
+		}
+		throw new ArgumentException($"Bgm player with id '{bgmId}' not found.");
+	}
+
+	public float GetBgmVolume(string bgmId)
+	{
+		if (bgmPlayers.TryGetValue(bgmId, out AudioStreamPlayer player))
 		{
 			return player.VolumeDb;
 		}
-		throw new ArgumentException($"Bgm player with id '{id}' not found.");
+		throw new ArgumentException($"Bgm player with id '{bgmId}' not found.");
 	}
 
-	public void SetBgmVolume(string id, float volumeDb, float duration = 0)
+	public void SetBgmVolume(string bgmId, float volumeDb, float duration = 0)
 	{
-		if (bgmPlayers.TryGetValue(id, out AudioStreamPlayer player))
+		if (bgmPlayers.TryGetValue(bgmId, out AudioStreamPlayer player))
 		{
 			if (player.HasMeta("volume_tween"))
 			{
@@ -213,24 +217,24 @@ public partial class UtmxGlobalStreamPlayer : Node
 			}
 			return;
 		}
-		throw new ArgumentException($"Bgm player with id '{id}' not found.");
+		throw new ArgumentException($"Bgm player with id '{bgmId}' not found.");
 	}
-	public float GetBgmPitch(string id)
+	public float GetBgmPitch(string bgmId)
 	{
-		if (bgmPlayers.TryGetValue(id, out AudioStreamPlayer player))
+		if (bgmPlayers.TryGetValue(bgmId, out AudioStreamPlayer player))
 		{
 			return player.PitchScale;
 		}
-		throw new ArgumentException($"Bgm player with id '{id}' not found.");
+		throw new ArgumentException($"Bgm player with id '{bgmId}' not found.");
 	}
 
-	public void SetBgmPitch(string id, float pitch, float duration = 0)
+	public void SetBgmPitch(string bgmId, float pitch, float duration = 0)
 	{
 		if (pitch < 0)
 		{
 			pitch = 0.01F;
 		}
-		if (bgmPlayers.TryGetValue(id, out AudioStreamPlayer player))
+		if (bgmPlayers.TryGetValue(bgmId, out AudioStreamPlayer player))
 		{
 			if (player.HasMeta("pitch_tween"))
 			{
@@ -249,7 +253,7 @@ public partial class UtmxGlobalStreamPlayer : Node
 			}
 			return;
 		}
-		throw new ArgumentException($"Bgm player with id '{id}' not found.");
+		throw new ArgumentException($"Bgm player with id '{bgmId}' not found.");
 	}
 	public void AppendStreamToLibrary(string id, AudioStream stream)
 	{

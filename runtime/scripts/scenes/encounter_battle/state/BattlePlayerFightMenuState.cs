@@ -14,7 +14,7 @@ public partial class BattlePlayerFightMenuState : StateNode
     public BattleMenuManager MenuManager { get; set; }
 
     [Export]
-    public EncounterChoiceEnemyMenu EncounterChoiceEnemyMenu { get; set; } // 命名规范：帕斯卡命名法
+    public EncounterChoiceEnemyMenu ChoiceEnemyMenu { get; set; }
 
     [Export]
     public EncounterAttackGaugeBarMenu GaugeBar { get; set; }
@@ -22,12 +22,13 @@ public partial class BattlePlayerFightMenuState : StateNode
     public BattleScreenButtonManager BattleButtonManager { get; set; }
     #endregion
 
-    private int _enemyChoice = 0;
-    private int _state = 0; // 状态机：0-选择敌人 1-攻击计量条 2-显示伤害文本
-    private float _damage = 0f; // 计算出的伤害
-    private bool _isTargetMiss = false; // 是否未命中
-    private BattleAttackAnimation _attackAnimation; // 攻击动画实例
-    private BattleDamageText _attackDamageText; // 伤害文本实例
+    public int EnemyChoice = 0;
+
+    private int _state = 0;
+    private float _damage = 0f;
+    private bool _isTargetMiss = false;
+    private BattleAttackAnimation _attackAnimation;
+    private BattleDamageText _attackDamageText;
 
     private const int STATE_SELECT_ENEMY = 0;
     private const int STATE_ATTACK_GAUGE = 1;
@@ -51,9 +52,9 @@ public partial class BattlePlayerFightMenuState : StateNode
         BaseEnemy targetEnemy = GetTargetEnemy();
         if (targetEnemy == null) return;
 
-        if (PlayerDataManager.Instance != null && PlayerDataManager.Instance.Weapon != null && !missed)
+        if (UtmxPlayerDataManager.Weapon != null && !missed)
         {
-            _damage = (float)PlayerDataManager.Instance.Weapon._CalculateDamage(hitValue, targetEnemy);
+            _damage = (float)UtmxPlayerDataManager.Weapon._CalculateDamage(hitValue, targetEnemy);
             SpawnAttackAnimation(targetEnemy);
         }
 
@@ -93,7 +94,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 
     private void SpawnAttackAnimation(BaseEnemy targetEnemy)
     {
-        BaseWeapon currentWeapon = PlayerDataManager.Instance.Weapon;
+        BaseWeapon currentWeapon = UtmxPlayerDataManager.Weapon;
         if (currentWeapon?.AttackAnimation == null) return;
 
         _attackAnimation = (BattleAttackAnimation)currentWeapon.AttackAnimation?.Instantiate();
@@ -107,8 +108,8 @@ public partial class BattlePlayerFightMenuState : StateNode
 
     private BaseEnemy GetTargetEnemy()
     {
-        _enemyChoice = Math.Clamp(_enemyChoice, 0, GlobalBattleManager.Instance.GetEnemysCount() - 1);
-        return GlobalBattleManager.Instance.EnemysList[_enemyChoice];
+        EnemyChoice = Math.Clamp(EnemyChoice, 0, UtmxBattleManager.Instance.GetEnemysCount() - 1);
+        return UtmxBattleManager.Instance.EnemysList[EnemyChoice];
     }
     #endregion
 
@@ -132,29 +133,29 @@ public partial class BattlePlayerFightMenuState : StateNode
     {
         if (Input.IsActionJustPressed("up"))
         {
-            int previousChoice = _enemyChoice;
-            _enemyChoice = Math.Max(_enemyChoice - 1, 0);
+            int previousChoice = EnemyChoice;
+            EnemyChoice = Math.Max(EnemyChoice - 1, 0);
 
-            if (previousChoice != _enemyChoice)
+            if (previousChoice != EnemyChoice)
             {
                 UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
             }
 
-            EncounterChoiceEnemyMenu?.SetChoice(_enemyChoice);
+            ChoiceEnemyMenu?.SetChoice(EnemyChoice);
         }
         else if (Input.IsActionJustPressed("down"))
         {
-            if (GlobalBattleManager.Instance.GetEnemysCount() == 0) return;
+            if (UtmxBattleManager.Instance.GetEnemysCount() == 0) return;
 
-            int previousChoice = _enemyChoice;
-            _enemyChoice = Math.Min(_enemyChoice + 1, GlobalBattleManager.Instance.GetEnemysCount() - 1);
+            int previousChoice = EnemyChoice;
+            EnemyChoice = Math.Min(EnemyChoice + 1, UtmxBattleManager.Instance.GetEnemysCount() - 1);
 
-            if (previousChoice != _enemyChoice)
+            if (previousChoice != EnemyChoice)
             {
                 UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
             }
 
-            EncounterChoiceEnemyMenu?.SetChoice(_enemyChoice);
+            ChoiceEnemyMenu?.SetChoice(EnemyChoice);
         }
         if (Input.IsActionJustPressed("confirm"))
         {
@@ -178,7 +179,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 
     private async Task OpenAttackGaugeMenu()
     {
-        GlobalBattleManager.Instance.GetPlayerSoul().Visible = false;
+        UtmxBattleManager.Instance.GetPlayerSoul().Visible = false;
         await MenuManager.OpenMenu("EncounterAttackGaugeBarMenu");
         await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
         BattleButtonManager.ResetAllBattleButton();
@@ -189,8 +190,9 @@ public partial class BattlePlayerFightMenuState : StateNode
     public override async void _EnterState()
     {
         await OpenEnemyChoiceMenu();
-        EncounterChoiceEnemyMenu.SetChoice(_enemyChoice);
-        EncounterChoiceEnemyMenu.HpBarSetVisible(true);
+        EnemyChoice = Math.Clamp(EnemyChoice, 0, ChoiceEnemyMenu.GetItemCount() - 1);
+        ChoiceEnemyMenu.SetChoice(EnemyChoice);
+        ChoiceEnemyMenu.HpBarSetVisible(true);
         _state = STATE_SELECT_ENEMY;
     }
 
@@ -201,17 +203,17 @@ public partial class BattlePlayerFightMenuState : StateNode
 
     private async Task OpenEnemyChoiceMenu()
     {
-        await MenuManager.OpenMenu("EncounterChoiceEnemyMenu");
+        await MenuManager.OpenMenu("ChoiceEnemyMenu");
     }
 
     public override void _ExitState()
     {
-        GlobalBattleManager.Instance.GetPlayerSoul().Visible = true;
+        UtmxBattleManager.Instance.GetPlayerSoul().Visible = true;
 
     }
     public override bool _CanEnterState()
     {
-        return GlobalBattleManager.Instance.GetEnemysCount() > 0;
+        return UtmxBattleManager.Instance.GetEnemysCount() > 0;
     }
     #endregion
 }

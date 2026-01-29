@@ -1,84 +1,14 @@
 [gd_scene format=3 uid="uid://dbstu48ru7vek"]
 
-[ext_resource type="FontFile" uid="uid://e0isplnd10cj" path="res://__data__/built-in-resources/fonts/UndertaleDialogue.ttf" id="1_5bhgw"]
-[ext_resource type="Script" uid="uid://dl6w8xq6lqsx3" path="res://tests/TEST/Test.cs" id="1_eplnt"]
-[ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="2_i1yiq"]
-[ext_resource type="Script" uid="uid://xpf1sduh0mgj" path="res://scripts/scenes/encounter_battle/projectile/BaseBattleProjectile.cs" id="4_rs6m0"]
-[ext_resource type="Texture2D" uid="uid://dn7mja0oxdkj4" path="res://__data__/built-in-resources/textures/a.png" id="5_rs6m0"]
+[ext_resource type="Script" uid="uid://0sdlv16sg7gj" path="res://scripts/singletons/UtmxSceneManager.cs" id="2_8k0jr"]
 [ext_resource type="Script" uid="uid://d1f5egxw1ec8r" path="res://scripts/singletons/script_boot/js/JavaScriptNode.cs" id="6_otw5d"]
 
-[sub_resource type="GDScript" id="GDScript_eplnt"]
-script/source = "extends Control
-@onready var java_script_node: JavaScriptNode = $\"../JavaScriptNode\"
-
-func _ready() -> void:
-	var c : Variant = java_script_node.get(\"playMusic\");
-	print(c);
-	
-"
-
-[sub_resource type="LabelSettings" id="LabelSettings_i1yiq"]
-font = ExtResource("1_5bhgw")
-font_size = 14
-
-[sub_resource type="GDScript" id="GDScript_w8t8k"]
-script/source = "extends Area2D;
-
-
-func _process(_delta: float) -> void:
-	global_position = get_global_mouse_position();
-
-func _on_area_entered(area: Area2D) -> void:
-	print(area);
-"
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_joesq"]
-radius = 5.3851647
-
 [node name="TEST" type="Node" unique_id=399590034]
-script = ExtResource("1_eplnt")
 
-[node name="Control" type="Control" parent="." unique_id=634095102]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = SubResource("GDScript_eplnt")
-
-[node name="Label" type="Label" parent="." unique_id=1104635272]
-offset_right = 40.0
-offset_bottom = 23.0
-text = "The quick brown fox jumps over the lazy dog
-看到那颗心了吗那是你的灵魂所在LV"
-label_settings = SubResource("LabelSettings_i1yiq")
-
-[node name="TextTyper" type="RichTextLabel" parent="." unique_id=1777977088]
-offset_left = 114.0
-offset_top = 160.0
-offset_right = 448.0
-offset_bottom = 315.0
-bbcode_enabled = true
-scroll_active = false
-script = ExtResource("2_i1yiq")
-metadata/_custom_type_script = "uid://dmq4qew4auuss"
-
-[node name="BaseBattleProjectile" type="Area2D" parent="." unique_id=741905409]
-position = Vector2(304, 218)
-script = ExtResource("4_rs6m0")
-Texture = ExtResource("5_rs6m0")
-metadata/_custom_type_script = "uid://xpf1sduh0mgj"
-
-[node name="Area2D" type="Area2D" parent="." unique_id=1755430120]
-collision_layer = 0
-collision_mask = 4
-script = SubResource("GDScript_w8t8k")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=2146103396]
-shape = SubResource("CircleShape2D_joesq")
-
-[node name="JavaScriptNode" type="Node" parent="." unique_id=1790400775]
+[node name="TestInput" type="Node" parent="." unique_id=1790400775]
 script = ExtResource("6_otw5d")
-JavaScriptFile = "res://__data__/js/myjs.js"
+JavaScriptFile = "res://tests/TEST/test_input.js"
 metadata/_custom_type_script = "uid://d1f5egxw1ec8r"
 
-[connection signal="area_entered" from="Area2D" to="Area2D" method="_on_area_entered"]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=288102571]
+script = ExtResource("2_8k0jr")

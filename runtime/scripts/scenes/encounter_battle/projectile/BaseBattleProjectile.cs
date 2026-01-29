@@ -55,8 +55,8 @@ public partial class BaseBattleProjectile : Area2D
 
 	BaseBattleProjectile()
 	{
-		CollisionLayer = (int)GlobalBattleManager.BattleCollisionLayers.Projectile;
-		CollisionMask = (int)GlobalBattleManager.BattleCollisionLayers.Player;
+		CollisionLayer = (int)UtmxBattleManager.BattleCollisionLayers.Projectile;
+		CollisionMask = (int)UtmxBattleManager.BattleCollisionLayers.Player;
 		AreaEntered += _BaseBattleProjectileAreaEntered;
 	}
 
@@ -71,7 +71,7 @@ public partial class BaseBattleProjectile : Area2D
 	public override void _PhysicsProcess(double delta)
 	{
 		base._PhysicsProcess(delta);
-		BattlePlayerSoul soul = GlobalBattleManager.Instance.GetPlayerSoul();
+		BattlePlayerSoul soul = UtmxBattleManager.Instance.GetPlayerSoul();
 		if (soul != null && soul.CanBeHurt() && IsCollideWithThePlayer())
 		{
 			OnHitPlayer(soul);

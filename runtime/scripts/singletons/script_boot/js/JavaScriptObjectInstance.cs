@@ -1,15 +1,16 @@
 using Jint.Native;
 using Godot;
 using Jint;
+using Jint.Native.Object;
+using System.Data.SqlTypes;
 
 public partial class JavaScriptObjectInstance : ScriptObjectInstance
 {
-	public JsObject JsInstance;
+	public ObjectInstance JsInstance;
 
-	public JavaScriptObjectInstance(JsObject ins)
+	public JavaScriptObjectInstance(ObjectInstance ins)
 	{
 		JsInstance = ins;
-		JsInstance.Set("this", JsValue.FromObject(JavaScriptBridge.MainEngine, this));
 	}
 
 	public override object Get(string propertyName)
@@ -23,22 +24,27 @@ public partial class JavaScriptObjectInstance : ScriptObjectInstance
 		return JsInstance.HasProperty(propertyName);
 	}
 
-	public override object Invoke(string method, object[] args)
-	{
-		if (string.IsNullOrEmpty(method)) return null;
-		JsInstance.TryGetValue(method, out JsValue methodValue);
-		if (!methodValue.IsUndefined() && !methodValue.IsNull())
-		{
-			JsValue[] jsValues = new JsValue[args.Length];
-			for (int i = 0; i < args.Length; i++)
-			{
-				jsValues[i] = JsValue.FromObject(JavaScriptBridge.MainEngine, args[i]);
-			}
+    public override object Invoke(string method, params object[] args)
+    {
+        if (string.IsNullOrEmpty(method)) return null;
+        JsValue methodValue = JsInstance.Get(method);
+        if (methodValue.Type == Jint.Runtime.Types.Object)
+        {
+            JsValue[] jsValues = new JsValue[args.Length];
+            for (int i = 0; i < args.Length; i++)
+            {
+                jsValues[i] = JsValue.FromObject(JavaScriptBridge.MainEngine, args[i]);
+            }
 
-			JsValue result = methodValue.Call(JsInstance, jsValues);
-			return result.ToObject();
-		}
-		return null;
+            JsValue result = methodValue.Call(JsInstance, jsValues);
+            return result.ToObject();
+        }
+        return null;
+    }
+
+    public object ToObject()
+	{
+		return JsInstance.ToObject();
 	}
 
 	public override void Set(string key, object value)

@@ -5,7 +5,7 @@ public partial class BattlePlayerSoulHitBox : Area2D
 {
 	public BattlePlayerSoulHitBox()
 	{
-		CollisionLayer = (int)GlobalBattleManager.BattleCollisionLayers.Player;
-		CollisionMask = (int)GlobalBattleManager.BattleCollisionLayers.Player;
+		CollisionLayer = (int)UtmxBattleManager.BattleCollisionLayers.Player;
+		CollisionMask = (int)UtmxBattleManager.BattleCollisionLayers.Player;
 	}
 }

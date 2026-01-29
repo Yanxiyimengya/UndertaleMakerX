@@ -92,8 +92,8 @@ public partial class BattlePlayerSoul : CharacterBody2D
 
 	public BattlePlayerSoul()
 	{
-		CollisionLayer = (int)GlobalBattleManager.BattleCollisionLayers.Player;
-		CollisionMask = (int)GlobalBattleManager.BattleCollisionLayers.Player;
+		CollisionLayer = (int)UtmxBattleManager.BattleCollisionLayers.Player;
+		CollisionMask = (int)UtmxBattleManager.BattleCollisionLayers.Player;
 	}
 
 	public override void _Ready()
@@ -173,14 +173,14 @@ public partial class BattlePlayerSoul : CharacterBody2D
 	{
 		if (CanBeHurt())
 		{
-			PlayerDataManager.Instance.PlayerHp -= (float)damage;
-			_invincibleTimer = PlayerDataManager.Instance.PlayerInvincibleTime;
+			UtmxPlayerDataManager.PlayerHp -= (float)damage;
+			_invincibleTimer = UtmxPlayerDataManager.PlayerInvincibleTime;
 			if (GetViewport().GetCamera2D() is BattleCamera camera)
 				camera.StartShake(0.1f, Vector2.One, new Vector2(30, 30));
 			UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("HURT"));
-			if (PlayerDataManager.Instance.PlayerHp <= 0)
+			if (UtmxPlayerDataManager.PlayerHp <= 0)
 			{
-				GlobalBattleManager.Instance.CallDeferred("GameOver", []);
+				UtmxBattleManager.Instance.CallDeferred("GameOver", []);
 			}
 		}
 	}
