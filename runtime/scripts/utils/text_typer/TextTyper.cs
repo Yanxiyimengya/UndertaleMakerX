@@ -478,6 +478,7 @@ public partial class TextTyper : Godot.RichTextLabel
 		TyperFont = TyperFont;
 		TyperSize = TyperSize;
 		TyperColor = TyperColor;
+		Modulate = Colors.White;
 	}
 
 }

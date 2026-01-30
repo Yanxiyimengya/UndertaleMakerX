@@ -100,12 +100,12 @@ public partial class BattleEnemyDialogueState : StateNode
 		else
 		{
 			if (UtmxBattleManager.Instance.GetTurnCount() > 0)
-			{
-				SwitchState("BattleEnemyState");
-			}
+            {
+                UtmxBattleManager.Instance.GetBattleController().ChangeToEnemyTurnState();
+            }
 			else
             {
-                SwitchState("BattlePlayerChoiceActionState");
+                UtmxBattleManager.Instance.GetBattleController().ChangeToPlayerTurnState();
             }
 		}
 	}

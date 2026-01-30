@@ -7,7 +7,7 @@ using System.Collections.Generic;
 #region 包装基类
 abstract partial class BaseEncounterRegisterData
 {
-	public virtual BaseEncounterConfiguration GetInstance()
+	public virtual BaseEncounter GetInstance()
 	{
 		return null;
 	}
@@ -34,28 +34,28 @@ partial class EncounterRegisterData : BaseEncounterRegisterData
 	public EncounterRegisterData(Type encounterType)
 	{
 		if (encounterType == null)
-			throw new ArgumentNullException(nameof(encounterType), "EncounterConfiguration Type cannot be null");
+			throw new ArgumentNullException(nameof(encounterType), "Encounter Type cannot be null");
 		if (encounterType.IsAbstract || encounterType.IsInterface)
 			throw new ArgumentException($"{encounterType.Name} is an abstract class or interface and cannot be instantiated",
 				nameof(encounterType));
-		if (!typeof(BaseEncounterConfiguration).IsAssignableFrom(encounterType))
-			throw new ArgumentException($"{encounterType.Name} is not a subclass of BaseEncounterConfiguration and cannot be registered", nameof(encounterType));
+		if (!typeof(BaseEncounter).IsAssignableFrom(encounterType))
+			throw new ArgumentException($"{encounterType.Name} is not a subclass of BaseEncounter and cannot be registered", nameof(encounterType));
 		_encounterType = encounterType;
 	}
-	public override BaseEncounterConfiguration GetInstance()
+	public override BaseEncounter GetInstance()
 	{
 		try
 		{
 			object instance = Activator.CreateInstance(_encounterType);
-			return instance as BaseEncounterConfiguration;
+			return instance as BaseEncounter;
 		}
 		catch (MissingMethodException ex)
 		{
-			UtmxLogger.Error($"Failed to instantiate EncounterConfiguration {_encounterType.Name}: No public parameterless constructor found! {ex.Message}");
+			UtmxLogger.Error($"Failed to instantiate Encounter {_encounterType.Name}: No public parameterless constructor found! {ex.Message}");
 		}
 		catch (Exception ex)
 		{
-			UtmxLogger.Error($"Failed to instantiate EncounterConfiguration {_encounterType.Name}: {ex.Message}");
+			UtmxLogger.Error($"Failed to instantiate Encounter {_encounterType.Name}: {ex.Message}");
 		}
 		return null;
 	}
@@ -134,13 +134,15 @@ partial class JavaScriptEncounterRegisterData : BaseEncounterRegisterData
 		_jsPath = scriptPath;
 		_jsClass = JavaScriptBridge.FromFile(_jsPath);
 	}
-	public override BaseEncounterConfiguration GetInstance()
-	{
-		if (_jsClass != null)
-		{
-			JavaScriptObjectInstance instance = _jsClass.New();
-			return instance.ToObject() as BaseEncounterConfiguration;
-		}
+	public override BaseEncounter GetInstance()
+    {
+        JavaScriptObjectInstance instance = _jsClass.New();
+        if (instance != null)
+        {
+            JavaScriptEncounterProxy encounter = instance.ToObject() as JavaScriptEncounterProxy;
+            encounter.JsInstance = instance;
+            return encounter;
+        }
 		return null;
 	}
 }
@@ -211,7 +213,32 @@ public partial class GameRegisterDB
 		_enemyDB.Clear();
 	}
 
-	public static void RegisterEnemy(string enemyId, Type t)
+
+    public static void RegisterEncounter(string encounterId, Type t)
+    {
+        _encounterDB.Add(encounterId, new EncounterRegisterData(t));
+    }
+    public static void RegisterEncounter(string encounterId, string scriptPath)
+    {
+        scriptPath = UtmxResourceLoader.ResolvePath(scriptPath);
+        _encounterDB.Add(encounterId, new JavaScriptEncounterRegisterData(scriptPath));
+    }
+    public static bool TryGetEncounter(string encounterId, out BaseEncounter encounter)
+    {
+        encounter = null;
+        if (_encounterDB.TryGetValue(encounterId, out BaseEncounterRegisterData encounterData))
+        {
+            encounter = encounterData.GetInstance();
+            return true;
+        }
+        else
+        {
+            UtmxLogger.Warning($"EncounterId '{encounterId}' not found in GameRegisterDB.");
+        }
+        return false;
+    }
+
+    public static void RegisterEnemy(string enemyId, Type t)
 	{
 		_enemyDB.Add(enemyId, new EnemyRegisterData(t));
 	}

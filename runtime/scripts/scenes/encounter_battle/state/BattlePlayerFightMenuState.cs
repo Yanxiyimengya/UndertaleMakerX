@@ -191,9 +191,9 @@ public partial class BattlePlayerFightMenuState : StateNode
 	}
 
 	private void _NextState()
-	{
-		SwitchState("BattlePlayerDialogState");
-	}
+    {
+        UtmxBattleManager.Instance.GetBattleController().ChangeToPlayerDialogueState();
+    }
 
 	public override void _ExitState()
 	{

@@ -58,7 +58,7 @@ public partial class EncounterChoicePageMenu : EncounterChoiceMenu
 
         await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
         int soulSelectIndex = choice - (page * MenuItems.Count);
-        if (soulSelectIndex < 3)
+        if (soulSelectIndex < 4)
         {
             var menuItem = MenuItems[soulSelectIndex];
             UtmxBattleManager.Instance.GetPlayerSoul().GlobalTransform = menuItem.GetSoulTransform();

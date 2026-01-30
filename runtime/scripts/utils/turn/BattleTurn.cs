@@ -4,7 +4,7 @@ public partial class BattleTurn : RefCounted
 {
     public Vector2 ArenaInitializeSize = new Vector2(155, 130);
     public Vector2 SoulInitializePosition = new Vector2(320, 320);
-    public double TurnTime = 0.0;
+    public double TurnTime = 0.5;
     public void _OnTurnInitialize()
     {
     }

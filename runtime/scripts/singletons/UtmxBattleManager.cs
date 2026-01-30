@@ -9,6 +9,13 @@ public partial class UtmxBattleManager : Node
 		Player = 1 << 1,
 		Projectile = 1 << 2,
 	};
+	public enum BattleStatus
+	{
+		Player,
+		PlayerDialogue,
+		EnemyDialogue,
+		Enemy,
+	}
 
 	public string EncounterText { get => _encounterText; set => _encounterText = value; }
 	public string FreeText { get => _freeText; set => _freeText = value; }
@@ -24,15 +31,14 @@ public partial class UtmxBattleManager : Node
 
 	public BattlePlayerSoul Soul => _playerSoul;
 	public BattleMainArenaExpand MainArena => _mainArena;
-
+	private BaseEncounter _battleEncounter;
 	private bool _isInBattle;
-	private StateMachine _battleStateMachine;
+	private BattleController _battleController;
 	private BattlePlayerSoul _playerSoul;
 	private BattleMainArenaExpand _mainArena;
 	private List<BaseEnemy> _enemysList = [];
 	// 战斗场景中的实例
 
-	private string _firstState = "";
 	private string _encounterText = "";
 	private string _freeText = "";
 	private string _deathText = "";
@@ -42,8 +48,7 @@ public partial class UtmxBattleManager : Node
 
 	private int _turnCounter = 0;
 	private double _turnTimer = 0.0;
-	public BaseEncounterConfiguration _encounterConfig = new();
-	private List<BattleTurn> _currentTurnList = new() { new BattleTurn() };
+	private List<BattleTurn> _currentTurnList = new();
 	private Vector2 _playerSoulPosition = Vector2.Zero;
 	private Color _playerSoulColor = Colors.Red;
 
@@ -54,55 +59,62 @@ public partial class UtmxBattleManager : Node
 	}
 	public static UtmxBattleManager Instance => _instance.Value;
 
-	public void EncounterBattleStart(BaseEncounterConfiguration configuration)
+	public void EncounterBattleStart(string encounterId)
 	{
-		UtmxDialogueQueueManager.Instance.ClearDialogue();
-
-		_encounterText = configuration.EncounterText;
-		_freeText = configuration.FreeText;
-		_deathText = configuration.DeathText;
-		_endText = configuration.EndText;
-		_canFree = configuration.CanFree;
-		_firstState = configuration.EncounterBattleFirstState;
-
-		foreach (BaseEnemy enemy in _enemysList) enemy.QueueFree();
-		_enemysList.Clear();
-		foreach (string enemyId in configuration.EnemysList)
+		GameRegisterDB.TryGetEncounter(encounterId, out BaseEncounter encounter);
+		if (encounter != null)
 		{
-			if (GameRegisterDB.TryGetEnemy(enemyId, out BaseEnemy enemy))
+			_battleEncounter = encounter;
+			Endded = false;
+			UtmxDialogueQueueManager.Instance.ClearDialogue();
+			_encounterText = encounter.EncounterText;
+			_freeText = encounter.FreeText;
+			_deathText = encounter.DeathText;
+			_endText = encounter.EndText;
+			_canFree = encounter.CanFree;
+
+			foreach (string enemyId in encounter.EnemysList)
 			{
-				_enemysList.Add(enemy);
+				AddEnemy(enemyId);
 			}
+			UtmxSceneManager.Instance.ChangeSceneToFile(UtmxSceneManager.Instance.EncounterBattleScenePath);
 		}
-		UtmxSceneManager.Instance.ChangeSceneToFile(UtmxSceneManager.Instance.EncounterBattleScenePath);
+		else
+		{
+			UtmxLogger.Error($"Failed to enter battle: invalid encounter : {encounterId}");
+		}
 	}
 	public void EncounterBattleEnd()
 	{
-		UninitializeBattle();
-	}
-
-	public void InitializeBattle(StateMachine stateMachine, BattlePlayerSoul soul, BattleMainArenaExpand mainArena)
-	{
-		_battleStateMachine = stateMachine;
-		_playerSoul = soul;
-		_mainArena = mainArena;
-		_isInBattle = true;
-	}
-
-	public void UninitializeBattle()
-	{
+		Endded = true;
 		if (_isInBattle)
 		{
-			_battleStateMachine = null;
+			GetEncounterInstance()._OnBattleEnd();
+			foreach (BaseEnemy enemy in _enemysList) enemy.Free();
+			_enemysList.Clear();
+			_currentTurnList.Clear();
+
+			_battleEncounter = null;
+			_battleController = null;
 			_playerSoul = null;
 			_mainArena = null;
 			_isInBattle = false;
 		}
 	}
+
+	public void InitializeBattle(BattleController battleController)
+	{
+		_battleController = battleController;
+		_playerSoul = battleController.PlayerSoul;
+		_mainArena = battleController.MainArena;
+		_isInBattle = true;
+	}
+
 	public void GameOver()
 	{
 		if (_isInBattle)
 		{
+			EncounterBattleEnd();
 			EnemysList.Clear();
 			Camera2D camera = _playerSoul.GetViewport().GetCamera2D();
 			PlayerSoulPosition = camera.GetCanvasTransform().BasisXform(_playerSoul.GlobalPosition);
@@ -112,21 +124,51 @@ public partial class UtmxBattleManager : Node
 	}
 
 
-
 	public bool IsInBattle() { return _isInBattle; }
-	public BattlePlayerSoul GetPlayerSoul() { return _playerSoul; }
-	public BattleMainArenaExpand GetMainArena() { return _mainArena; }
-	public int GetEnemysCount() { return EnemysList.Count; }
+	public BattlePlayerSoul GetPlayerSoul() { return _battleController.PlayerSoul; }
+	public BattleMainArenaExpand GetMainArena() { return _battleController.MainArena; }
+	public BaseEncounter GetEncounterInstance() { return _battleEncounter; }
+	public BattleController GetBattleController() { return _battleController; }
 
 	public void SwitchBattleState(string stateId)
 	{
-		_battleStateMachine.SwitchToState(stateId);
-	}
-	public string GetFirstBattleState()
-	{
-		return _firstState;
+		_battleController.SwitchToState(stateId);
 	}
 
+	#region
+	public void ShowDialogueText(object texts)
+	{
+		if (texts != null)
+		{
+			if (texts is string dialog && !string.IsNullOrEmpty(dialog))
+			{
+				UtmxDialogueQueueManager.Instance.AppendDialogue(dialog);
+			}
+			else if (texts is object[] dialogArray)
+			{
+				foreach (object elements in dialogArray)
+				{
+					if (elements is string dialogText && !string.IsNullOrEmpty(dialogText))
+					{
+						UtmxDialogueQueueManager.Instance.AppendDialogue(dialogText);
+					}
+				}
+			}
+		}
+	}
+	#endregion
+
+	#region 怪物管理
+	public int GetEnemysCount() { return EnemysList.Count; }
+
+	public void AddEnemy(string enemyId)
+	{
+		if (GameRegisterDB.TryGetEnemy(enemyId, out BaseEnemy enemy))
+		{
+			_enemysList.Add(enemy);
+		}
+	}
+	#endregion
 
 	#region 回合管理
 
@@ -190,7 +232,7 @@ public partial class UtmxBattleManager : Node
 	public int GetTurnCount()
 	{
 		return _currentTurnList.Count;
-    }
+	}
 	public Vector2 GetTurnSoulInitializePosition()
 	{
 		if (_currentTurnList.Count > 0)

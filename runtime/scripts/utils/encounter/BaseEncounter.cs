@@ -1,7 +1,7 @@
 using Godot;
 using Godot.Collections;
 [GlobalClass]
-public partial class BaseEncounterConfiguration : Resource
+public partial class BaseEncounter : Resource
 {
     [Export(PropertyHint.MultilineText)]
     public string EncounterText = "";
@@ -13,9 +13,28 @@ public partial class BaseEncounterConfiguration : Resource
     public string EndText = "";
 
     [Export]
-    public string EncounterBattleFirstState = "";
+    public UtmxBattleManager.BattleStatus EncounterBattleFirstState = UtmxBattleManager.BattleStatus.Player;
     [Export]
     public string[] EnemysList = [ "MyEnemy" ];
     [Export]
     public bool CanFree = true;
+
+    public virtual void _OnBattleStart()
+    {
+    }
+    public virtual void _OnBattleEnd()
+    {
+    }
+    public virtual void _OnPlayerTurn()
+    {
+    }
+    public virtual void _OnPlayerDialogue()
+    {
+    }
+    public virtual void _OnEnemyDialogue()
+    {
+    }
+    public virtual void _OnEnemyTurn()
+    {
+    }
 }

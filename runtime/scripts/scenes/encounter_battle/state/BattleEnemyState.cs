@@ -58,7 +58,7 @@ public partial class BattleEnemyState : StateNode
                 _tween.TweenProperty(_battleMainArena, "Size", targetSize, 0.4);
                 await ToSignal(_tween, Tween.SignalName.Finished);
             }
-            SwitchState("BattlePlayerChoiceActionState");
+            UtmxBattleManager.Instance.GetBattleController().ChangeToPlayerTurnState();
         }
     }
 }

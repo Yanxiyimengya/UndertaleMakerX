@@ -17,6 +17,7 @@ public class JavaScriptCoreInterface
 
             { "__UtmxItem" , typeof(JavaScriptItemProxy)},
             { "__UtmxEnemy" , typeof(JavaScriptEnemyProxy)},
+            { "__UtmxEncounter" , typeof(JavaScriptEncounterProxy)},
         };
     }
     public static Dictionary<string, string> _GetInterfaceExportScripts()

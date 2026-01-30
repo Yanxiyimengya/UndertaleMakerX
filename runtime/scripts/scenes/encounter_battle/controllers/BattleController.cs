@@ -10,12 +10,68 @@ public partial class BattleController : Node
 	[Export]
 	public StateMachine BattleStateMachine;
 
-	public override void _Ready()
+    private UtmxBattleManager.BattleStatus _battleStatus = UtmxBattleManager.BattleStatus.Player;
+
+    public override void _Ready()
+    {
+        UtmxBattleManager.Instance.InitializeBattle(this);
+        UtmxBattleManager.Instance.GetEncounterInstance()?._OnBattleStart();
+        switch (UtmxBattleManager.Instance.GetEncounterInstance().EncounterBattleFirstState)
+        {
+            case UtmxBattleManager.BattleStatus.Player:
+            {
+                ChangeToPlayerTurnState();
+                break;
+            }
+            case UtmxBattleManager.BattleStatus.PlayerDialogue:
+            {
+                ChangeToPlayerDialogueState();
+                break;
+            }
+            case UtmxBattleManager.BattleStatus.EnemyDialogue:
+            {
+                ChangeToEnemyDialogueState();
+                break;
+            }
+            case UtmxBattleManager.BattleStatus.Enemy:
+            {
+                ChangeToEnemyTurnState();
+                break;
+            }
+        }
+    }
+
+    public void ChangeToPlayerTurnState()
 	{
-		UtmxBattleManager.Instance.InitializeBattle(BattleStateMachine, PlayerSoul, MainArena);
-		BattleStateMachine.SwitchToState(UtmxBattleManager.Instance.GetFirstBattleState());
-	} 
-	
-	
-	
+        _battleStatus = UtmxBattleManager.BattleStatus.Player;
+        SwitchToState("BattlePlayerChoiceActionState");
+        UtmxBattleManager.Instance.GetEncounterInstance()?._OnPlayerTurn();
+    }
+    public void ChangeToPlayerDialogueState()
+    {
+        _battleStatus = UtmxBattleManager.BattleStatus.PlayerDialogue;
+        SwitchToState("BattlePlayerDialogueState");
+        UtmxBattleManager.Instance.GetEncounterInstance()?._OnPlayerDialogue();
+    }
+    public void ChangeToEnemyDialogueState()
+    {
+        _battleStatus = UtmxBattleManager.BattleStatus.EnemyDialogue;
+        SwitchToState("BattleEnemyDialogueState");
+        UtmxBattleManager.Instance.GetEncounterInstance()?._OnEnemyDialogue();
+    }
+    public void ChangeToEnemyTurnState()
+    {
+        _battleStatus = UtmxBattleManager.BattleStatus.Enemy;
+        SwitchToState("BattleEnemyState");
+        UtmxBattleManager.Instance.GetEncounterInstance()?._OnEnemyTurn();
+    }
+    public UtmxBattleManager.BattleStatus GetCurrentStatus()
+    {
+        return _battleStatus;
+    }
+
+    public void SwitchToState(string targetState)
+    {
+        BattleStateMachine.SwitchToState(targetState);
+    }
 }

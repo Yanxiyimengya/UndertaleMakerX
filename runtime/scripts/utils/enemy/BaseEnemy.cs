@@ -40,11 +40,4 @@ public partial class BaseEnemy : Node2D
     {
         return new BattleTurn();
     }
-
-    public void AppendDialogue(string dialogueMessage, Vector2? offset = null, bool hideSpike = false, int dir = 2)
-    {
-        if (offset == null)
-            offset = new Vector2(30, 0);
-        UtmxDialogueQueueManager.Instance.AppendBattleEnemyDialogue(EnemySlot, dialogueMessage, (Vector2)offset, hideSpike);
-    }
 }

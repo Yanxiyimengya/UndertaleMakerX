@@ -1,11 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://chb46puy2x813"]
+[gd_scene format=3 uid="uid://chb46puy2x813"]
 
 [ext_resource type="Script" uid="uid://dshp7kc1e02l6" path="res://scripts/scenes/encounter_battle/ui/menu/ui_elements/EncounterChoicePageMenu.cs" id="1_brxe0"]
 [ext_resource type="PackedScene" uid="uid://calfrmbvcuuks" path="res://scenes/encounter_battle/ui/ui_elements/choice_menu/choice_menu_item/choice_menu_item.tscn" id="2_brxe0"]
 [ext_resource type="FontFile" uid="uid://butt4gvjxibtq" path="res://__data__/built-in-resources/fonts/FZXS12.ttf" id="4_vcj86"]
 [ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="5_juvwh"]
 
-[node name="EncounterChoicePageMenu" type="Control" node_paths=PackedStringArray("PageTextTyper", "MenuItems")]
+[node name="EncounterChoicePageMenu" type="Control" unique_id=1038061057 node_paths=PackedStringArray("PageTextTyper", "MenuItems")]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_brxe0")
@@ -13,7 +13,7 @@ PageTextTyper = NodePath("VBoxContainer/MarginContainer/PageTextTyper")
 MenuItems = [NodePath("VBoxContainer/VBoxContainer/Line1/EnemyChoiceMenuItem1"), NodePath("VBoxContainer/VBoxContainer/Line1/EnemyChoiceMenuItem2"), NodePath("VBoxContainer/VBoxContainer/Line2/EnemyChoiceMenuItem4"), NodePath("VBoxContainer/VBoxContainer/Line2/EnemyChoiceMenuItem3")]
 metadata/_tab_index = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1806191284]
 layout_mode = 0
 offset_left = 63.0
 offset_top = 19.0
@@ -21,41 +21,41 @@ offset_right = 571.0
 offset_bottom = 193.0
 theme_override_constants/separation = 12
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer" unique_id=1030416766]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Line1" type="HBoxContainer" parent="VBoxContainer/VBoxContainer"]
+[node name="Line1" type="HBoxContainer" parent="VBoxContainer/VBoxContainer" unique_id=1670730598]
 layout_mode = 2
 size_flags_horizontal = 0
-theme_override_constants/separation = 139
 
-[node name="EnemyChoiceMenuItem1" parent="VBoxContainer/VBoxContainer/Line1" instance=ExtResource("2_brxe0")]
+[node name="EnemyChoiceMenuItem1" parent="VBoxContainer/VBoxContainer/Line1" unique_id=1667895128 instance=ExtResource("2_brxe0")]
+custom_minimum_size = Vector2(265, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="EnemyChoiceMenuItem2" parent="VBoxContainer/VBoxContainer/Line1" instance=ExtResource("2_brxe0")]
+[node name="EnemyChoiceMenuItem2" parent="VBoxContainer/VBoxContainer/Line1" unique_id=1206013535 instance=ExtResource("2_brxe0")]
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="Line2" type="HBoxContainer" parent="VBoxContainer/VBoxContainer"]
+[node name="Line2" type="HBoxContainer" parent="VBoxContainer/VBoxContainer" unique_id=626502571]
 layout_mode = 2
 size_flags_horizontal = 0
-theme_override_constants/separation = 139
 
-[node name="EnemyChoiceMenuItem4" parent="VBoxContainer/VBoxContainer/Line2" instance=ExtResource("2_brxe0")]
+[node name="EnemyChoiceMenuItem4" parent="VBoxContainer/VBoxContainer/Line2" unique_id=1639035448 instance=ExtResource("2_brxe0")]
+custom_minimum_size = Vector2(265, 0)
 layout_mode = 2
 
-[node name="EnemyChoiceMenuItem3" parent="VBoxContainer/VBoxContainer/Line2" instance=ExtResource("2_brxe0")]
+[node name="EnemyChoiceMenuItem3" parent="VBoxContainer/VBoxContainer/Line2" unique_id=476920879 instance=ExtResource("2_brxe0")]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1647287501]
 layout_mode = 2
 theme_override_constants/margin_left = 263
 theme_override_constants/margin_top = -6
 
-[node name="PageTextTyper" type="RichTextLabel" parent="VBoxContainer/MarginContainer"]
+[node name="PageTextTyper" type="RichTextLabel" parent="VBoxContainer/MarginContainer" unique_id=1736582208]
 layout_mode = 2
 size_flags_horizontal = 0
 bbcode_enabled = true

@@ -1,12 +1,11 @@
-import { __UtmxEnemy,__logger } from "__UTMX";
+import { __UtmxEnemy } from "__UTMX";
 
 export class UtmxBaseEnemy extends __UtmxEnemy  
 {
-	set name(value) {
-		__logger.Log(value)
+	set displayName(value) {
 		this.DisplayName = value;
 	}
-	get name() {
+	get displayName() {
 		return this.DisplayName;
 	}
 	get slot() {
@@ -70,15 +69,16 @@ export class UtmxBaseEnemy extends __UtmxEnemy
         this.CenterPosition = value;
     }
 
-    onSpare()
-    {
-    }
+    onSpare() {}
 
-    handleAction(action)
-    {
-    }
+    onHandleAction(action) {}
 
-    handleAttack(status)
+	onHandleAttack(status) {}
+
+	onGetNextTurn() {}
+
+    appendDialogue(...dialogues)
     {
+        this.AppendEnemyDialogue(...dialogues);
     }
 }

@@ -2,11 +2,10 @@ import { __UtmxItem ,__logger} from "__UTMX";
 
 export class UtmxBaseItem extends __UtmxItem  
 {
-	set name(value) {
-		__logger.Log(value)
+	set displayName(value) {
 		this.DisplayName = value;
 	}
-	get name() {
+	get displayName() {
 		return this.DisplayName;
 	}
 	get slot() {

@@ -17,17 +17,16 @@ public partial class UtmxGameManager : Node
 			_mainScriptInstace = JavaScriptBridge.FromFile(mainScriptFilePath)?.New();
 		}
 	}
-
 	public override void _ExitTree()
 	{
 		_GameEnd();
 		Instance = null;
 		_mainScriptInstace = null;
 	}
-
-
 	public void _GameStart()
 	{
+		GameRegisterDB.RegisterEncounter("BaseEncounter", typeof(BaseEncounter));
+		GameRegisterDB.RegisterEncounter("MyEncounter", "js/test_js_encounter.js");
 		GameRegisterDB.RegisterEnemy("BaseEnemy", typeof(BaseEnemy));
 		GameRegisterDB.RegisterEnemy("MyEnemy", "js/test_js_enemy.js");
 		GameRegisterDB.RegisterItem("BaseItem", typeof(BaseItem));
@@ -36,11 +35,10 @@ public partial class UtmxGameManager : Node
 
 		UtmxPlayerDataManager.AddItem("BaseItem");
 		UtmxPlayerDataManager.AddItem("MyItem");
-		UtmxBattleManager.Instance.EncounterBattleStart(new BaseEncounterConfiguration());
+		UtmxBattleManager.Instance.EncounterBattleStart("MyEncounter");
 		_mainScriptInstace?.Invoke("onGameStart", []);
 
 	}
-
 	public void _GameEnd()
 	{
 		_mainScriptInstace?.Invoke("onGameEnd", []);

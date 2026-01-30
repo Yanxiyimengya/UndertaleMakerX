@@ -40,7 +40,7 @@ public static class UtmxRuntimeProjectConfig
 		}
 	}
 
-	public static void LoadConfiguration(string configFilePath)
+	public static void Loadencounter(string configFilePath)
 	{
 		FlatConfigDict.Clear();
 

@@ -17,7 +17,6 @@ public partial class BattlePlayerMercyMenuState : StateNode
 
     private bool _freed = false;
     private BattlePlayerSoul _playerSoul;
-    private string _freeText = "";
 
     public override void _Process(double delta)
     {
@@ -30,9 +29,9 @@ public partial class BattlePlayerMercyMenuState : StateNode
             }
             if (TextMenu.IsTextTyperFinished())
             {
-
                 if (Input.IsActionJustPressed("confirm"))
                 {
+                    UtmxBattleManager.Instance.EncounterBattleEnd();
                 }
             }
         }
@@ -83,6 +82,7 @@ public partial class BattlePlayerMercyMenuState : StateNode
                             enemy._OnSpare();
                         }
                     }
+                    _NextState();
                 }
                 else if (choiced == "FREE")
                 {
@@ -103,10 +103,15 @@ public partial class BattlePlayerMercyMenuState : StateNode
     public override void _ExitState()
     {
     }
+    
+    private void _NextState()
+    {
+        UtmxBattleManager.Instance.GetBattleController().ChangeToPlayerDialogueState();
+    }
 
     private async void _OpenTextMenu()
     {
-        UtmxDialogueQueueManager.Instance.AppendDialogue(_freeText);
+        UtmxDialogueQueueManager.Instance.AppendDialogue(UtmxBattleManager.Instance.FreeText);
         await MenuManager.OpenMenu("EncounterTextMenu");
     }
 

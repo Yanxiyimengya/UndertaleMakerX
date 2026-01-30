@@ -4,11 +4,10 @@ export default class MyItem extends UTMX.Item {
 	
 	constructor() {
 		super();
-		this.name = "我的物品";
+		this.displayName = "我的物品";
 	}
 	
 	onUsed() {
-		UTMX.debug.print("active:name -> " + this.name);
-		UTMX.debug.print("active:DisplayName -> " + this.DisplayName);
+		return "你使用了我的物品！";
 	}
 }

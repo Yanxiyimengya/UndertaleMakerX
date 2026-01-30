@@ -2,7 +2,7 @@ using Godot;
 using System;
 
 [GlobalClass]
-public partial class BattlePlayerDialogState : StateNode
+public partial class BattlePlayerDialogueState : StateNode
 {
     [Export]
     BattleMenuManager MenuManager;
@@ -40,12 +40,14 @@ public partial class BattlePlayerDialogState : StateNode
         if (UtmxDialogueQueueManager.Instance.DialogueCount() > 0)
         {
             string dialogueText = UtmxDialogueQueueManager.Instance.GetNextDialogueAsText();
-            TextMenu.ShowEncounterText($"* {dialogueText}");
+            TextMenu.ShowEncounterText(dialogueText);
         }
         else
         {
             if (!UtmxBattleManager.Instance.Endded)
-                SwitchState("BattleEnemyDialogueState");
+            {
+                UtmxBattleManager.Instance.GetBattleController().ChangeToEnemyDialogueState();
+            }
         }
     }
 }

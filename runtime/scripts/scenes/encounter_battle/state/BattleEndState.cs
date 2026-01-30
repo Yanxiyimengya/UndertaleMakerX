@@ -11,6 +11,16 @@ public partial class BattleEndState : StateNode
     [Export]
     BattleMenuManager MenuManager;
 
+    public override void _Process(double delta)
+    {
+        if (TextMenu.IsTextTyperFinished())
+        {
+            if (Input.IsActionJustPressed("confirm"))
+            {
+                UtmxBattleManager.Instance.EncounterBattleEnd();
+            }
+        }
+    }
     public override async void _EnterState()
     {
         await MenuManager.OpenMenu("EncounterTextMenu");

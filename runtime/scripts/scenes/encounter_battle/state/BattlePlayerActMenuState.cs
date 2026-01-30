@@ -140,7 +140,9 @@ public partial class BattlePlayerActMenuState : StateNode
 		{
 			_selected = true;
 			await MenuManager.OpenMenu("EncounterActPageMenu");
-			encounterActPageMenu.SetChoice(ActChoice);
+			ActChoice = Math.Clamp(ActChoice, 0, actionsCount);
+            _prevActChoice = ActChoice;
+            encounterActPageMenu.SetChoice(ActChoice);
 		}
 	}
 
@@ -157,8 +159,8 @@ public partial class BattlePlayerActMenuState : StateNode
 	{
 		string actionCommand = encounterActPageMenu.GetChoicedDisplayName();
 		UtmxBattleManager.Instance.EnemysList[EnemyChoice]._HandleAction(actionCommand);
-		SwitchState("BattlePlayerDialogState");
-	}
+        UtmxBattleManager.Instance.GetBattleController().ChangeToPlayerDialogueState();
+    }
 
 	public override async void _EnterState()
 	{

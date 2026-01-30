@@ -12,7 +12,7 @@ public partial class BaseWeapon : BaseItem
     {
         float atk = UtmxPlayerDataManager.PlayerAttack + Attack;
         float def = targetEnemy.Defence;
-        float damage = atk - def + GD.Randf() * 2;
+        float damage = atk - def + (GD.Randf() * 2);
         if (value <= 12)
         {
             damage *= 2.2F;
@@ -22,9 +22,9 @@ public partial class BaseWeapon : BaseItem
             damage *= (1 - value / 545) * 2F;
         }
         damage = Mathf.Round(damage);
-        if (damage <= -1)
+        if (damage <= 0)
         {
-            damage = -1;
+            damage = 0;
         }
         return damage;
     }

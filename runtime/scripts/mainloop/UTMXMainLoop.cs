@@ -14,7 +14,7 @@ public partial class UtmxMainLoop : SceneTree
 	public override void _Initialize()
 	{
 		// 加载资源包配置项
-		UtmxRuntimeProjectConfig.LoadConfiguration($"{EngineProperties.DATAPACK_RESOURCE_PATH}/project_config.json");
+		UtmxRuntimeProjectConfig.Loadencounter($"{EngineProperties.DATAPACK_RESOURCE_PATH}/project_config.json");
 
 		_cmdArgs = ParseCmdlineArgs();
 		InitializeWindow();
