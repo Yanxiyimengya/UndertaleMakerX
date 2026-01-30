@@ -14,12 +14,10 @@ public partial class BattleEnemyState : StateNode
     public override void _EnterState()
     {
         turnEnded = false;
-        turnTimer = 0.0;
         _battleMainArena = UtmxBattleManager.Instance.GetMainArena();
-        turn = UtmxBattleManager.Instance.GetCurrentTurn();
         BattlePlayerSoul soul = UtmxBattleManager.Instance.GetPlayerSoul();
         soul.Movable = true;
-        if (turn == null)
+        if (!UtmxBattleManager.Instance.TurnStart())
         {
             EndEnemyTurn();
         }
@@ -28,17 +26,13 @@ public partial class BattleEnemyState : StateNode
     public override void _ExitState()
     {
         BattlePlayerSoul soul = UtmxBattleManager.Instance.GetPlayerSoul();
-        turn.End();
-        UtmxBattleManager.Instance.NextTurn();
         soul.Movable = true;
         soul.Visible = true;
     }
 
     public override void _Process(double delta)
     {
-        turn.Update();
-        turnTimer += delta;
-        if (!turnEnded && turnTimer >= turn.TurnTime)
+        if (!UtmxBattleManager.Instance.TurnUpdate(delta))
         {
             EndEnemyTurn();
         }
@@ -46,17 +40,25 @@ public partial class BattleEnemyState : StateNode
 
     private async void EndEnemyTurn()
     {
-        BattlePlayerSoul soul = UtmxBattleManager.Instance.GetPlayerSoul();
-        soul.Visible = false;
-        soul.Movable = false;
-        turnEnded = true;
-        if (_tween != null && _tween.IsRunning())
+        if (!turnEnded)
         {
-            _tween.Kill();
+            UtmxBattleManager.Instance.TurnEnd();
+            BattlePlayerSoul soul = UtmxBattleManager.Instance.GetPlayerSoul();
+            soul.Visible = false;
+            soul.Movable = false;
+            turnEnded = true;
+            if (_tween != null && _tween.IsRunning())
+            {
+                _tween.Kill();
+            }
+            Vector2 targetSize = new Vector2(565, 130);
+            if (_battleMainArena.Size != targetSize)
+            {
+                _tween = GetTree().CreateTween();
+                _tween.TweenProperty(_battleMainArena, "Size", targetSize, 0.4);
+                await ToSignal(_tween, Tween.SignalName.Finished);
+            }
+            SwitchState("BattlePlayerChoiceActionState");
         }
-        _tween = GetTree().CreateTween();
-        _tween.TweenProperty(_battleMainArena, "Size", new Vector2(565, 130), 0.4);
-        await ToSignal(_tween, Tween.SignalName.Finished);
-        SwitchState("BattlePlayerChoiceActionState");
     }
 }

@@ -2,6 +2,7 @@ import {UtmxDebugger} from "res://scripts/js/wappers/utmx_debugger.wapper.js";
 import {UtmxAudioPlayer} from "res://scripts/js/wappers/utmx_audio_player.wapper.js";
 import {UtmxInput} from "res://scripts/js/wappers/utmx_input.wapper.js";
 import {UtmxBaseItem} from "res://scripts/js/wappers/utmx_item.wapper.js";
+import {UtmxBaseEnemy} from "res://scripts/js/wappers/utmx_enemy.wapper.js";
 
 export class UTMX 
 {
@@ -10,4 +11,5 @@ export class UTMX
 	static input = UtmxInput;
 
 	static Item = UtmxBaseItem;
+	static Enemy = UtmxBaseEnemy;
 }

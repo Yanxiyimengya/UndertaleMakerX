@@ -15,7 +15,8 @@ public class JavaScriptCoreInterface
             { "__audio_player" , typeof(UtmxGlobalStreamPlayer) },
             { "__input" , typeof(UtmxInputManager)},
 
-            { "__UtmxItem" , typeof(JavaScriptProxyItem)},
+            { "__UtmxItem" , typeof(JavaScriptItemProxy)},
+            { "__UtmxEnemy" , typeof(JavaScriptEnemyProxy)},
         };
     }
     public static Dictionary<string, string> _GetInterfaceExportScripts()

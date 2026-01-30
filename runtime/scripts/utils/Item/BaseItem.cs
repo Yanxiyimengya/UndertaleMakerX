@@ -7,7 +7,7 @@ public partial class BaseItem : Resource
     public string DisplayName { get; set; } = "ITEM";
 
     [Export]
-    public int Slot { get; set; }
+    public int ItemSlot { get; set; }
 
     public virtual void _OnUseSelected()
     {
@@ -23,6 +23,6 @@ public partial class BaseItem : Resource
 
     public void RemoveSelf()
     {
-        UtmxPlayerDataManager.RemoveItem(Slot);
+        UtmxPlayerDataManager.RemoveItem(ItemSlot);
     }
 }

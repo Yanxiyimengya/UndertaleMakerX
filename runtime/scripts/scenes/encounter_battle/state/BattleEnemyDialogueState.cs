@@ -36,20 +36,18 @@ public partial class BattleEnemyDialogueState : StateNode
 	{
 		MenuManager.CloseAllMenu();
 		BattleMainArenaExpand _battleMainArena = UtmxBattleManager.Instance.GetMainArena();
-		BattleTurn currentTurn = UtmxBattleManager.Instance.GetCurrentTurn();
+        UtmxBattleManager.Instance.TurnInitialize();
 		BattlePlayerSoul soul = UtmxBattleManager.Instance.GetPlayerSoul();
-		currentTurn.Initialize();
-		soul.GlobalPosition = currentTurn.SoulPosition;
+		soul.GlobalPosition = UtmxBattleManager.Instance.GetTurnSoulInitializePosition();
 		soul.Movable = false;
-
-		if (_tween != null && _tween.IsRunning())
+		soul.Visible = true;
+        if (_tween != null && _tween.IsRunning())
 		{
 			_tween.Kill();
 		}
 		_tween = GetTree().CreateTween();
-		_tween.TweenProperty(_battleMainArena, "Size", currentTurn.ArenaSize, 0.4);
+		_tween.TweenProperty(_battleMainArena, "Size", UtmxBattleManager.Instance.GetTurnArenaInitializeSize(), 0.4);
 		NextStep();
-
 	}
 
 	public override void _ExitState()
@@ -100,6 +98,15 @@ public partial class BattleEnemyDialogueState : StateNode
 			}
 		}
 		else
-			SwitchState("BattleEnemyState");
+		{
+			if (UtmxBattleManager.Instance.GetTurnCount() > 0)
+			{
+				SwitchState("BattleEnemyState");
+			}
+			else
+            {
+                SwitchState("BattlePlayerChoiceActionState");
+            }
+		}
 	}
 }

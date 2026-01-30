@@ -14,7 +14,7 @@ public partial class BattleController : Node
 	{
 		UtmxBattleManager.Instance.InitializeBattle(BattleStateMachine, PlayerSoul, MainArena);
 		BattleStateMachine.SwitchToState(UtmxBattleManager.Instance.GetFirstBattleState());
-	}
+	} 
 	
 	
 	

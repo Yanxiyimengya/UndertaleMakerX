@@ -5,33 +5,40 @@ using System;
 [GlobalClass]
 public partial class BaseEnemy : Node2D
 {
-    public string DisplayName = "ENEMY";
-    public int EnemySlot = 0;
-
-    public float Attack = 0.0F;
-    public float Defence = 0.0F;
-    public float Hp = 100.0F;
-    public float MaxHp = 100.0F;
-    public bool AllowSpare = true;
-    public bool CanSpare = false;
-    public string MissText = "MISS";
-    public Vector2 CenterPosition = new Vector2(0.0F, -80.0F);
-    public Array<string> Actions = ["CHECK"];
-
-    public override void _Ready()
+    public enum AttackStatus
     {
-        base._Ready();
+        Selected,  // 菜单中被选中
+        Hit,     // 确认攻击
+        Missed      // 未确认
     }
 
-    public virtual void OnSpare()
+    public string DisplayName { get; set; } = "ENEMY";
+    public int EnemySlot { get; set; } = 0;
+    public float Attack { get; set; } = 0.0F;
+    public float Defence { get; set; } = 0.0F;
+    public float Hp { get; set; } = 100.0F;
+    public float MaxHp { get; set; } = 100.0F;
+    public bool AllowSpare { get; set; } = true;
+    public bool CanSpare { get; set; } = false;
+    public string MissText { get; set; } = "MISS";
+    public string[] Actions { get; set; } = ["CHECK"];
+    public Vector2 CenterPosition { get; set; } = new Vector2(0.0F, -80.0F);
+
+    public virtual void _OnSpare()
     {
     }
 
-    public virtual void HandleAction(string action)
+    public virtual void _HandleAction(string action)
     {
     }
-    public virtual void HandleAttack(bool missed)
+
+    public virtual void _HandleAttack(AttackStatus status)
     {
+    }
+
+    public virtual BattleTurn _GetNextTurn()
+    {
+        return new BattleTurn();
     }
 
     public void AppendDialogue(string dialogueMessage, Vector2? offset = null, bool hideSpike = false, int dir = 2)

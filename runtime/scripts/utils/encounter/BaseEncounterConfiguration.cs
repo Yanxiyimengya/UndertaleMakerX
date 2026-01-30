@@ -15,7 +15,7 @@ public partial class BaseEncounterConfiguration : Resource
     [Export]
     public string EncounterBattleFirstState = "";
     [Export]
-    public Array<string> EnemysList = new() {"BaseEnemy"};
+    public string[] EnemysList = [ "MyEnemy" ];
     [Export]
     public bool CanFree = true;
 }

@@ -50,7 +50,7 @@ public class JavaScriptModuleResolver : IModuleLoader
         }
     }
 
-    private string ResolvePath(string specifier, string referencingModuleLocation)
+    public static string ResolvePath(string specifier, string referencingModuleLocation)
     {
         if (string.IsNullOrEmpty(specifier)) { return null; }
 
@@ -66,11 +66,10 @@ public class JavaScriptModuleResolver : IModuleLoader
             {
                 string referencingDir = Path.GetDirectoryName(referencingModuleLocation);
                 resolvedPath = Path.Combine(referencingDir, resPath);
-                if (!resolvedPath.EndsWith(".js")) resolvedPath += ".js";
             }
             else
             {
-                resolvedPath = specifier;
+                return specifier;
             }
         }
         else
@@ -82,10 +81,10 @@ public class JavaScriptModuleResolver : IModuleLoader
             }
             else
             {
-                resolvedPath = specifier;
+                return specifier;
             }
-            if (!resolvedPath.EndsWith(".js")) resolvedPath += ".js";
         }
+        if (!resolvedPath.EndsWith(".js")) resolvedPath += ".js";
         return resolvedPath;
     }
 }

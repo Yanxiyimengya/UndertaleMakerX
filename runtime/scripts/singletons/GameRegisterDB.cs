@@ -152,13 +152,17 @@ partial class JavaScriptItemRegisterData : BaseItemRegisterData
 	{
 		_jsPath = scriptPath;
 		_jsClass = JavaScriptBridge.FromFile(_jsPath);
+		if (_jsClass == null)
+		{
+			UtmxLogger.Error($"Unable to load script from {scriptPath}");
+		}
 	}
 	public override BaseItem GetInstance()
 	{
-		if (_jsClass != null)
+		JavaScriptObjectInstance instance = _jsClass?.New();
+		if (instance != null)
 		{
-			JavaScriptObjectInstance instance = _jsClass.New();
-			JavaScriptProxyItem item = instance.ToObject() as JavaScriptProxyItem;
+			JavaScriptItemProxy item = instance.ToObject() as JavaScriptItemProxy;
 			item.JsInstance = instance;
 			return item;
 		}
@@ -173,13 +177,19 @@ partial class JavaScriptEnemyRegisterData : BaseEnemyRegisterData
 	{
 		_jsPath = scriptPath;
 		_jsClass = JavaScriptBridge.FromFile(_jsPath);
+		if (_jsClass == null)
+		{
+			UtmxLogger.Error($"Unable to load script from {scriptPath}");
+		}
 	}
 	public override BaseEnemy GetInstance()
 	{
-		if (_jsClass != null)
+		JavaScriptObjectInstance instance = _jsClass?.New();
+		if (instance != null)
 		{
-			JavaScriptObjectInstance instance = _jsClass.New();
-			return instance.ToObject() as BaseEnemy;
+			JavaScriptEnemyProxy enemy = instance.ToObject() as JavaScriptEnemyProxy;
+			enemy.JsInstance = instance;
+			return enemy;
 		}
 		return null;
 	}
@@ -218,6 +228,10 @@ public partial class GameRegisterDB
 			enemy = enemyData.GetInstance();
 			return true;
 		}
+		else
+		{
+			UtmxLogger.Warning($"EnemyId '{enemyId}' not found in GameRegisterDB.");
+		}
 		return false;
 	}
 	public static void RegisterItem(string itemId, Type t)
@@ -236,6 +250,10 @@ public partial class GameRegisterDB
 		{
 			item = itemData.GetInstance();
 			return true;
+		}
+		else
+		{
+			UtmxLogger.Warning($"itemId '{itemId}' not found in GameRegisterDB.");
 		}
 		return false;
 	}

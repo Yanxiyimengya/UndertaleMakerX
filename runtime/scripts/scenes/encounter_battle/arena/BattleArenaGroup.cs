@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.ComponentModel.Design;
 
 [Tool]
 [GlobalClass]
@@ -28,7 +29,7 @@ public partial class BattleArenaGroup : Node2D
 		_cullingMaterial = new CanvasItemMaterial();
 		_cullingMaterial.BlendMode = CanvasItemMaterial.BlendModeEnum.Sub;
 	}
-	public BattleArenaGroup()
+	public void Initialize()
 	{
 		_borderCanvas = RenderingServer.CanvasCreate();
 		_maskCanvas = RenderingServer.CanvasCreate();
@@ -56,10 +57,22 @@ public partial class BattleArenaGroup : Node2D
 
 		RenderingServer.CanvasItemSetMaterial(_arenaBorderCullingCanvasItem, _cullingMaterial.GetRid());
 		RenderingServer.CanvasItemSetMaterial(_arenaMaskCullingCanvasItem, _cullingMaterial.GetRid());
+
+		RenderingServer.ViewportAttachCanvas(GetViewport().GetViewportRid(), MainCanvas);
+		_borderViewportTextureRid = RenderingServer.ViewportGetTexture(_borderViewport);
+		_maskViewportTextureRid = RenderingServer.ViewportGetTexture(_maskViewport);
+		RenderingServer.CanvasItemSetParent(MainCanvasItem, GetCanvas());
+		RenderingServer.CanvasItemSetParent(_arenaBorderRenderingCanvasItem, _borderCanvas);
+		RenderingServer.CanvasItemSetParent(_arenaBorderCullingCanvasItem, _borderCanvas);
+		RenderingServer.CanvasItemSetParent(_arenaMaskRenderingCanvasItem, _maskCanvas);
+		RenderingServer.CanvasItemSetParent(_arenaMaskCullingCanvasItem, _maskCanvas);
 	}
 
-	~BattleArenaGroup()
-	{ 
+	public void Uninitialize()
+	{
+		if (_borderViewportTextureRid.IsValid) RenderingServer.FreeRid(_borderViewportTextureRid);
+		if (_maskViewportTextureRid.IsValid) RenderingServer.FreeRid(_maskViewportTextureRid);
+
 		if (MainCanvasItem.IsValid) RenderingServer.FreeRid(MainCanvasItem);
 		if (_arenaBorderRenderingCanvasItem.IsValid) RenderingServer.FreeRid(_arenaBorderRenderingCanvasItem);
 		if (_arenaBorderCullingCanvasItem.IsValid) RenderingServer.FreeRid(_arenaBorderCullingCanvasItem);
@@ -74,29 +87,27 @@ public partial class BattleArenaGroup : Node2D
 		if (_maskViewport.IsValid) RenderingServer.FreeRid(_maskViewport);
 	}
 
-	public override void _Ready()
+	public override void _EnterTree()
 	{
-		RenderingServer.ViewportAttachCanvas(GetViewport().GetViewportRid(), MainCanvas);
-		_borderViewportTextureRid = RenderingServer.ViewportGetTexture(_borderViewport);
-		_maskViewportTextureRid = RenderingServer.ViewportGetTexture(_maskViewport);
-		RenderingServer.CanvasItemSetParent(MainCanvasItem, GetCanvas());
-		RenderingServer.CanvasItemSetParent(_arenaBorderRenderingCanvasItem, _borderCanvas);
-		RenderingServer.CanvasItemSetParent(_arenaBorderCullingCanvasItem, _borderCanvas);
-		RenderingServer.CanvasItemSetParent(_arenaMaskRenderingCanvasItem, _maskCanvas);
-		RenderingServer.CanvasItemSetParent(_arenaMaskCullingCanvasItem, _maskCanvas);
+		Initialize();
 		QueueRedraw();
+	}
+
+	public override void _ExitTree()
+	{
+		Uninitialize();
 	}
 
 	public override void _Process(double delta)
 	{
 		GetCameraTransform();
 		RenderingServer.CanvasItemSetTransform(MainCanvasItem, CameraTransform);
+		RenderingServer.CanvasItemClear(_arenaBorderRenderingCanvasItem);
+		RenderingServer.CanvasItemClear(_arenaMaskRenderingCanvasItem);
+		RenderingServer.CanvasItemClear(_arenaBorderCullingCanvasItem);
+		RenderingServer.CanvasItemClear(_arenaMaskCullingCanvasItem);
 		if (IsInsideTree() && Visible)
 		{
-			RenderingServer.CanvasItemClear(_arenaBorderRenderingCanvasItem);
-			RenderingServer.CanvasItemClear(_arenaMaskRenderingCanvasItem);
-			RenderingServer.CanvasItemClear(_arenaBorderCullingCanvasItem);
-			RenderingServer.CanvasItemClear(_arenaMaskCullingCanvasItem);
 			bool _requireRedraw = false;
 			foreach (Node _child in GetChildren())
 			{

@@ -80,7 +80,7 @@ public partial class BattlePlayerMercyMenuState : StateNode
                     {
                         if (enemy.AllowSpare && enemy.CanSpare)
                         {
-                            enemy.OnSpare();
+                            enemy._OnSpare();
                         }
                     }
                 }

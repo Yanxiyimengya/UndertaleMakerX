@@ -3,14 +3,11 @@ using Godot;
 using Jint;
 using Jint.Native;
 using Jint.Native.Function;
-using Jint.Native.Map;
 using Jint.Native.Object;
 using Jint.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text.Json.Nodes;
-using static Godot.HttpRequest;
 
 public class JavaScriptBridge : ScriptBridge
 {
@@ -19,11 +16,10 @@ public class JavaScriptBridge : ScriptBridge
 		{
 			options.EnableModules(new JavaScriptModuleResolver());
 			options.AllowClr();
-            options.Interop.AllowGetType = true;
-            options.Interop.AllowWrite = true;
+			options.Interop.AllowGetType = true;
+			options.Interop.AllowWrite = true;
 
-        });
-
+		});
 	static JavaScriptBridge()
 	{
 		MainEngine.Modules.Add(JavaScriptCoreInterface.ModuleName, (builder) =>
@@ -61,9 +57,10 @@ public class JavaScriptBridge : ScriptBridge
 
 	public static JavaScriptClass FromFile(string path)
 	{
-		if (Godot.FileAccess.FileExists(path))
+		string filePath = JavaScriptModuleResolver.ResolvePath(path, "");
+		if (Godot.FileAccess.FileExists(filePath))
 		{
-			ObjectInstance jsNamespace = ImportModule(path);
+			ObjectInstance jsNamespace = ImportModule(filePath);
 			if (jsNamespace != null)
 			{
 				return _ConstructScriptObject(jsNamespace);
@@ -106,6 +103,7 @@ public class JavaScriptBridge : ScriptBridge
 		}
 		catch (Exception ex) when (!(ex is JavaScriptException))
 		{
+			UtmxLogger.Error($"Try to load javascript module {id}.");
 			UtmxLogger.Error($"OuterException Type: {ex.GetType().FullName}");
 			UtmxLogger.Error($"OuterException Message: {ex.Message}");
 			UtmxLogger.Error($".NET StackTrace:\n{ex.StackTrace}");
