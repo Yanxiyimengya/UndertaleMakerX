@@ -73,7 +73,7 @@ public partial class GameoverScene : Node
 		await ToSignal(_tween, Tween.SignalName.Finished);
 
 		GameoverTextTyper.Visible = true;
-		GameoverTextTyper.Start(UtmxBattleManager.Instance.DeathText);
+		GameoverTextTyper.Start(UtmxBattleManager.Instance.GetEncounterInstance()?.DeathText);
 		_inputAcceptable = true;
 	}
 

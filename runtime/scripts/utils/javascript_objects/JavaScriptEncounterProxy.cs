@@ -5,10 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public partial class JavaScriptEncounterProxy : BaseEncounter
+public partial class JavaScriptEncounterProxy : BaseEncounter, IJavaScriptObject
 {
-    public JavaScriptObjectInstance JsInstance;
-
+    public JavaScriptObjectInstance JsInstance { get; set; }
     public override void _OnBattleStart()
     {
         JsInstance?.Invoke("onBattleStart", []);

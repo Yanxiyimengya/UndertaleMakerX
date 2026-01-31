@@ -1,12 +1,14 @@
 [gd_scene format=3 uid="uid://o3ubysucd5hn"]
 
-[ext_resource type="Script" uid="uid://cq1dajdg36hgr" path="res://scripts/scenes/encounter_battle/controllers/ProjectileController.cs" id="2_3wf68"]
+[ext_resource type="Script" uid="uid://cf7kq3mwp7e6n" path="res://scripts/scenes/encounter_battle/controllers/BattleProjectileController.cs" id="2_3wf68"]
 [ext_resource type="Texture2D" uid="uid://cpt8lkhth2ikc" path="res://__data__/built-in-resources/textures/ui/battle_screen/bg/spr_battlebg_0.png" id="2_4xtxd"]
 [ext_resource type="Script" uid="uid://cctn2p527r38" path="res://scripts/utils/state_machine/StateMachine.cs" id="2_62htl"]
 [ext_resource type="Script" uid="uid://beqqcxbxsdem6" path="res://scripts/scenes/encounter_battle/controllers/BattleController.cs" id="2_mdx4q"]
 [ext_resource type="Script" uid="uid://c0ouwp06q4136" path="res://scripts/scenes/encounter_battle/state/BattlePlayerChoiceActionState.cs" id="3_18p8v"]
-[ext_resource type="Script" uid="uid://dt7k48j1jleu" path="res://scripts/scenes/encounter_battle/controllers/EnemyController.cs" id="3_u6j2e"]
+[ext_resource type="Script" uid="uid://dujsg2v330x4n" path="res://scripts/scenes/encounter_battle/controllers/BattleEnemyController.cs" id="3_u6j2e"]
 [ext_resource type="PackedScene" uid="uid://cee05uq5s87yp" path="res://scenes/encounter_battle/ui/status_bar/battle_status_bar.tscn" id="4_18p8v"]
+[ext_resource type="Script" uid="uid://e0km3ro3qsg7" path="res://scripts/scenes/encounter_battle/controllers/BattleTurnController.cs" id="4_knxdc"]
+[ext_resource type="Script" uid="uid://bwg8g6ptoi8ke" path="res://scripts/scenes/encounter_battle/controllers/BattlePlayerController.cs" id="5_vjgqx"]
 [ext_resource type="PackedScene" uid="uid://cfmmgpj17a2fc" path="res://scenes/encounter_battle/ui/button/battle_screen_button.tscn" id="5_wxkx7"]
 [ext_resource type="Texture2D" uid="uid://7t5wbkpk50fu" path="res://__data__/built-in-resources/textures/ui/buttons/spr_actbt_center_0.png" id="6_53d75"]
 [ext_resource type="Script" uid="uid://sekm2lap34uh" path="res://scripts/scenes/encounter_battle/state/BattlePlayerFightMenuState.cs" id="7_0mx1x"]
@@ -47,22 +49,31 @@
 
 [node name="EncounterBattle" type="Node" unique_id=1037590223]
 
-[node name="BattleControllers" type="Node" parent="." unique_id=1322891353]
-
-[node name="BattleController" type="Node" parent="BattleControllers" unique_id=1909813863 node_paths=PackedStringArray("PlayerSoul", "MainArena", "BattleStateMachine")]
+[node name="BattleController" type="Node" parent="." unique_id=1909813863 node_paths=PackedStringArray("PlayerSoul", "MainArena", "BattleStateMachine", "EnemyController", "PlayerController", "TurnController", "ProjectileController")]
 script = ExtResource("2_mdx4q")
-PlayerSoul = NodePath("../../Players/BattlePlayerSoul")
-MainArena = NodePath("../../BattleArenaGroup/MainArena")
-BattleStateMachine = NodePath("../../BattleStateMachine")
+PlayerSoul = NodePath("../Players/BattlePlayerSoul")
+MainArena = NodePath("../BattleArenaGroup/MainArena")
+BattleStateMachine = NodePath("../BattleStateMachine")
+EnemyController = NodePath("BattleEnemyController")
+PlayerController = NodePath("BattlePlayerController")
+TurnController = NodePath("BattleTurnController")
+ProjectileController = NodePath("BattleProjectileController")
 
-[node name="ProjectileController" type="Node" parent="BattleControllers" unique_id=1870263886 node_paths=PackedStringArray("ProjectilesNode", "ArenaMask")]
+[node name="BattleProjectileController" type="Node" parent="BattleController" unique_id=1870263886 node_paths=PackedStringArray("ProjectilesNode", "ArenaMask")]
 script = ExtResource("2_3wf68")
 ProjectilesNode = NodePath("../../Projectiles")
 ArenaMask = NodePath("../../BattleArenaGroup/BattleArenaMask")
 
-[node name="EnemyController" type="Node" parent="BattleControllers" unique_id=1106917610 node_paths=PackedStringArray("EnemysNode")]
+[node name="BattleEnemyController" type="Node" parent="BattleController" unique_id=1106917610 node_paths=PackedStringArray("EnemysNode")]
 script = ExtResource("3_u6j2e")
 EnemysNode = NodePath("../../Enemys")
+
+[node name="BattleTurnController" type="Node" parent="BattleController" unique_id=1363596801]
+script = ExtResource("4_knxdc")
+
+[node name="BattlePlayerController" type="Node" parent="BattleController" unique_id=1767836349 node_paths=PackedStringArray("PlayerSoul")]
+script = ExtResource("5_vjgqx")
+PlayerSoul = NodePath("../../Players/BattlePlayerSoul")
 
 [node name="BattleStateMachine" type="Node" parent="." unique_id=261701519]
 script = ExtResource("2_62htl")

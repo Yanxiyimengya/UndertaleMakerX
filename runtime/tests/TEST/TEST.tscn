@@ -1,14 +1,9 @@
 [gd_scene format=3 uid="uid://dbstu48ru7vek"]
 
-[ext_resource type="Script" uid="uid://0sdlv16sg7gj" path="res://scripts/singletons/UtmxSceneManager.cs" id="2_8k0jr"]
-[ext_resource type="Script" uid="uid://d1f5egxw1ec8r" path="res://scripts/singletons/script_boot/js/JavaScriptNode.cs" id="6_otw5d"]
+[ext_resource type="Script" uid="uid://v6h8bqj4xyfj" path="res://scripts/utils/javascript_objects/JavaScriptNode.cs" id="6_otw5d"]
 
 [node name="TEST" type="Node" unique_id=399590034]
 
 [node name="TestInput" type="Node" parent="." unique_id=1790400775]
 script = ExtResource("6_otw5d")
 JavaScriptFile = "res://tests/TEST/test_input.js"
-metadata/_custom_type_script = "uid://d1f5egxw1ec8r"
-
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=288102571]
-script = ExtResource("2_8k0jr")

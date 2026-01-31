@@ -18,6 +18,11 @@ public class JavaScriptCoreInterface
             { "__UtmxItem" , typeof(JavaScriptItemProxy)},
             { "__UtmxEnemy" , typeof(JavaScriptEnemyProxy)},
             { "__UtmxEncounter" , typeof(JavaScriptEncounterProxy)},
+            { "__BattleTurn" , typeof(JavaScriptBattleTurnProxy)},
+
+            { "__Vector2" , typeof(Vector2)},
+            { "__Vector3" , typeof(Vector3)},
+            { "__Vector4" , typeof(Vector4)},
         };
     }
     public static Dictionary<string, string> _GetInterfaceExportScripts()

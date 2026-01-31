@@ -35,18 +35,18 @@ public partial class BattleEnemyDialogueState : StateNode
 	public override void _EnterState()
 	{
 		MenuManager.CloseAllMenu();
-		BattleMainArenaExpand _battleMainArena = UtmxBattleManager.Instance.GetMainArena();
-        UtmxBattleManager.Instance.TurnInitialize();
-		BattlePlayerSoul soul = UtmxBattleManager.Instance.GetPlayerSoul();
-		soul.GlobalPosition = UtmxBattleManager.Instance.GetTurnSoulInitializePosition();
+		BattleMainArenaExpand _battleMainArena = UtmxBattleManager.Instance.GetBattleController().MainArena;
+		UtmxBattleManager.Instance.GetBattleTurnController().TurnInitialize();
+		BattlePlayerSoul soul = UtmxBattleManager.Instance.GetBattleController().PlayerSoul;
+		soul.GlobalPosition = UtmxBattleManager.Instance.GetBattleTurnController().GetTurnSoulInitializePosition();
 		soul.Movable = false;
 		soul.Visible = true;
-        if (_tween != null && _tween.IsRunning())
+		if (_tween != null && _tween.IsRunning())
 		{
 			_tween.Kill();
 		}
 		_tween = GetTree().CreateTween();
-		_tween.TweenProperty(_battleMainArena, "Size", UtmxBattleManager.Instance.GetTurnArenaInitializeSize(), 0.4);
+		_tween.TweenProperty(_battleMainArena, "Size", UtmxBattleManager.Instance.GetBattleTurnController().GetTurnArenaInitializeSize(), 0.4);
 		NextStep();
 	}
 
@@ -71,9 +71,9 @@ public partial class BattleEnemyDialogueState : StateNode
 			{
 				foreach (KeyValuePair<int, UtmxDialogueData> pair in dialogue)
 				{
-					if (pair.Key >= 0 && pair.Key < UtmxBattleManager.Instance.GetEnemysCount())
+					if (pair.Key >= 0 && pair.Key < UtmxBattleManager.Instance.GetBattleEnemyController().GetEnemiesCount())
 					{
-						BaseEnemy enemy = UtmxBattleManager.Instance.EnemysList[pair.Key];
+						BaseEnemy enemy = UtmxBattleManager.Instance.GetBattleEnemyController().EnemyList[pair.Key];
 						Node inst = DialogueSpeechBubblePackedScene.Instantiate();
 						if (inst is SpeechBubble bubble)
 						{
@@ -92,21 +92,20 @@ public partial class BattleEnemyDialogueState : StateNode
 						{
 							inst.Free();
 						}
-
 					}
 				}
 			}
 		}
 		else
 		{
-			if (UtmxBattleManager.Instance.GetTurnCount() > 0)
-            {
-                UtmxBattleManager.Instance.GetBattleController().ChangeToEnemyTurnState();
-            }
+			if (UtmxBattleManager.Instance.GetBattleTurnController().GetTurnCount() > 0)
+			{
+				UtmxBattleManager.Instance.GetBattleController().ChangeToEnemyTurnState();
+			}
 			else
-            {
-                UtmxBattleManager.Instance.GetBattleController().ChangeToPlayerTurnState();
-            }
+			{
+				UtmxBattleManager.Instance.GetBattleController().ChangeToPlayerTurnState();
+			}
 		}
 	}
 }

@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class ProjectileController : Node
+public partial class BattleProjectileController : Node
 {
 	[Export]
 	public Node2D ProjectilesNode;

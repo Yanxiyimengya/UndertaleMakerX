@@ -5,6 +5,7 @@ using Jint.Native.Object;
 using Jint.Runtime;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,11 +37,11 @@ public partial class JavaScriptClass : ScriptClass
             }
             if (!string.IsNullOrEmpty(jsEx.Location.SourceFile))
             {
-                UtmxLogger.Error($"SourceFile: {jsEx.Location.SourceFile} ({jsEx.Location.Start.Line}:{jsEx.Location.Start.Column})");
+                UtmxLogger.Error($"{TranslationServer.Translate("SourceFile")}: {jsEx.Location.SourceFile} ({jsEx.Location.Start.Line}:{jsEx.Location.Start.Column})");
             }
             if (!string.IsNullOrEmpty(jsEx.JavaScriptStackTrace))
             {
-                UtmxLogger.Error($"StackTrace: \n{jsEx.JavaScriptStackTrace}");
+                UtmxLogger.Error($"{TranslationServer.Translate("StackTrace")}: \n{jsEx.JavaScriptStackTrace}");
             }
             return null;
         }

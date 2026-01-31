@@ -37,7 +37,7 @@ public partial class UtmxSceneManager : CanvasLayer
 	{
 		if (!FileAccess.FileExists(filePath))
 		{
-			UtmxLogger.Error("Failed to switch scene: Invalid scene name.");
+			UtmxLogger.Error(TranslationServer.Translate("Failed to switch scene: Invalid scene path."));
 			return;
 		}
 		_prevScene = _currentScene;

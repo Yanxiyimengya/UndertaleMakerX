@@ -110,9 +110,10 @@ public partial class BattlePlayerActMenuState : StateNode
 			else if (Input.IsActionJustPressed("down"))
 			{
 				EnemyChoice += 1;
-				if (EnemyChoice >= UtmxBattleManager.Instance.GetEnemysCount())
+				int enemysCount = UtmxBattleManager.Instance.GetBattleEnemyController().GetEnemiesCount();
+				if (EnemyChoice >= enemysCount)
 				{
-					EnemyChoice = UtmxBattleManager.Instance.GetEnemysCount() - 1;
+					EnemyChoice = enemysCount - 1;
 				}
 				else
 				{
@@ -135,14 +136,14 @@ public partial class BattlePlayerActMenuState : StateNode
 
 	private async Task _OpenActMenu()
 	{
-		int actionsCount = UtmxBattleManager.Instance.EnemysList[EnemyChoice].Actions.Length;
+		int actionsCount = UtmxBattleManager.Instance.GetBattleEnemyController().EnemyList[EnemyChoice].Actions.Length;
 		if (actionsCount > 0)
 		{
 			_selected = true;
 			await MenuManager.OpenMenu("EncounterActPageMenu");
 			ActChoice = Math.Clamp(ActChoice, 0, actionsCount);
-            _prevActChoice = ActChoice;
-            encounterActPageMenu.SetChoice(ActChoice);
+			_prevActChoice = ActChoice;
+			encounterActPageMenu.SetChoice(ActChoice);
 		}
 	}
 
@@ -150,17 +151,17 @@ public partial class BattlePlayerActMenuState : StateNode
 	{
 		_selected = false;
 		await MenuManager.OpenMenu("EncounterChoiceEnemyMenu");
-        EnemyChoice = Math.Clamp(EnemyChoice, 0, UtmxBattleManager.Instance.GetEnemysCount());
-        ChoiceEnemyMenu.SetChoice(EnemyChoice);
-        ChoiceEnemyMenu.HpBarSetVisible(false);
+		EnemyChoice = Math.Clamp(EnemyChoice, 0, UtmxBattleManager.Instance.GetBattleEnemyController().GetEnemiesCount());
+		ChoiceEnemyMenu.SetChoice(EnemyChoice);
+		ChoiceEnemyMenu.HpBarSetVisible(false);
 	}
 
 	private void _NextState()
 	{
 		string actionCommand = encounterActPageMenu.GetChoicedDisplayName();
-		UtmxBattleManager.Instance.EnemysList[EnemyChoice]._HandleAction(actionCommand);
-        UtmxBattleManager.Instance.GetBattleController().ChangeToPlayerDialogueState();
-    }
+		UtmxBattleManager.Instance.GetBattleEnemyController().EnemyList[EnemyChoice]._HandleAction(actionCommand);
+		UtmxBattleManager.Instance.GetBattleController().ChangeToPlayerDialogueState();
+	}
 
 	public override async void _EnterState()
 	{
@@ -172,6 +173,7 @@ public partial class BattlePlayerActMenuState : StateNode
 	}
 	public override bool _CanEnterState()
 	{
-		return UtmxBattleManager.Instance.GetEnemysCount() > 0;
+		int enemysCount = UtmxBattleManager.Instance.GetBattleEnemyController().GetEnemiesCount();
+		return enemysCount > 0;
 	}
 }

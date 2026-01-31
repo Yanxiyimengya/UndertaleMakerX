@@ -36,8 +36,8 @@ public partial class BaseEnemy : Node2D
     {
     }
 
-    public virtual BattleTurn _GetNextTurn()
+    public virtual BaseBattleTurn _GetNextTurn()
     {
-        return new BattleTurn();
+        return new BaseBattleTurn();
     }
 }

@@ -4,6 +4,7 @@ export default class TestInput
 {
 	constructor()
 	{
+		UTMX.debug.print("intro");
 		UTMX.input.addAction("my_custom_action");
 		UTMX.input.actionAddKeyButton("my_custom_action", "A".charCodeAt(0));
 

@@ -35,7 +35,7 @@ public partial class UtmxGameManager : Node
 
 		UtmxPlayerDataManager.AddItem("BaseItem");
 		UtmxPlayerDataManager.AddItem("MyItem");
-		UtmxBattleManager.Instance.EncounterBattleStart("MyEncounter");
+		//UtmxBattleManager.EncounterBattleStart("MyEncounter");
 		_mainScriptInstace?.Invoke("onGameStart", []);
 
 	}

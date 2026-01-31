@@ -14,35 +14,30 @@ export class UtmxBaseEncounter extends __UtmxEncounter
     set freeText(value) {
         this.FreeText = value;
     }
-
     get deathText() {
         return this.DeathText;
     }
     set deathText(value) {
         this.DeathText = value;
     }
-
     get endText() {
         return this.EndText;
     }
     set endText(value) {
         this.EndText = value;
     }
-
     get encounterBattleFirstState() {
         return this.EncounterBattleFirstState;
     }
     set encounterBattleFirstState(value) {
         this.EncounterBattleFirstState = value;
     }
-
-    get enemysList() {
-        return this.EnemysList;
+    get enemies() {
+        return this.Enemies;
     }
-    set enemysList(value) {
-        this.EnemysList = value;
+    set enemies(value) {
+        this.Enemies = value;
     }
-
     get canFree() {
         return this.CanFree;
     }

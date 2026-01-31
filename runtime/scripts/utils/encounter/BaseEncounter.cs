@@ -15,7 +15,7 @@ public partial class BaseEncounter : Resource
     [Export]
     public UtmxBattleManager.BattleStatus EncounterBattleFirstState = UtmxBattleManager.BattleStatus.Player;
     [Export]
-    public string[] EnemysList = [ "MyEnemy" ];
+    public string[] Enemies = [ "MyEnemy" ];
     [Export]
     public bool CanFree = true;
 

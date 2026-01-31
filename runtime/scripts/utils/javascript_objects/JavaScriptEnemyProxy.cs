@@ -1,9 +1,9 @@
 using Godot;
 using static Godot.HttpRequest;
 
-public partial class JavaScriptEnemyProxy : BaseEnemy
+public partial class JavaScriptEnemyProxy : BaseEnemy, IJavaScriptObject
 {
-    public JavaScriptObjectInstance JsInstance;
+    public JavaScriptObjectInstance JsInstance { get; set; }
     public override void _OnSpare()
     {
         JsInstance.Invoke("onSpare", []);
@@ -34,23 +34,20 @@ public partial class JavaScriptEnemyProxy : BaseEnemy
     {
         JsInstance.Invoke("onHandleAttack", [status]);
     }
-    public override BattleTurn _GetNextTurn()
+    public override BaseBattleTurn _GetNextTurn()
     {
         object result = JsInstance.Invoke("onGetNextTurn", []);
         if (result != null && result is string path && !string.IsNullOrEmpty(path))
         {
-            JavaScriptClass jsClass = JavaScriptBridge.FromFile(path);
-            if (jsClass != null)
-            {
-                JavaScriptObjectInstance instance = jsClass.New();
-                BattleTurn battleTurn = instance.ToObject() as BattleTurn;
-                if (battleTurn != null)
-                {
-                    return battleTurn;
-                }
-            }
+            JavaScriptBattleTurnProxy battleTurn = IJavaScriptObject.New<JavaScriptBattleTurnProxy>(path);
+            if (battleTurn != null)
+                return battleTurn;
         }
-        return new BattleTurn();
+        else if (result != null && result is BaseBattleTurn turn)
+        {
+            return turn;
+        }
+        return new BaseBattleTurn();
     }
 
     public void AppendEnemyDialogue(object dialogueMessage, Vector2? offset = null, bool hideSpike = false, int dir = 2)

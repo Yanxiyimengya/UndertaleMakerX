@@ -34,12 +34,16 @@ partial class EncounterRegisterData : BaseEncounterRegisterData
 	public EncounterRegisterData(Type encounterType)
 	{
 		if (encounterType == null)
-			throw new ArgumentNullException(nameof(encounterType), "Encounter Type cannot be null");
+			UtmxLogger.Error(nameof(encounterType),
+				TranslationServer.Translate("The registered type name cannot be empty"));
+
 		if (encounterType.IsAbstract || encounterType.IsInterface)
-			throw new ArgumentException($"{encounterType.Name} is an abstract class or interface and cannot be instantiated",
-				nameof(encounterType));
+			UtmxLogger.Error($"{encounterType.Name} {
+				TranslationServer.Translate("is an abstract class or interface and cannot be instantiated.")}");
+
 		if (!typeof(BaseEncounter).IsAssignableFrom(encounterType))
-			throw new ArgumentException($"{encounterType.Name} is not a subclass of BaseEncounter and cannot be registered", nameof(encounterType));
+			UtmxLogger.Error($"{encounterType.Name} {
+				TranslationServer.Translate("Cannot register because it is not a subclass of the specified type")}");
 		_encounterType = encounterType;
 	}
 	public override BaseEncounter GetInstance()
@@ -51,11 +55,14 @@ partial class EncounterRegisterData : BaseEncounterRegisterData
 		}
 		catch (MissingMethodException ex)
 		{
-			UtmxLogger.Error($"Failed to instantiate Encounter {_encounterType.Name}: No public parameterless constructor found! {ex.Message}");
+			UtmxLogger.Error($"{
+				TranslationServer.Translate("Failed to instantiate object")} {_encounterType.Name}: {
+				TranslationServer.Translate("Missing public constructor")}: {ex.Message}");
 		}
 		catch (Exception ex)
 		{
-			UtmxLogger.Error($"Failed to instantiate Encounter {_encounterType.Name}: {ex.Message}");
+			UtmxLogger.Error($"{
+				TranslationServer.Translate("Failed to instantiate object")} {_encounterType.Name}: {ex.Message}");
 		}
 		return null;
 	}
@@ -66,11 +73,16 @@ partial class EnemyRegisterData : BaseEnemyRegisterData
 	public EnemyRegisterData(Type enemyType)
 	{
 		if (enemyType == null)
-			throw new ArgumentNullException(nameof(enemyType), "Enemy Type cannot be null");
+			throw new ArgumentNullException(nameof(enemyType), 
+				TranslationServer.Translate("The registered type name cannot be empty"));
+
 		if (enemyType.IsAbstract || enemyType.IsInterface)
-			throw new ArgumentException($"{enemyType.Name} is an abstract class or interface and cannot be instantiated", nameof(enemyType));
+			UtmxLogger.Error($"{enemyType.Name} {
+				TranslationServer.Translate("is an abstract class or interface and cannot be instantiated.")}");
+
 		if (!typeof(BaseEnemy).IsAssignableFrom(enemyType))
-			throw new ArgumentException($"{enemyType.Name} is not a subclass of BaseEnemy and cannot be registered", nameof(enemyType));
+			UtmxLogger.Error($"{enemyType.Name} {
+				TranslationServer.Translate("Cannot register because it is not a subclass of the specified type")}");
 		_enemyType = enemyType;
 	}
 	public override BaseEnemy GetInstance()
@@ -82,42 +94,53 @@ partial class EnemyRegisterData : BaseEnemyRegisterData
 		}
 		catch (MissingMethodException ex)
 		{
-			UtmxLogger.Error($"Failed to instantiate enemy {_enemyType.Name}: No public parameterless constructor found! {ex.Message}");
+			UtmxLogger.Error($"{
+				TranslationServer.Translate("Failed to instantiate object")} {_enemyType.Name}: {
+				TranslationServer.Translate("Missing public constructor")}: {ex.Message}");
 		}
 		catch (Exception ex)
 		{
-			UtmxLogger.Error($"Failed to instantiate enemy {_enemyType.Name}: {ex.Message}");
+			UtmxLogger.Error($"{
+				TranslationServer.Translate("Failed to instantiate object")} {_enemyType.Name}: {ex.Message}");
 		}
 		return null;
 	}
 }
 partial class ItemRegisterData : BaseItemRegisterData
 {
-	private Type _enemyType;
+	private Type _itemType;
 	public ItemRegisterData(Type itemType)
 	{
 		if (itemType == null)
-			throw new ArgumentNullException(nameof(itemType), "Item Type cannot be null");
+			throw new ArgumentNullException(nameof(itemType),
+				TranslationServer.Translate("The registered type name cannot be empty"));
+		
 		if (itemType.IsAbstract || itemType.IsInterface)
-			throw new ArgumentException($"{itemType.Name} is an abstract class or interface and cannot be instantiated", nameof(itemType));
+			UtmxLogger.Error($"{itemType.Name} {
+				TranslationServer.Translate("is an abstract class or interface and cannot be instantiated.")}");
+		
 		if (!typeof(BaseItem).IsAssignableFrom(itemType))
-			throw new ArgumentException($"{itemType.Name} is not a subclass of BaseItem and cannot be registered", nameof(itemType));
-		_enemyType = itemType;
+			UtmxLogger.Error($"{itemType.Name} {
+				TranslationServer.Translate("Cannot register because it is not a subclass of the specified type")}");
+		_itemType = itemType;
 	}
 	public override BaseItem GetInstance()
 	{
 		try
 		{
-			object instance = Activator.CreateInstance(_enemyType);
+			object instance = Activator.CreateInstance(_itemType);
 			return instance as BaseItem;
 		}
 		catch (MissingMethodException ex)
 		{
-			UtmxLogger.Error($"Failed to instantiate item {_enemyType.Name}: No public parameterless constructor found! {ex.Message}");
+			UtmxLogger.Error($"{
+				TranslationServer.Translate("Failed to instantiate item object")} {_itemType.Name}: {
+				TranslationServer.Translate("Missing public constructor")}: {ex.Message}");
 		}
 		catch (Exception ex)
 		{
-			UtmxLogger.Error($"Failed to instantiate item {_enemyType.Name}: {ex.Message}");
+			UtmxLogger.Error($"{
+				TranslationServer.Translate("Failed to instantiate object")} {_itemType.Name}: {ex.Message}");
 		}
 		return null;
 	}
@@ -128,72 +151,37 @@ partial class ItemRegisterData : BaseItemRegisterData
 partial class JavaScriptEncounterRegisterData : BaseEncounterRegisterData
 {
 	private string _jsPath;
-	private JavaScriptClass _jsClass;
 	public JavaScriptEncounterRegisterData(string scriptPath)
 	{
 		_jsPath = scriptPath;
-		_jsClass = JavaScriptBridge.FromFile(_jsPath);
 	}
 	public override BaseEncounter GetInstance()
-    {
-        JavaScriptObjectInstance instance = _jsClass.New();
-        if (instance != null)
-        {
-            JavaScriptEncounterProxy encounter = instance.ToObject() as JavaScriptEncounterProxy;
-            encounter.JsInstance = instance;
-            return encounter;
-        }
-		return null;
+	{
+		return IJavaScriptObject.New<JavaScriptEncounterProxy>(_jsPath);
 	}
 }
 partial class JavaScriptItemRegisterData : BaseItemRegisterData
 {
 	private string _jsPath;
-	private JavaScriptClass _jsClass;
 	public JavaScriptItemRegisterData(string scriptPath)
 	{
 		_jsPath = scriptPath;
-		_jsClass = JavaScriptBridge.FromFile(_jsPath);
-		if (_jsClass == null)
-		{
-			UtmxLogger.Error($"Unable to load script from {scriptPath}");
-		}
 	}
 	public override BaseItem GetInstance()
 	{
-		JavaScriptObjectInstance instance = _jsClass?.New();
-		if (instance != null)
-		{
-			JavaScriptItemProxy item = instance.ToObject() as JavaScriptItemProxy;
-			item.JsInstance = instance;
-			return item;
-		}
-		return null;
+		return IJavaScriptObject.New<JavaScriptItemProxy>(_jsPath);
 	}
 }
 partial class JavaScriptEnemyRegisterData : BaseEnemyRegisterData
 {
 	private string _jsPath;
-	private JavaScriptClass _jsClass;
 	public JavaScriptEnemyRegisterData(string scriptPath)
 	{
 		_jsPath = scriptPath;
-		_jsClass = JavaScriptBridge.FromFile(_jsPath);
-		if (_jsClass == null)
-		{
-			UtmxLogger.Error($"Unable to load script from {scriptPath}");
-		}
 	}
 	public override BaseEnemy GetInstance()
 	{
-		JavaScriptObjectInstance instance = _jsClass?.New();
-		if (instance != null)
-		{
-			JavaScriptEnemyProxy enemy = instance.ToObject() as JavaScriptEnemyProxy;
-			enemy.JsInstance = instance;
-			return enemy;
-		}
-		return null;
+		return IJavaScriptObject.New<JavaScriptEnemyProxy>(_jsPath);
 	}
 }
 
@@ -214,36 +202,46 @@ public partial class GameRegisterDB
 	}
 
 
-    public static void RegisterEncounter(string encounterId, Type t)
-    {
-        _encounterDB.Add(encounterId, new EncounterRegisterData(t));
-    }
-    public static void RegisterEncounter(string encounterId, string scriptPath)
-    {
-        scriptPath = UtmxResourceLoader.ResolvePath(scriptPath);
-        _encounterDB.Add(encounterId, new JavaScriptEncounterRegisterData(scriptPath));
-    }
-    public static bool TryGetEncounter(string encounterId, out BaseEncounter encounter)
-    {
-        encounter = null;
-        if (_encounterDB.TryGetValue(encounterId, out BaseEncounterRegisterData encounterData))
-        {
-            encounter = encounterData.GetInstance();
-            return true;
-        }
-        else
-        {
-            UtmxLogger.Warning($"EncounterId '{encounterId}' not found in GameRegisterDB.");
-        }
-        return false;
-    }
-
-    public static void RegisterEnemy(string enemyId, Type t)
+	public static void RegisterEncounter(string encounterId, Type t)
 	{
+		if (string.IsNullOrEmpty(encounterId))
+			UtmxLogger.Warning(TranslationServer.Translate("The registered object's ID is invalid and cannot be empty."));
+		_encounterDB.Add(encounterId, new EncounterRegisterData(t));
+	}
+	public static void RegisterEncounter(string encounterId, string scriptPath)
+	{
+		if (string.IsNullOrEmpty(encounterId))
+			UtmxLogger.Warning(TranslationServer.Translate("The registered object's ID is invalid and cannot be empty."));
+		scriptPath = UtmxResourceLoader.ResolvePath(scriptPath);
+		_encounterDB.Add(encounterId, new JavaScriptEncounterRegisterData(scriptPath));
+	}
+	public static bool TryGetEncounter(string encounterId, out BaseEncounter encounter)
+	{
+		encounter = null;
+		if (_encounterDB.TryGetValue(encounterId, out BaseEncounterRegisterData encounterData))
+		{
+			encounter = encounterData.GetInstance();
+			return true;
+		}
+		else
+		{
+			UtmxLogger.Warning($"{
+				TranslationServer.Translate("Invalid")} '{encounterId}' {
+				TranslationServer.Translate("Please check if the object has completed registration.")}");
+		}
+		return false;
+	}
+
+	public static void RegisterEnemy(string enemyId, Type t)
+	{
+		if (string.IsNullOrEmpty(enemyId))
+			UtmxLogger.Warning(TranslationServer.Translate("The registered object's ID is invalid and cannot be empty."));
 		_enemyDB.Add(enemyId, new EnemyRegisterData(t));
 	}
 	public static void RegisterEnemy(string enemyId, string scriptPath)
 	{
+		if (string.IsNullOrEmpty(enemyId))
+			UtmxLogger.Warning(TranslationServer.Translate("The registered object's ID is invalid and cannot be empty."));
 		scriptPath = UtmxResourceLoader.ResolvePath(scriptPath);
 		_enemyDB.Add(enemyId, new JavaScriptEnemyRegisterData(scriptPath));
 	}
@@ -257,16 +255,22 @@ public partial class GameRegisterDB
 		}
 		else
 		{
-			UtmxLogger.Warning($"EnemyId '{enemyId}' not found in GameRegisterDB.");
+			UtmxLogger.Warning($"{
+				TranslationServer.Translate("Invalid")} '{enemyId}' {
+				TranslationServer.Translate("Please check if the object has completed registration.")}");
 		}
 		return false;
 	}
 	public static void RegisterItem(string itemId, Type t)
 	{
+		if (string.IsNullOrEmpty(itemId))
+			UtmxLogger.Warning(TranslationServer.Translate("The registered object's ID is invalid and cannot be empty."));
 		_itemDB.Add(itemId, new ItemRegisterData(t));
 	}
 	public static void RegisterItem(string itemId, string scriptPath)
 	{
+		if (string.IsNullOrEmpty(itemId))
+			UtmxLogger.Warning(TranslationServer.Translate("The registered object's ID is invalid and cannot be empty."));
 		scriptPath = UtmxResourceLoader.ResolvePath(scriptPath);
 		_itemDB.Add(itemId, new JavaScriptItemRegisterData(scriptPath));
 	}
@@ -280,7 +284,9 @@ public partial class GameRegisterDB
 		}
 		else
 		{
-			UtmxLogger.Warning($"itemId '{itemId}' not found in GameRegisterDB.");
+			UtmxLogger.Warning($"{
+				TranslationServer.Translate("Invalid")} '{itemId}' {
+				TranslationServer.Translate("Please check if the object has completed registration.")}");
 		}
 		return false;
 	}

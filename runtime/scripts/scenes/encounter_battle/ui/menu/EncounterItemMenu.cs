@@ -5,17 +5,17 @@ public partial class EncounterItemMenu : EncounterChoiceListMenu
 {
 	public override void UIVisible()
 	{
-		ClearItem();
+		ClearDisplayItem();
 		HpBarSetVisible(false);
 		int index = 0;
 		foreach (BaseItem inventoryItem in UtmxPlayerDataManager.Items)
 		{
-			AddItem(index, inventoryItem.DisplayName, 1, 1);
+            AddDisplayItem(index, inventoryItem.DisplayName, 1, 1);
 			index++;
 		}
 	}
 	public override void UIHidden()
 	{
-		ClearItem();
+        ClearDisplayItem();
 	}
 }

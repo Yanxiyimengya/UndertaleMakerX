@@ -1,4 +1,4 @@
-import {__audio_player, __logger} from "__UTMX";
+import {__audio_player } from "__UTMX";
 
 export class UtmxAudioPlayer
 {

@@ -1,0 +1,21 @@
+keys,zh
+SourceFile,源文件
+StackTrace,堆栈追踪
+Try to load javascript module failed,尝试加载 JavaScript 模块失败
+OuterException Type,外部异常类型
+OuterException Message,外部异常消息
+.NET StackTrace,.NET 堆栈追踪
+InnerException Type,内部异常类型
+InnerException Message,内部异常消息
+InnerException StackTrace,内部异常堆栈追踪
+Failed to instantiate object,实例化对象失败
+Missing public constructor,缺少公共的构造器
+The registered type name cannot be empty,注册的类型名称不能为空
+is an abstract class or interface and cannot be instantiated.,是一个抽象类或接口，无法实例化
+Cannot register because it is not a subclass of the specified type,不是规定类型的子类，无法注册
+Please check if the object has completed registration.,请检查对象是否完成注册
+Invalid,无效的
+Failed to start battle,无法进入战斗
+invalid encounter object,无效的遭遇对象
+The registered object's ID is invalid and cannot be empty.,注册对象的ID无效，不能为空
+Please check if the object has completed registration.,请检查该对象是否已完成注册

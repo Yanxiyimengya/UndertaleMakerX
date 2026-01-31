@@ -43,7 +43,7 @@ public partial class EncounterChoiceListMenu : EncounterChoiceMenu
                 continue;
             }
 
-            ChoiceItem choiceItem = GetItem(slot);
+            ChoiceItem choiceItem = GetDisplayItem(slot);
             menuItem.Visible = true;
             menuItem.Text = choiceItem.ItemDisplayName;
             if (menuItem.ProgressVisible)
@@ -58,7 +58,7 @@ public partial class EncounterChoiceListMenu : EncounterChoiceMenu
         if (soulSelectIndex < 3)
         {
             var menuItem = MenuItems[soulSelectIndex];
-            UtmxBattleManager.Instance.GetPlayerSoul().GlobalTransform = menuItem.GetSoulTransform();
+            UtmxBattleManager.Instance.GetBattleController().PlayerSoul.GlobalTransform = menuItem.GetSoulTransform();
         }
     }
 }

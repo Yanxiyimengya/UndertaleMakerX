@@ -57,7 +57,7 @@ public class JavaScriptBridge : ScriptBridge
 
 	public static JavaScriptClass FromFile(string path)
 	{
-		string filePath = JavaScriptModuleResolver.ResolvePath(path, "");
+		string filePath = JavaScriptModuleResolver.ResolvePath("", path);
 		if (Godot.FileAccess.FileExists(filePath))
 		{
 			ObjectInstance jsNamespace = ImportModule(filePath);
@@ -103,16 +103,16 @@ public class JavaScriptBridge : ScriptBridge
 		}
 		catch (Exception ex) when (!(ex is JavaScriptException))
 		{
-			UtmxLogger.Error($"Try to load javascript module {id}.");
-			UtmxLogger.Error($"OuterException Type: {ex.GetType().FullName}");
-			UtmxLogger.Error($"OuterException Message: {ex.Message}");
-			UtmxLogger.Error($".NET StackTrace:\n{ex.StackTrace}");
+			UtmxLogger.Error($"{TranslationServer.Translate("Try to load javascript module failed")}: {id}");
+			UtmxLogger.Error($"{TranslationServer.Translate("OuterException Typ")}: {ex.GetType().FullName}");
+			UtmxLogger.Error($"{TranslationServer.Translate("OuterException Message")}: {ex.Message}");
+			UtmxLogger.Error($"{TranslationServer.Translate(".NET StackTrace")}: \n{ex.StackTrace}");
 
 			if (ex.InnerException != null)
 			{
-				UtmxLogger.Error($"InnerException Type: {ex.InnerException.GetType().FullName}");
-				UtmxLogger.Error($"InnerException Message: {ex.InnerException.Message}");
-				UtmxLogger.Error($"InnerException StackTrace:\n{ex.InnerException.StackTrace}");
+				UtmxLogger.Error($"{TranslationServer.Translate("InnerException Type")}: {ex.InnerException.GetType().FullName}");
+				UtmxLogger.Error($"{TranslationServer.Translate("InnerException Message")}: {ex.InnerException.Message}");
+				UtmxLogger.Error($"{TranslationServer.Translate("InnerException StackTrace")}:\n{ex.InnerException.StackTrace}");
 			}
 			return null;
 		}

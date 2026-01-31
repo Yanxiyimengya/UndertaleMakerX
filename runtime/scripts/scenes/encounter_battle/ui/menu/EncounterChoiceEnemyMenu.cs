@@ -6,13 +6,15 @@ public partial class EncounterChoiceEnemyMenu : EncounterChoiceListMenu
 {
 	public override void UIVisible()
 	{
-		ClearItem();
-		for (int i = 0; i < UtmxBattleManager.Instance.GetEnemysCount(); i++)
+		ClearDisplayItem();
+		
+		var EnemyList = UtmxBattleManager.Instance.GetBattleEnemyController().EnemyList;
+		for (int i = 0; i < EnemyList.Count; i++)
 		{
-			BaseEnemy enemy = UtmxBattleManager.Instance.EnemysList[i];
+			BaseEnemy enemy = EnemyList[i];
 			string enemyDiaplayText = ((enemy.CanSpare && enemy.AllowSpare) ? "[blend=yellow]" : "") +
 				enemy.DisplayName;
-			AddItem(i, enemyDiaplayText, enemy.MaxHp, enemy.Hp);
+			AddDisplayItem(i, enemyDiaplayText, enemy.MaxHp, enemy.Hp);
 		}
 	}
 	public override void UIHidden()

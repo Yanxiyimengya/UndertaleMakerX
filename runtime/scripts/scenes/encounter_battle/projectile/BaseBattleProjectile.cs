@@ -71,7 +71,7 @@ public partial class BaseBattleProjectile : Area2D
 	public override void _PhysicsProcess(double delta)
 	{
 		base._PhysicsProcess(delta);
-		BattlePlayerSoul soul = UtmxBattleManager.Instance.GetPlayerSoul();
+		BattlePlayerSoul soul = UtmxBattleManager.Instance.GetBattleController().PlayerSoul;
 		if (soul != null && soul.CanBeHurt() && IsCollideWithThePlayer())
 		{
 			OnHitPlayer(soul);

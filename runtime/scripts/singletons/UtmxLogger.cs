@@ -1,4 +1,5 @@
 using Godot;
+using System;
 
 public static class UtmxLogger
 {
@@ -10,9 +11,8 @@ public static class UtmxLogger
 	{
 		GD.PushWarning(message);
 	}
-
 	public static void Error(params object[] message)
 	{
-		GD.PrintErr(message);
+		GD.PushError(message);
 	}
 }

@@ -40,18 +40,28 @@ public partial class EncounterChoiceMenu : BaseEncounterMenu
 
     ~EncounterChoiceMenu()
     {
-        ClearItem();
+        ClearDisplayItem();
     }
 
 
     public override void UIVisible() { }
     public override void UIHidden() { }
 
-    public virtual void AddItem(object itemId, string displayName, float value = 1, float maxValue = 1)
+    public virtual void AddDisplayItem(object itemId, string displayName, float value = 1, float maxValue = 1)
     {
         _items.Add(new ChoiceItem(itemId).SetDisplayName(displayName).SetValue(value).SetMaxValue(maxValue));
     }
-    public virtual void RemoveItem(int i)
+
+    public void ClearDisplayItem()
+    {
+        foreach (ChoiceItem item in _items)
+        {
+            item.Free();
+        }
+        _items.Clear();
+    }
+
+    public virtual void RemoveDisplayItem(int i)
     {
         if (i > -1 && i < GetItemCount())
         {
@@ -60,7 +70,7 @@ public partial class EncounterChoiceMenu : BaseEncounterMenu
         }
     }
 
-    public ChoiceItem GetItem(int index)
+    public ChoiceItem GetDisplayItem(int index)
     {
         return _items[index];
     }
@@ -72,15 +82,6 @@ public partial class EncounterChoiceMenu : BaseEncounterMenu
     public string GetChoicedDisplayName()
     {
         return _items[_currentChoice].ItemDisplayName;
-    }
-
-    public void ClearItem()
-    {
-        foreach (ChoiceItem item in _items)
-        {
-            item.Free();
-        }
-        _items.Clear();
     }
 
     public int GetItemCount()
