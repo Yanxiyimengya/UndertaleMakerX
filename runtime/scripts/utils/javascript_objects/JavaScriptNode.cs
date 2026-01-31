@@ -9,7 +9,9 @@ using System.Collections.Generic;
 public partial class JavaScriptNode : Node, IJavaScriptObject
 {
 	public JavaScriptObjectInstance JsInstance { get; set; }
-	[Export(PropertyHint.FilePath, "*.js")]
+    public string JsScriptPath { get; set; }
+
+    [Export(PropertyHint.FilePath, "*.js")]
 	public string JavaScriptFile
 	{
 		get => _javaScriptFile;
@@ -36,6 +38,7 @@ public partial class JavaScriptNode : Node, IJavaScriptObject
     public JavaScriptNode New(string path)
     {
 		JavaScriptNode result = new JavaScriptNode();
+		JsScriptPath = path;
         result.JavaScriptFile = path;
         return result;
     }

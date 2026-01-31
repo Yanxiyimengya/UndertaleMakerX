@@ -11,7 +11,7 @@
 [ext_resource type="AudioStream" uid="uid://c05nk5k8k24jr" path="res://__data__/built-in-resources/sounds/sfx/snd_break2.wav" id="9_cohk7"]
 [ext_resource type="AudioStream" uid="uid://g5o72g1unno0" path="res://__data__/built-in-resources/sounds/bgm/mus_gameover.ogg" id="10_vvd1d"]
 
-[node name="UtmxGlobalStreamPlayer" type="Node" unique_id=1127036722]
+[node name="_UtmxGlobalStreamPlayer" type="Node" unique_id=1127036722]
 script = ExtResource("1_rytsd")
 SelectSoundStream = ExtResource("2_uvksp")
 SqueakSoundStream = ExtResource("3_wojre")

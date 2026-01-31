@@ -221,7 +221,8 @@ public partial class GameRegisterDB
 		if (_encounterDB.TryGetValue(encounterId, out BaseEncounterRegisterData encounterData))
 		{
 			encounter = encounterData.GetInstance();
-			return true;
+            if (encounter == null) return false;
+            return true;
 		}
 		else
 		{
@@ -251,7 +252,8 @@ public partial class GameRegisterDB
 		if (_enemyDB.TryGetValue(enemyId, out BaseEnemyRegisterData enemyData))
 		{
 			enemy = enemyData.GetInstance();
-			return true;
+            if (enemy == null) return false;
+            return true;
 		}
 		else
 		{
@@ -280,7 +282,8 @@ public partial class GameRegisterDB
 		if (_itemDB.TryGetValue(itemId, out BaseItemRegisterData itemData))
 		{
 			item = itemData.GetInstance();
-			return true;
+            if (item == null) return false;
+            return true;
 		}
 		else
 		{

@@ -4,6 +4,8 @@ import {UtmxInput} from "res://scripts/js/wappers/utmx_input.wapper.js";
 import {UtmxBaseItem} from "res://scripts/js/wappers/utmx_item.wapper.js";
 import {UtmxBaseEnemy} from "res://scripts/js/wappers/utmx_enemy.wapper.js";
 import {UtmxBaseEncounter} from "res://scripts/js/wappers/utmx_encounter.wapper.js";
+import {UtmxBattleTurn} from "res://scripts/js/wappers/utmx_battle_turn.wapper.js";
+import {__Vector2} from "__UTMX";
 
 class UTMX {
 	static debug = UtmxDebugger;
@@ -13,7 +15,7 @@ class UTMX {
 	static Item = UtmxBaseItem;
 	static Enemy = UtmxBaseEnemy;
 	static Encounter = UtmxBaseEncounter;
+	static BattleTurn = UtmxBattleTurn;
 }
 
-// 第二步：导出已定义的UTMX类 + Vector2（规范ES6命名导出）
-export { UTMX };
+export { UTMX, __Vector2 as Vector2};

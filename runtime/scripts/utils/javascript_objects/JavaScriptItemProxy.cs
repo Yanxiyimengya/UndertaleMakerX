@@ -5,6 +5,7 @@ using System;
 public partial class JavaScriptItemProxy : BaseItem, IJavaScriptObject
 {
     public JavaScriptObjectInstance JsInstance { get; set; }
+    public string JsScriptPath { get; set; }
     public override void _OnUseSelected()
 	{
 		object result = JsInstance.Invoke("onUsed", []);

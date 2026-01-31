@@ -3,9 +3,11 @@ using Godot;
 public interface IJavaScriptObject
 {
 	JavaScriptObjectInstance JsInstance { get; set; }
-	public static T New<T>(string path) where T : class, IJavaScriptObject, new()
+    string JsScriptPath { get; set; }
+
+    public static T New<T>(string path) where T : class, IJavaScriptObject, new()
 	{
-		JavaScriptClass jsClass = JavaScriptBridge.FromFile(path);
+        JavaScriptClass jsClass = JavaScriptBridge.FromFile(path);
 		if (jsClass == null)
 		{
 			UtmxLogger.Error($"{TranslationServer.Translate("Try to load javascript module failed.")}: {path}");
@@ -27,7 +29,8 @@ public interface IJavaScriptObject
 		}
 
 		csharpObj.JsInstance = jsInstance;
-		return csharpObj;
+        csharpObj.JsScriptPath = path;
+        return csharpObj;
 	}
 
 	public Variant _Get(StringName property)

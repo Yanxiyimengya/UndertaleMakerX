@@ -41,7 +41,6 @@ public partial class BootSplash : Control
 		backgroundColorRect.Color = Color.FromString(
 			(string)UtmxRuntimeProjectConfig.TryGetDefault("boot_splash/background_color", ""),
 			 backgroundColorRect.Color);
-		// 初始化画面元素
 
 		bootAnimationPlayer.Connect(AnimationPlayer.SignalName.AnimationFinished,
 			new Callable(this, nameof(OnIntroAnimationPlayerAnimationFinished)));

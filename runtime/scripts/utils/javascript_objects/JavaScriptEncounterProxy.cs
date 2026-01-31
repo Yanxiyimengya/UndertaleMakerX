@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 public partial class JavaScriptEncounterProxy : BaseEncounter, IJavaScriptObject
 {
     public JavaScriptObjectInstance JsInstance { get; set; }
+    public string JsScriptPath { get; set; }
     public override void _OnBattleStart()
     {
         JsInstance?.Invoke("onBattleStart", []);

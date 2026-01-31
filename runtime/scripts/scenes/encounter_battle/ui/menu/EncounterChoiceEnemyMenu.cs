@@ -14,7 +14,7 @@ public partial class EncounterChoiceEnemyMenu : EncounterChoiceListMenu
 			BaseEnemy enemy = EnemyList[i];
 			string enemyDiaplayText = ((enemy.CanSpare && enemy.AllowSpare) ? "[blend=yellow]" : "") +
 				enemy.DisplayName;
-			AddDisplayItem(i, enemyDiaplayText, enemy.MaxHp, enemy.Hp);
+			AddDisplayItem(i, enemyDiaplayText, enemy.Hp, enemy.MaxHp);
 		}
 	}
 	public override void UIHidden()

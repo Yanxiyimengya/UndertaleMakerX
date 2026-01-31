@@ -150,10 +150,10 @@ public partial class BattlePlayerActMenuState : StateNode
 	private async Task _OpenEnemyChoiceMenu()
 	{
 		_selected = false;
+		ChoiceEnemyMenu.HpBarSetVisible(false);
 		await MenuManager.OpenMenu("EncounterChoiceEnemyMenu");
 		EnemyChoice = Math.Clamp(EnemyChoice, 0, UtmxBattleManager.Instance.GetBattleEnemyController().GetEnemiesCount());
 		ChoiceEnemyMenu.SetChoice(EnemyChoice);
-		ChoiceEnemyMenu.HpBarSetVisible(false);
 	}
 
 	private void _NextState()

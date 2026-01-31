@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://calfrmbvcuuks"]
+[gd_scene format=3 uid="uid://calfrmbvcuuks"]
 
 [ext_resource type="Script" uid="uid://b6ur6lbelpbj0" path="res://scripts/scenes/encounter_battle/ui/menu/ui_elements/choice_menu/choice_menu_item/EncounterChoiceMenuItem.cs" id="1_6jsmc"]
 [ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="1_jr0et"]
@@ -10,7 +10,7 @@ bg_color = Color(1, 0, 0, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q4xod"]
 bg_color = Color(0, 1, 0, 1)
 
-[node name="EncounterChoiceMenuItem" type="HBoxContainer" node_paths=PackedStringArray("DisplayTextTyper", "ValueProgressBarMarginContainer", "ValueProgressBar", "soulMarker")]
+[node name="EncounterChoiceMenuItem" type="HBoxContainer" unique_id=1513565126 node_paths=PackedStringArray("DisplayTextTyper", "ValueProgressBarMarginContainer", "ValueProgressBar", "soulMarker")]
 anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
@@ -26,7 +26,7 @@ ValueProgressBarMarginContainer = NodePath("ProgressBarMarginContainer")
 ValueProgressBar = NodePath("ProgressBarMarginContainer/ProgressBar")
 soulMarker = NodePath("SoulPositionMarker2D")
 
-[node name="TextTyper" type="RichTextLabel" parent="."]
+[node name="TextTyper" type="RichTextLabel" parent="." unique_id=1031683700]
 clip_contents = false
 custom_minimum_size = Vector2(126, 25)
 layout_mode = 2
@@ -42,14 +42,14 @@ TyperSize = 24
 TyperFont = ExtResource("3_3csou")
 metadata/_custom_type_script = "uid://dmq4qew4auuss"
 
-[node name="ProgressBarMarginContainer" type="MarginContainer" parent="."]
+[node name="ProgressBarMarginContainer" type="MarginContainer" parent="." unique_id=1387386276]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 2
 theme_override_constants/margin_left = 40
 theme_override_constants/margin_top = 3
 
-[node name="ProgressBar" type="ProgressBar" parent="ProgressBarMarginContainer"]
+[node name="ProgressBar" type="ProgressBar" parent="ProgressBarMarginContainer" unique_id=2001162807]
 custom_minimum_size = Vector2(101, 17)
 layout_mode = 2
 size_flags_horizontal = 2
@@ -59,5 +59,5 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_q4xod")
 value = 100.0
 show_percentage = false
 
-[node name="SoulPositionMarker2D" type="Marker2D" parent="."]
+[node name="SoulPositionMarker2D" type="Marker2D" parent="." unique_id=2031630477]
 position = Vector2(-26, 13)

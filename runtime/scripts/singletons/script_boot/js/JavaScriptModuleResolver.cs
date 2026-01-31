@@ -11,41 +11,23 @@ public sealed class JavaScriptModuleResolver : IModuleLoader
 
     public static string ResolvePath(string referencingModuleLocation, string specifier)
         => ResolvePathInternal(referencingModuleLocation, specifier);
-
-    /// <summary>
-    /// Resolve：将 import specifier 解析成 ResolvedSpecifier
-    /// </summary>
     public ResolvedSpecifier Resolve(string referencingModuleLocation, ModuleRequest moduleRequest)
     {
         var specifier = moduleRequest.Specifier;
 
-        GD.Print(referencingModuleLocation, " :::::::: ", specifier);
-
-        // 规则 5：裸模块，保持原样（不加 .js、不拼目录、不转 res://）
         if (IsBareModule(specifier))
         {
-            // 关键：裸模块 Key 就用 specifier
             return new ResolvedSpecifier(moduleRequest, specifier, null, SpecifierType.Bare);
         }
 
-        // 规则 1~4：解析出最终 Godot 虚拟路径
         var resolvedPath = ResolvePathInternal(referencingModuleLocation, specifier);
-        GD.Print(resolvedPath, " :::::::: ", specifier);
 
-        // 用 Uri 保存位置（Jint 只是拿来当标识/定位，不要求是 file://）
         var uri = new Uri(resolvedPath, UriKind.RelativeOrAbsolute);
-
-        // 这里 SpecifierType 用 Bare（参考你给的 GitHub 示例）
-        // 重点在于 Key 要用 uri.ToString() / resolvedPath 这种“唯一绝对定位”
         return new ResolvedSpecifier(moduleRequest, uri.ToString(), uri, SpecifierType.Bare);
     }
 
-    /// <summary>
-    /// LoadModule：从 resolved.Uri 加载源码并构造 Module
-    /// </summary>
     public Module LoadModule(Jint.Engine engine, ResolvedSpecifier resolved)
     {
-        // 裸模块：不在这里加载（应该由 host 注册）
         if (resolved.Uri == null)
         {
             throw new InvalidOperationException(
@@ -54,45 +36,31 @@ public sealed class JavaScriptModuleResolver : IModuleLoader
 
         var location = resolved.Uri.ToString();
 
-        // 对路径进行标准化
         location = NormalizeVirtualPath(location);
 
-        // 缓存命中检查
         if (_moduleCache.TryGetValue(location, out var cached))
         {
             GD.Print($"Module {location} found in cache.");
             return cached;
         }
 
-        // 读取并加载模块
         var code = ReadAllText(location);
         var prepared = Jint.Engine.PrepareModule(code, location);
         var module = ModuleFactory.BuildSourceTextModule(engine, prepared);
 
-        // 缓存已加载模块
         _moduleCache[location] = module;
 
         return module;
     }
 
-    // ---------------------------------------------------------------------
-    // 路径解析规则（严格按你需求）
-    // ---------------------------------------------------------------------
-
     private static string ResolvePathInternal(string referencingModuleLocation, string specifier)
     {
-        // 打印原始路径和引用路径，检查是否为预期的相对路径
-        GD.Print($"Resolving {specifier} from {referencingModuleLocation}");
-
-        // 规则 1：res:// 开头 -> 原样返回（补 .js）
         if (specifier.StartsWith("res://", StringComparison.OrdinalIgnoreCase))
             return EnsureJsExtension(specifier);
 
-        // 规则 2：user:// 开头 -> 原样返回（补 .js）
         if (specifier.StartsWith("user://", StringComparison.OrdinalIgnoreCase))
             return EnsureJsExtension(specifier);
 
-        // 规则 3：../ 或 ./ 相对导入 -> 相对 referencingModuleLocation
         if (specifier.StartsWith("./", StringComparison.Ordinal) ||
             specifier.StartsWith("../", StringComparison.Ordinal))
         {
@@ -106,7 +74,6 @@ public sealed class JavaScriptModuleResolver : IModuleLoader
             return EnsureJsExtension(combined);
         }
 
-        // 规则 4：默认根目录映射
         {
             var cleaned = specifier.StartsWith("/", StringComparison.Ordinal)
                 ? specifier.Substring(1)
@@ -119,14 +86,8 @@ public sealed class JavaScriptModuleResolver : IModuleLoader
         }
     }
 
-    // ---------------------------------------------------------------------
-    // 工具函数
-    // ---------------------------------------------------------------------
-
     private static bool IsBareModule(string specifier)
     {
-        // 裸模块例子："ABC"
-        // 非裸模块例子：res://x user://x ./x ../x /x a/b.js
         if (string.IsNullOrEmpty(specifier))
             return false;
 
@@ -142,11 +103,9 @@ public sealed class JavaScriptModuleResolver : IModuleLoader
         if (specifier.Contains("://", StringComparison.Ordinal))
             return false;
 
-        // Windows 盘符防御
         if (specifier.Length >= 2 && char.IsLetter(specifier[0]) && specifier[1] == ':')
             return false;
 
-        // 有路径分隔符则不是裸模块
         if (specifier.Contains("/", StringComparison.Ordinal) || specifier.Contains("\\", StringComparison.Ordinal))
             return false;
 
@@ -155,7 +114,6 @@ public sealed class JavaScriptModuleResolver : IModuleLoader
 
     private static string EnsureJsExtension(string path)
     {
-        // 如果最后一个 '.' 在最后一个 '/' 之后，则认为已有扩展名
         var lastSlash = path.LastIndexOf('/');
         var lastDot = path.LastIndexOf('.');
 
@@ -165,12 +123,8 @@ public sealed class JavaScriptModuleResolver : IModuleLoader
         return path + ".js";
     }
 
-    /// <summary>
-    /// 不使用 Path.GetDirectoryName，避免 res:// 被破坏
-    /// </summary>
     private static string GetParentDirectoryPreserveScheme(string fullLocation)
     {
-        // fullLocation: res://aaa/bbb/ccc.js -> res://aaa/bbb/
         var lastSlash = fullLocation.LastIndexOf('/');
         if (lastSlash < 0)
             return "";
@@ -186,7 +140,6 @@ public sealed class JavaScriptModuleResolver : IModuleLoader
         if (string.IsNullOrEmpty(relativeOrChild))
             return baseDir;
 
-        // 绝对协议直接返回
         if (relativeOrChild.StartsWith("res://", StringComparison.OrdinalIgnoreCase) ||
             relativeOrChild.StartsWith("user://", StringComparison.OrdinalIgnoreCase))
         {
@@ -196,16 +149,12 @@ public sealed class JavaScriptModuleResolver : IModuleLoader
         if (!baseDir.EndsWith("/", StringComparison.Ordinal))
             baseDir += "/";
 
-        // "/xxx" 在这里被视作 baseDir 下的相对路径
         if (relativeOrChild.StartsWith("/", StringComparison.Ordinal))
             relativeOrChild = relativeOrChild.Substring(1);
 
         return baseDir + relativeOrChild;
     }
 
-    /// <summary>
-    /// 处理 ./ 和 ../，并保持 res:// user:// 协议头不被破坏
-    /// </summary>
     private static string NormalizeVirtualPath(string path)
     {
         if (string.IsNullOrEmpty(path))

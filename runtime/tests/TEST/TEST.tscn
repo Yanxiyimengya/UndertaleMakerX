@@ -1,9 +1,3 @@
 [gd_scene format=3 uid="uid://dbstu48ru7vek"]
 
-[ext_resource type="Script" uid="uid://v6h8bqj4xyfj" path="res://scripts/utils/javascript_objects/JavaScriptNode.cs" id="6_otw5d"]
-
 [node name="TEST" type="Node" unique_id=399590034]
-
-[node name="TestInput" type="Node" parent="." unique_id=1790400775]
-script = ExtResource("6_otw5d")
-JavaScriptFile = "res://tests/TEST/test_input.js"

@@ -17,9 +17,9 @@ public partial class BattleEnemyController : Node
 
 		foreach (string enemyId in UtmxBattleManager.Instance.GetEncounterInstance().Enemies)
 		{
-			if (GameRegisterDB.TryGetEnemy(enemyId, out BaseEnemy eenemy))
+			if (GameRegisterDB.TryGetEnemy(enemyId, out BaseEnemy enemy))
 			{
-				EnemyList.Add(eenemy);
+				EnemyList.Add(enemy);
 			}
 		}
 
@@ -37,9 +37,12 @@ public partial class BattleEnemyController : Node
 			}
 		}
 	}
-	
 	public int GetEnemiesCount()
 	{
 		return EnemyList.Count;
+	}
+	public BaseEnemy GetEnemy(int slot)
+	{
+		return EnemyList[slot];
 	}
 }

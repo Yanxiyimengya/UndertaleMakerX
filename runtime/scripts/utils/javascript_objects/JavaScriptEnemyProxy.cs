@@ -4,6 +4,8 @@ using static Godot.HttpRequest;
 public partial class JavaScriptEnemyProxy : BaseEnemy, IJavaScriptObject
 {
     public JavaScriptObjectInstance JsInstance { get; set; }
+    public string JsScriptPath { get; set; }
+
     public override void _OnSpare()
     {
         JsInstance.Invoke("onSpare", []);
@@ -39,13 +41,10 @@ public partial class JavaScriptEnemyProxy : BaseEnemy, IJavaScriptObject
         object result = JsInstance.Invoke("onGetNextTurn", []);
         if (result != null && result is string path && !string.IsNullOrEmpty(path))
         {
+            path = JavaScriptModuleResolver.ResolvePath(JsScriptPath, path);
             JavaScriptBattleTurnProxy battleTurn = IJavaScriptObject.New<JavaScriptBattleTurnProxy>(path);
             if (battleTurn != null)
                 return battleTurn;
-        }
-        else if (result != null && result is BaseBattleTurn turn)
-        {
-            return turn;
         }
         return new BaseBattleTurn();
     }

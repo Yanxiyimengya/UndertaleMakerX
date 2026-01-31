@@ -50,7 +50,8 @@ public partial class BattlePlayerFightMenuState : StateNode
 		if (UtmxPlayerDataManager.Weapon != null && !missed)
 		{
 			_damage = (float)UtmxPlayerDataManager.Weapon._CalculateDamage(hitValue, targetEnemy);
-			SpawnAttackAnimation(targetEnemy);
+            targetEnemy.Hp -= _damage;
+            SpawnAttackAnimation(targetEnemy);
 		}
 		if (_attackAnimation == null)
 		{
@@ -103,7 +104,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 	{
 		int enemysCount = UtmxBattleManager.Instance.GetBattleEnemyController().GetEnemiesCount();
 		EnemyChoice = Math.Clamp(EnemyChoice, 0, enemysCount - 1);
-		return UtmxBattleManager.Instance.GetBattleEnemyController().EnemyList[EnemyChoice];
+		return UtmxBattleManager.Instance.GetBattleEnemyController().GetEnemy(EnemyChoice);
 	}
 
 	public override void _Process(double delta)
@@ -172,11 +173,11 @@ public partial class BattlePlayerFightMenuState : StateNode
 
 	private async Task _OpenEnemyChoiceMenu()
 	{
+		ChoiceEnemyMenu.HpBarSetVisible(true);
 		await MenuManager.OpenMenu("EncounterChoiceEnemyMenu");
 		EnemyChoice = Math.Clamp(EnemyChoice, 0, 
 			UtmxBattleManager.Instance.GetBattleEnemyController().GetEnemiesCount());
 		ChoiceEnemyMenu.SetChoice(EnemyChoice);
-		ChoiceEnemyMenu.HpBarSetVisible(true);
 		_state = STATE_SELECT_ENEMY;
 	}
 

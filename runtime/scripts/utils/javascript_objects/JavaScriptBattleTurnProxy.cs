@@ -3,6 +3,7 @@ using Godot;
 public partial class JavaScriptBattleTurnProxy : BaseBattleTurn, IJavaScriptObject
 {
     public JavaScriptObjectInstance JsInstance { get; set; }
+    public string JsScriptPath { get; set; }
     public override void _OnTurnInitialize()
     {
         JsInstance?.Invoke("onTurnInitialize", []);
@@ -17,7 +18,6 @@ public partial class JavaScriptBattleTurnProxy : BaseBattleTurn, IJavaScriptObje
     }
     public override void _OnTurnUpdate(double delta)
     {
-        GD.Print(JsInstance);
         JsInstance?.Invoke("onTurnUpdate", [delta]);
     }
 }
