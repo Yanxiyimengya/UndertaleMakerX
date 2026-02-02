@@ -1,7 +1,6 @@
-import {__input} from "__UTMX";
+import { __input } from "__UTMX";
 
-export class UtmxInput 
-{
+export class UtmxInput {
 	static MouseButton = Object.freeze({
 		NONE: 0,
 		LEFT: 1,
@@ -14,12 +13,12 @@ export class UtmxInput
 		XBUTTON1: 8,
 		XBUTTON2: 9
 	});
-	
+
 	static KeyboardButton = Object.freeze({
 		NONE: 0,
 		SPECIAL: 4194304,
 		UNKNOWN: 8388607,
-		
+
 		ESCAPE: 4194305,
 		TAB: 4194306,
 		BACKTAB: 4194307,
@@ -31,7 +30,7 @@ export class UtmxInput
 		PRINT: 4194314,
 		SYSREQ: 4194315,
 		CLEAR: 4194316,
-		
+
 		HOME: 4194317,
 		END: 4194318,
 		LEFT: 4194319,
@@ -40,7 +39,7 @@ export class UtmxInput
 		DOWN: 4194322,
 		PAGEUP: 4194323,
 		PAGEDOWN: 4194324,
-		
+
 		SHIFT: 4194325,
 		CTRL: 4194326,
 		META: 4194327,
@@ -48,7 +47,7 @@ export class UtmxInput
 		CAPSLOCK: 4194329,
 		NUMLOCK: 4194330,
 		SCROLLLOCK: 4194331,
-		
+
 		F1: 4194332,
 		F2: 4194333,
 		F3: 4194334,
@@ -84,7 +83,7 @@ export class UtmxInput
 		F33: 4194364,
 		F34: 4194365,
 		F35: 4194366,
-		
+
 		KP_ENTER: 4194310,
 		KP_MULTIPLY: 4194433,
 		KP_DIVIDE: 4194434,
@@ -101,7 +100,7 @@ export class UtmxInput
 		KP_7: 4194445,
 		KP_8: 4194446,
 		KP_9: 4194447,
-		
+
 		VOLUMEDOWN: 4194380,
 		VOLUMEMUTE: 4194381,
 		VOLUMEUP: 4194382,
@@ -111,7 +110,7 @@ export class UtmxInput
 		MEDIANEXT: 4194391,
 		MEDIARECORD: 4194392,
 		STOP: 4194378,
-		
+
 		MENU: 4194370,
 		HELP: 4194373,
 		BACK: 4194376,
@@ -124,7 +123,7 @@ export class UtmxInput
 		OPENURL: 4194397,
 		LAUNCHMAIL: 4194398,
 		LAUNCHMEDIA: 4194399,
-		
+
 		LAUNCH0: 4194400,
 		LAUNCH1: 4194401,
 		LAUNCH2: 4194402,
@@ -141,13 +140,13 @@ export class UtmxInput
 		LAUNCHD: 4194413,
 		LAUNCHE: 4194414,
 		LAUNCHF: 4194415,
-		
+
 		HYPER: 4194371,
 		GLOBE: 4194416,
 		KEYBOARD: 4194417,
 		JIS_EISU: 4194418,
 		JIS_KANA: 4194419,
-		
+
 		SPACE: 32,
 
 		EXCLAM: 33,      // !
@@ -172,7 +171,7 @@ export class UtmxInput
 		GREATER: 62,     // >
 		QUESTION: 63,    // ?
 		AT: 64,          // @
-		
+
 		KEY_0: 48,
 		KEY_1: 49,
 		KEY_2: 50,
@@ -183,7 +182,7 @@ export class UtmxInput
 		KEY_7: 55,
 		KEY_8: 56,
 		KEY_9: 57,
-		
+
 		A: 65,
 		B: 66,
 		C: 67,
@@ -210,7 +209,7 @@ export class UtmxInput
 		X: 88,
 		Y: 89,
 		Z: 90,
-		
+
 		BRACKETLEFT: 91,    // [
 		BACKSLASH: 92,      // \
 		BRACKETRIGHT: 93,   // ]
@@ -225,63 +224,51 @@ export class UtmxInput
 		SECTION: 167,       // §
 	});
 
-	static addAction(action)
-	{
+	static addAction(action) {
 		return __input.AddAction(action);
 	}
 
-	static hasAction(action)
-	{
+	static hasAction(action) {
 		return __input.HasAction(action);
 	}
 
-	static eraseAction(action)
-	{
+	static eraseAction(action) {
 		return __input.EraseAction(action);
 	}
-	
-	static actionAddKeyButton(action, key)
-	{
+
+	static actionAddKeyButton(action, key) {
 		return __input.ActionAddKeyButton(action, key);
 	}
-	
-	static actionAddMouseButton(action, mouseButton)
-	{
+
+	static actionAddMouseButton(action, mouseButton) {
 		return __input.ActionAddMouseButton(action, mouseButton);
 	}
 
-	static isActionHeld(action)
-	{
+	static isActionHeld(action) {
 		return __input.IsActionPressed(action);
 	}
-	
-	static isActionDown(action)
-	{
+
+	static isActionDown(action) {
 		return __input.IsActionJustPressed(action);
 	}
 
-	static isActionReleased(action)
-	{
+	static isActionReleased(action) {
 		return __input.IsActionJustReleased(action);
 	}
 
-	static isKeyPressed(key)
-	{
+	static isKeyPressed(key) {
 		return __input.IsKeyPressed(key);
 	}
 
-	static isPhysicalKeyPressed(key)
-	{
+	static isPhysicalKeyPressed(key) {
 		return __input.IsPhysicalKeyPressed(key);
 	}
 
-	static isMouseButtonPressed(mouseButton)
-	{
+	static isMouseButtonPressed(mouseButton) {
 		return __input.IsMouseButtonPressed(mouseButton);
 	}
-	
-	static getMousePosition()
-	{
+
+	static getMousePosition() {
 		return __input.Instance.GetMouseGlobalPosition();
 	}
 }

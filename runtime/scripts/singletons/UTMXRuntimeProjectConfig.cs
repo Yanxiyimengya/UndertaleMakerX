@@ -30,13 +30,15 @@ public static class UtmxRuntimeProjectConfig
 			};
 			return (T)Convert.ChangeType(value, typeof(T));
 		}
-		catch (InvalidCastException)
+		catch (InvalidCastException e)
 		{
+			UtmxLogger.Error(e.ToString());
 			return defValue;
 		}
-		catch (FormatException)
-		{
-			return defValue;
+		catch (FormatException e)
+        {
+            UtmxLogger.Error(e.ToString());
+            return defValue;
 		}
 	}
 

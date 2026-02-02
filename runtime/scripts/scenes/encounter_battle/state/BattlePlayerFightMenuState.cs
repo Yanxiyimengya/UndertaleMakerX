@@ -102,9 +102,9 @@ public partial class BattlePlayerFightMenuState : StateNode
 
 	private BaseEnemy GetTargetEnemy()
 	{
-		int enemysCount = UtmxBattleManager.Instance.GetBattleEnemyController().GetEnemiesCount();
+		int enemysCount = UtmxBattleManager.GetBattleEnemyController().GetEnemiesCount();
 		EnemyChoice = Math.Clamp(EnemyChoice, 0, enemysCount - 1);
-		return UtmxBattleManager.Instance.GetBattleEnemyController().GetEnemy(EnemyChoice);
+		return UtmxBattleManager.GetBattleEnemyController().GetEnemy(EnemyChoice);
 	}
 
 	public override void _Process(double delta)
@@ -131,14 +131,14 @@ public partial class BattlePlayerFightMenuState : StateNode
 
 			if (previousChoice != EnemyChoice)
 			{
-				UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
+				UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("SQUEAK"));
 			}
 
 			ChoiceEnemyMenu?.SetChoice(EnemyChoice);
 		}
 		else if (Input.IsActionJustPressed("down"))
 		{
-			int enemysCount = UtmxBattleManager.Instance.GetBattleEnemyController().GetEnemiesCount();
+			int enemysCount = UtmxBattleManager.GetBattleEnemyController().GetEnemiesCount();
 			if (enemysCount < 1) return;
 			
 			int previousChoice = EnemyChoice;
@@ -146,7 +146,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 			
 			if (previousChoice != EnemyChoice)
 			{
-				UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
+				UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("SQUEAK"));
 			}
 
 			ChoiceEnemyMenu?.SetChoice(EnemyChoice);
@@ -155,7 +155,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 		{
 			await OpenAttackGaugeMenu();
 			_state = STATE_ATTACK_GAUGE;
-			UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SELECT"));
+			UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("SELECT"));
 		}
 		else if (Input.IsActionJustPressed("cancel"))
 		{
@@ -176,14 +176,14 @@ public partial class BattlePlayerFightMenuState : StateNode
 		ChoiceEnemyMenu.HpBarSetVisible(true);
 		await MenuManager.OpenMenu("EncounterChoiceEnemyMenu");
 		EnemyChoice = Math.Clamp(EnemyChoice, 0, 
-			UtmxBattleManager.Instance.GetBattleEnemyController().GetEnemiesCount());
+			UtmxBattleManager.GetBattleEnemyController().GetEnemiesCount());
 		ChoiceEnemyMenu.SetChoice(EnemyChoice);
 		_state = STATE_SELECT_ENEMY;
 	}
 
 	private async Task OpenAttackGaugeMenu()
 	{
-		UtmxBattleManager.Instance.GetBattleController().PlayerSoul.Visible = false;
+		UtmxBattleManager.GetBattlePlayerController().PlayerSoul.Visible = false;
 		await MenuManager.OpenMenu("EncounterAttackGaugeBarMenu");
 		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 		BattleButtonManager.ResetAllBattleButton();
@@ -196,17 +196,17 @@ public partial class BattlePlayerFightMenuState : StateNode
 
 	private void _NextState()
 	{
-		UtmxBattleManager.Instance.GetBattleController().ChangeToPlayerDialogueState();
+		UtmxBattleManager.GetBattleController().ChangeToPlayerDialogueState();
 	}
 
 	public override void _ExitState()
 	{
-		UtmxBattleManager.Instance.GetBattleController().PlayerSoul.Visible = true;
+		UtmxBattleManager.GetBattlePlayerController().PlayerSoul.Visible = true;
 
 	}
 	public override bool _CanEnterState()
 	{
-		int enemysCount = UtmxBattleManager.Instance.GetBattleEnemyController().GetEnemiesCount();
+		int enemysCount = UtmxBattleManager.GetBattleEnemyController().GetEnemiesCount();
 		return enemysCount > 0;
 	}
 }

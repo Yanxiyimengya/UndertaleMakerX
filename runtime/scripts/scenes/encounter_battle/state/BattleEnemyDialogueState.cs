@@ -35,10 +35,10 @@ public partial class BattleEnemyDialogueState : StateNode
 	public override void _EnterState()
 	{
 		MenuManager.CloseAllMenu();
-		BattleMainArenaExpand _battleMainArena = UtmxBattleManager.Instance.GetBattleController().MainArena;
-		UtmxBattleManager.Instance.GetBattleTurnController().TurnInitialize();
-		BattlePlayerSoul soul = UtmxBattleManager.Instance.GetBattleController().PlayerSoul;
-		soul.GlobalPosition = UtmxBattleManager.Instance.GetBattleTurnController().GetTurnSoulInitializePosition();
+		BattleMainArenaExpand _battleMainArena = UtmxBattleManager.GetBattleArenaController().MainArena;
+		UtmxBattleManager.GetBattleTurnController().TurnInitialize();
+		BattlePlayerSoul soul = UtmxBattleManager.GetBattlePlayerController().PlayerSoul;
+		soul.GlobalPosition = UtmxBattleManager.GetBattleTurnController().GetTurnSoulInitializePosition();
 		soul.Movable = false;
 		soul.Visible = true;
 		if (_tween != null && _tween.IsRunning())
@@ -46,7 +46,7 @@ public partial class BattleEnemyDialogueState : StateNode
 			_tween.Kill();
 		}
 		_tween = GetTree().CreateTween();
-		_tween.TweenProperty(_battleMainArena, "Size", UtmxBattleManager.Instance.GetBattleTurnController().GetTurnArenaInitializeSize(), 0.4);
+		_tween.TweenProperty(_battleMainArena, "Size", UtmxBattleManager.GetBattleTurnController().GetTurnArenaInitializeSize(), 0.4);
 		NextStep();
 	}
 
@@ -71,9 +71,9 @@ public partial class BattleEnemyDialogueState : StateNode
 			{
 				foreach (KeyValuePair<int, UtmxDialogueData> pair in dialogue)
 				{
-					if (pair.Key >= 0 && pair.Key < UtmxBattleManager.Instance.GetBattleEnemyController().GetEnemiesCount())
+					if (pair.Key >= 0 && pair.Key < UtmxBattleManager.GetBattleEnemyController().GetEnemiesCount())
 					{
-						BaseEnemy enemy = UtmxBattleManager.Instance.GetBattleEnemyController().EnemyList[pair.Key];
+						BaseEnemy enemy = UtmxBattleManager.GetBattleEnemyController().EnemiesList[pair.Key];
 						Node inst = DialogueSpeechBubblePackedScene.Instantiate();
 						if (inst is SpeechBubble bubble)
 						{
@@ -98,13 +98,13 @@ public partial class BattleEnemyDialogueState : StateNode
 		}
 		else
 		{
-			if (UtmxBattleManager.Instance.GetBattleTurnController().GetTurnCount() > 0)
+			if (UtmxBattleManager.GetBattleTurnController().GetTurnCount() > 0)
 			{
-				UtmxBattleManager.Instance.GetBattleController().ChangeToEnemyTurnState();
+				UtmxBattleManager.GetBattleController().ChangeToEnemyTurnState();
 			}
 			else
 			{
-				UtmxBattleManager.Instance.GetBattleController().ChangeToPlayerTurnState();
+				UtmxBattleManager.GetBattleController().ChangeToPlayerTurnState();
 			}
 		}
 	}

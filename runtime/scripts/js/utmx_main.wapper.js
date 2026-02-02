@@ -1,16 +1,26 @@
-import {UtmxDebugger} from "res://scripts/js/wappers/utmx_debugger.wapper.js";
-import {UtmxAudioPlayer} from "res://scripts/js/wappers/utmx_audio_player.wapper.js";
-import {UtmxInput} from "res://scripts/js/wappers/utmx_input.wapper.js";
-import {UtmxBaseItem} from "res://scripts/js/wappers/utmx_item.wapper.js";
-import {UtmxBaseEnemy} from "res://scripts/js/wappers/utmx_enemy.wapper.js";
-import {UtmxBaseEncounter} from "res://scripts/js/wappers/utmx_encounter.wapper.js";
-import {UtmxBattleTurn} from "res://scripts/js/wappers/utmx_battle_turn.wapper.js";
-import {__Vector2} from "__UTMX";
+import { __Object, __Vector2, __Vector3, __Vector4 } from "__UTMX";
+
+import { UtmxDebugger } from "res://scripts/js/wrappers/utmx_debugger.wrapper.js";
+import { UtmxAudioPlayer } from "res://scripts/js/wrappers/utmx_audio_player.wrapper.js";
+import { UtmxInput } from "res://scripts/js/wrappers/utmx_input.wrapper.js";
+import { UtmxBaseItem } from "res://scripts/js/wrappers/utmx_item.wrapper.js";
+import { UtmxBaseEnemy } from "res://scripts/js/wrappers/utmx_enemy.wrapper.js";
+import { UtmxBaseEncounter } from "res://scripts/js/wrappers/utmx_encounter.wrapper.js";
+import { UtmxBattleTurn } from "res://scripts/js/wrappers/utmx_battle_turn.wrapper.js";
+import { UtmxPlayerDataManager } from "res://scripts/js/wrappers/utmx_player_data_manager.wrapper.js";
+import { UtmxBattleManager } from "res://scripts/js/wrappers/utmx_battle_manager.weapper.js";
+import { UtmxGameRegisterDB } from "res://scripts/js/wrappers/utmx_game_register_db.wrapper.js";
+import { UtmxGameManager } from "res://scripts/js/wrappers/utmx_game_manager.wrapper";
+
 
 class UTMX {
 	static debug = UtmxDebugger;
 	static audio = UtmxAudioPlayer;
 	static input = UtmxInput;
+	static player = UtmxPlayerDataManager;
+	static battle = UtmxBattleManager;
+	static gameDB = UtmxGameRegisterDB;
+	static game = UtmxGameManager;
 
 	static Item = UtmxBaseItem;
 	static Enemy = UtmxBaseEnemy;
@@ -18,4 +28,10 @@ class UTMX {
 	static BattleTurn = UtmxBattleTurn;
 }
 
-export { UTMX, __Vector2 as Vector2};
+export {
+	UTMX,
+	__Vector2 as Vector2,
+	__Vector3 as Vector3,
+	__Vector4 as Vector4,
+	__Object as Object
+};

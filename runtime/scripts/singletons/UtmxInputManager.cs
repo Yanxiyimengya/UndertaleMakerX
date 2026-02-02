@@ -7,9 +7,14 @@ public partial class UtmxInputManager : Node
 {
 	public static UtmxInputManager Instance;
 	public override void _EnterTree()
-	{
-		Instance = this;
-	}
+    {
+        if (Instance != null && Instance != this)
+        {
+            QueueFree();
+            return;
+        }
+        Instance = this;
+    }
     public override void _ExitTree()
     {
         Instance = null;

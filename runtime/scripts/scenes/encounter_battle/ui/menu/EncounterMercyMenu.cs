@@ -8,7 +8,7 @@ public partial class EncounterMercyMenu : EncounterChoiceListMenu
 		ClearDisplayItem();
 		bool allowSpare = false;
 		bool canSpare = false;
-		foreach (BaseEnemy enemy in UtmxBattleManager.Instance.GetBattleEnemyController().EnemyList)
+		foreach (BaseEnemy enemy in UtmxBattleManager.GetBattleEnemyController().EnemiesList)
 		{
 			if (enemy.AllowSpare)
 			{
@@ -18,7 +18,7 @@ public partial class EncounterMercyMenu : EncounterChoiceListMenu
 		}
 		if (allowSpare)
 			AddDisplayItem("SPARE", $"{(canSpare ? "[blend=yellow]" : "")}Spare");
-		if ((bool)UtmxBattleManager.Instance.GetEncounterInstance()?.CanFree)
+		if ((bool)UtmxBattleManager.GetEncounterInstance()?.CanFree)
 			AddDisplayItem("FREE", "Free");
 		ScrollBarSetVisible(false);
 	}

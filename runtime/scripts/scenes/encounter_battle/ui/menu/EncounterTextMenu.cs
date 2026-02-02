@@ -28,7 +28,7 @@ public partial class EncounterTextMenu : BaseEncounterMenu
     {
         encounterTextTyper.TyperFont = DefaultFont;
         encounterTextTyper.TyperSize = 24;
-        encounterTextTyper.Voice = UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("TEXT_TYPER_VOICE");
+        encounterTextTyper.Voice = UtmxGlobalStreamPlayer.GetStreamFormLibrary("TEXT_TYPER_VOICE");
         encounterTextTyper.Instant = false;
         encounterTextTyper.Start(text);
     }

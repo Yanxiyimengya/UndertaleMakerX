@@ -40,7 +40,6 @@ public sealed class JavaScriptModuleResolver : IModuleLoader
 
         if (_moduleCache.TryGetValue(location, out var cached))
         {
-            GD.Print($"Module {location} found in cache.");
             return cached;
         }
 
@@ -114,13 +113,9 @@ public sealed class JavaScriptModuleResolver : IModuleLoader
 
     private static string EnsureJsExtension(string path)
     {
-        var lastSlash = path.LastIndexOf('/');
-        var lastDot = path.LastIndexOf('.');
-
-        if (lastDot > lastSlash)
-            return path;
-
-        return path + ".js";
+        if (! path.EndsWith(".js"))
+            return path + ".js";
+        return path;
     }
 
     private static string GetParentDirectoryPreserveScheme(string fullLocation)
@@ -197,14 +192,15 @@ public sealed class JavaScriptModuleResolver : IModuleLoader
 
     private static string ReadAllText(string location)
     {
-        using var fa = FileAccess.Open(location, FileAccess.ModeFlags.Read);
-        if (fa == null)
+        using var access = FileAccess.Open(location, FileAccess.ModeFlags.Read);
+        if (access == null)
         {
             var err = FileAccess.GetOpenError();
             throw new InvalidOperationException($"Failed to open module file '{location}', error={err}");
         }
 
-        var bytes = fa.GetBuffer((long)fa.GetLength());
+        var bytes = access.GetBuffer((long)access.GetLength());
+        access.Close();
         return Encoding.UTF8.GetString(bytes);
     }
 }

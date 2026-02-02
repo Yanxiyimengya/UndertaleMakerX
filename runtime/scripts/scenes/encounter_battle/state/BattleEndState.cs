@@ -25,11 +25,11 @@ public partial class BattleEndState : StateNode
 	{
 		await MenuManager.OpenMenu("EncounterTextMenu");
 		BattleButtonManager.ResetAllBattleButton();
-		TextMenu.ShowEncounterText(UtmxBattleManager.Instance.GetEncounterInstance()?.EndText);
+		TextMenu.ShowEncounterText(UtmxBattleManager.GetEncounterInstance()?.EndText);
 	}
 
 	public override void _ExitState()
 	{
-		UtmxBattleManager.Instance.GetBattleController().PlayerSoul.Visible = true;
+		UtmxBattleManager.GetBattlePlayerController().PlayerSoul.Visible = true;
 	}
 }

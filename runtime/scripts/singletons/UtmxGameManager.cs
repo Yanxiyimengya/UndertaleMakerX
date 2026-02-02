@@ -1,46 +1,47 @@
 using Godot;
+using Jint.Native.Object;
 using System;
 
 [GlobalClass]
 public partial class UtmxGameManager : Node
 {
 	public static UtmxGameManager Instance;
-	private JavaScriptObjectInstance _mainScriptInstace;
+	private IJavaScriptObject _mainScriptObject;
 
 	public override void _Ready()
 	{
+		if (Instance != null && Instance != this)
+		{
+			QueueFree();
+			return;
+		}
 		Instance = this;
 		string mainScriptFilePath = UtmxRuntimeProjectConfig.TryGetDefault("application/main_script", string.Empty).ToString();
 		mainScriptFilePath = UtmxResourceLoader.ResolvePath(mainScriptFilePath);
 		if (FileAccess.FileExists(mainScriptFilePath))
 		{
-			_mainScriptInstace = JavaScriptBridge.FromFile(mainScriptFilePath)?.New();
+			_mainScriptObject = IJavaScriptObject.New<JavaScriptObject>(mainScriptFilePath);
 		}
 	}
 	public override void _ExitTree()
 	{
 		_GameEnd();
 		Instance = null;
-		_mainScriptInstace = null;
+		_mainScriptObject = null;
 	}
+
+
 	public void _GameStart()
 	{
-		GameRegisterDB.RegisterEncounter("BaseEncounter", typeof(BaseEncounter));
-		GameRegisterDB.RegisterEncounter("MyEncounter", "js/test_js_encounter.js");
-		GameRegisterDB.RegisterEnemy("BaseEnemy", typeof(BaseEnemy));
-		GameRegisterDB.RegisterEnemy("MyEnemy", "js/test_js_enemy.js");
-		GameRegisterDB.RegisterItem("BaseItem", typeof(BaseItem));
-		GameRegisterDB.RegisterItem("MyItem", "js/test_js_item.js");
-
-
-		UtmxPlayerDataManager.AddItem("BaseItem");
-		UtmxPlayerDataManager.AddItem("MyItem");
-		UtmxBattleManager.EncounterBattleStart("MyEncounter");
-		_mainScriptInstace?.Invoke("onGameStart", []);
+		_mainScriptObject?.Invoke("onGameStart", []);
 
 	}
 	public void _GameEnd()
 	{
-		_mainScriptInstace?.Invoke("onGameEnd", []);
+		_mainScriptObject?.Invoke("onGameEnd", []);
+	}
+	public static void QuitGame()
+	{
+		Instance.GetTree().Quit();
 	}
 }

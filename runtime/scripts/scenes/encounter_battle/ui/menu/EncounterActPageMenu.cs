@@ -8,7 +8,7 @@ public partial class EncounterActPageMenu : EncounterChoicePageMenu
 	public override void UIVisible()
 	{
 		ClearDisplayItem();
-		BaseEnemy enemy = UtmxBattleManager.Instance.GetBattleEnemyController().EnemyList[battlePlayerActMenuState.EnemyChoice];
+		BaseEnemy enemy = UtmxBattleManager.GetBattleEnemyController().EnemiesList[battlePlayerActMenuState.EnemyChoice];
 		foreach (string act in enemy.Actions)
 		{
 			AddDisplayItem(act, act);

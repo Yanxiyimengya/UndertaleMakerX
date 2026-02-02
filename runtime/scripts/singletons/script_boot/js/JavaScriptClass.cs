@@ -7,16 +7,18 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Godot.HttpRequest;
-
-public partial class JavaScriptClass : ScriptClass
+public partial class JavaScriptClass
 {
     public ObjectInstance NamespaceObject;
     public JsValue JsConstructor;
+    public string JsFilePath;
 
-    public override JavaScriptObjectInstance New(params object[] arguments)
+    public JavaScriptClass(string path)
+    {
+        JsFilePath = path;
+    }
+
+    public ObjectInstance New(params object[] arguments) 
     {
         try
         {
@@ -24,8 +26,7 @@ public partial class JavaScriptClass : ScriptClass
             JsValue jsInstance = JavaScriptBridge.MainEngine.Construct(JsConstructor, jsArgs);
             if (jsInstance.Type == Jint.Runtime.Types.Object)
             {
-                ObjectInstance jsObject = jsInstance.AsObject();
-                return new JavaScriptObjectInstance(jsObject);
+                return jsInstance.AsObject();
             }
         }
         catch (JavaScriptException jsEx)

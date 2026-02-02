@@ -6,7 +6,8 @@ using System.ComponentModel.Design;
 [GlobalClass]
 public partial class BattleArenaGroup : Node2D
 {
-	public Rid MainCanvasItem;
+    public int EnabledArenaCount;
+    public Rid MainCanvasItem;
 	public Rid MainCanvas;
 
 	private Rid _arenaBorderRenderingCanvasItem;
@@ -19,18 +20,16 @@ public partial class BattleArenaGroup : Node2D
 	private Rid _maskCanvas;
 	private Rid _borderViewportTextureRid;
 	private Rid _maskViewportTextureRid;
-	private static CanvasItemMaterial _cullingMaterial;
+	private CanvasItemMaterial _cullingMaterial;
 
 	public Transform2D CameraTransform;
 	public Transform2D CameraTransformInverse;
-
-	static BattleArenaGroup()
+	
+	public void Initialize()
 	{
 		_cullingMaterial = new CanvasItemMaterial();
 		_cullingMaterial.BlendMode = CanvasItemMaterial.BlendModeEnum.Sub;
-	}
-	public void Initialize()
-	{
+		
 		_borderCanvas = RenderingServer.CanvasCreate();
 		_maskCanvas = RenderingServer.CanvasCreate();
 		MainCanvas = RenderingServer.CanvasCreate();
@@ -70,8 +69,12 @@ public partial class BattleArenaGroup : Node2D
 
 	public void Uninitialize()
 	{
-		if (_borderViewportTextureRid.IsValid) RenderingServer.FreeRid(_borderViewportTextureRid);
-		if (_maskViewportTextureRid.IsValid) RenderingServer.FreeRid(_maskViewportTextureRid);
+		if (_borderViewport.IsValid) RenderingServer.FreeRid(_borderViewport);
+		if (_maskViewport.IsValid) RenderingServer.FreeRid(_maskViewport);
+		
+		if (_borderCanvas.IsValid) RenderingServer.FreeRid(_borderCanvas);
+		if (_maskCanvas.IsValid) RenderingServer.FreeRid(_maskCanvas);
+		if (MainCanvas.IsValid) RenderingServer.FreeRid(MainCanvas);
 
 		if (MainCanvasItem.IsValid) RenderingServer.FreeRid(MainCanvasItem);
 		if (_arenaBorderRenderingCanvasItem.IsValid) RenderingServer.FreeRid(_arenaBorderRenderingCanvasItem);
@@ -79,12 +82,6 @@ public partial class BattleArenaGroup : Node2D
 		if (_arenaMaskRenderingCanvasItem.IsValid) RenderingServer.FreeRid(_arenaMaskRenderingCanvasItem);
 		if (_arenaMaskCullingCanvasItem.IsValid) RenderingServer.FreeRid(_arenaMaskCullingCanvasItem);
 
-		if (_borderCanvas.IsValid) RenderingServer.FreeRid(_borderCanvas);
-		if (_maskCanvas.IsValid) RenderingServer.FreeRid(_maskCanvas);
-		if (MainCanvas.IsValid) RenderingServer.FreeRid(MainCanvas);
-
-		if (_borderViewport.IsValid) RenderingServer.FreeRid(_borderViewport);
-		if (_maskViewport.IsValid) RenderingServer.FreeRid(_maskViewport);
 	}
 
 	public override void _EnterTree()
@@ -106,15 +103,17 @@ public partial class BattleArenaGroup : Node2D
 		RenderingServer.CanvasItemClear(_arenaMaskRenderingCanvasItem);
 		RenderingServer.CanvasItemClear(_arenaBorderCullingCanvasItem);
 		RenderingServer.CanvasItemClear(_arenaMaskCullingCanvasItem);
-		if (IsInsideTree() && Visible)
+		if (IsInsideTree() && IsVisibleInTree())
 		{
 			bool _requireRedraw = false;
-			foreach (Node _child in GetChildren())
+			EnabledArenaCount = 0;
+            foreach (Node _child in GetChildren())
 			{
 				if (_child is BaseBattleArena arena)
 				{
-					if (!arena.Visible) continue;
-					Transform2D arenaTransform2D = CameraTransformInverse * arena.GetTransform();
+					if (!arena.Enabled) continue;
+                    EnabledArenaCount += 1;
+                    Transform2D arenaTransform2D = CameraTransformInverse * arena.GetTransform();
 					RenderingServer.CanvasItemAddSetTransform(_arenaBorderRenderingCanvasItem, arenaTransform2D);
 					RenderingServer.CanvasItemAddSetTransform(_arenaMaskRenderingCanvasItem, arenaTransform2D);
 					RenderingServer.CanvasItemAddSetTransform(_arenaBorderCullingCanvasItem, arenaTransform2D);
@@ -186,6 +185,7 @@ public partial class BattleArenaGroup : Node2D
 
 	public bool IsPointInArenas(Vector2 pos)
 	{
+		if (EnabledArenaCount == 0) return false;
 		foreach (Node child in GetChildren())
 		{
 			if (child is not BattleArenaExpand arena || !arena.Enabled) continue;
@@ -197,8 +197,9 @@ public partial class BattleArenaGroup : Node2D
 	}
 
 	public bool IsLineInArenas(Vector2 from, Vector2 to)
-	{
-		foreach (Node child in GetChildren())
+    {
+        if (EnabledArenaCount == 0) return false;
+        foreach (Node child in GetChildren())
 		{
 			if (child is not BattleArenaExpand arena || !arena.Enabled) continue;
 			var insideChild = arena.IsSegmentInArena(
@@ -210,8 +211,9 @@ public partial class BattleArenaGroup : Node2D
 	}
 
 	public Vector2 PushBackInside(Vector2 center, Vector2[] checkPoints, float tolerance = 0.001f)
-	{
-		var closestCenter = center;
+    {
+        if (EnabledArenaCount == 0) return center;
+        var closestCenter = center;
 		var minDistSq = float.MaxValue;
 
 		foreach (Node child in GetChildren())

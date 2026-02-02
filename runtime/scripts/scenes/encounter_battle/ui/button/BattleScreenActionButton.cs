@@ -5,7 +5,7 @@ using static Godot.WebSocketPeer;
 public partial class BattleScreenActionButton : BattleScreenButton
 {
     [Export]
-    public string TargetaState;
+    public string TargetState;
 
     public override void _Ready()
     {
@@ -16,6 +16,6 @@ public partial class BattleScreenActionButton : BattleScreenButton
 
     private void _OpenTargetMenu()
     {
-        UtmxBattleManager.Instance.SwitchBattleState(TargetaState);
+        UtmxBattleManager.SwitchBattleState(TargetState);
     }
 }

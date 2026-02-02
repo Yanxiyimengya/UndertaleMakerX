@@ -9,17 +9,17 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-public class JavaScriptBridge : ScriptBridge
+public class JavaScriptBridge
 {
-	public static Jint.Engine MainEngine = 
+	public readonly static Jint.Engine MainEngine =
 		new Jint.Engine((options) =>
 		{
 			options.EnableModules(new JavaScriptModuleResolver());
 			options.AllowClr();
 			options.Interop.AllowGetType = true;
 			options.Interop.AllowWrite = true;
-
 		});
+	
 	static JavaScriptBridge()
 	{
 		MainEngine.Modules.Add(JavaScriptCoreInterface.ModuleName, (builder) =>
@@ -50,6 +50,7 @@ public class JavaScriptBridge : ScriptBridge
 				{
 					string fileContent = access.GetBuffer((long)access.GetLength()).GetStringFromUtf8();
 					MainEngine.Modules.Add(kvp.Key, fileContent);
+					access.Close();
 				}
 			}
 		}
@@ -63,30 +64,30 @@ public class JavaScriptBridge : ScriptBridge
 			ObjectInstance jsNamespace = ImportModule(filePath);
 			if (jsNamespace != null)
 			{
-				return _ConstructScriptObject(jsNamespace);
+				return _ConstructScriptObject(filePath, jsNamespace);
 			}
 		}
 		return null;
 	}
 
-	public static JavaScriptClass ExecuteString(string code)
+	public static JavaScriptClass FromString(string code)
 	{
 		string moduleId = code.Sha256Text();
 		MainEngine.Modules.Add(moduleId, code);
 		ObjectInstance jsNamespace = ImportModule(moduleId);
 		if (jsNamespace != null)
 		{
-			return _ConstructScriptObject(jsNamespace);
+			return _ConstructScriptObject("", jsNamespace);
 		}
 		return null;
 	}
 
-	private static JavaScriptClass _ConstructScriptObject(ObjectInstance jsNamespace)
+	private static JavaScriptClass _ConstructScriptObject(string path, ObjectInstance jsNamespace)
 	{
 		JsValue defaultValue = jsNamespace.Get("default");
 		if (defaultValue.Type == Jint.Runtime.Types.Object)
 		{
-			JavaScriptClass scriptObj = new JavaScriptClass();
+			JavaScriptClass scriptObj = new JavaScriptClass(path);
 			scriptObj.NamespaceObject = jsNamespace;
 			scriptObj.JsConstructor = defaultValue;
 			return scriptObj;

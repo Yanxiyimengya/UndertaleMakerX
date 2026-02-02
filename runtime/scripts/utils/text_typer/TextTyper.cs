@@ -155,7 +155,7 @@ public partial class TextTyper : Godot.RichTextLabel
 			{
 				if (Voice != null && !Engine.IsEditorHint())
 				{
-					UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(Voice);
+					UtmxGlobalStreamPlayer.PlaySoundFromStream(Voice);
 				}
 				break;
 			}
@@ -397,7 +397,7 @@ public partial class TextTyper : Godot.RichTextLabel
 					AudioStream soundStream = UtmxResourceLoader.Load(soundPath) as AudioStream;
 					if (soundStream != null)
 					{
-						UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(soundStream);
+						UtmxGlobalStreamPlayer.PlaySoundFromStream(soundStream);
 					}
 				}
 				break;
@@ -417,12 +417,12 @@ public partial class TextTyper : Godot.RichTextLabel
 					bool loop = false;
 					if (args.TryGetValue("loop", out string bgmLoopStr)) bool.TryParse(bgmLoopStr, out loop);
 
-					UtmxGlobalStreamPlayer.Instance.PlayBgmFormStream(bgmId, bgmStream, loop);
+					UtmxGlobalStreamPlayer.PlayBgmFormStream(bgmId, bgmStream, loop);
 
 					if (args.TryGetValue("pitch", out string bgmPitchStr) && float.TryParse(bgmPitchStr, out float bgmPitch))
-						UtmxGlobalStreamPlayer.Instance.SetBgmPitch(bgmId, bgmPitch);
+						UtmxGlobalStreamPlayer.SetBgmPitch(bgmId, bgmPitch);
 					if (args.TryGetValue("volume", out string bgmVolumeStr) && float.TryParse(bgmPitchStr, out float bgmVolume))
-						UtmxGlobalStreamPlayer.Instance.SetBgmVolume(bgmId, bgmVolume);
+						UtmxGlobalStreamPlayer.SetBgmVolume(bgmId, bgmVolume);
 				}
 				break;
 			}
@@ -433,15 +433,15 @@ public partial class TextTyper : Godot.RichTextLabel
 				string bgmId;
 				if (args.TryGetValue("value", out bgmId) && string.IsNullOrEmpty(bgmId))
 				{
-					UtmxGlobalStreamPlayer.Instance.StopBgm(bgmId);
+					UtmxGlobalStreamPlayer.StopBgm(bgmId);
                 }
                 else if (args.TryGetValue("id", out bgmId) && string.IsNullOrEmpty(bgmId))
                 {
-                    UtmxGlobalStreamPlayer.Instance.StopBgm(bgmId);
+                    UtmxGlobalStreamPlayer.StopBgm(bgmId);
                 }
 				else
 				{
-                    UtmxGlobalStreamPlayer.Instance.StopBgm("_TYPER_BGM");
+                    UtmxGlobalStreamPlayer.StopBgm("_TYPER_BGM");
                 }
 				break;
             }

@@ -1,27 +1,29 @@
 using Godot;
+using Jint.Native;
+using Jint.Native.Object;
 using System;
 
 [GlobalClass]
 public partial class JavaScriptItemProxy : BaseItem, IJavaScriptObject
 {
-    public JavaScriptObjectInstance JsInstance { get; set; }
+    public ObjectInstance JsInstance { get; set; }
     public string JsScriptPath { get; set; }
     public override void _OnUseSelected()
 	{
-		object result = JsInstance.Invoke("onUsed", []);
+		object result = ((IJavaScriptObject)this).Invoke("onUsed", []);
 		if (UtmxBattleManager.IsInBattle())
 		{
-			UtmxBattleManager.Instance.ShowDialogueText(result);
+			UtmxBattleManager.ShowDialogueText(result.ToString());
 		}
 	}
 
 	public override void _OnDropSelected()
 	{
-		object result = JsInstance.Invoke("onDrop", []);
+        ((IJavaScriptObject)this).Invoke("onDrop", []);
 	}
 
 	public override void _OnInfoSelected()
 	{
-		object result = JsInstance.Invoke("onInfo", []);
+        ((IJavaScriptObject)this).Invoke("onInfo", []);
 	}
 }

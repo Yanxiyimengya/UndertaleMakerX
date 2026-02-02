@@ -9,7 +9,6 @@ public partial class BattleProjectileController : Node
 	[Export]
 	public BattleArenaMask ArenaMask;
 	
-	private List<BaseBattleProjectile> projectileList = new();
 	private Queue<BaseBattleProjectile> projectilePool = new();
 	
 	public T CreateProjectile<T>(bool mask = false) where T : BaseBattleProjectile, new()
@@ -26,8 +25,6 @@ public partial class BattleProjectileController : Node
 		var targetParent = mask ? ArenaMask : ProjectilesNode;
 		if (projectile.IsInsideTree()) { projectile.Reparent(targetParent); }
 		else { targetParent.AddChild(projectile); }
-
-		projectileList.Add(projectile);
 		return projectile;
 	}
 
@@ -35,7 +32,7 @@ public partial class BattleProjectileController : Node
 	{
 		projectile.ProcessMode = ProcessModeEnum.Disabled;
 		projectile.SetPhysicsProcess(false);
-		projectileList.Remove(projectile);
-		projectilePool.Enqueue(projectile);
+		projectile.Reparent(null);
+        projectilePool.Enqueue(projectile);
 	}
 }

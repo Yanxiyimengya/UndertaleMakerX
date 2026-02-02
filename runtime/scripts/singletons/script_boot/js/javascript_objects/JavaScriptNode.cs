@@ -8,7 +8,7 @@ using System.Collections.Generic;
 [GlobalClass]
 public partial class JavaScriptNode : Node, IJavaScriptObject
 {
-	public JavaScriptObjectInstance JsInstance { get; set; }
+	public ObjectInstance JsInstance { get; set; }
     public string JsScriptPath { get; set; }
 
     [Export(PropertyHint.FilePath, "*.js")]
@@ -25,9 +25,9 @@ public partial class JavaScriptNode : Node, IJavaScriptObject
 				if (javaScriptClass != null)
 				{
 					JsInstance = javaScriptClass.New();
-					if (JsInstance.Has(EngineProperties.JAVASCRIPT_CREATE_CALLBACK))
-						JsInstance.Invoke(EngineProperties.JAVASCRIPT_CREATE_CALLBACK, []);
-					_javaScriptCanUpdate = JsInstance.Has(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK);
+					if (((IJavaScriptObject)this).Has(EngineProperties.JAVASCRIPT_CREATE_CALLBACK))
+                        ((IJavaScriptObject)this).Invoke(EngineProperties.JAVASCRIPT_CREATE_CALLBACK, []);
+					_javaScriptCanUpdate = ((IJavaScriptObject)this).Has(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK);
 				}
 			}
 		}
@@ -45,19 +45,19 @@ public partial class JavaScriptNode : Node, IJavaScriptObject
 	
 	public override void _Ready()
 	{
-		if (JsInstance.Has(EngineProperties.JAVASCRIPT_ACTIVE_CALLBACK))
-			JsInstance.Invoke(EngineProperties.JAVASCRIPT_ACTIVE_CALLBACK, []);
+		if (((IJavaScriptObject)this).Has(EngineProperties.JAVASCRIPT_ACTIVE_CALLBACK))
+            ((IJavaScriptObject)this).Invoke(EngineProperties.JAVASCRIPT_ACTIVE_CALLBACK, []);
 	}
 
 	~JavaScriptNode()
 	{
-		if (JsInstance.Has(EngineProperties.JAVASCRIPT_DESTROY_CALLBACK))
-			JsInstance.Invoke(EngineProperties.JAVASCRIPT_DESTROY_CALLBACK, []);
+		if (((IJavaScriptObject)this).Has(EngineProperties.JAVASCRIPT_DESTROY_CALLBACK))
+            ((IJavaScriptObject)this).Invoke(EngineProperties.JAVASCRIPT_DESTROY_CALLBACK, []);
 	}
 
 	public override void _Process(double delta)
 	{
-		if (_javaScriptCanUpdate) 
-			JsInstance.Invoke(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK, [delta]);
+		if (_javaScriptCanUpdate)
+            ((IJavaScriptObject)this).Invoke(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK, [delta]);
 	}
 }

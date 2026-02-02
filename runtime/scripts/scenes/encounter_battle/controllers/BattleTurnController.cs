@@ -4,16 +4,30 @@ using System.Collections.Generic;
 
 public partial class BattleTurnController : Node
 {
-	public int TurnCounter { get => _turnCounter; set => _turnCounter = value; }
 	public List<BaseBattleTurn> CurrentTurnList { get => _currentTurnList; set => _currentTurnList = value; }
 
-	private int _turnCounter = 0;
 	private double _turnTimer = 0.0;
+	private bool _turnStart = false;
 	private List<BaseBattleTurn> _currentTurnList = new();
+
+	public override void _Process(double delta)
+	{
+		if (_turnStart)
+		{
+			if (! TurnUpdate(delta))
+			{
+				TurnEnd();
+			}
+		}
+	}
+	public bool IsTurnInProgress()
+	{
+		return _turnStart;
+	}
 	public void TurnInitialize()
 	{
 		_currentTurnList.Clear();
-		foreach (BaseEnemy enemy in UtmxBattleManager.Instance.GetBattleEnemyController().EnemyList)
+		foreach (BaseEnemy enemy in UtmxBattleManager.GetBattleEnemyController().EnemiesList)
 		{
 			_currentTurnList.Add(enemy._GetNextTurn());
 		}
@@ -26,6 +40,8 @@ public partial class BattleTurnController : Node
 	{
 		if (_currentTurnList.Count > 0)
 		{
+			_turnStart = true;
+			_turnTimer = 0.0;
 			foreach (BaseBattleTurn turn in _currentTurnList)
 			{
 				turn._OnTurnStart();
@@ -57,6 +73,7 @@ public partial class BattleTurnController : Node
 	}
 	public bool TurnEnd()
 	{
+		_turnStart = false;
 		if (_currentTurnList.Count > 0)
 		{
 			foreach (BaseBattleTurn turn in _currentTurnList)
@@ -79,7 +96,7 @@ public partial class BattleTurnController : Node
 		}
 		else
 		{
-			BattleMainArenaExpand mainArena = UtmxBattleManager.Instance.GetBattleController().MainArena;
+			BattleMainArenaExpand mainArena = UtmxBattleManager.GetBattleArenaController().MainArena;
 			return mainArena.GlobalPosition - new Vector2(0F, mainArena.Size.Y * 0.5F);
 		}
 	}
@@ -91,7 +108,7 @@ public partial class BattleTurnController : Node
 		}
 		else
 		{
-			BattleMainArenaExpand mainArena = UtmxBattleManager.Instance.GetBattleController().MainArena;
+			BattleMainArenaExpand mainArena = UtmxBattleManager.GetBattleArenaController().MainArena;
 			return mainArena.Size;
 		}
 	}

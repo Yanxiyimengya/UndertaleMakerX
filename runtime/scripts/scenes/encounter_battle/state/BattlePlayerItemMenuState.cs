@@ -22,7 +22,7 @@ public partial class BattlePlayerItemMenuState : StateNode
 			}
 			else
 			{
-				UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
+				UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("SQUEAK"));
 			}
 			ItemChoiceMenu.SetChoice(ItemChoice);
 
@@ -36,7 +36,7 @@ public partial class BattlePlayerItemMenuState : StateNode
 			}
 			else
 			{
-				UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
+				UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("SQUEAK"));
 			}
 			ItemChoiceMenu.SetChoice(ItemChoice);
 		}
@@ -46,8 +46,8 @@ public partial class BattlePlayerItemMenuState : StateNode
 		}
 		else if (Input.IsActionJustPressed("confirm"))
 		{
-			int itemChoiced = (int)ItemChoiceMenu.GetChoicedItemId();
-			UtmxPlayerDataManager.UseItem(itemChoiced);
+			int itemselected = (int)ItemChoiceMenu.GetselectedItemId();
+			UtmxPlayerDataManager.UseItem(itemselected);
 			_NextState();
 		}
 	}
@@ -60,7 +60,7 @@ public partial class BattlePlayerItemMenuState : StateNode
 	}
 	private void _NextState()
 	{
-		UtmxBattleManager.Instance.GetBattleController().ChangeToPlayerDialogueState();
+		UtmxBattleManager.GetBattleController().ChangeToPlayerDialogueState();
 	}
 
 	public override void _ExitState()

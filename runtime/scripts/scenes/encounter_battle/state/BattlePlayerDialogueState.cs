@@ -30,12 +30,12 @@ public partial class BattlePlayerDialogueState : StateNode
 
     public override void _ExitState()
     {
-        UtmxBattleManager.Instance.GetBattleController().PlayerSoul.Visible = true;
+        UtmxBattleManager.GetBattlePlayerController().PlayerSoul.Visible = true;
     }
 
     private void NextStep()
     {
-        BattlePlayerSoul soul = UtmxBattleManager.Instance.GetBattleController().PlayerSoul;
+        BattlePlayerSoul soul = UtmxBattleManager.GetBattlePlayerController().PlayerSoul;
         soul.Visible = false;
         if (UtmxDialogueQueueManager.Instance.DialogueCount() > 0)
         {
@@ -44,9 +44,9 @@ public partial class BattlePlayerDialogueState : StateNode
         }
         else
         {
-            if (!UtmxBattleManager.Instance.Endded)
+            if (!UtmxBattleManager.Endded)
             {
-                UtmxBattleManager.Instance.GetBattleController().ChangeToEnemyDialogueState();
+                UtmxBattleManager.GetBattleController().ChangeToEnemyDialogueState();
             }
         }
     }

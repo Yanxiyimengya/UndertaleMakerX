@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://bwg8g6ptoi8ke" path="res://scripts/scenes/encounter_battle/controllers/BattlePlayerController.cs" id="5_vjgqx"]
 [ext_resource type="PackedScene" uid="uid://cfmmgpj17a2fc" path="res://scenes/encounter_battle/ui/button/battle_screen_button.tscn" id="5_wxkx7"]
 [ext_resource type="Texture2D" uid="uid://7t5wbkpk50fu" path="res://__data__/built-in-resources/textures/ui/buttons/spr_actbt_center_0.png" id="6_53d75"]
+[ext_resource type="Script" uid="uid://flstyqid3vnp" path="res://scripts/scenes/encounter_battle/controllers/BattleArenaController.cs" id="6_kyp32"]
 [ext_resource type="Script" uid="uid://sekm2lap34uh" path="res://scripts/scenes/encounter_battle/state/BattlePlayerFightMenuState.cs" id="7_0mx1x"]
 [ext_resource type="Script" uid="uid://dc27u6sxv148b" path="res://scripts/scenes/encounter_battle/state/BattlePlayerItemMenuState.cs" id="7_3peba"]
 [ext_resource type="Texture2D" uid="uid://p8a3d1ppm0r" path="res://__data__/built-in-resources/textures/ui/buttons/spr_actbt_center_1.png" id="7_e7ctv"]
@@ -49,13 +50,12 @@
 
 [node name="EncounterBattle" type="Node" unique_id=1037590223]
 
-[node name="BattleController" type="Node" parent="." unique_id=1909813863 node_paths=PackedStringArray("PlayerSoul", "MainArena", "BattleStateMachine", "EnemyController", "PlayerController", "TurnController", "ProjectileController")]
+[node name="BattleController" type="Node" parent="." unique_id=1909813863 node_paths=PackedStringArray("BattleStateMachine", "EnemyController", "PlayerController", "ArenaController", "TurnController", "ProjectileController")]
 script = ExtResource("2_mdx4q")
-PlayerSoul = NodePath("../Players/BattlePlayerSoul")
-MainArena = NodePath("../BattleArenaGroup/MainArena")
 BattleStateMachine = NodePath("../BattleStateMachine")
 EnemyController = NodePath("BattleEnemyController")
 PlayerController = NodePath("BattlePlayerController")
+ArenaController = NodePath("BattleArenaController")
 TurnController = NodePath("BattleTurnController")
 ProjectileController = NodePath("BattleProjectileController")
 
@@ -64,9 +64,9 @@ script = ExtResource("2_3wf68")
 ProjectilesNode = NodePath("../../Projectiles")
 ArenaMask = NodePath("../../BattleArenaGroup/BattleArenaMask")
 
-[node name="BattleEnemyController" type="Node" parent="BattleController" unique_id=1106917610 node_paths=PackedStringArray("EnemysNode")]
+[node name="BattleEnemyController" type="Node" parent="BattleController" unique_id=1106917610 node_paths=PackedStringArray("EnemiesNode")]
 script = ExtResource("3_u6j2e")
-EnemysNode = NodePath("../../Enemys")
+EnemiesNode = NodePath("../../Enemies")
 
 [node name="BattleTurnController" type="Node" parent="BattleController" unique_id=1363596801]
 script = ExtResource("4_knxdc")
@@ -74,6 +74,11 @@ script = ExtResource("4_knxdc")
 [node name="BattlePlayerController" type="Node" parent="BattleController" unique_id=1767836349 node_paths=PackedStringArray("PlayerSoul")]
 script = ExtResource("5_vjgqx")
 PlayerSoul = NodePath("../../Players/BattlePlayerSoul")
+
+[node name="BattleArenaController" type="Node" parent="BattleController" unique_id=2037974018 node_paths=PackedStringArray("ArenaGroup", "MainArena")]
+script = ExtResource("6_kyp32")
+ArenaGroup = NodePath("../../BattleArenaGroup")
+MainArena = NodePath("../../BattleArenaGroup/MainArena")
 
 [node name="BattleStateMachine" type="Node" parent="." unique_id=261701519]
 script = ExtResource("2_62htl")
@@ -265,26 +270,26 @@ script = ExtResource("8_wxkx7")
 [node name="FIGHT" parent="UILayer/BattleScreenButtonManager" unique_id=454262181 instance=ExtResource("5_wxkx7")]
 position = Vector2(87, 453)
 script = ExtResource("33_q4xod")
-TargetaState = "BattlePlayerFightMenuState"
+TargetState = "BattlePlayerFightMenuState"
 
 [node name="ACT" parent="UILayer/BattleScreenButtonManager" unique_id=1824391601 instance=ExtResource("5_wxkx7")]
 position = Vector2(240, 453)
 script = ExtResource("33_q4xod")
-TargetaState = "BattlePlayerActMenuState"
+TargetState = "BattlePlayerActMenuState"
 buttonTexture = ExtResource("6_53d75")
 buttonPressedTexture = ExtResource("7_e7ctv")
 
 [node name="ITEM" parent="UILayer/BattleScreenButtonManager" unique_id=891213374 instance=ExtResource("5_wxkx7")]
 position = Vector2(400, 453)
 script = ExtResource("33_q4xod")
-TargetaState = "BattlePlayerItemMenuState"
+TargetState = "BattlePlayerItemMenuState"
 buttonTexture = ExtResource("8_taqgn")
 buttonPressedTexture = ExtResource("9_oxe8y")
 
 [node name="MERCY" parent="UILayer/BattleScreenButtonManager" unique_id=1780387998 instance=ExtResource("5_wxkx7")]
 position = Vector2(555, 453)
 script = ExtResource("33_q4xod")
-TargetaState = "BattlePlayerMercyMenuState"
+TargetState = "BattlePlayerMercyMenuState"
 buttonTexture = ExtResource("10_66xs5")
 buttonPressedTexture = ExtResource("11_17tmt")
 
@@ -294,7 +299,7 @@ buttonPressedTexture = ExtResource("11_17tmt")
 position = Vector2(48, 453)
 ArenaGroup = NodePath("../../BattleArenaGroup")
 
-[node name="Enemys" type="Node2D" parent="." unique_id=490966930]
+[node name="Enemies" type="Node2D" parent="." unique_id=490966930]
 position = Vector2(320, 240)
 
 [node name="Projectiles" type="Node2D" parent="." unique_id=1993100029]

@@ -13,8 +13,13 @@ public class JavaScriptCoreInterface
         {
             { "__logger" , typeof(UtmxLogger)},
             { "__audio_player" , typeof(UtmxGlobalStreamPlayer) },
+            { "__player_data_manager" , typeof(UtmxPlayerDataManager)},
+            { "__game_register_db" , typeof(UtmxGameRegisterDB)},
+            { "__game_manager" , typeof(UtmxGameManager)},
+            { "__battle_manager" , typeof(UtmxBattleManager)},
             { "__input" , typeof(UtmxInputManager)},
 
+            { "__Object" , typeof(JavaScriptObject)},
             { "__UtmxItem" , typeof(JavaScriptItemProxy)},
             { "__UtmxEnemy" , typeof(JavaScriptEnemyProxy)},
             { "__UtmxEncounter" , typeof(JavaScriptEncounterProxy)},

@@ -8,7 +8,7 @@ export default class MyEnemy extends UTMX.Encounter {
         this.encounterText = "你遇到了一个测试敌人！";
         this.deathText = "我被打败了！";
         this.endText = "遭遇战结束！";
-        this.enemysList = ["MyEnemy"];
+        this.enemies = ["MyEnemy"];
         //this.canFree = false;
     }
 

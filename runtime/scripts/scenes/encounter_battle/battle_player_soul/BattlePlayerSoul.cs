@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 [GlobalClass]
 public partial class BattlePlayerSoul : CharacterBody2D
@@ -11,12 +12,12 @@ public partial class BattlePlayerSoul : CharacterBody2D
 	[Export]
 	public float CollisionRadius = 8F;
 	[Export]
-	public bool EnableCollision
+	public bool EnabledCollision
 	{
-		get => _enableCollision;
+		get => _enabledCollision;
 		set
 		{
-			_enableCollision = value;
+			_enabledCollision = value;
 			if (value)
 			{
 				PhysicsServer2D.BodySetMode(GetRid(), PhysicsServer2D.BodyMode.Static);
@@ -57,7 +58,7 @@ public partial class BattlePlayerSoul : CharacterBody2D
 			if (_freed)
 			{
 				animSprite2d.Play("free");
-				EnableCollision = false;
+				EnabledCollision = false;
 				Movable = false;
 			}
 		}
@@ -81,7 +82,7 @@ public partial class BattlePlayerSoul : CharacterBody2D
 
 	private uint _collisionLayer = 0;
 	private uint _collisionMask = 0;
-	private bool _enableCollision = true;
+	private bool _enabledCollision = true;
 	private bool _movable = true;
 	private bool _freed = false;
 	private double _invincibleTimer = 0.0F;
@@ -136,21 +137,13 @@ public partial class BattlePlayerSoul : CharacterBody2D
 		Vector2 inputDir = Input.GetVector("left", "right", "up", "down").Normalized();
 		Vector2 targetPos = GlobalPosition + inputDir * (float)delta * 
 			(Input.IsActionPressed("cancel") ? (Speed * 0.5F) : Speed);
-		GlobalPosition = targetPos;
-
-		if (!IsInsideArena(targetPos))
-		{
-			while (!IsInsideArena(GlobalPosition))
-			{
-				GlobalPosition = ArenaGroup.PushBackInside(GlobalPosition, _checkPoints.ToArray(), 1.0F);
-			}
-		}
+		TryMoveTo(targetPos);
 		MoveAndSlide();
 	}
 
 	private bool IsInsideArena(Vector2 center)
 	{
-		if (!_enableCollision) return true;
+		if (!_enabledCollision) return true;
 		foreach (Vector2 offset in _checkPoints)
 		{
 			Vector2 worldPoint = center + offset;
@@ -162,26 +155,36 @@ public partial class BattlePlayerSoul : CharacterBody2D
 		return true;
 	}
 
+	public void TryMoveTo(Vector2 targetPos)
+	{
+		if (ArenaGroup.EnabledArenaCount > 0 && !IsInsideArena(targetPos))
+		{
+			GlobalPosition = targetPos;
+			while (!IsInsideArena(GlobalPosition))
+			{
+				GlobalPosition = ArenaGroup.PushBackInside(GlobalPosition, _checkPoints.ToArray(), 1.0F);
+			}
+		}
+		else
+		{
+			GlobalPosition = targetPos;
+		}
+	}
+
 	public bool CanBeHurt()
 	{
 		if (_invincibleTimer > 0)
 			return false;
 		return true;
 	}
-
 	public void Hurt(double damage)
 	{
 		if (CanBeHurt())
 		{
-			UtmxPlayerDataManager.PlayerHp -= (float)damage;
+			UtmxPlayerDataManager.PlayerHp -= damage;
 			_invincibleTimer = UtmxPlayerDataManager.PlayerInvincibleTime;
 			if (GetViewport().GetCamera2D() is BattleCamera camera)
 				camera.StartShake(0.1f, Vector2.One, new Vector2(30, 30));
-			UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("HURT"));
-			if (UtmxPlayerDataManager.PlayerHp <= 0)
-			{
-				UtmxBattleManager.Instance.CallDeferred("GameOver", []);
-			}
 		}
 	}
 }

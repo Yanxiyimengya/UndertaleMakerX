@@ -8,13 +8,13 @@ public partial class EncounterChoiceEnemyMenu : EncounterChoiceListMenu
 	{
 		ClearDisplayItem();
 		
-		var EnemyList = UtmxBattleManager.Instance.GetBattleEnemyController().EnemyList;
-		for (int i = 0; i < EnemyList.Count; i++)
+		var EnemiesList = UtmxBattleManager.GetBattleEnemyController().EnemiesList;
+		for (int i = 0; i < EnemiesList.Count; i++)
 		{
-			BaseEnemy enemy = EnemyList[i];
-			string enemyDiaplayText = ((enemy.CanSpare && enemy.AllowSpare) ? "[blend=yellow]" : "") +
+			BaseEnemy enemy = EnemiesList[i];
+			string enemyDisplayText = ((enemy.CanSpare && enemy.AllowSpare) ? "[blend=yellow]" : "") +
 				enemy.DisplayName;
-			AddDisplayItem(i, enemyDiaplayText, enemy.Hp, enemy.MaxHp);
+			AddDisplayItem(i, enemyDisplayText, enemy.Hp, enemy.MaxHp);
 		}
 	}
 	public override void UIHidden()

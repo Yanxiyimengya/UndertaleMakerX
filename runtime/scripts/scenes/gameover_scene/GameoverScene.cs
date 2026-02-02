@@ -40,26 +40,26 @@ public partial class GameoverScene : Node
 
 	public override void _ExitTree()
 	{
-		UtmxGlobalStreamPlayer.Instance.StopBgm("GAME_OVER");
+		UtmxGlobalStreamPlayer.StopBgm("GAME_OVER");
 	}
 
 	private async void Play()
 	{
 		_inputAcceptable = false;
-		UtmxGlobalStreamPlayer.Instance.StopAll();
+		UtmxGlobalStreamPlayer.StopAll();
 		SoulSprite2D.Visible = true;
 		GameoverTextTyper.Visible = false;
-		SoulPositionNode.Modulate = UtmxBattleManager.Instance.PlayerSoulColor;
-		SoulPositionNode.GlobalPosition = UtmxBattleManager.Instance.PlayerSoulPosition;
+		SoulPositionNode.Modulate = UtmxBattleManager.PlayerSoulColor;
+		SoulPositionNode.GlobalPosition = UtmxBattleManager.PlayerSoulPosition;
 		GameoverBg.Modulate = Color.Color8(255, 255, 255, 0);
 		await ToSignal(GetTree().CreateTimer(0.67), Timer.SignalName.Timeout);
 
 		SoulSprite2D.Texture = SoulBreakTexture;
-		UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("HEART_BEAT_BREAK"));
+		UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("HEART_BEAT_BREAK"));
 		await ToSignal(GetTree().CreateTimer(1.5), Timer.SignalName.Timeout);
 
 		SoulSprite2D.Visible = false;
-		UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("HEART_PLOSION"));
+		UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("HEART_PLOSION"));
 		for (int i = 0; i < 4; i++)
 		{
 			SoulParticles2D.EmitParticle(SoulParticles2D.GlobalTransform, Vector2.Zero, Colors.White,
@@ -69,17 +69,17 @@ public partial class GameoverScene : Node
 
 		Tween _tween = CreateTween();
 		_tween.TweenProperty(GameoverBg, "modulate:a", 1.0, 1.0).From(0.0);
-		UtmxGlobalStreamPlayer.Instance.PlayBgmFormStream("GAME_OVER", UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("GAME_OVER"));
+		UtmxGlobalStreamPlayer.PlayBgmFormStream("GAME_OVER", UtmxGlobalStreamPlayer.GetStreamFormLibrary("GAME_OVER"));
 		await ToSignal(_tween, Tween.SignalName.Finished);
 
 		GameoverTextTyper.Visible = true;
-		GameoverTextTyper.Start(UtmxBattleManager.Instance.GetEncounterInstance()?.DeathText);
+		GameoverTextTyper.Start(UtmxBattleManager.GetEncounterInstance()?.DeathText);
 		_inputAcceptable = true;
 	}
 
 	private async void End()
 	{
-		UtmxGlobalStreamPlayer.Instance.SetBgmVolume("GAME_OVER", -72, 2.0F);
+		UtmxGlobalStreamPlayer.SetBgmVolume("GAME_OVER", -72, 2.0F);
 		_inputAcceptable = false;
 		GameoverTextTyper.Visible = false;
 		Tween _tween = CreateTween();

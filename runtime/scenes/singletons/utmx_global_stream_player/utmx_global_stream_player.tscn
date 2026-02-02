@@ -7,6 +7,7 @@
 [ext_resource type="AudioStream" uid="uid://dmtjjdohc4f7u" path="res://__data__/built-in-resources/sounds/voice/snd_texttyper.wav" id="5_yuuso"]
 [ext_resource type="AudioStream" uid="uid://d2u6tsm4bxsnh" path="res://__data__/built-in-resources/sounds/voice/snd_text.wav" id="6_8rblb"]
 [ext_resource type="AudioStream" uid="uid://g3f3hmwbsfsb" path="res://__data__/built-in-resources/sounds/sfx/snd_hurt.wav" id="7_3c4hc"]
+[ext_resource type="AudioStream" uid="uid://ktq5wbigafhb" path="res://__data__/built-in-resources/sounds/sfx/snd_heal.wav" id="8_s6ry2"]
 [ext_resource type="AudioStream" uid="uid://f57cj4gwas2l" path="res://__data__/built-in-resources/sounds/sfx/snd_break1.wav" id="8_vvd1d"]
 [ext_resource type="AudioStream" uid="uid://c05nk5k8k24jr" path="res://__data__/built-in-resources/sounds/sfx/snd_break2.wav" id="9_cohk7"]
 [ext_resource type="AudioStream" uid="uid://g5o72g1unno0" path="res://__data__/built-in-resources/sounds/bgm/mus_gameover.ogg" id="10_vvd1d"]
@@ -19,6 +20,7 @@ EscapedSoundStream = ExtResource("4_yuuso")
 TextTyperSoundStream = ExtResource("5_yuuso")
 EnemyDialogueSoundStream = ExtResource("6_8rblb")
 HurtSoundStream = ExtResource("7_3c4hc")
+HealSoundStream = ExtResource("8_s6ry2")
 HeartBeatBreakSoundStream = ExtResource("8_vvd1d")
 HeartPlosionSoundStream = ExtResource("9_cohk7")
 GameOverMusicSoundStream = ExtResource("10_vvd1d")

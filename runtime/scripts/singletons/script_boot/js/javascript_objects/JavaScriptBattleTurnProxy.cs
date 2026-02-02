@@ -1,23 +1,24 @@
 using Godot;
+using Jint.Native.Object;
 
 public partial class JavaScriptBattleTurnProxy : BaseBattleTurn, IJavaScriptObject
 {
-    public JavaScriptObjectInstance JsInstance { get; set; }
+    public ObjectInstance JsInstance { get; set; }
     public string JsScriptPath { get; set; }
     public override void _OnTurnInitialize()
     {
-        JsInstance?.Invoke("onTurnInitialize", []);
+        ((IJavaScriptObject)this).Invoke("onTurnInitialize", []);
     }
     public override void _OnTurnStart()
     {
-        JsInstance?.Invoke("onTurnStart", []);
+        ((IJavaScriptObject)this).Invoke("onTurnStart", []);
     }
     public override void _OnTurnEnd()
     {
-        JsInstance?.Invoke("onTurnEnd", []);
+        ((IJavaScriptObject)this).Invoke("onTurnEnd", []);
     }
     public override void _OnTurnUpdate(double delta)
     {
-        JsInstance?.Invoke("onTurnUpdate", [delta]);
+        ((IJavaScriptObject)this).Invoke("onTurnUpdate", [delta]);
     }
 }

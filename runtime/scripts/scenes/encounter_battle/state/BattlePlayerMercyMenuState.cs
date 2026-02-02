@@ -47,7 +47,7 @@ public partial class BattlePlayerMercyMenuState : StateNode
 				}
 				else
 				{
-					UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
+					UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("SQUEAK"));
 				}
 				MercyChoiceMenu.SetChoice(MercyChoice);
 			}
@@ -60,7 +60,7 @@ public partial class BattlePlayerMercyMenuState : StateNode
 				}
 				else
 				{
-					UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SQUEAK"));
+					UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("SQUEAK"));
 				}
 
 				MercyChoiceMenu.SetChoice(MercyChoice);
@@ -71,11 +71,11 @@ public partial class BattlePlayerMercyMenuState : StateNode
 			}
 			else if (Input.IsActionJustPressed("confirm"))
 			{
-				UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("SELECT"));
-				string choiced = (string)MercyChoiceMenu.GetChoicedItemId();
-				if (choiced == "SPARE")
+				UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("SELECT"));
+				string selected = (string)MercyChoiceMenu.GetselectedItemId();
+				if (selected == "SPARE")
 				{
-					foreach (BaseEnemy enemy in UtmxBattleManager.Instance.GetBattleEnemyController().EnemyList)
+					foreach (BaseEnemy enemy in UtmxBattleManager.GetBattleEnemyController().EnemiesList)
 					{
 						if (enemy.AllowSpare && enemy.CanSpare)
 						{
@@ -84,7 +84,7 @@ public partial class BattlePlayerMercyMenuState : StateNode
 					}
 					_NextState();
 				}
-				else if (choiced == "FREE")
+				else if (selected == "FREE")
 				{
 					_Free();
 				}
@@ -106,7 +106,7 @@ public partial class BattlePlayerMercyMenuState : StateNode
 	
 	private void _NextState()
 	{
-		UtmxBattleManager.Instance.GetBattleController().ChangeToPlayerDialogueState();
+		UtmxBattleManager.GetBattleController().ChangeToPlayerDialogueState();
 	}
 
 	private async void _OpenTextMenu()
@@ -117,13 +117,13 @@ public partial class BattlePlayerMercyMenuState : StateNode
 	private void _Free()
 	{
 		_freed = true;
-		UtmxBattleManager.Instance.Endded = true;
-		_playerSoul = UtmxBattleManager.Instance.GetBattleController().PlayerSoul;
+		UtmxBattleManager.Endded = true;
+		_playerSoul = UtmxBattleManager.GetBattlePlayerController().PlayerSoul;
 		_playerSoul.Freed = true;
 		_playerSoul.Visible = true;
 		_OpenTextMenu();
-		TextMenu.ShowEncounterText(UtmxBattleManager.Instance.GetEncounterInstance()?.FreeText);
+		TextMenu.ShowEncounterText(UtmxBattleManager.GetEncounterInstance()?.FreeText);
 		BattleButtonManager.ResetAllBattleButton();
-		UtmxGlobalStreamPlayer.Instance.PlaySoundFromStream(UtmxGlobalStreamPlayer.Instance.GetStreamFormLibrary("ESCAPED"));
+		UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("ESCAPED"));
 	}
 }

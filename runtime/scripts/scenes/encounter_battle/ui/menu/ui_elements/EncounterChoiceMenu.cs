@@ -75,11 +75,11 @@ public partial class EncounterChoiceMenu : BaseEncounterMenu
         return _items[index];
     }
 
-    public object GetChoicedItemId()
+    public object GetselectedItemId()
     {
         return _items[_currentChoice].ItemId;
     }
-    public string GetChoicedDisplayName()
+    public string GetselectedDisplayName()
     {
         return _items[_currentChoice].ItemDisplayName;
     }

@@ -7,12 +7,14 @@ using Godot.Collections;
 public static class UtmxPlayerDataManager
 {
 	public static string PlayerName = "FRISK";
-	public static int PlayerLv = 19;
-	public static float PlayerHp = 92F;
-	public static float PlayerMaxHp = 92F;
-	public static float PlayerAttack = 0F;
-	public static float PlayerDefence = 0F;
-	public static float PlayerInvincibleTime = 0.025F * 30F;
+	public static double PlayerLv = 19;
+	public static double PlayerExp = 0;
+	public static double PlayerGold = 0;
+	public static double PlayerHp = 92F;
+	public static double PlayerMaxHp = 92F;
+	public static double PlayerAttack = 0F;
+	public static double PlayerDefence = 0F;
+	public static double PlayerInvincibleTime = 0.025F * 30F;
 
 	public static List<BaseItem> Items = new List<BaseItem>() {};
 	public static BaseWeapon Weapon = new BaseWeapon();
@@ -20,14 +22,24 @@ public static class UtmxPlayerDataManager
 
 	public static void AddItem(string itemId)
 	{
-		if (GameRegisterDB.TryGetItem(itemId, out BaseItem item))
+		if (UtmxGameRegisterDB.TryGetItem(itemId, out BaseItem item))
 		{
 			Items.Add(item);
 		}
 	}
-	private static bool TryGetItem(int slot, out BaseItem item)
+	public static BaseItem GetItemAt(int slot)
+	{
+		if (TryGetItem(slot, out BaseItem result))
+		{
+			return result;
+        }
+		return null;
+	}
+
+    private static bool TryGetItem(int slot, out BaseItem item)
 	{
 		item = null;
+		if (slot < 0 || slot >= Items.Count) return false;
 		if (slot > -1 && slot < Items.Count)
 		{
 			item = Items[slot];
@@ -35,24 +47,49 @@ public static class UtmxPlayerDataManager
 		}
 		return false;
 	}
-
 	public static int GetItemCount()
 	{
 		return Items.Count;
 	}
-
-
 	public static void UseItem(int slot)
 	{
+		if (slot < 0 || slot >= Items.Count) return;
 		BaseItem item = Items[slot];
 		item.ItemSlot = slot;
 		item._OnUseSelected();
 	}
+
 	public static void RemoveItem(int slot)
 	{
+		if (slot < 0 || slot >= Items.Count) return;
 		if (slot > -1 && slot < Items.Count)
 		{
 			Items.RemoveAt(slot);
 		}
+	}
+
+
+
+	public static void Hurt(double value)
+	{
+		UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("HURT"));
+		if (UtmxBattleManager.IsInBattle())
+		{
+			UtmxBattleManager.GetBattlePlayerController()?.PlayerSoul?.Hurt(value);
+			if (PlayerHp <= 0)
+			{
+				UtmxBattleManager.GameOver();
+			}
+		}
+		else
+		{
+			PlayerHp -= value;
+		}
+
+	}
+	public static void Heal(double value)
+	{
+		UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("HEAL"));
+		PlayerHp += (float)value;
 	}
 }

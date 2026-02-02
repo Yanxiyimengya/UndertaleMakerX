@@ -1,7 +1,6 @@
-import {__BattleTurn} from "__UTMX";
+import { __BattleTurn } from "__UTMX";
 
-export class UtmxBattleTurn extends __BattleTurn 
-{
+export class UtmxBattleTurn extends __BattleTurn {
     get arenaInitializeSize() {
         return this.ArenaInitializeSize;
     }
@@ -21,8 +20,8 @@ export class UtmxBattleTurn extends __BattleTurn
         this.TurnTime = value;
     }
 
-    onTurnInitialize() {}
-    onTurnStart() {}
-    onTurnEnd() {}
-    onTurnUpdate(delta) {}
+    onTurnInitialize() { }
+    onTurnStart() { }
+    onTurnEnd() { }
+    onTurnUpdate(delta) { }
 }
