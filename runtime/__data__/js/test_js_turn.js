@@ -1,5 +1,5 @@
 import { UTMX, Vector2 } from "UTMX";
-
+import MyProjectile from "./test_js_projectile";
 
 
 export default class MyBattleTurn extends UTMX.BattleTurn {
@@ -13,9 +13,10 @@ export default class MyBattleTurn extends UTMX.BattleTurn {
     
     onTurnInitialize()
 	{
-		this.proj = UTMX.BattleProjectile.new("a.png", 10, true);
+		this.proj = UTMX.battle.createProjectile(MyProjectile, "a.png", 10, true);
+		UTMX.debug.print(this.proj);
 		this.proj.position = new Vector2(320, 320);
-		this.proj.collisionMode = UTMX.BattleProjectile.CollisionMode.PRECISE;
+		this.proj.collisionMode = UTMX.battle.ProjectileCollisionMode.PRECISE;
 	}
 
     onTurnUpdate(delta) {
@@ -28,10 +29,9 @@ export default class MyBattleTurn extends UTMX.BattleTurn {
 		}
 		if (UTMX.input.isActionDown("menu"))
 		{
-			this.proj.destroy();
+			this.proj.enabled = !this.proj.enabled;
 		}
 		this.time += 1;
-
 
 	}
 }

@@ -147,6 +147,7 @@ MenuManager = NodePath("../../UILayer/BattleMenuManager")
 metadata/_custom_type_script = "uid://dxmt2vmf5f8bi"
 
 [node name="BackgroundLayer" type="Control" parent="." unique_id=2067686152]
+z_index = -300
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -156,7 +157,6 @@ grow_vertical = 2
 
 [node name="BackgroundColorRect" type="ColorRect" parent="BackgroundLayer" unique_id=1376972820]
 visible = false
-z_index = -1000
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -171,6 +171,7 @@ texture = ExtResource("2_4xtxd")
 
 [node name="BattleArenaGroup" type="Node2D" parent="." unique_id=185318783]
 process_priority = 1
+z_index = -200
 script = ExtResource("18_3wf68")
 metadata/_custom_type_script = "uid://vrolycbhr1jt"
 
@@ -186,9 +187,13 @@ script = ExtResource("20_3wf68")
 Size = Vector2(565, 130)
 metadata/_custom_type_script = "uid://7hd25hqmu3q2"
 
-[node name="UILayer" type="Node2D" parent="." unique_id=1514394633]
+[node name="UILayer" type="Control" parent="." unique_id=1117765173]
+z_index = -100
+layout_mode = 3
+anchors_preset = 0
 
 [node name="BattleStatusBar" parent="UILayer" unique_id=2025938519 instance=ExtResource("4_18p8v")]
+layout_mode = 0
 anchors_preset = 0
 anchor_right = 0.0
 anchor_bottom = 0.0
@@ -201,6 +206,7 @@ PlayerLv = 1
 
 [node name="BattleMenuManager" type="TabContainer" parent="UILayer" unique_id=799359222]
 visible = false
+layout_mode = 0
 offset_left = 37.0
 offset_top = 255.0
 offset_right = 603.0
@@ -303,11 +309,14 @@ position = Vector2(48, 453)
 ArenaGroup = NodePath("../../BattleArenaGroup")
 
 [node name="Enemies" type="Node2D" parent="." unique_id=490966930]
+z_index = 100
 position = Vector2(320, 240)
 
 [node name="Projectiles" type="Node2D" parent="." unique_id=1993100029]
+z_index = 200
 
 [node name="BattleCamera" type="Camera2D" parent="." unique_id=1305980599]
+z_index = 300
 position = Vector2(320, 240)
 ignore_rotation = false
 script = ExtResource("43_knxdc")

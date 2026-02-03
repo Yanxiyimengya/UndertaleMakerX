@@ -4,32 +4,52 @@ using System;
 [GlobalClass]
 public abstract partial class BaseBattleArena : Node2D
 {
-    [Export]
-    public float BorderWidth = 5.0F;
+    [Export(PropertyHint.Range, "0,200,0.1")]
+    public float BorderWidth
+    {
+        get => _borderWidth;
+        set
+        {
+            if (Mathf.IsEqualApprox(_borderWidth, value))
+                return;
+            _borderWidth = Mathf.Max(0f, value);
+        }
+    }
+
     [Export]
     public virtual bool Enabled
     {
         get => _enabled;
         set
         {
+            if (_enabled == value)
+                return;
             _enabled = value;
-            Visible = value;
+            if (Visible != value)
+                Visible = value;
         }
     }
-    public bool IsDirty = true;
 
+    private float _borderWidth = 5.0f;
     protected bool _enabled = true;
-    public override void _Notification(int what)
+
+    private Transform2D _lastGlobalTransform;
+    private bool _lastVisible;
+    private bool _initialized;
+
+    public override void _Ready()
     {
-        if (what == NotificationTransformChanged)
-        {
-            IsDirty = true;
-        }
-        else if (what == NotificationLocalTransformChanged)
-        {
-            IsDirty = true;
-        }
+        _lastGlobalTransform = GlobalTransform;
+        _lastVisible = Visible;
+
+        if (Visible != _enabled)
+            Visible = _enabled;
+        _initialized = true;
     }
-    public abstract void DrawFrame(Rid borderRenderingItem, Rid maskRenderingItem,
-        Rid borderCullingCanvasItem, Rid maskCullingCanvasItem);
+    public abstract void DrawFrame(
+        Rid borderRenderingItem,
+        Rid maskRenderingItem,
+        Rid borderCullingCanvasItem,
+        Rid maskCullingCanvasItem
+    );
 }

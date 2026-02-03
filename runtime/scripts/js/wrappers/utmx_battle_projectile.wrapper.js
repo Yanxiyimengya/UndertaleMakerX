@@ -1,68 +1,71 @@
 
-import { __Node, __battle_manager } from "__UTMX";
+import { __logger } from "__UTMX";
+import { UtmxSprite } from "./utmx_sprite.wrapper";
 
-export class UtmxBattleProjectile extends __Node {
+export class UtmxBattleProjectile extends UtmxSprite { 
 
-    static CollisionMode = Object.freeze({
-        FULL_TEXTURE : 0,
-        USED_RECT : 1,
-        PRECISE : 2
-    });
-
-    constructor(textures = "", damage = 1, mask = false)
+    constructor()
     {
-        this.instance = __battle_manager.GetBattleProjectileController().CreateProjectile(mask);
-        this.instance.SetTextures(textures);
-        this.instance.Damage = damage;
+        super();
     }
-
+    
     get destroyOnTurnEnd() {
-        return this.instance.DestroyOnTurnEnd;
+        return this.__instance.DestroyOnTurnEnd;
     }
     set destroyOnTurnEnd(value) {
-        this.instance.DestroyOnTurnEnd = value;
+        this.__instance.DestroyOnTurnEnd = value;
     }
     get collisionMode() {
-        return this.instance.CollisionMode;
+        return this.__instance.CollisionMode;
     }
     set collisionMode(value) {
-        this.instance.CollisionMode = value;
+        this.__instance.CollisionMode = value;
+    }
+    
+    get textures() {
+        return this.__instance.TexturesPath;
+    }
+    set textures(value) {
+        if (typeof value === "string")
+        {
+            this.__instance.TexturesPath = [value];
+        }
+        else
+        {
+            this.__instance.TexturesPath = value;
+        }
     }
 
-    get x() {
-        return this.instance.Position.X;
+    get offset() {
+        return this.__instance.Offset;
     }
-    set x(value) {
-        let newPosition = this.instance.Position;
-        newPosition.X = value;
-        this.instance.Position = newPosition;
-    }
-    get y() {
-        return this.instance.Position.Y;
-    }
-    set y(value) {
-        let newPosition = this.instance.Position;
-        newPosition.Y = value;
-        this.instance.Position = newPosition;
+    set offset(value) {
+        this.__instance.Offset = value;
     }
 
-    get rotation() {
-        return this.instance.RotationDegress;
+    get damage() {
+        return this.__instance.Damage;
     }
-    set rotation(value) {
-        this.instance.RotationDegress = value;
+    set damage(value) {
+        this.__instance.Damage = value;
     }
 
-    get position() {
-        return this.instance.Position;
+    get preciseEpsilon() {
+        return this.__instance.PreciseEpsilon;
     }
-    set position(value) {
-        this.instance.Position = value;
+    set preciseEpsilon(value) {
+        this.__instance.PreciseEpsilon = value;
+    }
+
+    get enabled() {
+        return this.__instance.Enabled;
+    }
+    set enabled(value) {
+        this.__instance.Enabled = value;
     }
 
     destroy()
     {
-        this.instance.Destroy();
+        this.__instance.Destroy();
     }
-
 }

@@ -2,26 +2,15 @@ using Godot;
 using Jint.Native.Object;
 
 [GlobalClass]
-public partial class JavaScriptSpriteProxy : BaseBattleProjectile
+public partial class JavaScriptSpriteProxy : GameSprite2D, IJavaScriptObject
 {
-    public JavaScriptSpriteProxy(bool mask = false)
+    public ObjectInstance JsInstance { get; set; }
+    public string JsScriptPath { get; set; }
+    public static JavaScriptSpriteProxy New(ObjectInstance objInstance, bool mask = false)
     {
-        if (UtmxBattleManager.IsInBattle())
-        {
-            SceneTree sceneTree = UtmxSceneManager.Instance.GetTree();
-            if (sceneTree != null)
-            {
-
-            }
-        }
-        else
-        {
-            QueueFree();
-        }
+        JavaScriptSpriteProxy sprite = new();
+        sprite.JsInstance = objInstance;
+        return sprite;
     }
 
-    public void SetTextures(object value)
-    {
-        SetTextures((Texture[])value);
-    }
 }

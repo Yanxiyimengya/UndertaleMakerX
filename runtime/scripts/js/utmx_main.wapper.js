@@ -8,9 +8,9 @@ import { UtmxBaseEnemy } from "res://scripts/js/wrappers/utmx_enemy.wrapper.js";
 import { UtmxBaseEncounter } from "res://scripts/js/wrappers/utmx_encounter.wrapper.js";
 import { UtmxBattleTurn } from "res://scripts/js/wrappers/utmx_battle_turn.wrapper.js";
 import { UtmxPlayerDataManager } from "res://scripts/js/wrappers/utmx_player_data_manager.wrapper.js";
-import { UtmxBattleManager } from "res://scripts/js/wrappers/utmx_battle_manager.weapper.js";
+import { UtmxBattleManager } from "res://scripts/js/wrappers/utmx_battle_manager.wrapper.js";
 import { UtmxGameRegisterDB } from "res://scripts/js/wrappers/utmx_game_register_db.wrapper.js";
-import { UtmxGameManager } from "res://scripts/js/wrappers/utmx_game_manager.wrapper";
+import { UtmxGameManager } from "res://scripts/js/wrappers/utmx_game_manager.wrapper.js";
 import { UtmxBattleProjectile } from "res://scripts/js/wrappers/utmx_battle_projectile.wrapper.js";
 
 class UTMX {

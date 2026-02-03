@@ -6,8 +6,8 @@ using System.ComponentModel.Design;
 [GlobalClass]
 public partial class BattleArenaGroup : Node2D
 {
-    public int EnabledArenaCount;
-    public Rid MainCanvasItem;
+	public int EnabledArenaCount;
+	public Rid MainCanvasItem;
 	public Rid MainCanvas;
 
 	private Rid _arenaBorderRenderingCanvasItem;
@@ -100,37 +100,28 @@ public partial class BattleArenaGroup : Node2D
 			GetCameraTransform();
 		if (IsInsideTree() && IsVisibleInTree())
 		{
-			bool _requireRedraw = false;
+			RenderingServer.CanvasItemSetTransform(MainCanvasItem, CameraTransform);
+			RenderingServer.CanvasItemSetZIndex(MainCanvasItem, ZIndex);
+			RenderingServer.CanvasItemClear(_arenaBorderRenderingCanvasItem);
+			RenderingServer.CanvasItemClear(_arenaMaskRenderingCanvasItem);
+			RenderingServer.CanvasItemClear(_arenaBorderCullingCanvasItem);
+			RenderingServer.CanvasItemClear(_arenaMaskCullingCanvasItem);
+
 			EnabledArenaCount = 0;
-            foreach (Node _child in GetChildren())
+			foreach (Node _child in GetChildren())
 			{
 				if (_child is BaseBattleArena arena)
 				{
 					if (!arena.Enabled) continue;
-                    EnabledArenaCount += 1;
-					if (arena.IsDirty)
-                    {
-                        RenderingServer.CanvasItemSetTransform(MainCanvasItem, CameraTransform);
-                        RenderingServer.CanvasItemClear(_arenaBorderRenderingCanvasItem);
-                        RenderingServer.CanvasItemClear(_arenaMaskRenderingCanvasItem);
-                        RenderingServer.CanvasItemClear(_arenaBorderCullingCanvasItem);
-                        RenderingServer.CanvasItemClear(_arenaMaskCullingCanvasItem);
-                        Transform2D arenaTransform2D = CameraTransformInverse * arena.GetTransform();
-						RenderingServer.CanvasItemAddSetTransform(_arenaBorderRenderingCanvasItem, arenaTransform2D);
-						RenderingServer.CanvasItemAddSetTransform(_arenaMaskRenderingCanvasItem, arenaTransform2D);
-						RenderingServer.CanvasItemAddSetTransform(_arenaBorderCullingCanvasItem, arenaTransform2D);
-						RenderingServer.CanvasItemAddSetTransform(_arenaMaskCullingCanvasItem, arenaTransform2D);
-						arena.DrawFrame(_arenaBorderRenderingCanvasItem, _arenaMaskRenderingCanvasItem,
-						_arenaBorderCullingCanvasItem, _arenaMaskCullingCanvasItem);
-						arena.IsDirty = false;
-						_requireRedraw = true;
-					}
+					EnabledArenaCount += 1;
+					Transform2D arenaTransform2D = CameraTransformInverse * arena.GetTransform();
+					RenderingServer.CanvasItemAddSetTransform(_arenaBorderRenderingCanvasItem, arenaTransform2D);
+					RenderingServer.CanvasItemAddSetTransform(_arenaMaskRenderingCanvasItem, arenaTransform2D);
+					RenderingServer.CanvasItemAddSetTransform(_arenaBorderCullingCanvasItem, arenaTransform2D);
+					RenderingServer.CanvasItemAddSetTransform(_arenaMaskCullingCanvasItem, arenaTransform2D);
+					arena.DrawFrame(_arenaBorderRenderingCanvasItem, _arenaMaskRenderingCanvasItem,
+					_arenaBorderCullingCanvasItem, _arenaMaskCullingCanvasItem);
 				}
-			}
-			if (_requireRedraw)
-			{
-				RenderingServer.ViewportSetActive(GetViewport().GetViewportRid(), false);
-				RenderingServer.ViewportSetActive(GetViewport().GetViewportRid(), true);
 			}
 		}
 	}
@@ -145,6 +136,8 @@ public partial class BattleArenaGroup : Node2D
 			_borderViewportTextureRid);
 		RenderingServer.CanvasItemAddTextureRect(MainCanvasItem, new Rect2(Vector2.Zero, viewportSize),
 				_maskViewportTextureRid);
+		RenderingServer.ViewportSetActive(GetViewport().GetViewportRid(), false);
+		RenderingServer.ViewportSetActive(GetViewport().GetViewportRid(), true);
 	}
 
 	public Vector2 GetScreenTopLeftPosition()
@@ -197,9 +190,9 @@ public partial class BattleArenaGroup : Node2D
 	}
 
 	public bool IsLineInArenas(Vector2 from, Vector2 to)
-    {
-        if (EnabledArenaCount == 0) return false;
-        foreach (Node child in GetChildren())
+	{
+		if (EnabledArenaCount == 0) return false;
+		foreach (Node child in GetChildren())
 		{
 			if (child is not BattleArenaExpand arena || !arena.Enabled) continue;
 			var insideChild = arena.IsSegmentInArena(
@@ -211,9 +204,9 @@ public partial class BattleArenaGroup : Node2D
 	}
 
 	public Vector2 PushBackInside(Vector2 center, Vector2[] checkPoints, float tolerance = 0.001f)
-    {
-        if (EnabledArenaCount == 0) return center;
-        var closestCenter = center;
+	{
+		if (EnabledArenaCount == 0) return center;
+		var closestCenter = center;
 		var minDistSq = float.MaxValue;
 
 		foreach (Node child in GetChildren())

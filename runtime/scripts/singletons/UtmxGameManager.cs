@@ -21,7 +21,6 @@ public partial class UtmxGameManager : Node
 		if (FileAccess.FileExists(mainScriptFilePath))
 		{
 			_mainScriptObject = IJavaScriptObject.New<JavaScriptObject>(mainScriptFilePath);
-
         }
 	}
 	public override void _ExitTree()
@@ -30,7 +29,6 @@ public partial class UtmxGameManager : Node
 		Instance = null;
 		_mainScriptObject = null;
 	}
-
 
 	public void _GameStart()
 	{
@@ -45,4 +43,8 @@ public partial class UtmxGameManager : Node
 	{
 		Instance.GetTree().Quit();
 	}
+
+	public static double GetFpsReal() { return Engine.GetFramesPerSecond(); }
+	public static void SetMaxFps(int fps) { Engine.MaxFps = fps; }
+
 }

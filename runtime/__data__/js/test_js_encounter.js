@@ -1,6 +1,6 @@
 import { UTMX } from "UTMX";
 
-export default class MyEnemy extends UTMX.Encounter {
+export default class MyEncounter extends UTMX.Encounter {
     
     constructor() {
         super();

@@ -14,7 +14,6 @@ public partial class BattleRectangleArenaCulling : BattleArenaCulling
             if (_size != value)
             {
                 _size = value;
-                IsDirty = true;
                 UpdateCollisionShape(_shape);
             }
 

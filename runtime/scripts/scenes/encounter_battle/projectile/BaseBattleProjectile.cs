@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 [GlobalClass]
-public partial class BaseBattleProjectile : GameSprite2D
+public partial class BaseBattleProjectile : GameSprite2D, IObjectPoolObject
 {
 	public enum PrecisionCollisionMode { FullTexture = 0, UsedRect = 1, Precise = 2 }
 
@@ -37,7 +37,28 @@ public partial class BaseBattleProjectile : GameSprite2D
 	[Export] public float PreciseEpsilon = 0.5f;
 	[Export] public float Damage = 1f;
 	[Export] public bool DestroyOnTurnEnd = true;
-
+	[Export]
+	public bool Enabled
+	{
+		get => _enabled;
+		set
+		{
+			if (_enabled != value)
+			{
+				_enabled = value;
+				if (value)
+				{
+					ProcessMode = ProcessModeEnum.Inherit;
+					SetPhysicsProcess(value);
+				}
+				else
+				{
+					ProcessMode = ProcessModeEnum.Disabled;
+					SetPhysicsProcess(value);
+				}
+			}
+		}
+	}
 
 	private PrecisionCollisionMode collisionMode = PrecisionCollisionMode.UsedRect;
 	private readonly List<List<Node2D>> _collisionShapesList = new();
@@ -45,11 +66,24 @@ public partial class BaseBattleProjectile : GameSprite2D
 	private int _prevFrame = -1;
 	private bool _textureChangedConnected = false;
 	private bool _frameChangedConnected = false;
+	private bool _enabled = false;
 	private readonly Dictionary<Image, List<Vector2[]>> _polygonCache = new();
 
 	public BaseBattleProjectile()
 	{
 		_area = new Area2D();
+	}
+
+	public void Awake()
+	{
+		Enabled = true;
+		Transform = Transform2D.Identity;
+		Modulate = Colors.White;
+	}
+
+	public void Disabled()
+	{
+		Enabled = false;
 	}
 
 	public override void _EnterTree()
@@ -100,6 +134,7 @@ public partial class BaseBattleProjectile : GameSprite2D
 
 	public override void _PhysicsProcess(double delta)
 	{
+		if (!Enabled) return;
 		if (IsCollideWithThePlayer())
 		{
 			var soul = UtmxBattleManager.GetBattlePlayerController()?.PlayerSoul;

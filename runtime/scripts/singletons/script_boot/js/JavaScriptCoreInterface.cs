@@ -20,11 +20,11 @@ public class JavaScriptCoreInterface
             { "__input" , typeof(UtmxInputManager)},
 
             { "__Object" , typeof(JavaScriptObject)},
-            { "__Node" , typeof(JavaScriptNode)},
             { "__UtmxItem" , typeof(JavaScriptItemProxy)},
             { "__UtmxEnemy" , typeof(JavaScriptEnemyProxy)},
             { "__UtmxEncounter" , typeof(JavaScriptEncounterProxy)},
             { "__BattleTurn" , typeof(JavaScriptBattleTurnProxy)},
+            { "__BattleProjectile" , typeof(JavaScriptBattleProjectileProxy)},
 
             { "__Vector2" , typeof(Vector2)},
             { "__Vector3" , typeof(Vector3)},

@@ -14,7 +14,6 @@ public partial class BattlePolygonArenaExpand : BattleArenaExpand
             if (_vertices != value)
             {
                 _vertices = value;
-                IsDirty = true;
                 _borderVertices = PolygonBuildTool.ExpandPolygon(_vertices, BorderWidth);
                 _bBox = PolygonBuildTool.GetBBox(_vertices);
 

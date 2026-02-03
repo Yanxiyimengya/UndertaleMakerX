@@ -14,7 +14,6 @@ public partial class BattleCircleArenaCulling : BattleArenaCulling
             if (_radius != value)
             {
                 _radius = value;
-                IsDirty = true;
                 UpdateCollisionShape(_shape);
             }
         }

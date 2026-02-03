@@ -2,7 +2,7 @@ using Godot;
 using System.Collections.Generic;
 
 [GlobalClass]
-public partial class GameSprite2D : AnimatedSprite2D 
+public partial class GameSprite2D : AnimatedSprite2D, IObjectPoolObject
 {
 	public const string DEFAULT_ANIM_NAME = "default";
 	[Signal]
@@ -70,8 +70,8 @@ public partial class GameSprite2D : AnimatedSprite2D
 			{
 				SpriteFrames.AddFrame(DEFAULT_ANIM_NAME, texture);
 				_texturesArray[index] = texture;
-				index += 1;
 			}
+			index += 1;
 		}
 		Textures = _texturesArray;
 		Play(DEFAULT_ANIM_NAME);

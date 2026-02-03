@@ -15,9 +15,7 @@ public partial class BattleRectangleArenaExpand : BattleArenaExpand
             if (_size != value)
             {
                 _size = value;
-                IsDirty = true;
             }
-
         }
     }
 

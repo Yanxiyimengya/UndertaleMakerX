@@ -21,6 +21,7 @@ public partial class UtmxBattleManager
 	public static Vector2 PlayerSoulPosition { get => _playerSoulPosition; set => _playerSoulPosition = value; }
 	public static Color PlayerSoulColor { get => _playerSoulColor; set => _playerSoulColor = value; }
 	public static string PrevScenePath { get => _prevScenePath; set => _prevScenePath = value; }
+	public static string DeathText { get => _deathText; set => _deathText = value; }
 
 	private static BaseEncounter _battleEncounter;
 	private static BattleController _battleController;
@@ -29,6 +30,7 @@ public partial class UtmxBattleManager
 	private static Vector2 _playerSoulPosition = Vector2.Zero;
 	private static Color _playerSoulColor = Colors.Red;
 	private static string _prevScenePath = "";
+	private static string _deathText = "";
 
 	public static void EncounterBattleStart(string encounterId)
 	{
@@ -71,11 +73,11 @@ public partial class UtmxBattleManager
 			Camera2D camera = soul.GetViewport().GetCamera2D();
 			PlayerSoulPosition = camera.GetCanvasTransform().BasisXform(soul.Position);
 			PlayerSoulColor = soul.SoulColor;
+			DeathText = GetEncounterInstance()?.DeathText;
 			EncounterBattleEnd();
 			UtmxSceneManager.Instance.CallDeferred("ChangeSceneToFile", [UtmxSceneManager.Instance.GameoverScenePath]);
 		}
 	}
-
 
 	public static bool IsInBattle() { return _isInBattle; }
 	public static BaseEncounter GetEncounterInstance() { return _battleEncounter; }

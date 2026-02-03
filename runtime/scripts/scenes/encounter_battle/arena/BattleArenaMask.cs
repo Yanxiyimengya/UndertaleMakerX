@@ -14,6 +14,7 @@ public partial class BattleArenaMask : Node2D
     public override void _EnterTree()
     {
         _arenaGroup = null;
+        Visible = false;
         if (GetParent() is BattleArenaGroup parentNode)
         {
             _arenaGroup = parentNode;
@@ -24,6 +25,7 @@ public partial class BattleArenaMask : Node2D
     {
         if (_arenaGroup != null)
         {
+            Visible = true;
             Rid _canvasItem = GetCanvasItem();
             RenderingServer.CanvasItemClear(_canvasItem);
             RenderingServer.CanvasItemAddSetTransform(_canvasItem, _arenaGroup.CameraTransform);
