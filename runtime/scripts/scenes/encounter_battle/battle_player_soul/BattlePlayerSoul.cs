@@ -10,7 +10,23 @@ public partial class BattlePlayerSoul : CharacterBody2D
 	[Export]
 	BattleArenaGroup ArenaGroup;
 	[Export]
-	public float CollisionRadius = 8F;
+	public double CollisionRadius
+	{
+		get => _collisionRadius;
+		set
+		{
+			if (_collisionRadius != value)
+			{
+				_collisionRadius = value;
+				int count = 6;
+				_checkPoints.Clear();
+				for (float i = 0; i < count; i++)
+				{
+					_checkPoints.Add((float)value * Vector2.Down.Rotated((i / count) * MathF.Tau + MathF.PI));
+				}
+			}
+		}
+	}
 	[Export]
 	public bool EnabledCollision
 	{
@@ -57,69 +73,58 @@ public partial class BattlePlayerSoul : CharacterBody2D
 			_freed = value;
 			if (_freed)
 			{
-				animSprite2d.Play("free");
 				EnabledCollision = false;
 				Movable = false;
+				Sprite.Play("free");
 			}
 		}
 	}
-	[Export]
+	
 	public Color SoulColor
 	{
-		get => Modulate;
+		get => Sprite.Modulate;
 		set
 		{
-			Modulate = value;
+			Sprite.Modulate = value;
 		}
 	}
 
 	[Export]
-	public AnimatedSprite2D animSprite2d;
+	public AnimatedSprite2D Sprite;
 	[Export]
-	public AnimationPlayer animPlayer;
+	public AnimationPlayer AnimPlayer;
 	[Export]
 	public BattlePlayerSoulHitBox HitBox;
 
 	private uint _collisionLayer = 0;
 	private uint _collisionMask = 0;
+	private double _collisionRadius = 0;
 	private bool _enabledCollision = true;
 	private bool _movable = true;
 	private bool _freed = false;
 	private double _invincibleTimer = 0.0F;
 	private List<Vector2> _checkPoints = new List<Vector2>();
 
-	public const float Speed = 130.0f;
-	public const float JumpVelocity = -400.0f;
-
+	public const float MOVE_SPEED = 130.0f;
 	public BattlePlayerSoul()
 	{
 		CollisionLayer = (int)UtmxBattleManager.BattleCollisionLayers.Player;
 		CollisionMask = (int)UtmxBattleManager.BattleCollisionLayers.Player;
 	}
 
-	public override void _Ready()
-	{
-		int count = 8;
-		for (float i = 0; i < count; i++)
-		{
-			_checkPoints.Add(CollisionRadius * Vector2.Down.Rotated((i / count) * Mathf.Tau));
-		}
-	}
-
 	public override void _Process(double delta)
 	{
-		base._Process(delta);
 		if (_invincibleTimer > 0)
 		{
 			_invincibleTimer -= delta;
-			animPlayer.Play("hurt");
+			AnimPlayer.Play("hurt");
 		}
 		else
 		{
-			if (animPlayer.IsPlaying() && animPlayer.CurrentAnimation != "RESET")
+			if (AnimPlayer.IsPlaying() && AnimPlayer.CurrentAnimation != "RESET")
 			{
-				animPlayer.Stop();
-				animPlayer.Play("RESET");
+				AnimPlayer.Stop();
+				AnimPlayer.Play("RESET");
 			}
 		}
 	}
@@ -134,9 +139,9 @@ public partial class BattlePlayerSoul : CharacterBody2D
 
 	public void ProcessMove(double delta)
 	{
-		Vector2 inputDir = Input.GetVector("left", "right", "up", "down").Normalized();
-		Vector2 targetPos = GlobalPosition + inputDir * (float)delta * 
-			(Input.IsActionPressed("cancel") ? (Speed * 0.5F) : Speed);
+		Vector2 inputDir = Input.GetVector("left", "right", "up", "down").Normalized().Rotated(GlobalRotation);
+		Vector2 targetPos = Position + inputDir * (float)delta * 
+			(Input.IsActionPressed("cancel") ? (MOVE_SPEED * 0.5F) : MOVE_SPEED);
 		TryMoveTo(targetPos);
 		MoveAndSlide();
 	}
@@ -159,32 +164,27 @@ public partial class BattlePlayerSoul : CharacterBody2D
 	{
 		if (ArenaGroup.EnabledArenaCount > 0 && !IsInsideArena(targetPos))
 		{
-			GlobalPosition = targetPos;
-			while (!IsInsideArena(GlobalPosition))
+			Position = targetPos;
+			while (!IsInsideArena(Position))
 			{
-				GlobalPosition = ArenaGroup.PushBackInside(GlobalPosition, _checkPoints.ToArray(), 1.0F);
+				Position = ArenaGroup.PushBackInside(Position, _checkPoints.ToArray(), 1.0F);
 			}
 		}
 		else
 		{
-			GlobalPosition = targetPos;
+			Position = targetPos;
 		}
 	}
 
-	public bool CanBeHurt()
-	{
-		if (_invincibleTimer > 0)
-			return false;
-		return true;
-	}
 	public void Hurt(double damage)
 	{
-		if (CanBeHurt())
+		if (_invincibleTimer <= 0)
 		{
 			UtmxPlayerDataManager.PlayerHp -= damage;
 			_invincibleTimer = UtmxPlayerDataManager.PlayerInvincibleTime;
 			if (GetViewport().GetCamera2D() is BattleCamera camera)
 				camera.StartShake(0.1f, Vector2.One, new Vector2(30, 30));
+			UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("HURT"));
 		}
 	}
 }

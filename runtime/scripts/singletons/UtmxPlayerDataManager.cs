@@ -72,7 +72,6 @@ public static class UtmxPlayerDataManager
 
 	public static void Hurt(double value)
 	{
-		UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("HURT"));
 		if (UtmxBattleManager.IsInBattle())
 		{
 			UtmxBattleManager.GetBattlePlayerController()?.PlayerSoul?.Hurt(value);
@@ -84,7 +83,8 @@ public static class UtmxPlayerDataManager
 		else
 		{
 			PlayerHp -= value;
-		}
+            UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("HURT"));
+        }
 
 	}
 	public static void Heal(double value)

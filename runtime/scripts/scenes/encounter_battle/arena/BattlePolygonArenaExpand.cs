@@ -16,36 +16,36 @@ public partial class BattlePolygonArenaExpand : BattleArenaExpand
                 _vertices = value;
                 IsDirty = true;
                 _borderVertices = PolygonBuildTool.ExpandPolygon(_vertices, BorderWidth);
+                _bBox = PolygonBuildTool.GetBBox(_vertices);
+
+                _borderColors = new Color[_borderVertices.Length];
+                for (int i = 0; i < _borderColors.Length; i++)
+                    _borderColors[i] = BorderColor;
+
+                _borderColors = new Color[Vertices.Length];
+                for (int i = 0; i < _borderColors.Length; i++)
+                    _borderColors[i] = ContentColor;
             }
         }
     }
 
     private Vector2[] _vertices;
     private Vector2[] _borderVertices;
+    private Rect2 _bBox;
+    private Color[] _borderColors;
+    private Color[] _contentColors;
 
     public override void DrawFrame(Rid borderRenderingItem, Rid maskRenderingItem,
         Rid borderCullingCanvasItem, Rid maskCullingCanvasItem)
     {
         if (Vertices.Length < 3) return;
-
-        var borderColors = new Color[_borderVertices.Length];
-        for (int i = 0; i < borderColors.Length; i++)
-        {
-            borderColors[i] = BorderColor;
-        }
-        RenderingServer.CanvasItemAddPolygon(borderRenderingItem, _borderVertices, borderColors);
-
-        var contentColors = new Color[Vertices.Length];
-        for (int i = 0; i < contentColors.Length; i++)
-        {
-            contentColors[i] = ContentColor;
-        }
-        RenderingServer.CanvasItemAddPolygon(maskRenderingItem, Vertices, contentColors);
+        RenderingServer.CanvasItemAddPolygon(borderRenderingItem, _borderVertices, _borderColors);
+        RenderingServer.CanvasItemAddPolygon(maskRenderingItem, Vertices, _contentColors);
     }
 
     public override bool IsPointInArena(Vector2 point)
     {
-        return Geometry2D.IsPointInPolygon(point, Vertices);
+        return _bBox.HasPoint(point) && Geometry2D.IsPointInPolygon(point, Vertices);
     }
 
     public override bool IsSegmentInArena(Vector2 from, Vector2 to)

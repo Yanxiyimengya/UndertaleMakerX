@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.IO;
+using System.Resources;
 
 internal static class UtmxResourceLoader
 {
@@ -8,7 +9,7 @@ internal static class UtmxResourceLoader
     {
         if (string.IsNullOrEmpty(resPath)) return null;
         string resNewPath = ResolvePath(resPath);
-        if (Godot.FileAccess.FileExists(resNewPath))
+        if (ResourceLoader.Exists(resNewPath))
         {
             return ResourceLoader.Load(resNewPath);
         }

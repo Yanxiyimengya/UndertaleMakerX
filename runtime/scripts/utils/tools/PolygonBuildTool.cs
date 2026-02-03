@@ -48,4 +48,14 @@ public static class PolygonBuildTool
 
         return result;
     }
+
+
+    public static Rect2 GetBBox(Vector2[] polygon) {
+        if (polygon.Length <= 0) return new Rect2 ();
+        Rect2 bounds = new Rect2(polygon[0], Vector2.Zero);
+        for (int i = 1; i < polygon.Length; i++) {
+            bounds = bounds.Expand(polygon[i]);
+        }
+        return bounds;
+    }
 }

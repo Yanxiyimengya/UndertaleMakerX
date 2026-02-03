@@ -20,6 +20,7 @@ public partial class UtmxBattleManager
 	public static bool Endded { get => _endded; set => _endded = value; }
 	public static Vector2 PlayerSoulPosition { get => _playerSoulPosition; set => _playerSoulPosition = value; }
 	public static Color PlayerSoulColor { get => _playerSoulColor; set => _playerSoulColor = value; }
+	public static string PrevScenePath { get => _prevScenePath; set => _prevScenePath = value; }
 
 	private static BaseEncounter _battleEncounter;
 	private static BattleController _battleController;
@@ -27,6 +28,7 @@ public partial class UtmxBattleManager
 	private static bool _isInBattle;
 	private static Vector2 _playerSoulPosition = Vector2.Zero;
 	private static Color _playerSoulColor = Colors.Red;
+	private static string _prevScenePath = "";
 
 	public static void EncounterBattleStart(string encounterId)
 	{
@@ -34,6 +36,7 @@ public partial class UtmxBattleManager
 		{
 			_battleEncounter = encounter;
 			Endded = false;
+			PrevScenePath = UtmxSceneManager.Instance.GetCurrentScenePath();
 			UtmxSceneManager.Instance.ChangeSceneToFile(UtmxSceneManager.Instance.EncounterBattleScenePath);
 		}
 		else
@@ -50,6 +53,7 @@ public partial class UtmxBattleManager
 			_battleEncounter = null;
 			_battleController = null;
 			_isInBattle = false;
+			UtmxSceneManager.Instance.ChangeSceneToFile(UtmxBattleManager.PrevScenePath);
 		}
 	}
 
@@ -65,8 +69,8 @@ public partial class UtmxBattleManager
 		{
 			BattlePlayerSoul soul = GetBattlePlayerController().PlayerSoul;
 			Camera2D camera = soul.GetViewport().GetCamera2D();
-			PlayerSoulPosition = camera.GetCanvasTransform().BasisXform(soul.GlobalPosition);
-			PlayerSoulColor = soul.Modulate;
+			PlayerSoulPosition = camera.GetCanvasTransform().BasisXform(soul.Position);
+			PlayerSoulColor = soul.SoulColor;
 			EncounterBattleEnd();
 			UtmxSceneManager.Instance.CallDeferred("ChangeSceneToFile", [UtmxSceneManager.Instance.GameoverScenePath]);
 		}
@@ -77,23 +81,23 @@ public partial class UtmxBattleManager
 	public static BaseEncounter GetEncounterInstance() { return _battleEncounter; }
 	public static BattleController GetBattleController() { return _battleController; }
 	public static BattleEnemyController GetBattleEnemyController() { 
-		return _battleController.EnemyController;
+		return _battleController?.EnemyController;
 	}
 	public static BattleTurnController GetBattleTurnController()
 	{
-		return _battleController.TurnController;
+		return _battleController?.TurnController;
 	}
 	public static BattlePlayerController GetBattlePlayerController()
 	{
-		return _battleController.PlayerController;
+		return _battleController?.PlayerController;
 	}
 	public static BattleArenaController GetBattleArenaController()
 	{
-		return _battleController.ArenaController;
+		return _battleController?.ArenaController;
 	}
 	public static BattleProjectileController GetBattleProjectileController()
 	{
-		return _battleController.ProjectileController;
+		return _battleController?.ProjectileController;
 	}
 
 	public static void SwitchBattleState(string stateId)

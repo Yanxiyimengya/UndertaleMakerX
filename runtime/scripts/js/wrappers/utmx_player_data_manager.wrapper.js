@@ -1,5 +1,28 @@
-import { __player_data_manager } from "__UTMX";
+import { __player_data_manager, __logger } from "__UTMX";
+import { UtmxBaseItem } from "./utmx_item.wrapper";
 
+class PlayerInventory
+{
+    static addItem(itemId) {
+        __player_data_manager.AddItem(itemId);
+    }
+    static removeItem(slot) {
+        __player_data_manager.RemoveItem(slot);
+    }
+    static getItem(slot) {
+        let item = __player_data_manager.GetItemAt(slot);
+        if (item.JsInstance != null && item.JsInstance instanceof UtmxBaseItem.constructor)
+        {
+            return item.JsInstance;
+        }
+        return item;
+    }
+
+    static get itemCount() {
+        return __player_data_manager.GetItemCount();
+    }
+    static set itemCount(value) {};
+}
 
 export class UtmxPlayerDataManager {
     get name() { return __player_data_manager.PlayerName; }
@@ -36,16 +59,5 @@ export class UtmxPlayerDataManager {
         __player_data_manager.Heal(value);
     }
 
-    static addItem(itemId) {
-        __player_data_manager.AddItem(itemId);
-    }
-    static removeItem(slot) {
-        __player_data_manager.RemoveItem(slot);
-    }
-    static getItemCount() {
-        return __player_data_manager.GetItemCount();
-    }
-    static getItemAt(slot) {
-        return __player_data_manager.GetItemAt(slot);
-    }
+    static inventory = PlayerInventory;
 }

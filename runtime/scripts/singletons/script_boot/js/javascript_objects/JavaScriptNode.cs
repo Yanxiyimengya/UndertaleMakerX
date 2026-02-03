@@ -1,9 +1,5 @@
 using Godot;
-using Jint;
-using Jint.Native;
 using Jint.Native.Object;
-using System;
-using System.Collections.Generic;
 
 [GlobalClass]
 public partial class JavaScriptNode : Node, IJavaScriptObject
@@ -35,12 +31,21 @@ public partial class JavaScriptNode : Node, IJavaScriptObject
 	public string _javaScriptFile;
 	public bool _javaScriptCanUpdate = false;
 
-    public JavaScriptNode New(string path)
+    public static ObjectInstance New(string path)
     {
-		JavaScriptNode result = new JavaScriptNode();
-		JsScriptPath = path;
+		SceneTree sceneTree = UtmxSceneManager.Instance.GetTree();
+        if (sceneTree == null) return null;
+
+        JavaScriptNode result = new JavaScriptNode();
+        result.JsScriptPath = path;
         result.JavaScriptFile = path;
-        return result;
+		if (result.JsInstance == null)
+		{
+			result.QueueFree();
+			return null;
+		}
+        sceneTree.Root.AddChild(result);
+        return result.JsInstance;
     }
 	
 	public override void _Ready()

@@ -12,7 +12,6 @@ public partial class UtmxSceneManager : CanvasLayer
 	private string _prevScene = "";
 	private string _currentScene = "";
 	private string _mainScene = "";
-
 	public static UtmxSceneManager Instance { get; private set; }
 
 	public override void _EnterTree()
@@ -35,9 +34,9 @@ public partial class UtmxSceneManager : CanvasLayer
 
 	public void ChangeSceneToFile(string filePath)
 	{
-		if (!FileAccess.FileExists(filePath))
+		if (! ResourceLoader.Exists(filePath))
 		{
-			UtmxLogger.Error(TranslationServer.Translate("Failed to switch scene: Invalid scene path."));
+			UtmxLogger.Error(TranslationServer.Translate("Failed to switch scene: Invalid scene path:"), $": {filePath}");
 			return;
 		}
 		_prevScene = _currentScene;
@@ -49,5 +48,15 @@ public partial class UtmxSceneManager : CanvasLayer
 	public string GetMainScenePath()
 	{
 		return _mainScene;
-	}
+    }
+    public string GetCurrentScenePath()
+    {
+        return _currentScene;
+    }
+    public string GetPreviousScenePath()
+    {
+        return _prevScene;
+    }
+
+
 }

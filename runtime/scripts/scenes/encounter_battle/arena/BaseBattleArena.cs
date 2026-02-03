@@ -19,7 +19,17 @@ public abstract partial class BaseBattleArena : Node2D
     public bool IsDirty = true;
 
     protected bool _enabled = true;
-
+    public override void _Notification(int what)
+    {
+        if (what == NotificationTransformChanged)
+        {
+            IsDirty = true;
+        }
+        else if (what == NotificationLocalTransformChanged)
+        {
+            IsDirty = true;
+        }
+    }
     public abstract void DrawFrame(Rid borderRenderingItem, Rid maskRenderingItem,
         Rid borderCullingCanvasItem, Rid maskCullingCanvasItem);
 }

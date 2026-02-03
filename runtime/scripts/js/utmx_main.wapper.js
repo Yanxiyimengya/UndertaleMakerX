@@ -11,7 +11,7 @@ import { UtmxPlayerDataManager } from "res://scripts/js/wrappers/utmx_player_dat
 import { UtmxBattleManager } from "res://scripts/js/wrappers/utmx_battle_manager.weapper.js";
 import { UtmxGameRegisterDB } from "res://scripts/js/wrappers/utmx_game_register_db.wrapper.js";
 import { UtmxGameManager } from "res://scripts/js/wrappers/utmx_game_manager.wrapper";
-
+import { UtmxBattleProjectile } from "res://scripts/js/wrappers/utmx_battle_projectile.wrapper.js";
 
 class UTMX {
 	static debug = UtmxDebugger;
@@ -26,6 +26,7 @@ class UTMX {
 	static Enemy = UtmxBaseEnemy;
 	static Encounter = UtmxBaseEncounter;
 	static BattleTurn = UtmxBattleTurn;
+	static BattleProjectile = UtmxBattleProjectile;
 }
 
 export {

@@ -15,7 +15,6 @@ export default class PapyrusEnemy extends UTMX.Enemy {
 
     onGetNextTurn()
     {
-        UTMX.debug.print("PapyrusEnemy onGetNextTurn");
         return new MyBattleTurn();
     }
 }

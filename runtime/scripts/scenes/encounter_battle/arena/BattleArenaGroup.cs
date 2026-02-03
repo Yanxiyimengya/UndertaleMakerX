@@ -81,7 +81,6 @@ public partial class BattleArenaGroup : Node2D
 		if (_arenaBorderCullingCanvasItem.IsValid) RenderingServer.FreeRid(_arenaBorderCullingCanvasItem);
 		if (_arenaMaskRenderingCanvasItem.IsValid) RenderingServer.FreeRid(_arenaMaskRenderingCanvasItem);
 		if (_arenaMaskCullingCanvasItem.IsValid) RenderingServer.FreeRid(_arenaMaskCullingCanvasItem);
-
 	}
 
 	public override void _EnterTree()
@@ -97,12 +96,8 @@ public partial class BattleArenaGroup : Node2D
 
 	public override void _Process(double delta)
 	{
-		GetCameraTransform();
-		RenderingServer.CanvasItemSetTransform(MainCanvasItem, CameraTransform);
-		RenderingServer.CanvasItemClear(_arenaBorderRenderingCanvasItem);
-		RenderingServer.CanvasItemClear(_arenaMaskRenderingCanvasItem);
-		RenderingServer.CanvasItemClear(_arenaBorderCullingCanvasItem);
-		RenderingServer.CanvasItemClear(_arenaMaskCullingCanvasItem);
+		if (! Engine.IsEditorHint()) 
+			GetCameraTransform();
 		if (IsInsideTree() && IsVisibleInTree())
 		{
 			bool _requireRedraw = false;
@@ -113,15 +108,20 @@ public partial class BattleArenaGroup : Node2D
 				{
 					if (!arena.Enabled) continue;
                     EnabledArenaCount += 1;
-                    Transform2D arenaTransform2D = CameraTransformInverse * arena.GetTransform();
-					RenderingServer.CanvasItemAddSetTransform(_arenaBorderRenderingCanvasItem, arenaTransform2D);
-					RenderingServer.CanvasItemAddSetTransform(_arenaMaskRenderingCanvasItem, arenaTransform2D);
-					RenderingServer.CanvasItemAddSetTransform(_arenaBorderCullingCanvasItem, arenaTransform2D);
-					RenderingServer.CanvasItemAddSetTransform(_arenaMaskCullingCanvasItem, arenaTransform2D);
-					arena.DrawFrame(_arenaBorderRenderingCanvasItem, _arenaMaskRenderingCanvasItem,
-						_arenaBorderCullingCanvasItem, _arenaMaskCullingCanvasItem);
 					if (arena.IsDirty)
-					{
+                    {
+                        RenderingServer.CanvasItemSetTransform(MainCanvasItem, CameraTransform);
+                        RenderingServer.CanvasItemClear(_arenaBorderRenderingCanvasItem);
+                        RenderingServer.CanvasItemClear(_arenaMaskRenderingCanvasItem);
+                        RenderingServer.CanvasItemClear(_arenaBorderCullingCanvasItem);
+                        RenderingServer.CanvasItemClear(_arenaMaskCullingCanvasItem);
+                        Transform2D arenaTransform2D = CameraTransformInverse * arena.GetTransform();
+						RenderingServer.CanvasItemAddSetTransform(_arenaBorderRenderingCanvasItem, arenaTransform2D);
+						RenderingServer.CanvasItemAddSetTransform(_arenaMaskRenderingCanvasItem, arenaTransform2D);
+						RenderingServer.CanvasItemAddSetTransform(_arenaBorderCullingCanvasItem, arenaTransform2D);
+						RenderingServer.CanvasItemAddSetTransform(_arenaMaskCullingCanvasItem, arenaTransform2D);
+						arena.DrawFrame(_arenaBorderRenderingCanvasItem, _arenaMaskRenderingCanvasItem,
+						_arenaBorderCullingCanvasItem, _arenaMaskCullingCanvasItem);
 						arena.IsDirty = false;
 						_requireRedraw = true;
 					}

@@ -36,7 +36,8 @@ public partial class BattleEnemyState : StateNode
 	private async void EndEnemyTurn()
 	{
 		started = false;
-		BattlePlayerSoul soul = UtmxBattleManager.GetBattlePlayerController().PlayerSoul;
+        UtmxBattleManager.GetBattleProjectileController().DestroyProjectilesOnTurnEnd();
+        BattlePlayerSoul soul = UtmxBattleManager.GetBattlePlayerController().PlayerSoul;
 		soul.Visible = false;
 		soul.Movable = false;
 		if (_tween != null && _tween.IsRunning())

@@ -21,7 +21,8 @@ public partial class UtmxGameManager : Node
 		if (FileAccess.FileExists(mainScriptFilePath))
 		{
 			_mainScriptObject = IJavaScriptObject.New<JavaScriptObject>(mainScriptFilePath);
-		}
+
+        }
 	}
 	public override void _ExitTree()
 	{

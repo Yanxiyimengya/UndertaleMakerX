@@ -31,6 +31,7 @@ public partial class BattleCamera : Camera2D
 	{
 		ResetShakeState();
 		UpdateShakeIntervals();
+		IgnoreRotation = false;
 	}
 
 	public override void _Process(double delta)

@@ -14,7 +14,7 @@ public partial class UtmxMainLoop : SceneTree
 	public override void _Initialize()
 	{
 		// 加载资源包配置项
-		UtmxRuntimeProjectConfig.Loadencounter($"{EngineProperties.DATAPACK_RESOURCE_PATH}/project_config.json");
+		UtmxRuntimeProjectConfig.Loadencounter($"res://{EngineProperties.DATAPACK_RESOURCE_PATH}/project_config.json");
 
 		_cmdArgs = ParseCmdlineArgs();
 		InitializeWindow();
@@ -26,7 +26,13 @@ public partial class UtmxMainLoop : SceneTree
 			DisplayServer.WindowGetVsyncMode() != DisplayServer.VSyncMode.Disabled)
 			? DisplayServer.VSyncMode.Enabled : DisplayServer.VSyncMode.Disabled;
 		DisplayServer.WindowSetVsyncMode((DisplayServer.VSyncMode)vsyncMode);
-	}
+
+
+        Color clearColor = Color.FromString(
+            (string)UtmxRuntimeProjectConfig.TryGetDefault("window/clear_color", ""),
+             ProjectSettings.GetSetting("rendering/environment/defaults/default_clear_color").AsColor());
+		RenderingServer.SetDefaultClearColor(clearColor);
+    }
 
 	public override bool _Process(double delta)
 	{

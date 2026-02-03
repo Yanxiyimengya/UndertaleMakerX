@@ -19,6 +19,10 @@ public partial class BattlePolygonArenaCulling : BattleArenaCulling
                 IsDirty = true;
                 _borderVertices = PolygonBuildTool.ExpandPolygon(_vertices, BorderWidth);
                 UpdateCollisionShape(_shape);
+
+                _colors = new Color[_borderVertices.Length];
+                for (int i = 0; i < _colors.Length; i++)
+                    _colors[i] = Colors.White;
             }
         }
     }
@@ -33,25 +37,15 @@ public partial class BattlePolygonArenaCulling : BattleArenaCulling
     private Vector2[] _vertices;
     private Vector2[] _borderVertices;
     private List<Rid> _convexShapes = new List<Rid>();
+    private Color[] _colors = [];
 
     public override void DrawFrame(Rid borderRenderingItem, Rid maskRenderingItem,
         Rid borderCullingCanvasItem, Rid maskCullingCanvasItem)
     {
         if (Vertices.Length < 3) return;
 
-        var borderColors = new Color[_borderVertices.Length];
-        for (int i = 0; i < borderColors.Length; i++)
-        {
-            borderColors[i] = Colors.White;
-        }
-        RenderingServer.CanvasItemAddPolygon(maskCullingCanvasItem, _borderVertices, borderColors);
-
-        var contentColors = new Color[Vertices.Length];
-        for (int i = 0; i < contentColors.Length; i++)
-        {
-            contentColors[i] = Colors.White;
-        }
-        RenderingServer.CanvasItemAddPolygon(borderCullingCanvasItem, Vertices, contentColors);
+        RenderingServer.CanvasItemAddPolygon(maskCullingCanvasItem, _borderVertices, _colors);
+        RenderingServer.CanvasItemAddPolygon(borderCullingCanvasItem, Vertices, _colors);
     }
 
     protected override Rid GenerateCollisionShape()

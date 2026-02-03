@@ -20,7 +20,8 @@ public partial class GameoverScene : Node
 
 	public override void _Ready()
 	{
-		Play();
+		_inputAcceptable = false;
+        Play();
 	}
 
 	public override void _Process(double delta)
@@ -85,5 +86,6 @@ public partial class GameoverScene : Node
 		Tween _tween = CreateTween();
 		_tween.TweenProperty(GameoverBg, "modulate:a", 0.0, 1.0).From(1.0);
 		await ToSignal(_tween, Tween.SignalName.Finished);
-	}
+        UtmxSceneManager.Instance.ChangeSceneToFile(UtmxBattleManager.PrevScenePath);
+    }
 }

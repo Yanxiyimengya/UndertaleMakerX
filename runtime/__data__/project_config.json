@@ -13,6 +13,7 @@
 		"resizable": true,
 		"fullscreen": false,
 		"boderless" : false,
+		"clear_color" : "#000000"
 	},
 	"boot_splash" : {
 		"enabled" : false,

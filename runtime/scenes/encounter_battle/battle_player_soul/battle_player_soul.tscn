@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://creftm2k8k0aw" path="res://scripts/scenes/encounter_battle/battle_player_soul/BattlePlayerSoul.cs" id="1_4pjqo"]
 [ext_resource type="Texture2D" uid="uid://bi04oi56jlyi3" path="res://__data__/built-in-resources/textures/soul/spr_soul_battle-0.png" id="2_4feig"]
 [ext_resource type="Texture2D" uid="uid://dfxhcfd8upbf7" path="res://__data__/built-in-resources/textures/soul/spr_heartgtfo/spr_heartgtfo_0-Sheet.png" id="3_4feig"]
+[ext_resource type="Script" uid="uid://dn8jwrsub7n45" path="res://scripts/utils/sprite/GameSprite2D.cs" id="4_4h8dk"]
 [ext_resource type="Script" uid="uid://8fxros6kah3m" path="res://scripts/scenes/encounter_battle/battle_player_soul/BattlePlayerSoulHitBox.cs" id="4_x7lr4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_x7lr4"]
@@ -46,7 +47,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:self_modulate")
+tracks/0/path = NodePath("GameSprite2D:self_modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -64,7 +65,7 @@ step = 0.0625
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:self_modulate")
+tracks/0/path = NodePath("GameSprite2D:self_modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -80,18 +81,19 @@ _data = {
 &"hurt": SubResource("Animation_x7lr4")
 }
 
-[node name="BattlePlayerSoul" type="CharacterBody2D" unique_id=1005979490 node_paths=PackedStringArray("animSprite2d", "animPlayer", "HitBox")]
-modulate = Color(1, 0, 0, 1)
+[node name="BattlePlayerSoul" type="CharacterBody2D" unique_id=1005979490 node_paths=PackedStringArray("Sprite", "AnimPlayer", "HitBox")]
 script = ExtResource("1_4pjqo")
-CollisionRadius = 7.5
-animSprite2d = NodePath("Sprite2D")
-animPlayer = NodePath("AnimationPlayer")
+CollisionRadius = 8.5
+Sprite = NodePath("GameSprite2D")
+AnimPlayer = NodePath("AnimationPlayer")
 HitBox = NodePath("HitBox")
 
-[node name="Sprite2D" type="AnimatedSprite2D" parent="." unique_id=1726302119]
+[node name="GameSprite2D" type="AnimatedSprite2D" parent="." unique_id=558478810]
+modulate = Color(1, 0, 0, 1)
 sprite_frames = SubResource("SpriteFrames_00thf")
 autoplay = "default"
-frame_progress = 0.64733773
+script = ExtResource("4_4h8dk")
+metadata/_custom_type_script = "uid://dn8jwrsub7n45"
 
 [node name="HitBox" type="Area2D" parent="." unique_id=749596674]
 monitoring = false
