@@ -70,11 +70,11 @@ public static class UtmxPlayerDataManager
 
 
 
-	public static void Hurt(double value)
+	public static void Hurt(double value, double invtime = -1)
 	{
 		if (UtmxBattleManager.IsInBattle())
 		{
-			UtmxBattleManager.GetBattlePlayerController()?.PlayerSoul?.Hurt(value);
+			UtmxBattleManager.GetBattlePlayerController()?.PlayerSoul?.Hurt(value, invtime);
 			if (PlayerHp <= 0)
 			{
 				UtmxBattleManager.GameOver();

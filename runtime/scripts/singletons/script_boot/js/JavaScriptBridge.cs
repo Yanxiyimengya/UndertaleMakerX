@@ -22,7 +22,12 @@ public class JavaScriptBridge
 	
 	static JavaScriptBridge()
 	{
-		MainEngine.Modules.Add(JavaScriptCoreInterface.ModuleName, (builder) =>
+		MainEngine.Modules.Add("Lib", (builder) =>
+		{
+			builder.ExportType<JavaScriptFileAccess>("File");
+		});
+
+        MainEngine.Modules.Add(JavaScriptCoreInterface.ModuleName, (builder) =>
 		{
 			Dictionary<string, Type> exportTypes = JavaScriptCoreInterface._GetCoreExportTypes();
 			var method = typeof(Jint.Runtime.Modules.ModuleBuilder).GetMethod("ExportType",
@@ -95,17 +100,22 @@ public class JavaScriptBridge
 		return null;
 	}
 
-	private static ObjectInstance ImportModule(string id)
+	public static ObjectInstance ImportModule(string id)
 	{
 		try
 		{
 			ObjectInstance jsNamespace = MainEngine.Modules.Import(id);
 			return jsNamespace;
 		}
-		catch (Exception ex) when (!(ex is JavaScriptException))
+		catch (Exception ex) when (ex is JavaScriptException)
+		{
+			UtmxLogger.Error(ex.ToString());
+			return null;
+		}
+		catch (Exception ex)
 		{
 			UtmxLogger.Error($"{TranslationServer.Translate("Try to load javascript module failed")}: {id}");
-			UtmxLogger.Error($"{TranslationServer.Translate("OuterException Typ")}: {ex.GetType().FullName}");
+			UtmxLogger.Error($"{TranslationServer.Translate("OuterException Type")}: {ex.GetType().FullName}");
 			UtmxLogger.Error($"{TranslationServer.Translate("OuterException Message")}: {ex.Message}");
 			UtmxLogger.Error($"{TranslationServer.Translate(".NET StackTrace")}: \n{ex.StackTrace}");
 
@@ -117,6 +127,59 @@ public class JavaScriptBridge
 			}
 			return null;
 		}
+	}
+	public static JsValue InvokeFunction(ObjectInstance ins, string method, params object[] args)
+	{
+		if (string.IsNullOrEmpty(method))
+		{
+			UtmxLogger.Error($"{TranslationServer.Translate("Failed to execute class member method")}: {TranslationServer.Translate("Method name cannot be empty")}");
+			return null;
+		}
+		try
+		{
+			JsValue methodValue = ins.Get(method);
+			if (methodValue.Type == Jint.Runtime.Types.Object)
+			{
+				JsValue[] jsValues = new JsValue[args.Length];
+				for (int i = 0; i < args.Length; i++)
+				{
+					jsValues[i] = JsValue.FromObject(MainEngine, args[i]);
+				}
+				return methodValue.Call(ins, jsValues);
+			}
+		}
+		catch (JavaScriptException jsEx)
+		{
+			if (jsEx.Error.IsObject())
+			{
+				var errorObj = jsEx.Error.AsObject();
+				UtmxLogger.Error($"{errorObj.Get("name")}: {errorObj.Get("message")}");
+			}
+			if (!string.IsNullOrEmpty(jsEx.Location.SourceFile))
+			{
+				UtmxLogger.Error($"{TranslationServer.Translate("SourceFile")}: {jsEx.Location.SourceFile} ({jsEx.Location.Start.Line}:{jsEx.Location.Start.Column})");
+			}
+			if (!string.IsNullOrEmpty(jsEx.JavaScriptStackTrace))
+			{
+				UtmxLogger.Error($"{TranslationServer.Translate("StackTrace")}: \n{jsEx.JavaScriptStackTrace}");
+			}
+			return null;
+		}
+		catch (Exception ex)
+		{
+			UtmxLogger.Error($"{TranslationServer.Translate("Failed to execute class member method")}: {method}");
+			UtmxLogger.Error($"{TranslationServer.Translate("OuterException Typ")}: {ex.GetType().FullName}");
+			UtmxLogger.Error($"{TranslationServer.Translate("OuterException Message")}: {ex.Message}");
+			UtmxLogger.Error($"{TranslationServer.Translate(".NET StackTrace")}: \n{ex.StackTrace}");
+			if (ex.InnerException != null)
+			{
+				UtmxLogger.Error($"{TranslationServer.Translate("InnerException Type")}: {ex.InnerException.GetType().FullName}");
+				UtmxLogger.Error($"{TranslationServer.Translate("InnerException Message")}: {ex.InnerException.Message}");
+				UtmxLogger.Error($"{TranslationServer.Translate("InnerException StackTrace")}:\n{ex.InnerException.StackTrace}");
+			}
+			return null;
+		}
+		return null;
 	}
 
 	public static object ConvertToObject(JsValue jsValue)

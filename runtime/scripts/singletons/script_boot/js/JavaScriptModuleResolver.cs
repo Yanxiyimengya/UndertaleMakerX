@@ -30,6 +30,7 @@ public sealed class JavaScriptModuleResolver : IModuleLoader
     {
         if (resolved.Uri == null)
         {
+            return null;
             throw new InvalidOperationException(
                 $"Bare module '{resolved.Key}' must be provided by host, resolved.Uri is null.");
         }

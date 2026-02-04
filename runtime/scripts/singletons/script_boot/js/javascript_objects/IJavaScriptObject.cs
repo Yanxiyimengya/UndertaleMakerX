@@ -9,6 +9,7 @@ public interface IJavaScriptObject
 {
 	public ObjectInstance JsInstance { get; set; }
 	public string JsScriptPath { get; set; }
+	public virtual static IJavaScriptObject New() { return null;  }
 
 	// 这个方法直接从脚本实例化一个继承了实现IJavaScriptObject接口的Clr类型的JavaScript类
 	// 也就是说只能从一个继承于实现了于IJavaScriptObject接口的JS类里实例化对象
@@ -71,18 +72,7 @@ public interface IJavaScriptObject
 
 	public JsValue Invoke(string method, params object[] args)
 	{
-		if (string.IsNullOrEmpty(method)) return null;
-		JsValue methodValue = JsInstance.Get(method);
-		if (methodValue.Type == Jint.Runtime.Types.Object)
-		{
-			JsValue[] jsValues = new JsValue[args.Length];
-			for (int i = 0; i < args.Length; i++)
-			{
-				jsValues[i] = JsValue.FromObject(JavaScriptBridge.MainEngine, args[i]);
-			}
-			return methodValue.Call(JsInstance, jsValues);
-		}
-		return null;
+		return JavaScriptBridge.InvokeFunction(JsInstance, method, args);
 	}
 
 	public static bool TryConvertToClr(in JsValue value, out IJavaScriptObject result)
@@ -99,4 +89,8 @@ public interface IJavaScriptObject
 		if (result == null) return false;
 		return true;
 	}
+
+    public virtual void Destroy()
+    {
+    }
 }

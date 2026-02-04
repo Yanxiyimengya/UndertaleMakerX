@@ -24,15 +24,25 @@ public partial class BaseEnemy : Node2D
     public string[] Actions { get; set; } = ["CHECK"];
     public Vector2 CenterPosition { get; set; } = new Vector2(0.0F, -80.0F);
 
-    public virtual void _OnSpare()
+    public virtual void _OnBattleStart()
     {
     }
-
+    public virtual void _OnBattleEnd()
+    {
+    }
+    public virtual void _OnDialogueStarting()
+    {
+    }
+    public virtual void _OnDialogueEnding()
+    {
+    }
     public virtual void _HandleAction(string action)
     {
     }
-
     public virtual void _HandleAttack(AttackStatus status)
+    {
+    }
+    public virtual void _OnSpare()
     {
     }
 

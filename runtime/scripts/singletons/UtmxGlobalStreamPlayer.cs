@@ -18,9 +18,9 @@ public partial class UtmxGlobalStreamPlayer : Node
 	public AudioStream EnemyDialogueSoundStream;
 	[Export]
 	public AudioStream HurtSoundStream;
-    [Export]
-    public AudioStream HealSoundStream;
-    [Export]
+	[Export]
+	public AudioStream HealSoundStream;
+	[Export]
 	public AudioStream HeartBeatBreakSoundStream;
 	[Export]
 	public AudioStream HeartPlosionSoundStream;
@@ -28,10 +28,10 @@ public partial class UtmxGlobalStreamPlayer : Node
 	public AudioStream GameOverMusicSoundStream;
 
 	public static UtmxGlobalStreamPlayer Instance;
-    private static AudioStreamPlayer soundPlayer = null;
-    private static Dictionary<string, AudioStreamPlayer> bgmPlayers = new Dictionary<string, AudioStreamPlayer>();
-    private static Queue<AudioStreamPlayer> bgmPlayersPool = new Queue<AudioStreamPlayer>();
-    private static Dictionary<string, AudioStream> _streamLibrary = new Dictionary<string, AudioStream>();
+	private static AudioStreamPlayer soundPlayer = null;
+	private static Dictionary<string, AudioStreamPlayer> bgmPlayers = new Dictionary<string, AudioStreamPlayer>();
+	private static Queue<AudioStreamPlayer> bgmPlayersPool = new Queue<AudioStreamPlayer>();
+	private static Dictionary<string, AudioStream> _streamLibrary = new Dictionary<string, AudioStream>();
 
 	static UtmxGlobalStreamPlayer()
 	{
@@ -39,14 +39,14 @@ public partial class UtmxGlobalStreamPlayer : Node
 		soundPlayer.Stream = new AudioStreamPolyphonic();
 	}
 	public override void _EnterTree()
-    {
-        if (Instance != null && Instance != this)
-        {
-            QueueFree();
-            return;
-        }
-        Instance = this;
-        AddChild(soundPlayer);
+	{
+		if (Instance != null && Instance != this)
+		{
+			QueueFree();
+			return;
+		}
+		Instance = this;
+		AddChild(soundPlayer);
 
 		AppendStreamToLibrary("SELECT", SelectSoundStream);
 		AppendStreamToLibrary("SQUEAK", SqueakSoundStream);
@@ -54,28 +54,28 @@ public partial class UtmxGlobalStreamPlayer : Node
 		AppendStreamToLibrary("TEXT_TYPER_VOICE", TextTyperSoundStream);
 		AppendStreamToLibrary("ENEMY_VOICE", EnemyDialogueSoundStream);
 		AppendStreamToLibrary("HURT", HurtSoundStream);
-        AppendStreamToLibrary("HEAL", HealSoundStream);
+		AppendStreamToLibrary("HEAL", HealSoundStream);
 
-        AppendStreamToLibrary("HEART_BEAT_BREAK", HeartBeatBreakSoundStream);
+		AppendStreamToLibrary("HEART_BEAT_BREAK", HeartBeatBreakSoundStream);
 		AppendStreamToLibrary("HEART_PLOSION", HeartPlosionSoundStream);
 
 		AppendStreamToLibrary("GAME_OVER", GameOverMusicSoundStream);
 	}
 
-    public override void _ExitTree()
-    {
+	public override void _ExitTree()
+	{
 		Instance = null;
 		soundPlayer = null;
-        bgmPlayers.Clear();
-        _streamLibrary.Clear();
+		bgmPlayers.Clear();
+		_streamLibrary.Clear();
 		foreach (AudioStreamPlayer player in bgmPlayersPool)
 		{
 			player.QueueFree();
-        }
+		}
 		bgmPlayersPool.Clear();
-    }
+	}
 
-    public static long PlaySoundFromStream(AudioStream stream)
+	public static long PlaySoundFromStream(AudioStream stream)
 	{
 		if (!soundPlayer.Playing) soundPlayer.Play();
 		if (soundPlayer.GetStreamPlayback() is AudioStreamPlaybackPolyphonic playback)
@@ -112,7 +112,7 @@ public partial class UtmxGlobalStreamPlayer : Node
 	}
 
 
-	public static void PlayBgmFormStream(string bgmId, AudioStream stream, bool loop = false)
+	public static void PlayBgmFromStream(string bgmId, AudioStream stream, bool loop = false)
 	{
 		if (string.IsNullOrEmpty(bgmId)) return;
 		AudioStreamPlayer player;
@@ -168,7 +168,7 @@ public partial class UtmxGlobalStreamPlayer : Node
 		Resource res = UtmxResourceLoader.Load(path);
 		if (res != null && res is AudioStream stream)
 		{
-			PlayBgmFormStream(bgmId, stream, loop);
+			PlayBgmFromStream(bgmId, stream, loop);
 		}
 	}
 	public static void StopBgm(string bgmId)

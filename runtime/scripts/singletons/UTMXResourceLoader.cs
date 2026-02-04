@@ -13,6 +13,10 @@ internal static class UtmxResourceLoader
         {
             return ResourceLoader.Load(resNewPath);
         }
+        else
+        {
+            UtmxLogger.Log(TranslationServer.Translate($"Resource file not found: {resPath}"));
+        }
         return null;
     }
 
@@ -22,7 +26,7 @@ internal static class UtmxResourceLoader
         filePath = ResolvePath(filePath);
         if (Godot.FileAccess.FileExists(filePath))
         {
-            return Godot. FileAccess.Open(filePath, flags);
+            return Godot.FileAccess.Open(filePath, flags);
         }
         return null;
     }

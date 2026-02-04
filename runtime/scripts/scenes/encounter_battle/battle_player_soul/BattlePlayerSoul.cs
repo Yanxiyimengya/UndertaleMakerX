@@ -176,15 +176,27 @@ public partial class BattlePlayerSoul : CharacterBody2D
 		}
 	}
 
-	public void Hurt(double damage)
+	public void Hurt(double damage, double invtime = -1)
 	{
 		if (_invincibleTimer <= 0)
 		{
 			UtmxPlayerDataManager.PlayerHp -= damage;
-			_invincibleTimer = UtmxPlayerDataManager.PlayerInvincibleTime;
+			if (invtime > 0)
+			{
+                _invincibleTimer = invtime;
+            }
+			else
+			{
+                _invincibleTimer = UtmxPlayerDataManager.PlayerInvincibleTime;
+            }
 			if (GetViewport().GetCamera2D() is BattleCamera camera)
 				camera.StartShake(0.1f, Vector2.One, new Vector2(30, 30));
 			UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("HURT"));
 		}
 	}
+
+	public void SetInvincibleTimer(double timer = 0.0)
+	{
+		_invincibleTimer = timer;
+    }
 }

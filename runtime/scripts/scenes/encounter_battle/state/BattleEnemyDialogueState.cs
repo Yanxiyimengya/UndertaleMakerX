@@ -47,12 +47,21 @@ public partial class BattleEnemyDialogueState : StateNode
 		}
 		_tween = GetTree().CreateTween();
 		_tween.TweenProperty(_battleMainArena, "Size", UtmxBattleManager.GetBattleTurnController().GetTurnArenaInitializeSize(), 0.4);
-		NextStep();
+
+        foreach (BaseEnemy enemy in UtmxBattleManager.GetBattleEnemyController().EnemiesList)
+        {
+            enemy._OnDialogueStarting();
+        }
+        NextStep();
 	}
 
 	public override void _ExitState()
-	{
-	}
+    {
+        foreach (BaseEnemy enemy in UtmxBattleManager.GetBattleEnemyController().EnemiesList)
+        {
+            enemy._OnDialogueEnding();
+        }
+    }
 
 
 	private void NextStep()

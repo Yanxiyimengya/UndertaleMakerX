@@ -1,0 +1,8 @@
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://bw2cvrh5vjcbh"]
+
+[ext_resource type="FontFile" uid="uid://bjqgv5ql5jy1e" path="res://__data__/fonts/FZXS12.ttf" id="1_yky4q"]
+
+[resource]
+fallbacks = Array[Font]([ExtResource("1_yky4q")])
+base_font = ExtResource("1_yky4q")
+spacing_space = 2

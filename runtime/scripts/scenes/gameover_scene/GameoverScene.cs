@@ -51,7 +51,7 @@ public partial class GameoverScene : Node
 		SoulSprite2D.Visible = true;
 		GameoverTextTyper.Visible = false;
 		SoulPositionNode.Modulate = UtmxBattleManager.PlayerSoulColor;
-		SoulPositionNode.GlobalPosition = UtmxBattleManager.PlayerSoulPosition;
+		SoulPositionNode.GlobalTransform = UtmxBattleManager.PlayerSoulTransform;
 		GameoverBg.Modulate = Color.Color8(255, 255, 255, 0);
 		await ToSignal(GetTree().CreateTimer(0.67), Timer.SignalName.Timeout);
 
@@ -70,11 +70,11 @@ public partial class GameoverScene : Node
 
 		Tween _tween = CreateTween();
 		_tween.TweenProperty(GameoverBg, "modulate:a", 1.0, 1.0).From(0.0);
-		UtmxGlobalStreamPlayer.PlayBgmFormStream("GAME_OVER", UtmxGlobalStreamPlayer.GetStreamFormLibrary("GAME_OVER"));
+		UtmxGlobalStreamPlayer.PlayBgmFromStream("GAME_OVER", UtmxGlobalStreamPlayer.GetStreamFormLibrary("GAME_OVER"), true);
 		await ToSignal(_tween, Tween.SignalName.Finished);
 
 		GameoverTextTyper.Visible = true;
-		GameoverTextTyper.Start(UtmxBattleManager.DeathText);
+		GameoverTextTyper.Start(UtmxBattleManager.GetEncounterInstance()?.DeathText);
 		_inputAcceptable = true;
 	}
 
@@ -86,6 +86,6 @@ public partial class GameoverScene : Node
 		Tween _tween = CreateTween();
 		_tween.TweenProperty(GameoverBg, "modulate:a", 0.0, 1.0).From(1.0);
 		await ToSignal(_tween, Tween.SignalName.Finished);
-        UtmxSceneManager.Instance.ChangeSceneToFile(UtmxBattleManager.PrevScenePath);
+        UtmxBattleManager.EncounterBattleEnd();
     }
 }

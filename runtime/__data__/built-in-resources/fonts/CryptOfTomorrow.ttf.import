@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://dks40d20ernd2"
-path="res://.godot/imported/Hachicro.ttf-3932348f74f9260d4ec7de443ac22eea.fontdata"
+uid="uid://b1tsggmhxj5mv"
+path="res://.godot/imported/CryptOfTomorrow.ttf-02bcd46c1ec75aa7cf56e0c8b915e40a.fontdata"
 
 [deps]
 
-source_file="res://__data__/built-in-resources/fonts/Hachicro.ttf"
-dest_files=["res://.godot/imported/Hachicro.ttf-3932348f74f9260d4ec7de443ac22eea.fontdata"]
+source_file="res://__data__/built-in-resources/fonts/CryptOfTomorrow.ttf"
+dest_files=["res://.godot/imported/CryptOfTomorrow.ttf-02bcd46c1ec75aa7cf56e0c8b915e40a.fontdata"]
 
 [params]
 

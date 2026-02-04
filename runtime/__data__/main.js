@@ -1,6 +1,6 @@
-import {UTMX, Object} from "UTMX";
+import { UTMX } from "UTMX";
 
-export default class Main extends Object
+export default class Main
 {
 	onGameStart()
 	{

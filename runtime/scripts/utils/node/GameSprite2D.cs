@@ -15,14 +15,7 @@ public partial class GameSprite2D : AnimatedSprite2D, IObjectPoolObject
 			if (_texturesPath != value)
 			{
 				_texturesPath = value;
-				if (_texturesPath.Length == 1)
-				{
-					SetTextures(_texturesPath[0]);
-				}
-				else
-				{
-					SetTextures(_texturesPath);
-				}
+				SetTextures(_texturesPath);
 			}
 		}
 	}
@@ -39,26 +32,10 @@ public partial class GameSprite2D : AnimatedSprite2D, IObjectPoolObject
 	protected Texture2D[] _textures;
 	protected string[] _texturesPath;
 
-	public GameSprite2D()
-	{
-		if (SpriteFrames == null)
-			SpriteFrames = new SpriteFrames();
-	}
-
-	public void SetTextures(string texturePath)
-	{
-		Resource res = UtmxResourceLoader.Load(texturePath);
-		if (res != null && res is Texture2D texture)
-		{
-			if (SpriteFrames.HasAnimation(DEFAULT_ANIM_NAME))
-				SpriteFrames.Clear(DEFAULT_ANIM_NAME);
-			SpriteFrames.AddFrame(DEFAULT_ANIM_NAME, texture);
-			Textures = [texture];
-		}
-	}
 	public void SetTextures(string[] texturesPath)
 	{
-		if (SpriteFrames.HasAnimation(DEFAULT_ANIM_NAME))
+		if (SpriteFrames == null) SpriteFrames = new();
+        if (SpriteFrames.HasAnimation(DEFAULT_ANIM_NAME))
 			SpriteFrames.Clear(DEFAULT_ANIM_NAME);
 
 		var _texturesArray = new Texture2D[texturesPath.Length];
@@ -75,5 +52,21 @@ public partial class GameSprite2D : AnimatedSprite2D, IObjectPoolObject
 		}
 		Textures = _texturesArray;
 		Play(DEFAULT_ANIM_NAME);
-	}
+    }
+    public virtual void Awake()
+    {
+		Transform = Transform2D.Identity;
+		Modulate = Colors.White;
+		Material = null;
+        Offset = Vector2.Zero;
+    }
+
+    public virtual void Disabled()
+    {
+    }
+
+    public virtual void Destroy()
+    {
+		UtmxSceneManager.DeleteSprite(this);
+    }
 }

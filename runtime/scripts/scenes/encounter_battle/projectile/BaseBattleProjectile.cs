@@ -74,15 +74,15 @@ public partial class BaseBattleProjectile : GameSprite2D, IObjectPoolObject
 		_area = new Area2D();
 	}
 
-	public void Awake()
+	public override void Awake()
 	{
+		base.Awake();
 		Enabled = true;
-		Transform = Transform2D.Identity;
-		Modulate = Colors.White;
 	}
 
-	public void Disabled()
+	public override void Disabled()
 	{
+		base.Disabled();
 		Enabled = false;
 	}
 
@@ -142,7 +142,7 @@ public partial class BaseBattleProjectile : GameSprite2D, IObjectPoolObject
 		}
 	}
 
-	public void Destroy()
+	public override void Destroy()
 	{
 		if (UtmxBattleManager.IsInBattle())
 		{

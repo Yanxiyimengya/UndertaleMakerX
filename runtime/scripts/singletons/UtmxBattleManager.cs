@@ -6,8 +6,8 @@ public partial class UtmxBattleManager
 {
 	public enum BattleCollisionLayers
 	{
-		Player = 1 << 1,
-		Projectile = 1 << 2,
+		Player = 0b10,
+		Projectile = 0b100,
 	};
 	public enum BattleStatus
 	{
@@ -18,19 +18,17 @@ public partial class UtmxBattleManager
 	}
 
 	public static bool Endded { get => _endded; set => _endded = value; }
-	public static Vector2 PlayerSoulPosition { get => _playerSoulPosition; set => _playerSoulPosition = value; }
+	public static Transform2D PlayerSoulTransform { get => _playerSoulTransform; set => _playerSoulTransform = value; }
 	public static Color PlayerSoulColor { get => _playerSoulColor; set => _playerSoulColor = value; }
 	public static string PrevScenePath { get => _prevScenePath; set => _prevScenePath = value; }
-	public static string DeathText { get => _deathText; set => _deathText = value; }
 
 	private static BaseEncounter _battleEncounter;
 	private static BattleController _battleController;
 	private static bool _endded = false;
 	private static bool _isInBattle;
-	private static Vector2 _playerSoulPosition = Vector2.Zero;
+	private static Transform2D _playerSoulTransform;
 	private static Color _playerSoulColor = Colors.Red;
 	private static string _prevScenePath = "";
-	private static string _deathText = "";
 
 	public static void EncounterBattleStart(string encounterId)
 	{
@@ -50,12 +48,14 @@ public partial class UtmxBattleManager
 	{
 		Endded = true;
 		if (IsInBattle())
-		{
-			GetEncounterInstance()._OnBattleEnd();
+        {
+            UtmxSceneManager.Instance.ChangeSceneToFile(UtmxBattleManager.PrevScenePath);
+            foreach (BaseEnemy enemy in UtmxBattleManager.GetBattleEnemyController().EnemiesList)
+                enemy._OnBattleEnd();
+            GetEncounterInstance()._OnBattleEnd();
 			_battleEncounter = null;
 			_battleController = null;
 			_isInBattle = false;
-			UtmxSceneManager.Instance.ChangeSceneToFile(UtmxBattleManager.PrevScenePath);
 		}
 	}
 
@@ -71,10 +71,8 @@ public partial class UtmxBattleManager
 		{
 			BattlePlayerSoul soul = GetBattlePlayerController().PlayerSoul;
 			Camera2D camera = soul.GetViewport().GetCamera2D();
-			PlayerSoulPosition = camera.GetCanvasTransform().BasisXform(soul.Position);
+            _playerSoulTransform = soul.Sprite.GlobalTransform;
 			PlayerSoulColor = soul.SoulColor;
-			DeathText = GetEncounterInstance()?.DeathText;
-			EncounterBattleEnd();
 			UtmxSceneManager.Instance.CallDeferred("ChangeSceneToFile", [UtmxSceneManager.Instance.GameoverScenePath]);
 		}
 	}

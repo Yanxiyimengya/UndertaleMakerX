@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://bt8ejn6arrtt3"
-path="res://.godot/imported/snd_laz.wav-8cfcc10816dff036ccb6d39618cd75dd.sample"
+path="res://.godot/imported/laz.wav-cd600486cbee496660ac2b078b853aba.sample"
 
 [deps]
 
-source_file="res://__data__/built-in-resources/sounds/sfx/snd_laz.wav"
-dest_files=["res://.godot/imported/snd_laz.wav-8cfcc10816dff036ccb6d39618cd75dd.sample"]
+source_file="res://__data__/built-in-resources/sounds/sfx/laz.wav"
+dest_files=["res://.godot/imported/laz.wav-cd600486cbee496660ac2b078b853aba.sample"]
 
 [params]
 

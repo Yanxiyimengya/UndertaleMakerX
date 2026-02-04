@@ -1,32 +1,33 @@
 import { UTMX } from "UTMX";
 
 export default class MyEncounter extends UTMX.Encounter {
-    
-    constructor() {
-        super();
-        this.freeText = "这是一个测试遭遇战！我跑了！";
-        this.encounterText = "你遇到了一个测试敌人！";
-        this.deathText = "我被打败了！";
-        this.endText = "遭遇战结束！";
-        this.enemies = ["MyEnemy"];
-        //this.canFree = false;
-    }
+	
+	constructor() {
+		super();
+		this.freeText = "这是一个测试遭遇战！我跑了！";
+		this.encounterText = "你遇到了一个测试敌人！";
+		this.deathText = "我被打败了！";
+		this.endText = "遭遇战结束！";
+		this.enemies = ["MyEnemy"];
+		//this.canFree = false;
+	}
 
-    onBattleStart() {
-    }
+	onBattleStart() {
+	}
 
-    onBattleEnd() {
-    }
+	onBattleEnd() {
+		UTMX.scene.changeScene("scenes/main_scene.tscn");
+	}
 
-    onPlayerTurn() {
-    }
+	onPlayerTurn() {
+	}
 
-    onPlayerDialogue() {
-    }
+	onPlayerDialogue() {
+	}
 
-    onEnemyDialogue() {
-    }
+	onEnemyDialogue() {
+	}
 
-    onEnemyTurn() {
-    }
+	onEnemyTurn() {
+	}
 }

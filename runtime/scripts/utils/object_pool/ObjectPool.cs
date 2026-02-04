@@ -42,10 +42,10 @@ public partial class ObjectPool<T> : RefCounted where T : Godot.Node, IObjectPoo
 
     public void AppendNode(T node)
     {
-        node.Awake();
         node.ProcessMode = ProcessModeEnum.Inherit;
         node.SetProcess(true);
         node.SetPhysicsProcess(true);
+        node.Awake();
         if (node is CanvasItem canvasItem) canvasItem.Show();
     }
 

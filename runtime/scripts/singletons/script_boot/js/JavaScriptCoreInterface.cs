@@ -17,18 +17,22 @@ public class JavaScriptCoreInterface
             { "__game_register_db" , typeof(UtmxGameRegisterDB)},
             { "__game_manager" , typeof(UtmxGameManager)},
             { "__battle_manager" , typeof(UtmxBattleManager)},
+            { "__scene_manager" , typeof(UtmxSceneManager)},
             { "__input" , typeof(UtmxInputManager)},
+            { "__resource_loader" , typeof(UtmxResourceLoader)},
 
-            { "__Object" , typeof(JavaScriptObject)},
             { "__UtmxItem" , typeof(JavaScriptItemProxy)},
             { "__UtmxEnemy" , typeof(JavaScriptEnemyProxy)},
             { "__UtmxEncounter" , typeof(JavaScriptEncounterProxy)},
             { "__BattleTurn" , typeof(JavaScriptBattleTurnProxy)},
             { "__BattleProjectile" , typeof(JavaScriptBattleProjectileProxy)},
+            { "__GameSprite" , typeof(JavaScriptGameSpriteProxy)},
+            { "__TextTyper" , typeof(JavaScriptTextTyperProxy)},
 
             { "__Vector2" , typeof(Vector2)},
             { "__Vector3" , typeof(Vector3)},
             { "__Vector4" , typeof(Vector4)},
+            { "__Color" , typeof(Color)},
         };
     }
     public static Dictionary<string, string> _GetInterfaceExportScripts()

@@ -10,7 +10,7 @@ public partial class BattleEnemyController : Node
 
 	private List<BaseEnemy> _enemiesList = [];
 
-	public override void _Ready()
+	public override void _EnterTree()
 	{
 		foreach (BaseEnemy enemy in _enemiesList) enemy.Free();
 		_enemiesList.Clear();
@@ -20,6 +20,7 @@ public partial class BattleEnemyController : Node
 			if (UtmxGameRegisterDB.TryGetEnemy(enemyId, out BaseEnemy enemy))
 			{
 				_enemiesList.Add(enemy);
+				enemy._OnBattleStart();
 			}
 		}
 
@@ -36,6 +37,11 @@ public partial class BattleEnemyController : Node
 				EnemiesNode.AddChild(enemy);
 			}
 		}
+	}
+
+	public override void _ExitTree()
+	{
+		base._ExitTree();
 	}
 	public int GetEnemiesCount()
 	{

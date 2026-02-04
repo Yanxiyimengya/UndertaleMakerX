@@ -6,6 +6,7 @@ export class UtmxDebugger
 	{
 		return __logger.Log(message);
 	}
+	static log = this.print;
 	
 	static warning(...message)
 	{

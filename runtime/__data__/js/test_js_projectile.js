@@ -1,5 +1,8 @@
 import { UTMX } from "UTMX";
 
+
+let niubi = 19;
+
 export default class MyProjectile extends UTMX.BattleProjectile
 {
     constructor() {
@@ -8,12 +11,19 @@ export default class MyProjectile extends UTMX.BattleProjectile
 
     active()
     {
-        UTMX.debug.print(this.rotation);
+        this.timer = 0.0;
+        this.damage = 100;
+        niubi += 1;
+        UTMX.debug.print(niubi);
+    }
+
+    disabled()
+    {
     }
 
     update(delta)
     {
-        this.rotation += delta * 3.0;
-        UTMX.debug.print(this.rotation);
+        this.rotation = Math.sin(this.timer * 3.0) * 45;
+        this.timer += delta;
     }
 }

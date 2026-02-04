@@ -3,10 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static Godot.TextServer;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 [GlobalClass]
-public partial class TextTyper : Godot.RichTextLabel
+public partial class TextTyper : Godot.RichTextLabel, IObjectPoolObject
 {
 	[Export(PropertyHint.MultilineText)]
 	public string TyperText = "";
@@ -63,6 +64,8 @@ public partial class TextTyper : Godot.RichTextLabel
 	{
 		BbcodeEnabled = true;
 		ScrollActive = false;
+		FitContent = true;
+		AutowrapMode = AutowrapMode.Off;
 	}
 
 	public override void _Process(double delta)
@@ -72,20 +75,12 @@ public partial class TextTyper : Godot.RichTextLabel
 			if (_waitForKeyAction != null)
 			{
 				if (_waitForKeyAction is string actString && Input.IsActionPressed(actString) ||
-					_waitForKeyAction is Key actKey && Input.IsKeyPressed(actKey)
-					)
+					_waitForKeyAction is Key actKey && Input.IsKeyPressed(actKey))
 					_waitForKeyAction = null;
 			}
 		}
 		else
 		{
-			if (!NoSkip && !Instant && !Engine.IsEditorHint())
-			{
-				if (Input.IsActionJustPressed("cancel"))
-				{
-					Instant = true;
-				}
-			}
 			if (_typerWattingTimer > 0.0) _typerWattingTimer -= delta;
 			else
 			{
@@ -95,17 +90,27 @@ public partial class TextTyper : Godot.RichTextLabel
 					_typerTimer = TyperSpeed;
 					_ProcessText();
 				}
-			}
-		}
+
+                if (!NoSkip && !Instant && !Engine.IsEditorHint())
+                {
+                    if (Input.IsActionJustPressed("cancel"))
+                    {
+                        Instant = true;
+                        _typerTimer = 0.0;
+
+                    }
+                }
+            }
+        }
 	}
 
 	private void _ProcessText()
 	{
 		while (_CanRunning())
-        {
+		{
 			char c = TyperText[_typerProgress];
-            _typerProgress += 1;
-            while (c == '[')
+			_typerProgress += 1;
+			while (c == '[')
 			{
 				int locate = TyperText.FindN("]", _typerProgress);
 				if (locate != -1)
@@ -127,10 +132,10 @@ public partial class TextTyper : Godot.RichTextLabel
 							}
 						}
 					}
-                    _typerProgress = locate + 1;
-                }
-                if (!_CanRunning())
-                {
+					_typerProgress = locate + 1;
+				}
+				if (!_CanRunning())
+				{
 					return;
 				}
 				else
@@ -138,7 +143,7 @@ public partial class TextTyper : Godot.RichTextLabel
 					c = TyperText[_typerProgress];
 					_typerProgress += 1;
 				}
-            }
+			}
 
 			while (c == '\r' || c == '\n')
 			{
@@ -147,7 +152,7 @@ public partial class TextTyper : Godot.RichTextLabel
 				Newline();
 			}
 
-            if (_typerWattingTimer <= 0.0)
+			if (_typerWattingTimer <= 0.0)
 			{
 				AddText(c.ToString());
 			}
@@ -246,7 +251,7 @@ public partial class TextTyper : Godot.RichTextLabel
 		return new string[] { token };
 	}
 
-	private bool _ProcessCmd(string cmd, Dictionary<string, string> args)
+	public virtual bool _ProcessCmd(string cmd, Dictionary<string, string> args)
 	{
 		switch (cmd)
 		{
@@ -333,6 +338,19 @@ public partial class TextTyper : Godot.RichTextLabel
 				break;
 			}
 
+			case "noskip":
+				{
+					if (args.TryGetValue("value", out string noskipValue) && bool.TryParse(noskipValue, out bool _noskip))
+					{
+						NoSkip = _noskip;
+					}
+					else
+					{
+						NoSkip = !NoSkip;
+					}
+					break;
+				}
+
 			case "clear":
 			{
 				Clear();
@@ -342,8 +360,13 @@ public partial class TextTyper : Godot.RichTextLabel
 				Instant = false;
 				break;
 			}
+            case "end":
+                {
+                    Destroy();
+                    break;
+                }
 
-			case "img":
+            case "img":
 			{
 				if (args.TryGetValue("path", out string imgPath) && !string.IsNullOrEmpty(imgPath))
 				{
@@ -403,7 +426,7 @@ public partial class TextTyper : Godot.RichTextLabel
 				break;
 			}
 
-            case "play_bgm":
+			case "play_bgm":
 			{
 				if (Instant) return true;
 				if (args.TryGetValue("path", out string bgmPath) && !string.IsNullOrEmpty(bgmPath))
@@ -417,7 +440,7 @@ public partial class TextTyper : Godot.RichTextLabel
 					bool loop = false;
 					if (args.TryGetValue("loop", out string bgmLoopStr)) bool.TryParse(bgmLoopStr, out loop);
 
-					UtmxGlobalStreamPlayer.PlayBgmFormStream(bgmId, bgmStream, loop);
+					UtmxGlobalStreamPlayer.PlayBgmFromStream(bgmId, bgmStream, loop);
 
 					if (args.TryGetValue("pitch", out string bgmPitchStr) && float.TryParse(bgmPitchStr, out float bgmPitch))
 						UtmxGlobalStreamPlayer.SetBgmPitch(bgmId, bgmPitch);
@@ -434,20 +457,18 @@ public partial class TextTyper : Godot.RichTextLabel
 				if (args.TryGetValue("value", out bgmId) && string.IsNullOrEmpty(bgmId))
 				{
 					UtmxGlobalStreamPlayer.StopBgm(bgmId);
-                }
-                else if (args.TryGetValue("id", out bgmId) && string.IsNullOrEmpty(bgmId))
-                {
-                    UtmxGlobalStreamPlayer.StopBgm(bgmId);
-                }
+				}
+				else if (args.TryGetValue("id", out bgmId) && string.IsNullOrEmpty(bgmId))
+				{
+					UtmxGlobalStreamPlayer.StopBgm(bgmId);
+				}
 				else
 				{
-                    UtmxGlobalStreamPlayer.StopBgm("_TYPER_BGM");
-                }
+					UtmxGlobalStreamPlayer.StopBgm("_TYPER_BGM");
+				}
 				break;
-            }
-
-
-            default:
+			}
+			default:
 				return false;
 		}
 		return true;
@@ -478,7 +499,25 @@ public partial class TextTyper : Godot.RichTextLabel
 		TyperFont = TyperFont;
 		TyperSize = TyperSize;
 		TyperColor = TyperColor;
+		NoSkip = false;
+		Instant = false;
 		Modulate = Colors.White;
 	}
 
+	public virtual void Awake()
+	{
+		Start(null);
+		Position = Vector2.Zero;
+		Scale = Vector2.One;
+	}
+
+	public virtual void Disabled()
+	{
+	}
+
+
+    public virtual void Destroy()
+    {
+        UtmxSceneManager.DeleteTextTyper(this);
+    }
 }

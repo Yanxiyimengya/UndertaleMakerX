@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://be7tjrap5mupx" path="res://__data__/built-in-resources/textures/ui/gameover/spr_gameoverbg_0.png" id="2_o25v4"]
 [ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="3_jg54t"]
 [ext_resource type="Texture2D" uid="uid://84ot5rinyrk3" path="res://__data__/built-in-resources/textures/soul/spr_heartshards_sheet.png" id="3_llsh4"]
-[ext_resource type="FontFile" uid="uid://butt4gvjxibtq" path="res://__data__/built-in-resources/fonts/FZXS12.ttf" id="4_llsh4"]
+[ext_resource type="FontFile" uid="uid://v628opivhevj" path="res://__data__/built-in-resources/fonts/Text.ttf" id="4_llsh4"]
 [ext_resource type="AudioStream" uid="uid://ddlvbybr05c6i" path="res://__data__/built-in-resources/sounds/voice/snd_txtasg.wav" id="5_ffyyg"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ffyyg"]

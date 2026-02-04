@@ -1,4 +1,4 @@
-import { __player_data_manager, __logger } from "__UTMX";
+import { __player_data_manager } from "__UTMX";
 import { UtmxBaseItem } from "./utmx_item.wrapper";
 
 class PlayerInventory
@@ -52,8 +52,8 @@ export class UtmxPlayerDataManager {
     get invincibleTime() { return __player_data_manager.PlayerInvincibleTime; }
     set invincibleTime(value) { __player_data_manager.PlayerInvincibleTime = value; }
 
-    static hurt(value) {
-        __player_data_manager.Hurt(value);
+    static hurt(value, invtime = -1) {
+        __player_data_manager.Hurt(value, invtime);
     }
     static heal(value) {
         __player_data_manager.Heal(value);

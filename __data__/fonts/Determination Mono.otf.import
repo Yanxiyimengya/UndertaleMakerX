@@ -2,18 +2,18 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://cwx3mwjg1bnsb"
-path="res://.godot/imported/Jkaton.ttf-7267be8059d4d963912e1e389e20a4f3.fontdata"
+uid="uid://cju04ttipdehd"
+path="res://.godot/imported/Determination Mono.otf-69aaa3a6109013513fd8dc69778e946c.fontdata"
 
 [deps]
 
-source_file="res://__data__/built-in-resources/fonts/Jkaton.ttf"
-dest_files=["res://.godot/imported/Jkaton.ttf-7267be8059d4d963912e1e389e20a4f3.fontdata"]
+source_file="res://__data__/fonts/Determination Mono.otf"
+dest_files=["res://.godot/imported/Determination Mono.otf-69aaa3a6109013513fd8dc69778e946c.fontdata"]
 
 [params]
 
 Rendering=null
-antialiasing=0
+antialiasing=1
 generate_mipmaps=false
 disable_embedded_bitmaps=true
 multichannel_signed_distance_field=false
@@ -30,12 +30,7 @@ Fallbacks=null
 fallbacks=[]
 Compress=null
 compress=true
-preload=[{
-"chars": [],
-"glyphs": [],
-"name": "新建配置",
-"size": Vector2i(16, 0)
-}]
+preload=[]
 language_support={}
 script_support={}
 opentype_features={}

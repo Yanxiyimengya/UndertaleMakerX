@@ -1,4 +1,4 @@
-import { __Object, __Vector2, __Vector3, __Vector4 } from "__UTMX";
+import { __Vector2, __Vector3, __Vector4, __Color } from "__UTMX";
 
 import { UtmxDebugger } from "res://scripts/js/wrappers/utmx_debugger.wrapper.js";
 import { UtmxAudioPlayer } from "res://scripts/js/wrappers/utmx_audio_player.wrapper.js";
@@ -11,7 +11,9 @@ import { UtmxPlayerDataManager } from "res://scripts/js/wrappers/utmx_player_dat
 import { UtmxBattleManager } from "res://scripts/js/wrappers/utmx_battle_manager.wrapper.js";
 import { UtmxGameRegisterDB } from "res://scripts/js/wrappers/utmx_game_register_db.wrapper.js";
 import { UtmxGameManager } from "res://scripts/js/wrappers/utmx_game_manager.wrapper.js";
+import { UtmxSceneManager } from "res://scripts/js/wrappers/utmx_scene_manager.weapper.js";
 import { UtmxBattleProjectile } from "res://scripts/js/wrappers/utmx_battle_projectile.wrapper.js";
+import { UtmxGameSprite } from "res://scripts/js/wrappers/utmx_game_sprite.wrapper.js";
 
 class UTMX {
 	static debug = UtmxDebugger;
@@ -21,12 +23,14 @@ class UTMX {
 	static battle = UtmxBattleManager;
 	static gameDB = UtmxGameRegisterDB;
 	static game = UtmxGameManager;
+	static scene = UtmxSceneManager;
 
 	static Item = UtmxBaseItem;
 	static Enemy = UtmxBaseEnemy;
 	static Encounter = UtmxBaseEncounter;
 	static BattleTurn = UtmxBattleTurn;
 	static BattleProjectile = UtmxBattleProjectile;
+	static Sprite = UtmxGameSprite;
 }
 
 export {
@@ -34,5 +38,5 @@ export {
 	__Vector2 as Vector2,
 	__Vector3 as Vector3,
 	__Vector4 as Vector4,
-	__Object as Object
+	__Color as Color,
 };

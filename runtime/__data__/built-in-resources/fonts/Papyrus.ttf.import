@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://cal8atjmq5awk"
-path="res://.godot/imported/FZSR_GBK.ttf-49e57f5f7e2b35c91a7530d3bdb9d07b.fontdata"
+uid="uid://bql5sax226p1f"
+path="res://.godot/imported/Papyrus.ttf-557a2b1e8c1dfc829b0214f4cd471304.fontdata"
 
 [deps]
 
-source_file="res://__data__/built-in-resources/fonts/FZSR_GBK.ttf"
-dest_files=["res://.godot/imported/FZSR_GBK.ttf-49e57f5f7e2b35c91a7530d3bdb9d07b.fontdata"]
+source_file="res://__data__/built-in-resources/fonts/Papyrus.ttf"
+dest_files=["res://.godot/imported/Papyrus.ttf-557a2b1e8c1dfc829b0214f4cd471304.fontdata"]
 
 [params]
 
@@ -34,8 +34,7 @@ preload=[{
 "chars": [],
 "glyphs": [],
 "name": "新建配置",
-"size": Vector2i(16, 0),
-&"variation_embolden": 0.0
+"size": Vector2i(16, 0)
 }]
 language_support={}
 script_support={}

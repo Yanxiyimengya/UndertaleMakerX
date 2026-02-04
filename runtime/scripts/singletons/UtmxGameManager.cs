@@ -5,10 +5,16 @@ using System;
 [GlobalClass]
 public partial class UtmxGameManager : Node
 {
-	public static UtmxGameManager Instance;
-	private IJavaScriptObject _mainScriptObject;
+	[Signal]
+	public delegate void GameStartEventHandler();
+	[Signal]
+	public delegate void GameEndEventHandler();
 
-	public override void _Ready()
+	public static UtmxGameManager Instance;
+
+	private static JavaScriptGameManagerBoot boot;
+
+	public override void _EnterTree()
 	{
 		if (Instance != null && Instance != this)
 		{
@@ -16,29 +22,25 @@ public partial class UtmxGameManager : Node
 			return;
 		}
 		Instance = this;
-		string mainScriptFilePath = UtmxRuntimeProjectConfig.TryGetDefault("application/main_script", string.Empty).ToString();
-		mainScriptFilePath = UtmxResourceLoader.ResolvePath(mainScriptFilePath);
-		if (FileAccess.FileExists(mainScriptFilePath))
-		{
-			_mainScriptObject = IJavaScriptObject.New<JavaScriptObject>(mainScriptFilePath);
-        }
+		boot = new JavaScriptGameManagerBoot();
 	}
 	public override void _ExitTree()
 	{
-		_GameEnd();
 		Instance = null;
-		_mainScriptObject = null;
+		_GameEnd();
 	}
 
 	public void _GameStart()
 	{
-		_mainScriptObject?.Invoke("onGameStart", []);
+		EmitSignal(SignalName.GameStart, []);
 
 	}
 	public void _GameEnd()
 	{
-		_mainScriptObject?.Invoke("onGameEnd", []);
+		EmitSignal(SignalName.GameEnd, []);
 	}
+
+
 	public static void QuitGame()
 	{
 		Instance.GetTree().Quit();

@@ -1,19 +1,9 @@
 import { __battle_manager, __BattleProjectile, __logger } from "__UTMX";
-import { UtmxBattleProjectile } from "./utmx_battle_projectile.wrapper";
+import { UtmxBattleProjectile } from "./utmx_battle_projectile.wrapper.js";
+import { UtmxGameSprite } from "./utmx_game_sprite.wrapper.js";
+import { UtmxObject } from "./utmx_node_object.weapper.js";
 
-class BattlePlayerSprite
-{
-    static get textures() {
-        if (! __battle_manager.IsInBattle()) return false;
-        return __battle_manager.GetBattlePlayerController().PlayerSoul.Sprite;
-    }
-    static set textures(value) {
-        if (! __battle_manager.IsInBattle()) return;
-        __battle_manager.GetBattlePlayerController().PlayerSoul.Sprite.SetTextures(value);
-    }
-}
-
-class BattleCamera
+class BattleCamera extends UtmxObject
 {
     static get x() {
         let battleCamera = __battle_manager.GetBattleController().Camera;
@@ -57,7 +47,7 @@ class BattleCamera
     }
 }
 
-class BattlePlayer
+class BattlePlayer extends UtmxObject
 {
     static get enabledCollision() {
         if (! __battle_manager.IsInBattle()) return false;
@@ -76,10 +66,12 @@ class BattlePlayer
         if (! __battle_manager.IsInBattle()) return;
         __battle_manager.GetBattlePlayerController().PlayerSoul.Movable = value;
     }
-
+    
+    static __sprite = new UtmxGameSprite();
     static get sprite() {
         if (! __battle_manager.IsInBattle()) return null;
-        return BattlePlayerSprite;
+        this.__sprite.instance = __battle_manager.GetBattlePlayerController().PlayerSoul.Sprite;
+        return this.__sprite;
     }
     static set sprite(value) { } // 只读
 }
@@ -99,23 +91,27 @@ export class UtmxBattleManager {
 
     static createProjectile(projectileConstructor = UtmxBattleProjectile, textures = "", 
         damage = 1, mask = false) {
-        try
+        if (typeof projectileConstructor !== "function") return null;
+        if (projectileConstructor === UtmxBattleProjectile || 
+            UtmxBattleProjectile.prototype.isPrototypeOf(projectileConstructor.prototype))
         {
-            let projectileWrapper = new projectileConstructor();
-            if (projectileWrapper != null) 
+            try
             {
-                let projectile = __BattleProjectile.New(projectileWrapper, mask);
-                projectileWrapper.instance = projectile;
-                projectileWrapper.textures = textures;
-                projectileWrapper.damage = damage;
-                return projectileWrapper;
+                let projectileWrapper = new projectileConstructor();
+                if (projectileWrapper != null) 
+                {
+                    let projectile = __BattleProjectile.New(projectileWrapper, mask);
+                    projectileWrapper.instance = projectile;
+                    projectileWrapper.textures = textures;
+                    projectileWrapper.damage = damage;
+                    return projectileWrapper;
+                }
             }
-        }
-        catch (e)
-        {
-            let message = (e && e.message) ? e.message : JSON.stringify(e);
-            __logger.Error(message);
-            return null;
+            catch (e)
+            {
+                let message = (e && e.message) ? e.message : JSON.stringify(e);
+                __logger.Error(message);
+            }
         }
         return null;
     }

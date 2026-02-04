@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b6ur6lbelpbj0" path="res://scripts/scenes/encounter_battle/ui/menu/ui_elements/choice_menu/choice_menu_item/EncounterChoiceMenuItem.cs" id="1_6jsmc"]
 [ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="1_jr0et"]
-[ext_resource type="FontFile" uid="uid://butt4gvjxibtq" path="res://__data__/built-in-resources/fonts/FZXS12.ttf" id="3_3csou"]
+[ext_resource type="FontFile" uid="uid://v628opivhevj" path="res://__data__/built-in-resources/fonts/Text.ttf" id="3_3csou"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vdmq1"]
 bg_color = Color(1, 0, 0, 1)

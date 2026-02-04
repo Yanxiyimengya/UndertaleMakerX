@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://ktq5wbigafhb"
-path="res://.godot/imported/snd_heal.wav-361ebbe1f51b65022fe8986d0f66a509.sample"
+path="res://.godot/imported/heal.wav-533e64cae5333d7c3f4ad39cef028e0d.sample"
 
 [deps]
 
-source_file="res://__data__/built-in-resources/sounds/sfx/snd_heal.wav"
-dest_files=["res://.godot/imported/snd_heal.wav-361ebbe1f51b65022fe8986d0f66a509.sample"]
+source_file="res://__data__/built-in-resources/sounds/sfx/heal.wav"
+dest_files=["res://.godot/imported/heal.wav-533e64cae5333d7c3f4ad39cef028e0d.sample"]
 
 [params]
 

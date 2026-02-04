@@ -35,7 +35,7 @@
 [ext_resource type="Script" uid="uid://bpyxalubh243m" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterChoiceEnemyMenu.cs" id="19_vdmq1"]
 [ext_resource type="Script" uid="uid://7hd25hqmu3q2" path="res://scripts/scenes/encounter_battle/arena/BattleMainArenaExpand.cs" id="20_3wf68"]
 [ext_resource type="Script" uid="uid://c2nsgymkcwbb6" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterItemMenu.cs" id="23_0mx1x"]
-[ext_resource type="FontFile" uid="uid://butt4gvjxibtq" path="res://__data__/built-in-resources/fonts/FZXS12.ttf" id="23_3wf68"]
+[ext_resource type="FontFile" uid="uid://v628opivhevj" path="res://__data__/built-in-resources/fonts/Text.ttf" id="23_3wf68"]
 [ext_resource type="PackedScene" uid="uid://b4s2vi1x468nj" path="res://scenes/encounter_battle/ui/ui_elements/choice_menu/encounter_choice_list_menu.tscn" id="24_noyau"]
 [ext_resource type="PackedScene" uid="uid://chb46puy2x813" path="res://scenes/encounter_battle/ui/ui_elements/choice_menu/encounter_choice_page_menu.tscn" id="24_vdmq1"]
 [ext_resource type="Script" uid="uid://cq7rq1smnlytk" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterActPageMenu.cs" id="25_q4xod"]
@@ -147,6 +147,7 @@ MenuManager = NodePath("../../UILayer/BattleMenuManager")
 metadata/_custom_type_script = "uid://dxmt2vmf5f8bi"
 
 [node name="BackgroundLayer" type="Control" parent="." unique_id=2067686152]
+visible = false
 z_index = -300
 layout_mode = 3
 anchors_preset = 15
@@ -156,7 +157,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="BackgroundColorRect" type="ColorRect" parent="BackgroundLayer" unique_id=1376972820]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

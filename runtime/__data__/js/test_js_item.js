@@ -8,6 +8,8 @@ export default class MyItem extends UTMX.Item {
 	}
 	
 	onUsed() {
+		UTMX.player.heal(30);
+		UTMX.audio.playSound("built-in-resources/sounds/sfx/heal.wav");
 		return "你使用了我的物品！";
 	}
 }

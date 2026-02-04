@@ -35,7 +35,7 @@ partial class EncounterRegisterData : BaseEncounterRegisterData
 	{
 		if (encounterType == null)
 			UtmxLogger.Error(nameof(encounterType),
-				TranslationServer.Translate("The registered type name cannot be empty"));
+				TranslationServer.Translate("The registered type name cannot be empty."));
 
 		if (encounterType.IsAbstract || encounterType.IsInterface)
 			UtmxLogger.Error($"{encounterType.Name} {
@@ -74,7 +74,7 @@ partial class EnemyRegisterData : BaseEnemyRegisterData
 	{
 		if (enemyType == null)
 			throw new ArgumentNullException(nameof(enemyType), 
-				TranslationServer.Translate("The registered type name cannot be empty"));
+				TranslationServer.Translate("The registered type name cannot be empty."));
 
 		if (enemyType.IsAbstract || enemyType.IsInterface)
 			UtmxLogger.Error($"{enemyType.Name} {
@@ -113,7 +113,7 @@ partial class ItemRegisterData : BaseItemRegisterData
 	{
 		if (itemType == null)
 			throw new ArgumentNullException(nameof(itemType),
-				TranslationServer.Translate("The registered type name cannot be empty"));
+				TranslationServer.Translate("The registered type name cannot be empty."));
 		
 		if (itemType.IsAbstract || itemType.IsInterface)
 			UtmxLogger.Error($"{itemType.Name} {

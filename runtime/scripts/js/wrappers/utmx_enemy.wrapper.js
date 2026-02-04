@@ -70,12 +70,14 @@ export class UtmxBaseEnemy extends __UtmxEnemy
     }
 
     onSpare() {}
-
     onHandleAction(action) {}
-
 	onHandleAttack(status) {}
-
 	onGetNextTurn() {}
+    onBattleStart() {}
+    onBattleEnd() {}
+    onDialogueStarting() {}
+    onDialogueEnding() {}
+
 
     appendDialogue(...dialogues)
     {

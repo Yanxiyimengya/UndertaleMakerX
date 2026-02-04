@@ -3,17 +3,11 @@ using Jint;
 using Jint.Native;
 using Jint.Native.Object;
 using System;
-using static Godot.HttpRequest;
 
 public partial class JavaScriptEnemyProxy : BaseEnemy, IJavaScriptObject
 {
 	public ObjectInstance JsInstance { get; set; }
 	public string JsScriptPath { get; set; }
-
-	public override void _OnSpare()
-	{
-		((IJavaScriptObject)this).Invoke("onSpare", []);
-	}
 
 	public override void _HandleAction(string action)
 	{
@@ -36,7 +30,35 @@ public partial class JavaScriptEnemyProxy : BaseEnemy, IJavaScriptObject
 			}
 		}
 	}
-	public override void _HandleAttack(AttackStatus status)
+
+	public override void _Process(double delta)
+	{
+		if (JsInstance.HasProperty(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK))
+			JavaScriptBridge.InvokeFunction(JsInstance, EngineProperties.JAVASCRIPT_UPDATE_CALLBACK, [delta]);
+    }
+    public override void _OnSpare()
+    {
+        ((IJavaScriptObject)this).Invoke("onSpare", []);
+    }
+
+    public override void _OnBattleStart()
+    {
+        ((IJavaScriptObject)this).Invoke("onBattleStart", []);
+    }
+    public override void _OnBattleEnd()
+    {
+        ((IJavaScriptObject)this).Invoke("onBattleEnd", []);
+    }
+    public override void _OnDialogueStarting()
+    {
+        ((IJavaScriptObject)this).Invoke("onDialogueStarting", []);
+    }
+    public override void _OnDialogueEnding()
+    {
+        ((IJavaScriptObject)this).Invoke("onDialogueEnding", []);
+    }
+
+    public override void _HandleAttack(AttackStatus status)
 	{
 		((IJavaScriptObject)this).Invoke("onHandleAttack", [status]);
 	}
