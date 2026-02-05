@@ -13,8 +13,8 @@ export default class MyBattleTurn extends UTMX.BattleTurn {
 		this.time = 0;
 	}
 
-    
-    onTurnStart()
+	
+	onTurnStart()
 	{
 		this.typing_chicken = UTMX.scene.createTextTyper(
 			"[instant=false][color=red][font='built-in-resources/fonts/Text.ttf']Hello, [hello sb=10]World[play_sound=SeaTea.wav][end]");
@@ -44,7 +44,7 @@ export default class MyBattleTurn extends UTMX.BattleTurn {
 		}
 
 		this.spr = UTMX.scene.createSprite(MySpr, "a.png");
-        UTMX.debug.print(this.spr);
+		UTMX.debug.print(this.spr);
 		this.spr.z = 1000;
 		this.spr.position = new Vector2(320, 180);
 		this.spr.color = "00ff00aa";
@@ -54,7 +54,7 @@ export default class MyBattleTurn extends UTMX.BattleTurn {
 		this.proj.collisionMode = UTMX.battle.ProjectileCollisionMode.PRECISE;
 	}
 
-    onTurnUpdate(delta) {
+	onTurnUpdate(delta) {
 		if (UTMX.input.isActionDown("ui_accept"))
 		{
 			//UTMX.audio.playSound("built-in-resources/sounds/sfx/snd_break1.wav");

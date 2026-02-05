@@ -147,7 +147,6 @@ MenuManager = NodePath("../../UILayer/BattleMenuManager")
 metadata/_custom_type_script = "uid://dxmt2vmf5f8bi"
 
 [node name="BackgroundLayer" type="Control" parent="." unique_id=2067686152]
-visible = false
 z_index = -300
 layout_mode = 3
 anchors_preset = 15

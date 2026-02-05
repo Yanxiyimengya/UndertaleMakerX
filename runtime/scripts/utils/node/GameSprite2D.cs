@@ -50,8 +50,16 @@ public partial class GameSprite2D : AnimatedSprite2D, IObjectPoolObject
 			}
 			index += 1;
 		}
+        SetAnimation(DEFAULT_ANIM_NAME);
 		Textures = _texturesArray;
-		Play(DEFAULT_ANIM_NAME);
+		if (_texturesArray.Length > 1)
+		{
+			Play(DEFAULT_ANIM_NAME);
+		}
+    }
+    public virtual void SetLoop(bool loop)
+    {
+		SpriteFrames.SetAnimationLoop(DEFAULT_ANIM_NAME, loop);
     }
     public virtual void Awake()
     {

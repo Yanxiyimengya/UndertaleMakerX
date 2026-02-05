@@ -116,6 +116,16 @@ export class UtmxGameSprite extends UtmxObject {
         this.__instance.Offset = value;
     }
     
+    play()
+    {
+        this.__instance.Play();
+    }
+
+    setLoop(loop)
+    {
+        this.__instance.SetLoop(loop);
+    }
+
     destroy()
     {
         this.__instance.Destroy();

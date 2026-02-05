@@ -21,6 +21,8 @@ public partial class UtmxGlobalStreamPlayer : Node
 	[Export]
 	public AudioStream HealSoundStream;
 	[Export]
+	public AudioStream LazSoundStream;
+	[Export]
 	public AudioStream HeartBeatBreakSoundStream;
 	[Export]
 	public AudioStream HeartPlosionSoundStream;
@@ -55,10 +57,9 @@ public partial class UtmxGlobalStreamPlayer : Node
 		AppendStreamToLibrary("ENEMY_VOICE", EnemyDialogueSoundStream);
 		AppendStreamToLibrary("HURT", HurtSoundStream);
 		AppendStreamToLibrary("HEAL", HealSoundStream);
-
+		AppendStreamToLibrary("LAZ", LazSoundStream);
 		AppendStreamToLibrary("HEART_BEAT_BREAK", HeartBeatBreakSoundStream);
 		AppendStreamToLibrary("HEART_PLOSION", HeartPlosionSoundStream);
-
 		AppendStreamToLibrary("GAME_OVER", GameOverMusicSoundStream);
 	}
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ntyrfjwuxajv"
-path="res://.godot/imported/spr_slice_o_0-Sheet.png-6382df46df7be72553a91639022cb948.ctex"
+uid="uid://ckkbt5riy5erg"
+path="res://.godot/imported/spr_slice_o_2.png-6b5f7f12b63a21b4815bbb9fb64fbb9f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://__data__/built-in-resources/textures/ui/battle_screen/spr_slice_o_0-Sheet.png"
-dest_files=["res://.godot/imported/spr_slice_o_0-Sheet.png-6382df46df7be72553a91639022cb948.ctex"]
+source_file="res://__data__/built-in-resources/textures/attack_animation/spr_slice_o_2.png"
+dest_files=["res://.godot/imported/spr_slice_o_2.png-6b5f7f12b63a21b4815bbb9fb64fbb9f.ctex"]
 
 [params]
 

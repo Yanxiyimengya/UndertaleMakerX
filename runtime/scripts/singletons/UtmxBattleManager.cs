@@ -48,11 +48,11 @@ public partial class UtmxBattleManager
 	{
 		Endded = true;
 		if (IsInBattle())
-        {
-            UtmxSceneManager.Instance.ChangeSceneToFile(UtmxBattleManager.PrevScenePath);
-            foreach (BaseEnemy enemy in UtmxBattleManager.GetBattleEnemyController().EnemiesList)
-                enemy._OnBattleEnd();
-            GetEncounterInstance()._OnBattleEnd();
+		{
+			UtmxSceneManager.Instance.ChangeSceneToFile(UtmxBattleManager.PrevScenePath);
+			foreach (BaseEnemy enemy in UtmxBattleManager.GetBattleEnemyController().EnemiesList)
+				enemy._OnBattleEnd();
+			GetEncounterInstance()._OnBattleEnd();
 			_battleEncounter = null;
 			_battleController = null;
 			_isInBattle = false;
@@ -71,7 +71,7 @@ public partial class UtmxBattleManager
 		{
 			BattlePlayerSoul soul = GetBattlePlayerController().PlayerSoul;
 			Camera2D camera = soul.GetViewport().GetCamera2D();
-            _playerSoulTransform = soul.Sprite.GlobalTransform;
+			_playerSoulTransform = soul.Sprite.GlobalTransform;
 			PlayerSoulColor = soul.SoulColor;
 			UtmxSceneManager.Instance.CallDeferred("ChangeSceneToFile", [UtmxSceneManager.Instance.GameoverScenePath]);
 		}

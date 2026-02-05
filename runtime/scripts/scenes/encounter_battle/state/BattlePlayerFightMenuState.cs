@@ -49,7 +49,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 
 		if (UtmxPlayerDataManager.Weapon != null && !missed)
 		{
-			_damage = (float)UtmxPlayerDataManager.Weapon._CalculateDamage(hitValue, targetEnemy);
+			_damage = (float)UtmxPlayerDataManager.Weapon.onAttack(hitValue, targetEnemy);
             targetEnemy.Hp -= _damage;
             SpawnAttackAnimation(targetEnemy);
 		}
@@ -90,15 +90,16 @@ public partial class BattlePlayerFightMenuState : StateNode
 	{
 		BaseWeapon currentWeapon = UtmxPlayerDataManager.Weapon;
 		if (currentWeapon?.AttackAnimation == null) return;
+		_attackAnimation = new BattleAttackAnimationFrame();
+		_attackAnimation.TexturesPath = currentWeapon.AttackAnimation;
+		_attackAnimation.Play();
+        _attackAnimation.GlobalPosition = targetEnemy.GlobalPosition + targetEnemy.CenterPosition;
+        AddChild(_attackAnimation);
 
-		_attackAnimation = (BattleAttackAnimation)currentWeapon.AttackAnimation?.Instantiate();
-		_attackAnimation.GlobalPosition = targetEnemy.GlobalPosition + targetEnemy.CenterPosition;
-		AddChild(_attackAnimation);
-
-		_attackAnimation.Connect(
-			BattleAttackAnimation.SignalName.Finished,
-			Callable.From(() => ShowDamageText(targetEnemy)));
-	}
+        _attackAnimation.Connect(
+        	BattleAttackAnimation.SignalName.Finished,
+        	Callable.From(() => ShowDamageText(targetEnemy)));
+    }
 
 	private BaseEnemy GetTargetEnemy()
 	{

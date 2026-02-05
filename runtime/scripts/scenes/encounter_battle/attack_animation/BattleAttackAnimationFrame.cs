@@ -1,18 +1,17 @@
 using Godot;
 using System;
 
-public partial class BattleAttackAnimationKnife0 : BattleAttackAnimation
+public partial class BattleAttackAnimationFrame : BattleAttackAnimation
 {
-    [Export]
-    public AnimatedSprite2D animSprite2D;
-    [Export]
-    public AudioStream attackSound;
+    static AudioStream attackSound = UtmxGlobalStreamPlayer.GetStreamFormLibrary("LAZ");
 
     public override void _Ready()
     {
+        SetLoop(false);
         UtmxGlobalStreamPlayer.PlaySoundFromStream(attackSound);
-        animSprite2D.Play();
-        animSprite2D.Connect(AnimatedSprite2D.SignalName.AnimationFinished,
+        Play();
+        SpeedScale = 2.0F;
+        Connect(AnimatedSprite2D.SignalName.AnimationFinished,
             Callable.From(() =>
             {
                 EmitSignal(SignalName.Finished, []);

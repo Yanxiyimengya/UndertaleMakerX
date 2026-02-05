@@ -2,11 +2,10 @@ using Godot;
 using System;
 
 [GlobalClass]
-public abstract partial class BattleAttackAnimation : Node2D
+public abstract partial class BattleAttackAnimation : GameSprite2D
 {
     [Signal]
     public delegate void FinishedEventHandler();
-
 
     public override void _Ready()
     {

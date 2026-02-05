@@ -7,7 +7,7 @@ public partial class BattleArenaController : Node
 	BattleArenaGroup ArenaGroup;
 	[Export]
 	public BattleMainArenaExpand MainArena;
-
-
-
+	
+	
+	
 }
