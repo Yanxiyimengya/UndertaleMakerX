@@ -23,7 +23,6 @@ public partial class BattleController : Node
 	public override void _Ready()
 	{
 		UtmxBattleManager.InitializeBattle(this);
-		UtmxBattleManager.GetEncounterInstance()?._OnBattleStart();
 		switch (UtmxBattleManager.GetEncounterInstance()?.EncounterBattleFirstState)
 		{
 			case UtmxBattleManager.BattleStatus.Player:

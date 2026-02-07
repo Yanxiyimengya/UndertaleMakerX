@@ -9,7 +9,7 @@ public interface IJavaScriptObject
 {
 	public ObjectInstance JsInstance { get; set; }
 	public string JsScriptPath { get; set; }
-	public virtual static IJavaScriptObject New() { return null;  }
+	public virtual static IJavaScriptObject New(ObjectInstance instance) { return null; }
 
 	// 这个方法直接从脚本实例化一个继承了实现IJavaScriptObject接口的Clr类型的JavaScript类
 	// 也就是说只能从一个继承于实现了于IJavaScriptObject接口的JS类里实例化对象
@@ -42,7 +42,7 @@ public interface IJavaScriptObject
 
 	// 这个方法从JS端包装JsValue类型,前提是JS端的对象继承于实现了IJavaScriptObject的Clr对象类型
 	// 若脚本没有继承于正确的类型，就会返回null且打印错误
-	public static T New<T>(JsValue value) where T : class, IJavaScriptObject, new()
+	public static T Wrapper<T>(JsValue value) where T : class, IJavaScriptObject, new()
 	{
 		T result = null;
 		object obj = value.ToObject();

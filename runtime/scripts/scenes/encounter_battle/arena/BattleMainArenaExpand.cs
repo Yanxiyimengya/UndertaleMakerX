@@ -1,6 +1,7 @@
 using Godot;
 using Microsoft.VisualBasic;
 using System;
+using System.Threading.Tasks;
 [Tool]
 [GlobalClass]
 public partial class BattleMainArenaExpand : BattleRectangleArenaExpand
@@ -9,6 +10,8 @@ public partial class BattleMainArenaExpand : BattleRectangleArenaExpand
 	{
 		_size = new Vector2(140, 130);
 	}
+	Tween _tween;
+
 	public override void DrawFrame(Rid borderRenderingItem, Rid maskRenderingItem,
 		Rid borderCullingCanvasItem, Rid maskCullingCanvasItem)
 	{
@@ -75,5 +78,13 @@ public partial class BattleMainArenaExpand : BattleRectangleArenaExpand
 		}
 
 		return false;
+	}
+	public async Task Resize(Vector2 size, double duration = 0.4)
+	{
+		if (_tween != null && _tween.IsRunning())
+			_tween.Kill();
+		_tween = CreateTween();
+		_tween.TweenProperty(this, "Size", size, duration);
+		await ToSignal(_tween, Tween.SignalName.Finished);
 	}
 }

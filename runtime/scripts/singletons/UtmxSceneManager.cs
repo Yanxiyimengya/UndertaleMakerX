@@ -60,32 +60,52 @@ public partial class UtmxSceneManager : CanvasLayer
 	}
 
 
-	#region 精灵管理
+    #region 渲染对象管理
 
-	private static ObjectPool<GameSprite2D> _spritePool = new(); 
+    private static ObjectPool<DrawableObject> _drawableObjectPool = new();
+    public static DrawableObject CreateDrawableObject()
+    {
+        return CreateDrawableObject<DrawableObject>();
+    }
+    public static T CreateDrawableObject<T>() where T : DrawableObject, new()
+    {
+        T node = _drawableObjectPool.GetObject<T>();
+		Node parent = node.GetParent();
+        Node targetParent = Instance.GetTree().CurrentScene;
+        if (parent == null) targetParent.CallDeferred("add_child", node);
+        else if (parent != targetParent) targetParent.CallDeferred("reparent", node);
+        return node;
+    }
+
+    public static void DeleteDrawableObject(DrawableObject typer)
+    {
+        if (typer == null) return;
+        _drawableObjectPool.DisabledObject(typer);
+    }
+    #endregion
+
+    #region 精灵管理
+
+    private static ObjectPool<GameSprite2D> _spritePool = new(); 
 	public static GameSprite2D CreateSprite()
 	{
 		return CreateSprite<GameSprite2D>();
 	}
-	public static T CreateSprite<T>() where T : GameSprite2D, new()
-	{
-		Node parent = Instance.GetTree()?.CurrentScene;
-		if (parent == null) return null;
-
-		T node = _spritePool.GetObject<T>();
-		if (node.IsInsideTree()) node.Reparent(parent);
-		else parent.AddChild(node);
-		return node;
-	}
-
-	public static void DeleteSprite(GameSprite2D sprite)
+    public static T CreateSprite<T>() where T : GameSprite2D, new()
+    {
+        T node = _spritePool.GetObject<T>();
+        Node parent = node.GetParent();
+        Node targetParent = Instance.GetTree().CurrentScene;
+        if (parent == null) targetParent.CallDeferred("add_child", node);
+        else if (parent != targetParent) targetParent.CallDeferred("reparent", node);
+        return node;
+    }
+    public static void DeleteSprite(GameSprite2D sprite)
 	{
 		if (sprite == null) return;
 		_spritePool.DisabledObject(sprite);
 	}
 	#endregion
-
-
 
 	#region 打字机管理
 
@@ -95,14 +115,14 @@ public partial class UtmxSceneManager : CanvasLayer
 		return CreateTextTyper<TextTyper>();
 	}
 	public static T CreateTextTyper<T>() where T : TextTyper, new()
-	{
-		Node parent = Instance.GetTree()?.CurrentScene;
-		if (parent == null) return null;
-		T node = _textTyperPool.GetObject<T>();
-		if (node.IsInsideTree()) node.Reparent(parent);
-		else parent.AddChild(node);
-		return node;
-	}
+    {
+        T node = _textTyperPool.GetObject<T>();
+        Node parent = node.GetParent();
+        Node targetParent = Instance.GetTree().CurrentScene;
+        if (parent == null) targetParent.CallDeferred("add_child", node);
+        else if (parent != targetParent) targetParent.CallDeferred("reparent", node);
+        return node;
+    }
 
 	public static void DeleteTextTyper(TextTyper typer)
 	{

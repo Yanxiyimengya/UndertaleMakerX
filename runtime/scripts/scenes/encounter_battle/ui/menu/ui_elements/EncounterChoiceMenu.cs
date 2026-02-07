@@ -38,9 +38,12 @@ public partial class EncounterChoiceMenu : BaseEncounterMenu
     protected int _currentChoice = 0; // 当前选择
     private List<ChoiceItem> _items = [];
 
-    ~EncounterChoiceMenu()
+    public override void _Notification(int what)
     {
-        ClearDisplayItem();
+        if (what == NotificationPredelete)
+        {
+            ClearDisplayItem();
+        }
     }
 
 

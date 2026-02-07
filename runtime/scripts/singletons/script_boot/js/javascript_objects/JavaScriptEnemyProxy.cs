@@ -16,7 +16,7 @@ public partial class JavaScriptEnemyProxy : BaseEnemy, IJavaScriptObject
 		{ 
 			if (result is string dialog && !string.IsNullOrEmpty(dialog))
 			{
-				UtmxDialogueQueueManager.Instance.AppendDialogue(dialog);
+				UtmxDialogueQueueManager.AppendDialogue(dialog);
 			}
 			else if (result is object[] dialogArray)
 			{
@@ -24,7 +24,7 @@ public partial class JavaScriptEnemyProxy : BaseEnemy, IJavaScriptObject
 				{
 					if (elements is string dialogText && !string.IsNullOrEmpty(dialogText))
 					{
-						UtmxDialogueQueueManager.Instance.AppendDialogue(dialogText);
+						UtmxDialogueQueueManager.AppendDialogue(dialogText);
 					}
 				}
 			}
@@ -35,30 +35,30 @@ public partial class JavaScriptEnemyProxy : BaseEnemy, IJavaScriptObject
 	{
 		if (JsInstance.HasProperty(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK))
 			JavaScriptBridge.InvokeFunction(JsInstance, EngineProperties.JAVASCRIPT_UPDATE_CALLBACK, [delta]);
-    }
-    public override void _OnSpare()
-    {
-        ((IJavaScriptObject)this).Invoke("onSpare", []);
-    }
+	}
+	public override void _OnSpare()
+	{
+		((IJavaScriptObject)this).Invoke("onSpare", []);
+	}
 
-    public override void _OnBattleStart()
-    {
-        ((IJavaScriptObject)this).Invoke("onBattleStart", []);
-    }
-    public override void _OnBattleEnd()
-    {
-        ((IJavaScriptObject)this).Invoke("onBattleEnd", []);
-    }
-    public override void _OnDialogueStarting()
-    {
-        ((IJavaScriptObject)this).Invoke("onDialogueStarting", []);
-    }
-    public override void _OnDialogueEnding()
-    {
-        ((IJavaScriptObject)this).Invoke("onDialogueEnding", []);
-    }
+	public override void _OnBattleStart()
+	{
+		((IJavaScriptObject)this).Invoke("onBattleStart", []);
+	}
+	public override void _OnBattleEnd()
+	{
+		((IJavaScriptObject)this).Invoke("onBattleEnd", []);
+	}
+	public override void _OnDialogueStarting()
+	{
+		((IJavaScriptObject)this).Invoke("onDialogueStarting", []);
+	}
+	public override void _OnDialogueEnding()
+	{
+		((IJavaScriptObject)this).Invoke("onDialogueEnding", []);
+	}
 
-    public override void _HandleAttack(AttackStatus status)
+	public override void _HandleAttack(AttackStatus status)
 	{
 		((IJavaScriptObject)this).Invoke("onHandleAttack", [status]);
 	}
@@ -77,7 +77,7 @@ public partial class JavaScriptEnemyProxy : BaseEnemy, IJavaScriptObject
 			}
 			else if (JsObj is BaseBattleTurn)
 			{
-				return IJavaScriptObject.New<JavaScriptBattleTurnProxy>(result);
+				return IJavaScriptObject.Wrapper<JavaScriptBattleTurnProxy>(result);
 			}
 		}
 		return new BaseBattleTurn();
@@ -87,7 +87,7 @@ public partial class JavaScriptEnemyProxy : BaseEnemy, IJavaScriptObject
 	{
 		if (offset == null)
 			offset = new Vector2(30, 0);
-		UtmxDialogueQueueManager.Instance.AppendBattleEnemyDialogue(EnemySlot, dialogueMessage.ToString(), (Vector2)offset, hideSpike);
+		UtmxDialogueQueueManager.AppendBattleEnemyDialogue(EnemySlot, dialogueMessage.ToString(), (Vector2)offset, hideSpike);
 	}
 	public void AppendEnemyDialogue(object[] dialogueMessages, Vector2? offset = null, bool hideSpike = false, int dir = 2)
 	{
@@ -95,7 +95,7 @@ public partial class JavaScriptEnemyProxy : BaseEnemy, IJavaScriptObject
 			offset = new Vector2(30, 0);
 		foreach (string message in dialogueMessages)
 		{
-			UtmxDialogueQueueManager.Instance.AppendBattleEnemyDialogue(EnemySlot, message, (Vector2)offset, hideSpike);
+			UtmxDialogueQueueManager.AppendBattleEnemyDialogue(EnemySlot, message, (Vector2)offset, hideSpike);
 		}
 	}
 }

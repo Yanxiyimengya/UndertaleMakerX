@@ -1,4 +1,4 @@
-import { UTMX, Vector2 } from "UTMX";
+import { UTMX,Vector2, Vector4 } from "UTMX";
 import MyProjectile from "./test_js_projectile";
 import MySpr from "./test_js_sprite";
 
@@ -6,62 +6,47 @@ import MySpr from "./test_js_sprite";
 export default class MyBattleTurn extends UTMX.BattleTurn {
 	
 	static a = false;
-	
-	constructor() {
-		super();
-		this.turnTime = 3.0; 
+
+	onTurnInitialize()
+	{
+		this.turnTime = 20.0; 
 		this.time = 0;
 	}
-
 	
 	onTurnStart()
 	{
 		this.typing_chicken = UTMX.scene.createTextTyper(
-			"[instant=false][color=red][font='built-in-resources/fonts/Text.ttf']Hello, [hello sb=10]World[play_sound=SeaTea.wav][end]");
+			"[color=red][font='built-in-resources/fonts/Text.ttf']Hello, [hello sb=10]World[play_sound=SeaTea.wav][end]");
 		this.typing_chicken.position = new Vector2(320, 100);
 		this.typing_chicken.z = 2000;
-		
-		UTMX.debug.print(MyBattleTurn.a);
-		if (!MyBattleTurn.a) {
-			UTMX.debug.print(123123123123);
-			this.typing_chicken.processCmd = (cmd, args) => {
-				if (cmd == "hello")
-				{
-					if (args.sb == 10)
-					{
-						UTMX.audio.playSound("built-in-resources/sounds/sfx/escaped.wav");
-					}
-					else
-					{
-						
-						UTMX.audio.playSound("built-in-resources/sounds/sfx/heal.wav");
-					}
-					return true;
-				}
-				return false;
-			};
-			MyBattleTurn.a = true;
-		}
 
-		this.spr = UTMX.scene.createSprite(MySpr, "a.png");
-		UTMX.debug.print(this.spr);
-		this.spr.z = 1000;
-		this.spr.position = new Vector2(320, 180);
-		this.spr.color = "00ff00aa";
-
-		this.proj = UTMX.battle.createProjectile(MyProjectile, "a.png", 10, true);
+		this.proj = MyProjectile.new();
+		this.proj.textures = "a.png";
+		this.proj.damage = 2;
 		this.proj.position = new Vector2(320, 320);
 		this.proj.collisionMode = UTMX.battle.ProjectileCollisionMode.PRECISE;
+		this.proj.useMask = true;
+
+		UTMX.battle.arena.resize(new Vector2(600, 600), 0.8);
+		this.circleArena = UTMX.battle.arena.createRectangleCulling(new Vector2(320, 100), new Vector2(100, 100));
+	}
+
+	onTurnEnd()
+	{
+		this.circleArena.destroy();
 	}
 
 	onTurnUpdate(delta) {
+		let pos = Vector2.Zero; // 创建一个零向量，你也可以使用 new Vector2(0, 0) 来创建同样内容
+		pos.add(2);
+		UTMX.debug.log(pos);
+
 		if (UTMX.input.isActionDown("ui_accept"))
 		{
 			//UTMX.audio.playSound("built-in-resources/sounds/sfx/snd_break1.wav");
 			this.proj.x += 10;
 			this.proj.rotation += 50;
-			this.spr.xscale += 0.1;
-			this.spr.destroy();
+			this.proj.useMask = !this.proj.useMask;
 		}
 		if (UTMX.input.isActionDown("menu"))
 		{
@@ -69,7 +54,8 @@ export default class MyBattleTurn extends UTMX.BattleTurn {
 		}
 		this.time += 1;
 		UTMX.battle.player.sprite.rotation += 1;
-		//this.typing_chicken.position = UTMX.input.getMousePosition();
 
+		this.circleArena.position = UTMX.input.getMousePosition();
+		this.circleArena.rotation += delta * 45;
 	}
 }

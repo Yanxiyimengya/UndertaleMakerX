@@ -5,6 +5,13 @@ public partial class JavaScriptBattleTurnProxy : BaseBattleTurn, IJavaScriptObje
 {
     public ObjectInstance JsInstance { get; set; }
     public string JsScriptPath { get; set; }
+    public static IJavaScriptObject New(ObjectInstance objInstance)
+    {
+        JavaScriptBattleTurnProxy turn = new JavaScriptBattleTurnProxy();
+        turn.JsInstance = objInstance;
+        return turn;
+    }
+
     public override void _OnTurnInitialize()
     {
         ((IJavaScriptObject)this).Invoke("onTurnInitialize", []);

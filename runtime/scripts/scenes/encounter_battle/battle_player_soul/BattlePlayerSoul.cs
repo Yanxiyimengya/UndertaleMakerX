@@ -143,7 +143,8 @@ public partial class BattlePlayerSoul : CharacterBody2D
 		Vector2 targetPos = Position + inputDir * (float)delta * 
 			(Input.IsActionPressed("cancel") ? (MOVE_SPEED * 0.5F) : MOVE_SPEED);
 		TryMoveTo(targetPos);
-		MoveAndSlide();
+        Velocity = Vector2.Zero;
+        MoveAndSlide();
 	}
 
 	private bool IsInsideArena(Vector2 center)
@@ -165,10 +166,7 @@ public partial class BattlePlayerSoul : CharacterBody2D
 		if (ArenaGroup.EnabledArenaCount > 0 && !IsInsideArena(targetPos))
 		{
 			Position = targetPos;
-			while (!IsInsideArena(Position))
-			{
-				Position = ArenaGroup.PushBackInside(Position, _checkPoints.ToArray(), 1.0F);
-			}
+            Position = ArenaGroup.PushBackInside(Position, _checkPoints.ToArray(), 1.0F);
 		}
 		else
 		{
@@ -181,7 +179,7 @@ public partial class BattlePlayerSoul : CharacterBody2D
 		if (_invincibleTimer <= 0)
 		{
 			UtmxPlayerDataManager.PlayerHp -= damage;
-			if (invtime > 0)
+			if (invtime >= 0)
 			{
                 _invincibleTimer = invtime;
             }

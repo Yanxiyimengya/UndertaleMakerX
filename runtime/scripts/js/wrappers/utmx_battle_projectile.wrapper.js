@@ -1,14 +1,16 @@
 
-import { __logger } from "__UTMX";
+import { __BattleProjectile, __logger } from "__UTMX";
 import { UtmxGameSprite } from "./utmx_game_sprite.wrapper";
 
 export class UtmxBattleProjectile extends UtmxGameSprite { 
 
-    constructor()
+    static new()
     {
-        super();
+        let ins = new this();
+        ins.__instance = __BattleProjectile.New(ins);
+        return ins;
     }
-    
+
     get destroyOnTurnEnd() {
         return this.__instance.DestroyOnTurnEnd;
     }
@@ -41,5 +43,12 @@ export class UtmxBattleProjectile extends UtmxGameSprite {
     }
     set enabled(value) {
         this.__instance.Enabled = value;
+    }
+
+    get useMask() {
+        return this.__instance.UseMask;
+    }
+    set useMask(value) {
+        this.__instance.UseMask = value;
     }
 }

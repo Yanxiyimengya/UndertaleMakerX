@@ -10,11 +10,7 @@ public partial class JavaScriptItemProxy : BaseItem, IJavaScriptObject
     public string JsScriptPath { get; set; }
     public override void _OnUseSelected()
 	{
-		object result = ((IJavaScriptObject)this).Invoke("onUsed", []);
-		if (UtmxBattleManager.IsInBattle())
-		{
-			UtmxBattleManager.ShowDialogueText(result.ToString());
-		}
+		((IJavaScriptObject)this).Invoke("onUse", []);
 	}
 
 	public override void _OnDropSelected()

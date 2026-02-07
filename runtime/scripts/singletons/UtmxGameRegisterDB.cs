@@ -213,8 +213,14 @@ public partial class UtmxGameRegisterDB
 			UtmxLogger.Error(TranslationServer.Translate("The registered object's ID is invalid and cannot be empty."));
 		scriptPath = UtmxResourceLoader.ResolvePath(scriptPath);
 		_encounterDB.Add(encounterId, new JavaScriptEncounterRegisterData(scriptPath));
-	}
-	public static void UnregisterEncounter(string encounterId)
+    }
+    public static bool IsEncounterRegistered(string encounterId)
+    {
+        if (string.IsNullOrEmpty(encounterId)) return false;
+        bool isRegistered = _encounterDB.ContainsKey(encounterId);
+        return isRegistered;
+    }
+    public static void UnregisterEncounter(string encounterId)
     {
         if (string.IsNullOrEmpty(encounterId))
             UtmxLogger.Error(TranslationServer.Translate("The registered object's ID is invalid and cannot be empty."));
@@ -251,6 +257,12 @@ public partial class UtmxGameRegisterDB
 		scriptPath = UtmxResourceLoader.ResolvePath(scriptPath);
 		_enemyDB.Add(enemyId, new JavaScriptEnemyRegisterData(scriptPath));
     }
+    public static bool IsEnemyRegistered(string enemyId)
+    {
+        if (string.IsNullOrEmpty(enemyId)) return false;
+        bool isRegistered = _enemyDB.ContainsKey(enemyId);
+        return isRegistered;
+    }
     public static void UnregisterEnemy(string enemyId)
     {
         if (string.IsNullOrEmpty(enemyId))
@@ -286,6 +298,12 @@ public partial class UtmxGameRegisterDB
 			UtmxLogger.Error(TranslationServer.Translate("The registered object's ID is invalid and cannot be empty."));
 		scriptPath = UtmxResourceLoader.ResolvePath(scriptPath);
 		_itemDB.Add(itemId, new JavaScriptItemRegisterData(scriptPath));
+    }
+    public static bool IsItemRegistered(string itemId)
+    {
+        if (string.IsNullOrEmpty(itemId)) return false;
+        bool isRegistered = _itemDB.ContainsKey(itemId);
+        return isRegistered;
     }
     public static void UnregisterItem(string itemId)
     {

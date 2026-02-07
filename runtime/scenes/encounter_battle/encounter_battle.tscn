@@ -31,7 +31,7 @@
 [ext_resource type="Script" uid="uid://3iy182u0a5o5" path="res://scripts/scenes/encounter_battle/state/BattleEnemyDialogueState.cs" id="15_mdx4q"]
 [ext_resource type="Script" uid="uid://clyj12q3o6mo" path="res://scripts/scenes/encounter_battle/state/BattleEnemyState.cs" id="17_wibws"]
 [ext_resource type="Script" uid="uid://vrolycbhr1jt" path="res://scripts/scenes/encounter_battle/arena/BattleArenaGroup.cs" id="18_3wf68"]
-[ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="19_taqgn"]
+[ext_resource type="Script" uid="uid://cjyho7by408k4" path="res://scripts/utils/game_objects/TextTyper.cs" id="19_taqgn"]
 [ext_resource type="Script" uid="uid://bpyxalubh243m" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterChoiceEnemyMenu.cs" id="19_vdmq1"]
 [ext_resource type="Script" uid="uid://7hd25hqmu3q2" path="res://scripts/scenes/encounter_battle/arena/BattleMainArenaExpand.cs" id="20_3wf68"]
 [ext_resource type="Script" uid="uid://c2nsgymkcwbb6" path="res://scripts/scenes/encounter_battle/ui/menu/EncounterItemMenu.cs" id="23_0mx1x"]
@@ -241,7 +241,6 @@ fit_content = true
 scroll_active = false
 autowrap_mode = 1
 script = ExtResource("19_taqgn")
-metadata/_custom_type_script = "uid://dmq4qew4auuss"
 
 [node name="EncounterChoiceEnemyMenu" parent="UILayer/BattleMenuManager" unique_id=1194380642 instance=ExtResource("24_noyau")]
 visible = false

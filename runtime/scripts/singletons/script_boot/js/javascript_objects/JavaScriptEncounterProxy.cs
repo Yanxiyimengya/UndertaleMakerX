@@ -22,10 +22,10 @@ public partial class JavaScriptEncounterProxy : BaseEncounter, IJavaScriptObject
     }
     public override void _OnEnemyDialogue()
     {
-        ((IJavaScriptObject)this).Invoke("onnEnemyDialogue", []);
+        ((IJavaScriptObject)this).Invoke("onEnemyDialogue", []);
     }
     public override void _OnEnemyTurn()
     {
-        ((IJavaScriptObject)this).Invoke("onnEnemyTurn", []);
+        ((IJavaScriptObject)this).Invoke("onEnemyTurn", []);
     }
 }

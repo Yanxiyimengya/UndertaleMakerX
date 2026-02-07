@@ -1,6 +1,12 @@
 import { __BattleTurn } from "__UTMX";
 
 export class UtmxBattleTurn extends __BattleTurn {
+    static new()
+    {
+        let ins = new this();
+        return ins;
+    }
+
     get arenaInitializeSize() {
         return this.ArenaInitializeSize;
     }

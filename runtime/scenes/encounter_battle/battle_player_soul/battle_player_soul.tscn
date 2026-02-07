@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://creftm2k8k0aw" path="res://scripts/scenes/encounter_battle/battle_player_soul/BattlePlayerSoul.cs" id="1_4pjqo"]
 [ext_resource type="Texture2D" uid="uid://bi04oi56jlyi3" path="res://__data__/built-in-resources/textures/soul/spr_soul_battle-0.png" id="2_4feig"]
 [ext_resource type="Texture2D" uid="uid://dfxhcfd8upbf7" path="res://__data__/built-in-resources/textures/soul/spr_heartgtfo/spr_heartgtfo_0-Sheet.png" id="3_4feig"]
-[ext_resource type="Script" uid="uid://dn8jwrsub7n45" path="res://scripts/utils/node/GameSprite2D.cs" id="4_4h8dk"]
+[ext_resource type="Script" uid="uid://d2j46mipofwg3" path="res://scripts/utils/game_objects/GameSprite2D.cs" id="4_4h8dk"]
 [ext_resource type="Script" uid="uid://8fxros6kah3m" path="res://scripts/scenes/encounter_battle/battle_player_soul/BattlePlayerSoulHitBox.cs" id="4_x7lr4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_x7lr4"]

@@ -13,10 +13,10 @@ public partial class JavaScriptBattleProjectileProxy : BaseBattleProjectile, IOb
 	public ObjectInstance JsInstance { get; set; }
 	public string JsScriptPath { get; set; }
 
-	public static IJavaScriptObject New(ObjectInstance objInstance, bool mask = false)
+	public static IJavaScriptObject New(ObjectInstance objInstance)
 	{
 		JavaScriptBattleProjectileProxy projectile =
-			UtmxBattleManager.GetBattleProjectileController().CreateProjectile<JavaScriptBattleProjectileProxy>(mask);
+			UtmxBattleManager.GetBattleProjectileController().CreateProjectile<JavaScriptBattleProjectileProxy>();
 		projectile.JsInstance = objInstance;
 		return projectile;
 	}

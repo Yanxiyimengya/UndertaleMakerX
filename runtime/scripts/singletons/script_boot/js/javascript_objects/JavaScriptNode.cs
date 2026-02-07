@@ -54,10 +54,13 @@ public partial class JavaScriptNode : Node, IJavaScriptObject
             ((IJavaScriptObject)this).Invoke(EngineProperties.JAVASCRIPT_ACTIVE_CALLBACK, []);
 	}
 
-	~JavaScriptNode()
-	{
-		if (((IJavaScriptObject)this).Has(EngineProperties.JAVASCRIPT_DESTROY_CALLBACK))
-            ((IJavaScriptObject)this).Invoke(EngineProperties.JAVASCRIPT_DESTROY_CALLBACK, []);
+    public override void _Notification(int what)
+    {
+		if (what == NotificationPredelete)
+		{
+			if (((IJavaScriptObject)this).Has(EngineProperties.JAVASCRIPT_DESTROY_CALLBACK))
+				((IJavaScriptObject)this).Invoke(EngineProperties.JAVASCRIPT_DESTROY_CALLBACK, []);
+		}
 	}
 
 	public override void _Process(double delta)

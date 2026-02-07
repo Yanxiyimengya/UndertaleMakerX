@@ -1,4 +1,5 @@
 import { UTMX } from "UTMX";
+import MyDO from "./test_js_drawable_object";
 
 export default class MyEncounter extends UTMX.Encounter {
 	

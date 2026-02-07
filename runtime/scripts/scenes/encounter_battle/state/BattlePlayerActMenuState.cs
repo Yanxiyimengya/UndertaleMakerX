@@ -22,9 +22,9 @@ public partial class BattlePlayerActMenuState : StateNode
 		if (_selected)
 		{
 			int menuItemCount = encounterActPageMenu.MenuItems.Count;
-			int pageCount = encounterActPageMenu.GetItemCount() / menuItemCount; // 页面总数
-			int page = ActChoice / menuItemCount; // 当前页面索引
-			int index = ActChoice % menuItemCount; // 获取ActChoice在当前页面得索引
+			int pageCount = encounterActPageMenu.GetItemCount() / menuItemCount;
+			int page = ActChoice / menuItemCount;
+			int index = ActChoice % menuItemCount;
 			int lineCount = (menuItemCount / 2);
 			if (Input.IsActionJustPressed("up"))
 			{
@@ -76,9 +76,12 @@ public partial class BattlePlayerActMenuState : StateNode
 			if (ActChoice != _prevActChoice)
 			{
 				ActChoice = Math.Clamp(ActChoice, 0, encounterActPageMenu.GetItemCount() - 1);
-				encounterActPageMenu.SetChoice(ActChoice);
-				_prevActChoice = ActChoice;
-				UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("SQUEAK"));
+				if (ActChoice != _prevActChoice)
+				{
+					encounterActPageMenu.SetChoice(ActChoice);
+					_prevActChoice = ActChoice;
+					UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("SQUEAK"));
+				}
 			}
 
 			if (Input.IsActionJustPressed("cancel"))

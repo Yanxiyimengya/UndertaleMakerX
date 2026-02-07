@@ -1,9 +1,13 @@
 import { __battle_manager, __BattleProjectile, __logger } from "__UTMX";
-import { UtmxBattleProjectile } from "./utmx_battle_projectile.wrapper.js";
 import { UtmxGameSprite } from "./utmx_game_sprite.wrapper.js";
-import { UtmxObject } from "./utmx_node_object.weapper.js";
+import { UtmxGameObject } from "./utmx_game_object.weapper.js";
+import {
+    BattleArenaRectangle,
+    BattleArenaCircle,
+    BattleArenaPolygon,
+} from "./utmx_battle_arena.wrapper.js";
 
-class BattleCamera extends UtmxObject
+class BattleCamera extends UtmxGameObject
 {
     static get x() {
         let battleCamera = __battle_manager.GetBattleController().Camera;
@@ -46,8 +50,7 @@ class BattleCamera extends UtmxObject
         battleCamera.RotationDegrees = value;
     }
 }
-
-class BattlePlayer extends UtmxObject
+class BattlePlayer extends UtmxGameObject
 {
     static get enabledCollision() {
         if (! __battle_manager.IsInBattle()) return false;
@@ -75,6 +78,76 @@ class BattlePlayer extends UtmxObject
     }
     static set sprite(value) { } // 只读
 }
+class BattleArenaAccess
+{
+    static get x() {
+        let mainArena = __battle_manager.GetBattleArenaController().MainArena;
+        return mainArena.Position.X;
+    }
+    static set x(value) {
+        let mainArena = __battle_manager.GetBattleArenaController().MainArena;
+        let newPosition = mainArena.Position;
+        newPosition.X = value;
+        mainArena.Position = newPosition;
+    }
+    static get y() {
+        let mainArena = __battle_manager.GetBattleArenaController().MainArena;
+        return mainArena.Position.Y;
+    }
+    static set y(value) {
+        let mainArena = __battle_manager.GetBattleArenaController().MainArena;
+        let newPosition = mainArena.Position;
+        newPosition.Y = value;
+        mainArena.Position = newPosition;
+    }
+    static get rotation() {
+        let mainArena = __battle_manager.GetBattleArenaController().MainArena;
+        if (mainArena != null) {
+            return mainArena.RotationDegrees;
+        }
+    }
+    static set rotation(value) {
+        let mainArena = __battle_manager.GetBattleArenaController().MainArena;
+        mainArena.RotationDegrees = value;
+    }
+    static get size() {
+        let mainArena = __battle_manager.GetBattleArenaController().MainArena;
+        if (mainArena != null) {
+            return mainArena.Size;
+        }
+    }
+    static set size(value) {
+        let mainArena = __battle_manager.GetBattleArenaController().MainArena;
+        mainArena.Size = value;
+    }
+
+    static resize(value)
+    {
+        let mainArena = __battle_manager.GetBattleArenaController().MainArena;
+        mainArena.Resize(value);
+    }
+
+    static createRectangleExpand(pos = new Vector2(320, 320), size = new Vector2(130, 130))
+    {
+        let arenaWrapper = new BattleArenaRectangle();
+        arenaWrapper.__instance =  __battle_manager.GetBattleArenaController().CreateRectangleArenaExpand();
+        return arenaWrapper;
+    }
+    static createRectangleCulling(pos = new Vector2(320, 320), size = new Vector2(130, 130))
+    {
+        let arenaWrapper = new BattleArenaRectangle();
+        arenaWrapper.__instance =  __battle_manager.GetBattleArenaController().CreateRectangleArenaCulling();
+        return arenaWrapper;
+    }
+    static createCircleExpand(pos = new Vector2(320, 320), radius = 120)
+    {
+        let arenaWrapper = new BattleArenaCircle();
+        arenaWrapper.__instance =  __battle_manager.GetBattleArenaController().CreateCircleArenaExpand();
+        arenaWrapper.position = pos;
+        arenaWrapper.radius = radius;
+        return arenaWrapper;
+    }
+}
 
 export class UtmxBattleManager {
     InitializeBattle = null;
@@ -88,33 +161,7 @@ export class UtmxBattleManager {
 
     static player = BattlePlayer;
     static camera = BattleCamera;
-
-    static createProjectile(projectileConstructor = UtmxBattleProjectile, textures = "", 
-        damage = 1, mask = false) {
-        if (typeof projectileConstructor !== "function") return null;
-        if (projectileConstructor === UtmxBattleProjectile || 
-            UtmxBattleProjectile.prototype.isPrototypeOf(projectileConstructor.prototype))
-        {
-            try
-            {
-                let projectileWrapper = new projectileConstructor();
-                if (projectileWrapper != null) 
-                {
-                    let projectile = __BattleProjectile.New(projectileWrapper, mask);
-                    projectileWrapper.instance = projectile;
-                    projectileWrapper.textures = textures;
-                    projectileWrapper.damage = damage;
-                    return projectileWrapper;
-                }
-            }
-            catch (e)
-            {
-                let message = (e && e.message) ? e.message : JSON.stringify(e);
-                __logger.Error(message);
-            }
-        }
-        return null;
-    }
+    static arena = BattleArenaAccess;
 
     static startEncounter(encounterId)
     {

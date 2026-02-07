@@ -11,8 +11,6 @@ public partial class BattleEnemyDialogueState : StateNode
 	public BattleMenuManager MenuManager;
 
 	private List<SpeechBubble> _speechBubbleList = new();
-
-	private Tween _tween;
 	public override void _Process(double delta)
 	{
 		if (Input.IsActionJustPressed("confirm"))
@@ -32,22 +30,16 @@ public partial class BattleEnemyDialogueState : StateNode
 		}
 	}
 
-	public override void _EnterState()
+	public async override void _EnterState()
 	{
 		MenuManager.CloseAllMenu();
-		BattleMainArenaExpand _battleMainArena = UtmxBattleManager.GetBattleArenaController().MainArena;
 		UtmxBattleManager.GetBattleTurnController().TurnInitialize();
 		BattlePlayerSoul soul = UtmxBattleManager.GetBattlePlayerController().PlayerSoul;
 		soul.GlobalPosition = UtmxBattleManager.GetBattleTurnController().GetTurnSoulInitializePosition();
 		soul.Movable = false;
 		soul.Visible = true;
-		if (_tween != null && _tween.IsRunning())
-		{
-			_tween.Kill();
-		}
-		_tween = GetTree().CreateTween();
-		_tween.TweenProperty(_battleMainArena, "Size", UtmxBattleManager.GetBattleTurnController().GetTurnArenaInitializeSize(), 0.4);
-
+        BattleMainArenaExpand _battleMainArena = UtmxBattleManager.GetBattleArenaController().MainArena;
+        await _battleMainArena.Resize(UtmxBattleManager.GetBattleTurnController().GetTurnArenaInitializeSize(), 0.4);
         foreach (BaseEnemy enemy in UtmxBattleManager.GetBattleEnemyController().EnemiesList)
         {
             enemy._OnDialogueStarting();
@@ -73,9 +65,9 @@ public partial class BattleEnemyDialogueState : StateNode
 		_speechBubbleList.Clear();
 
 
-		if (UtmxDialogueQueueManager.Instance.BattleEnemyDialogueCount() > 0)
+		if (UtmxDialogueQueueManager.BattleEnemyDialogueCount() > 0)
 		{
-			Dictionary<int, UtmxDialogueData> dialogue = UtmxDialogueQueueManager.Instance.GetBattleEnemyDialogues();
+			Dictionary<int, UtmxDialogueData> dialogue = UtmxDialogueQueueManager.GetBattleEnemyDialogues();
 			if (DialogueSpeechBubblePackedScene != null)
 			{
 				foreach (KeyValuePair<int, UtmxDialogueData> pair in dialogue)

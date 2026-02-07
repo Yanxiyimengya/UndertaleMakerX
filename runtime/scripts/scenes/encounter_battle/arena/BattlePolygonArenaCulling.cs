@@ -26,11 +26,14 @@ public partial class BattlePolygonArenaCulling : BattleArenaCulling
         }
     }
 
-    ~BattlePolygonArenaCulling()
+    public override void _Notification(int what)
     {
-        foreach (Rid shapeRid in _convexShapes)
-            PhysicsServer2D.FreeRid(shapeRid);
-        _convexShapes.Clear();
+        if (what == NotificationPredelete)
+        {
+            foreach (Rid shapeRid in _convexShapes)
+                PhysicsServer2D.FreeRid(shapeRid);
+            _convexShapes.Clear();
+        }
     }
 
     private Vector2[] _vertices;

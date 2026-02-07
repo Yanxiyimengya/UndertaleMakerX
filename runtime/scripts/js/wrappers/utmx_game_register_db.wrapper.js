@@ -13,6 +13,9 @@ export class UtmxGameRegisterDB {
     static unregisterItem(item) {
         __game_register_db.UnregisterItem(item);
     }
+    static isItemRegistered(item) {
+        return __game_register_db.IsItemRegistered(item);
+    }
 
     static registerEnemy(enemy, path) {
         __game_register_db.RegisterEnemy(enemy, path);
@@ -20,11 +23,17 @@ export class UtmxGameRegisterDB {
     static unregisterEnemy(enemy) {
         __game_register_db.UnregisterEnemy(enemy);
     }
+    static isEnemyRegistered(item) {
+        return __game_register_db.IsItemRegistered(item);
+    }
 
     static registerEncounter(encounter, path) {
         __game_register_db.RegisterEncounter(encounter, path);
     }
     static unregisterEncounter(encounter) {
         __game_register_db.UnregisterEncounter(encounter);
+    }
+    static isEncounterRegistered(item) {
+        return __game_register_db.IsItemRegistered(item);
     }
 }

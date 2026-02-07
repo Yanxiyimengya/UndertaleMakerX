@@ -45,10 +45,13 @@ public abstract partial class BattleArenaCulling : BaseBattleArena
             UpdateCollisionShape(_shape);
         }
     }
-    ~BattleArenaCulling()
+    public override void _Notification(int what)
     {
-        if (_shape.IsValid) PhysicsServer2D.FreeRid(_shape);
-        if (_arenaPhysicBody.IsValid) PhysicsServer2D.FreeRid(_arenaPhysicBody);
+        if (what == NotificationPredelete)
+        {
+            if (_shape.IsValid) PhysicsServer2D.FreeRid(_shape);
+            if (_arenaPhysicBody.IsValid)  PhysicsServer2D.FreeRid(_arenaPhysicBody);
+        }
     }
 
     public override void _EnterTree()

@@ -4,15 +4,15 @@ export default class Main
 {
 	onGameStart()
 	{
-		UTMX.gameDB.registerItem("Test Item from JS", "js/test_js_item");
+		UTMX.registerDB.registerItem("Test Item from JS", "js/test_js_item");
 
 		UTMX.player.inventory.addItem("Test Item from JS");
 		UTMX.player.inventory.addItem("Test Item from JS");
 		UTMX.player.inventory.addItem("Test Item from JS");
 		UTMX.player.inventory.addItem("Test Item from JS");
 
-		UTMX.gameDB.registerEnemy("MyEnemy", "js/test_js_enemy");
-		UTMX.gameDB.registerEncounter("Test Encounter from JS", "js/test_js_encounter");
+		UTMX.registerDB.registerEnemy("MyEnemy", "js/test_js_enemy");
+		UTMX.registerDB.registerEncounter("Test Encounter from JS", "js/test_js_encounter");
 
 		UTMX.battle.startEncounter("Test Encounter from JS");
 

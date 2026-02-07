@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://3dmh7idg5rqu"]
 
-[ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="1_aqt5t"]
+[ext_resource type="Script" uid="uid://cjyho7by408k4" path="res://scripts/utils/game_objects/TextTyper.cs" id="1_aqt5t"]
 [ext_resource type="Script" uid="uid://bqn2adt52kuta" path="res://scripts/scenes/encounter_battle/ui/speech_bubble/SpeechBubble.cs" id="1_u62k8"]
 [ext_resource type="Texture2D" uid="uid://co115267ve8cl" path="res://__data__/built-in-resources/textures/speech_bubble/speech_bubble_spike.png" id="2_u62k8"]
 [ext_resource type="Texture2D" uid="uid://bsagp7eas1rov" path="res://__data__/built-in-resources/textures/speech_bubble/speech_bubble_full.png" id="2_yixuf"]

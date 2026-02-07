@@ -2,7 +2,7 @@
 
 [ext_resource type="FontFile" uid="uid://dks40d20ernd2" path="res://__data__/built-in-resources/fonts/DamageText.ttf" id="1_ewr1v"]
 [ext_resource type="Script" uid="uid://c70yccichye13" path="res://scripts/scenes/encounter_battle/ui/menu/ui_elements/battle_damage_text/BattleDamageText.cs" id="1_mvfbq"]
-[ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="2_pxun5"]
+[ext_resource type="Script" uid="uid://cjyho7by408k4" path="res://scripts/utils/game_objects/TextTyper.cs" id="2_pxun5"]
 
 [node name="BattleDamageText" type="Node2D" node_paths=PackedStringArray("DamageTextTyper")]
 script = ExtResource("1_mvfbq")

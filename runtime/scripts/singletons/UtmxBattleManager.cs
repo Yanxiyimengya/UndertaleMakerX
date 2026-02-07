@@ -16,7 +16,6 @@ public partial class UtmxBattleManager
 		EnemyDialogue,
 		Enemy,
 	}
-
 	public static bool Endded { get => _endded; set => _endded = value; }
 	public static Transform2D PlayerSoulTransform { get => _playerSoulTransform; set => _playerSoulTransform = value; }
 	public static Color PlayerSoulColor { get => _playerSoulColor; set => _playerSoulColor = value; }
@@ -63,6 +62,7 @@ public partial class UtmxBattleManager
 	{
 		_battleController = battleController;
 		_isInBattle = true;
+		GetEncounterInstance()?._OnBattleStart();
 	}
 
 	public static void GameOver()
@@ -111,7 +111,7 @@ public partial class UtmxBattleManager
 		{
 			if (texts is string dialog && !string.IsNullOrEmpty(dialog))
 			{
-				UtmxDialogueQueueManager.Instance.AppendDialogue(dialog);
+				UtmxDialogueQueueManager.AppendDialogue(dialog);
 			}
 			else if (texts is object[] dialogArray)
 			{
@@ -119,7 +119,7 @@ public partial class UtmxBattleManager
 				{
 					if (elements is string dialogText && !string.IsNullOrEmpty(dialogText))
 					{
-						UtmxDialogueQueueManager.Instance.AppendDialogue(dialogText);
+						UtmxDialogueQueueManager.AppendDialogue(dialogText);
 					}
 				}
 			}

@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dshp7kc1e02l6" path="res://scripts/scenes/encounter_battle/ui/menu/ui_elements/EncounterChoicePageMenu.cs" id="1_brxe0"]
 [ext_resource type="PackedScene" uid="uid://calfrmbvcuuks" path="res://scenes/encounter_battle/ui/ui_elements/choice_menu/choice_menu_item/choice_menu_item.tscn" id="2_brxe0"]
 [ext_resource type="FontFile" uid="uid://v628opivhevj" path="res://__data__/built-in-resources/fonts/Text.ttf" id="4_vcj86"]
-[ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="5_juvwh"]
+[ext_resource type="Script" uid="uid://cjyho7by408k4" path="res://scripts/utils/game_objects/TextTyper.cs" id="5_juvwh"]
 
 [node name="EncounterChoicePageMenu" type="Control" unique_id=1038061057 node_paths=PackedStringArray("PageTextTyper", "MenuItems")]
 layout_mode = 3

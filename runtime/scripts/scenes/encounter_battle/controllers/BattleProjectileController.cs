@@ -12,18 +12,15 @@ public partial class BattleProjectileController : Node
 	
 	private ObjectPool<BaseBattleProjectile> _pool = new();
 
-	public BaseBattleProjectile CreateProjectile(bool mask = false)
+	public BaseBattleProjectile CreateProjectile()
 	{
-		return CreateProjectile<BaseBattleProjectile>(mask);
+		return CreateProjectile<BaseBattleProjectile>();
 	}
-	public T CreateProjectile<T>(bool mask = false) where T : BaseBattleProjectile, new()
+	public T CreateProjectile<T>() where T : BaseBattleProjectile, new()
 	{
 		T projectile = _pool.GetObject<T>();
-		var targetParent = mask ? ArenaMask : ProjectilesNode;
-		if (projectile.IsInsideTree())
-		{ projectile.Reparent(targetParent); }
-		else { targetParent.AddChild(projectile); }
-		return projectile;
+		projectile.UseMask = false;
+        return projectile;
 	}
 
 	public void DeleteProjectile(BaseBattleProjectile projectile)

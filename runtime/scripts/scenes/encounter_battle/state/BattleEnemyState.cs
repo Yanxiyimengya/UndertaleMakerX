@@ -44,14 +44,9 @@ public partial class BattleEnemyState : StateNode
 		{
 			_tween.Kill();
 		}
-		Vector2 targetSize = new Vector2(565, 130);
-		if (_battleMainArena.Size != targetSize)
-		{
-			_tween = GetTree().CreateTween();
-			_tween.TweenProperty(_battleMainArena, "Size", targetSize, 0.4);
-			await ToSignal(_tween, Tween.SignalName.Finished);
-		}
-		UtmxBattleManager.GetBattleController().ChangeToPlayerTurnState();
+        BattleMainArenaExpand _battleMainArena = UtmxBattleManager.GetBattleArenaController().MainArena;
+        await _battleMainArena.Resize(new Vector2(565, 130), 0.4);
+        UtmxBattleManager.GetBattleController().ChangeToPlayerTurnState();
 		soul.Movable = false;
 	}
 }

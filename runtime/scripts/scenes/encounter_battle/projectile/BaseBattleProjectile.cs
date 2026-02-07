@@ -58,23 +58,81 @@ public partial class BaseBattleProjectile : GameSprite2D, IObjectPoolObject
 				}
 			}
 		}
-	}
+    }
+    public bool UseMask
+    {
+		get => _useMask;
+		set
+		{
+			if (_useMask != value)
+			{
+				var projectileController = UtmxBattleManager.GetBattleProjectileController();
+				var targetParent = value ? projectileController.ArenaMask : projectileController.ProjectilesNode;
+				if (IsInsideTree()) { this.CallDeferred("reparent", targetParent); }
+				else { targetParent.AddChild(this); }
+				_useMask = value;
+			}
+		}
+    }
 
-	private PrecisionCollisionMode collisionMode = PrecisionCollisionMode.UsedRect;
+    private PrecisionCollisionMode collisionMode = PrecisionCollisionMode.UsedRect;
 	private readonly List<List<Node2D>> _collisionShapesList = new();
 	private Area2D _area;
 	private int _prevFrame = -1;
 	private bool _textureChangedConnected = false;
 	private bool _frameChangedConnected = false;
 	private bool _enabled = false;
-	private readonly Dictionary<Image, List<Vector2[]>> _polygonCache = new();
+    private bool _useMask = false;
+    private readonly Dictionary<Image, List<Vector2[]>> _polygonCache = new();
 
 	public BaseBattleProjectile()
 	{
 		_area = new Area2D();
-	}
+        if (_area != null)
+        {
+            AddChild(_area, false, InternalMode.Front);
+            _area.CollisionLayer = (int)UtmxBattleManager.BattleCollisionLayers.Player;
+            _area.CollisionMask = (int)(
+                UtmxBattleManager.BattleCollisionLayers.Projectile |
+                UtmxBattleManager.BattleCollisionLayers.Player);
+        }
 
-	public override void Awake()
+        if (!_frameChangedConnected)
+        {
+            Connect(AnimatedSprite2D.SignalName.FrameChanged, Callable.From(OnFrameChanged));
+            _frameChangedConnected = true;
+        }
+        if (!_textureChangedConnected)
+        {
+            Connect(GameSprite2D.SignalName.TextureChanged, Callable.From(UpdateCollisionShapes));
+            _textureChangedConnected = true;
+        }
+    }
+    public override void _Notification(int what)
+    {
+		if (what == NotificationPredelete)
+		{
+			if (_area != null)
+			{
+				_area.QueueFree();
+				_area = null;
+			}
+			if (_frameChangedConnected)
+			{
+				Disconnect(AnimatedSprite2D.SignalName.FrameChanged, Callable.From(OnFrameChanged));
+				_frameChangedConnected = false;
+			}
+			if (_textureChangedConnected)
+			{
+				Disconnect(GameSprite2D.SignalName.TextureChanged, Callable.From(UpdateCollisionShapes));
+				_textureChangedConnected = false;
+			}
+			ClearCollisionShapes();
+			_polygonCache.Clear();
+		}
+    }
+
+    public override void Awake()
 	{
 		base.Awake();
 		Enabled = true;
@@ -85,53 +143,6 @@ public partial class BaseBattleProjectile : GameSprite2D, IObjectPoolObject
 		base.Disabled();
 		Enabled = false;
 	}
-
-	public override void _EnterTree()
-	{
-		if (_area != null)
-		{
-			AddChild(_area, false, InternalMode.Front);
-			_area.CollisionLayer = (int)UtmxBattleManager.BattleCollisionLayers.Player;
-			_area.CollisionMask = (int)(
-				UtmxBattleManager.BattleCollisionLayers.Projectile |
-				UtmxBattleManager.BattleCollisionLayers.Player);
-		}
-
-		if (!_frameChangedConnected)
-		{
-			Connect(AnimatedSprite2D.SignalName.FrameChanged, Callable.From(OnFrameChanged));
-			_frameChangedConnected = true;
-		}
-		if (!_textureChangedConnected)
-		{
-			Connect(GameSprite2D.SignalName.TextureChanged, Callable.From(UpdateCollisionShapes));
-			_textureChangedConnected = true;
-		}
-	}
-
-	public override void _ExitTree()
-	{
-		if (_area != null)
-		{
-			_area.QueueFree();
-			_area = null;
-		}
-
-		if (_frameChangedConnected)
-		{
-			Disconnect(AnimatedSprite2D.SignalName.FrameChanged, Callable.From(OnFrameChanged));
-			_frameChangedConnected = false;
-		}
-		if (_textureChangedConnected)
-		{
-			Disconnect(GameSprite2D.SignalName.TextureChanged, Callable.From(UpdateCollisionShapes));
-			_textureChangedConnected = false;
-		}
-
-		ClearCollisionShapes();
-		_polygonCache.Clear();
-	}
-
 	public override void _PhysicsProcess(double delta)
 	{
 		if (!Enabled) return;

@@ -9,13 +9,13 @@ public partial class JavaScriptTextTyperProxy : TextTyper, IObjectPoolObject , I
 {
 	public ObjectInstance JsInstance { get; set; }
 	public string JsScriptPath { get; set; }
-	public static JavaScriptTextTyperProxy New(ObjectInstance objInstance)
+	public static IJavaScriptObject New(ObjectInstance objInstance)
 	{
 		JavaScriptTextTyperProxy typer = UtmxSceneManager.CreateTextTyper<JavaScriptTextTyperProxy>();
 		typer.JsInstance = objInstance;
 		return typer;
 	}
-	public override bool _ProcessCmd(string cmd, Dictionary<string, string> args)
+    public override bool _ProcessCmd(string cmd, Dictionary<string, string> args)
 	{
 		bool result = false;
 		if (JsInstance.HasProperty("processCmd"))

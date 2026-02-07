@@ -82,10 +82,13 @@ public partial class UndertaleStyleScrollBar : Control
         RenderingServer.CanvasItemSetParent(_bottomArrow, GetCanvasItem());
     }
 
-    ~UndertaleStyleScrollBar()
+    public override void _Notification(int what)
     {
-        if (_topArrow.IsValid) RenderingServer.FreeRid(_topArrow);
-        if (_bottomArrow.IsValid) RenderingServer.FreeRid(_bottomArrow);
+        if (what == NotificationPredelete)
+        {
+            if (_topArrow.IsValid) RenderingServer.FreeRid(_topArrow);
+            if (_bottomArrow.IsValid) RenderingServer.FreeRid(_bottomArrow);
+        }
     }
 
     public override void _Ready()

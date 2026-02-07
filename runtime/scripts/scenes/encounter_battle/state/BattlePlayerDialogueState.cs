@@ -37,9 +37,9 @@ public partial class BattlePlayerDialogueState : StateNode
 	{
 		BattlePlayerSoul soul = UtmxBattleManager.GetBattlePlayerController().PlayerSoul;
 		soul.Visible = false;
-		if (UtmxDialogueQueueManager.Instance.DialogueCount() > 0)
+		if (UtmxDialogueQueueManager.DialogueCount() > 0)
 		{
-			string dialogueText = UtmxDialogueQueueManager.Instance.GetNextDialogueAsText();
+			string dialogueText = UtmxDialogueQueueManager.GetNextDialogueAsText();
 			TextMenu.ShowEncounterText(dialogueText);
 		}
 		else

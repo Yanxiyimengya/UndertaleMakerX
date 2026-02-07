@@ -7,14 +7,15 @@ using Godot.Collections;
 public static class UtmxPlayerDataManager
 {
 	public static string PlayerName = "FRISK";
-	public static double PlayerLv = 19;
+	public static double PlayerLv = 1;
 	public static double PlayerExp = 0;
 	public static double PlayerGold = 0;
-	public static double PlayerHp = 92F;
-	public static double PlayerMaxHp = 92F;
+	public static double PlayerHp = 20F;
+	public static double PlayerMaxHp = 20F;
 	public static double PlayerAttack = 0F;
 	public static double PlayerDefence = 0F;
-	public static double PlayerInvincibleTime = 0.025F * 30F;
+	public static double PlayerInvincibleTime = 0.75F;
+	public static int MaxInventoryCount = 8;
 
 	public static List<BaseItem> Items = new List<BaseItem>() {};
 	public static BaseWeapon Weapon = new BaseWeapon();
@@ -22,9 +23,22 @@ public static class UtmxPlayerDataManager
 
 	public static void AddItem(string itemId)
 	{
-		if (UtmxGameRegisterDB.TryGetItem(itemId, out BaseItem item))
+		if (GetItemCount() < MaxInventoryCount)
 		{
-			Items.Add(item);
+			if (UtmxGameRegisterDB.TryGetItem(itemId, out BaseItem item))
+			{
+				Items.Add(item);
+			}
+		}
+	}
+	public static void SetItem(string itemId, int slot)
+	{
+		if (slot > -1 && slot < GetItemCount())
+		{
+			if (UtmxGameRegisterDB.TryGetItem(itemId, out BaseItem item))
+			{
+				Items[slot] = item;
+			}
 		}
 	}
 	public static BaseItem GetItemAt(int slot)
@@ -32,11 +46,11 @@ public static class UtmxPlayerDataManager
 		if (TryGetItem(slot, out BaseItem result))
 		{
 			return result;
-        }
+		}
 		return null;
 	}
 
-    private static bool TryGetItem(int slot, out BaseItem item)
+	private static bool TryGetItem(int slot, out BaseItem item)
 	{
 		item = null;
 		if (slot < 0 || slot >= Items.Count) return false;
@@ -57,6 +71,10 @@ public static class UtmxPlayerDataManager
 		BaseItem item = Items[slot];
 		item.ItemSlot = slot;
 		item._OnUseSelected();
+		if (UtmxBattleManager.IsInBattle())
+		{
+			UtmxDialogueQueueManager.AppendDialogue(item.UsedText);
+		}
 	}
 
 	public static void RemoveItem(int slot)
@@ -67,8 +85,6 @@ public static class UtmxPlayerDataManager
 			Items.RemoveAt(slot);
 		}
 	}
-
-
 
 	public static void Hurt(double value, double invtime = -1)
 	{
@@ -83,13 +99,14 @@ public static class UtmxPlayerDataManager
 		else
 		{
 			PlayerHp -= value;
-            UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("HURT"));
-        }
-
+			UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("HURT"));
+		}
+		PlayerHp = Math.Clamp(PlayerHp, 0, PlayerMaxHp);
 	}
 	public static void Heal(double value)
 	{
 		UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("HEAL"));
 		PlayerHp += (float)value;
+		PlayerHp = Math.Clamp(PlayerHp, 0, PlayerMaxHp);
 	}
 }

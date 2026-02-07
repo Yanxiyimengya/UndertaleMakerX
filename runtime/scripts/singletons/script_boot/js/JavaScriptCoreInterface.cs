@@ -28,6 +28,7 @@ public class JavaScriptCoreInterface
             { "__BattleProjectile" , typeof(JavaScriptBattleProjectileProxy)},
             { "__GameSprite" , typeof(JavaScriptGameSpriteProxy)},
             { "__TextTyper" , typeof(JavaScriptTextTyperProxy)},
+            { "__DrawableObject" , typeof(JavaScriptDrawableObjectProxy)},
 
             { "__Vector2" , typeof(Vector2)},
             { "__Vector3" , typeof(Vector3)},
