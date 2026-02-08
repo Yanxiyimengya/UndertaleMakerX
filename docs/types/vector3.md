@@ -1,141 +1,161 @@
 # Vector3
-包含三个 ${$.var.typeReferenceNumber} 元素的，可用于代表 3D 坐标或任何数值的三元组。
 
-这个类实际上只是 Jint 引擎对 Godot Vector3 类的包装，因此你可以通过 Godot API 直接访问其内部的任何属性/方法。
+Vector3 是包含三个 `number` 分量的三维向量类型，可用于表示 3D 坐标或任意三元数值组合。
 
-关于与 Godot API 的差异部分，本文档会列出。
-## 常量
-- Vector3.Zero = `Vector3(0, 0, 0)`
+该类型为 Jint 引擎对 Godot `Vector3` 的包装对象，因此可以直接访问 Godot API 中的大部分属性与方法。
+本文档仅列出 UTMX 层扩展或与 Godot 存在差异的部分。
 
-    零向量，所有分量都设置为 0 的向量。<br><br>
+---
 
-- Vector3.One = `Vector3(1, 1, 1)`
+## 常量（Constants）
 
-    一向量，所有分量都设置为 1 的向量。<br><br>
+?> 可以使用常量快速初始化特定值的 Vector3
 
-- Vector3.Inf = `Vector3(Infinity, Infinity, Infinity)`
+<br>
 
-    无穷大向量，所有分量都设置为 @GDScript.INF 的向量。<br><br>
+| Name                | Type    | Description                                   |
+| ------------------- | ------- | --------------------------------------------- |
+| Vector3.Zero        | Vector3 | `Vector3(0, 0, 0)`，零向量                        |
+| Vector3.One         | Vector3 | `Vector3(1, 1, 1)`，一向量                        |
+| Vector3.Inf         | Vector3 | `Vector3(Infinity, Infinity, Infinity)`，无穷大向量 |
+| Vector3.Left        | Vector3 | `Vector3(-1, 0, 0)`，左单位向量                     |
+| Vector3.Right       | Vector3 | `Vector3(1, 0, 0)`，右单位向量                      |
+| Vector3.Up          | Vector3 | `Vector3(0, 1, 0)`，上单位向量                      |
+| Vector3.Down        | Vector3 | `Vector3(0, -1, 0)`，下单位向量                     |
+| Vector3.Forward     | Vector3 | `Vector3(0, 0, -1)`，前单位向量                     |
+| Vector3.Back        | Vector3 | `Vector3(0, 0, 1)`，后单位向量                      |
+| Vector3.ModelLeft   | Vector3 | `Vector3(1, 0, 0)`，模型空间左方向                    |
+| Vector3.ModelRight  | Vector3 | `Vector3(-1, 0, 0)`，模型空间右方向                   |
+| Vector3.ModelTop    | Vector3 | `Vector3(0, 1, 0)`，模型空间上方向                    |
+| Vector3.ModelBottom | Vector3 | `Vector3(0, -1, 0)`，模型空间下方向                   |
+| Vector3.ModelFront  | Vector3 | `Vector3(0, 0, 1)`，模型空间前方向                    |
+| Vector3.ModelRear   | Vector3 | `Vector3(0, 0, -1)`，模型空间后方向                   |
 
-- Vector3.Left = `Vector3(-1, 0, 0)`
+---
 
-    左单位向量。代表局部的左方向，全局的西方向。<br><br>
+## 核心属性（Properties）
 
-- Vector3.Right = `Vector3(1, 0, 0)`
+| Property | Type   | Default | Description |
+| -------- | ------ | ------- | ----------- |
+| x        | number | `0`     | 向量的 X 分量    |
+| y        | number | `0`     | 向量的 Y 分量    |
+| z        | number | `0`     | 向量的 Z 分量    |
 
-    右单位向量。代表局部的右方向，全局的东方向。<br><br>
+---
 
-- Vector3.Up = `Vector3(0, 1, 0)`
-
-    上单位向量。<br><br>
-
-- Vector3.Down = `Vector3(0, -1, 0)`
-
-    下单位向量。<br><br>
-
-- Vector3.Forward = `Vector3(0, 0, -1)`
-
-    向前的单位向量。代表局部的前方，全局的北方。<br><br>
-
-- Vector3.Back = `Vector3(0, 0, 1)`
-
-    向后的单位向量。代表局部的后方，全局的南方。<br><br>
-
-- Vector3.ModelLeft = `Vector3(1, 0, 0)`
-
-    指向导入后 3D 资产左侧的单位向量。<br><br>
-
-- Vector3.ModelRight = `Vector3(-1, 0, 0)`
-
-    指向导入后 3D 资产右侧的单位向量。<br><br>
-
-- Vector3.ModelTop = `Vector3(0, 1, 0)`
-
-    指向导入后 3D 资产顶部（上方）的单位向量。<br><br>
-
-- Vector3.ModelBottom = `Vector3(0, -1, 0)`
-
-    指向导入后 3D 资产底部（下方）的单位向量。<br><br>
-
-- Vector3.ModelFront = `Vector3(0, 0, 1)`
-
-    指向导入后 3D 资产正面（前方）的单位向量。<br><br>
-
-- Vector3.ModelRear = `Vector3(0, 0, -1)`
-
-    指向导入后 3D 资产背面（后方）的单位向量。<br><br>
-
-## 方法列表
+## 方法（Methods）
 
 ### add
-用于替代 Godot 加法运算符重载。
 
-若传入的参数是 ${$.var.typeReferenceNumber}，则将该 Vector3 的每个分量加上该数值。  
-若传入的参数是 ${$.var.typeReferenceVector3}，则将该 Vector3 的每个分量加上给定 Vector3 的对应分量。
+```javascript
+add(value: number | Vector3) -> Vector3
+```
 
-**返回值** : ${$.var.typeReferenceVector3} (返回自身实例以支持链式调用)
+替代 Godot 加法运算符重载。
 
-| 参数 | 类型 | 可选 | 默认值 | 简介 |
-| :----- | :---- | :---- | :---- | :---- |
-| value | ${$.var.typeReferenceNumber} / ${$.var.typeReferenceVector3} | ❌ | - | 加数 |
+* 传入 `number` 时：对每个分量执行数值相加
+* 传入 `Vector3` 时：对每个分量执行对应相加
+
+**Returns**
+`Vector3` — 返回当前实例
+
+| Parameter | Type             | Description |
+| --------- | ---------------- | ----------- |
+| value     | number | Vector3 | 加数          |
 
 ---
 
 ### subtract
-用于替代 Godot 减法运算符重载腔。
 
-若传入的参数是 ${$.var.typeReferenceNumber}，则将该 Vector3 的每个分量减去该数值。  
-若传入的参数是 ${$.var.typeReferenceVector3}，则将该 Vector3 的每个分量减去给定 Vector3 的对应分量。
+```javascript
+subtract(value: number | Vector3) -> Vector3
+```
 
-**返回值** : ${$.var.typeReferenceVector3} (返回自身实例以支持链式调用)
+替代 Godot 减法运算符重载。
 
-| 参数 | 类型 | 可选 | 默认值 | 简介 |
-| :----- | :---- | :---- | :---- | :---- |
-| value | ${$.var.typeReferenceNumber} / ${$.var.typeReferenceVector3} | ❌ | - | 减数 |
+* 传入 `number` 时：对每个分量执行数值相减
+* 传入 `Vector3` 时：对每个分量执行对应相减
+
+**Returns**
+`Vector3` — 返回当前实例
+
+| Parameter | Type             | Description |
+| --------- | ---------------- | ----------- |
+| value     | number | Vector3 | 减数          |
 
 ---
 
 ### multiply
-用于替代 Godot 乘法运算符重载。
 
-若传入的参数是 ${$.var.typeReferenceNumber}，则将该 Vector3 的每个分量乘以该数值（缩放）。  
-若传入的参数是 ${$.var.typeReferenceVector3}，则将该 Vector3 的每个分量乘以给定 Vector3 的对应分量。
+```javascript
+multiply(value: number | Vector3) -> Vector3
+```
 
-**返回值** : ${$.var.typeReferenceVector3} (返回自身实例以支持链式调用)
+替代 Godot 乘法运算符重载。
 
-| 参数 | 类型 | 可选 | 默认值 | 简介 |
-| :----- | :---- | :---- | :---- | :---- |
-| value | ${$.var.typeReferenceNumber} / ${$.var.typeReferenceVector3} | ❌ | - | 乘数 |
+* 传入 `number` 时：对每个分量执行数值缩放
+* 传入 `Vector3` 时：对每个分量执行对应相乘
+
+**Returns**
+`Vector3` — 返回当前实例
+
+| Parameter | Type             | Description |
+| --------- | ---------------- | ----------- |
+| value     | number | Vector3 | 乘数          |
 
 ---
 
 ### divide
-用于替代 Godot 除法运算符重载。
 
-若传入的参数是 ${$.var.typeReferenceNumber}，则将该 Vector3 的每个分量除以该数值。  
-若传入的参数是 ${$.var.typeReferenceVector3}，则将该 Vector3 的每个分量除以给定 Vector3 的对应分量。
-
-**返回值** : ${$.var.typeReferenceVector3} (返回自身实例以支持链式调用)
-
-| 参数 | 类型 | 可选 | 默认值 | 简介 |
-| :----- | :---- | :---- | :---- | :---- |
-| value | ${$.var.typeReferenceNumber} / ${$.var.typeReferenceVector3} | ❌ | - | 除数 |
-
-### 其他API
-
-详细请阅读 [Godot 中的 Vector3](https://docs.godotengine.org/zh-cn/4.x/classes/class_vector3.html)
-
-## 核心属性
-
-| 属性 | 类型 | 默认值 | 简介 |
-| :----- | :---- | :---- | :---- |
-| x | ${$.var.typeReferenceNumber} | `0` | 向量的 X 分量 |
-| y | ${$.var.typeReferenceNumber} | `0` | 向量的 Y 分量）|
-| z | ${$.var.typeReferenceNumber} | `0` | 向量的 Z 分量）|
-
-## 使用示例
 ```javascript
-import { UTMX, Vector3 } from "UTMX"; // 从 UTMX 包中导入 Vector3 类型
-let pos = Vector3.One; // 创建一个一向量，你也可以使用 new Vector3(1, 1, 1) 来创建同样内容
-UTMX.debug.log(pos.length()); // 打印 pos 向量的模长
+divide(value: number | Vector3) -> Vector3
+```
+
+替代 Godot 除法运算符重载。
+
+* 传入 `number` 时：对每个分量执行数值相除
+* 传入 `Vector3` 时：对每个分量执行对应相除
+
+**Returns**
+`Vector3` — 返回当前实例
+
+| Parameter | Type             | Description |
+| --------- | ---------------- | ----------- |
+| value     | number | Vector3 | 除数          |
+
+---
+
+### copy
+
+```javascript
+copy(value: Vector3) -> Vector3
+```
+
+将指定 Vector3 类型中的每个分量拷贝到自身
+
+**Returns**
+`Vector3` — 返回当前实例
+
+| Parameter | Type             | Description |
+| --------- | ---------------- | ----------- |
+| value     | Vector3          | 目标 Vector3 |
+
+---
+
+## 其他 API
+
+完整功能请参考 Godot 官方文档中的 `Vector3` 类说明。
+
+[Godot 中的 Vector3](https://docs.godotengine.org/zh-cn/stable/classes/class_vector3.html)
+
+---
+
+#### 使用示例
+
+```javascript
+import { UTMX, Vector3 } from "UTMX";
+
+let pos = Vector3.One;
+
+UTMX.debug.log(pos.length());
 ```

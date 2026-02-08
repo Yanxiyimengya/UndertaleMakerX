@@ -10,7 +10,6 @@
   box-sizing: border-box;
 }
 
-html,
 body {
   height: 100%;
   margin: 0;
@@ -22,7 +21,7 @@ body {
   font-size: 15px;
   letter-spacing: 0;
   overflow-x: hidden;
-  background: radial-gradient(ellipse at top center, #0fdfff5e 0%, rgba(16, 16, 20, .5) 70%) center top / 100% 40vh no-repeat, #121826;
+  background: radial-gradient(ellipse at top center, #0fdfff3e 0%, rgba(0,0,0,0) 60%) center top / 100% 40vh no-repeat, #121826;
 }
 
 /* 加载状态 */
@@ -60,15 +59,11 @@ div#app:empty::before {
   border-radius: 0 3px 3px 0;
 }
 
-/* 核心修改：搜索框置顶（标题在下方）+ 样式精简 */
 .search {
   position: relative;
   margin: 16px auto 24px;
   max-width: 600px;
   width: 100%;
-  /* 确保搜索框在标题上方：提升层级 + 调整侧边栏内的排序 */
-  order: -1; 
-  z-index: 1;
   border-bottom: 1px solid #2A3A4E !important;
 }
 .search input {
@@ -77,7 +72,7 @@ div#app:empty::before {
   color: #FFF;
   border: 1px solid #38465E;
   padding: 8px 14px;
-  transition: all 0.3s;
+  /*transition: all 0.3s;*/
   width: 100%;
 }
 .search input:focus {
@@ -362,7 +357,6 @@ main.hidden {
   float: left;
   color: #F0F5FFFF;
 }
-
 /* 侧边栏滚动条 */
 .sidebar::-webkit-scrollbar {
   width: 6px;
@@ -478,9 +472,9 @@ main.hidden {
   margin-bottom: 1rem;
   overflow: auto;
   width: 100%;
-  background-color: #1E2634;
   border-radius: 12px;
-  border: 1px solid #38465E;
+  /*background-color: #1E2634;*/
+  /*border: 1px solid #38465E;*/
 }
 .markdown-section th {
   border: 1px solid #38465E;
@@ -498,21 +492,24 @@ main.hidden {
 .markdown-section tr:first-child th:last-child { border-top-right-radius: 12px; }
 .markdown-section tr:last-child td:first-child { border-bottom-left-radius: 12px; }
 .markdown-section tr:last-child td:last-child { border-bottom-right-radius: 12px; }
+.markdown-section tr:nth-child(2n) {
+  background-color: #283448;
+}
 
 /* Markdown 提示/警告框 */
 .markdown-section p.tip {
-  background-color: #1E2634;
+  background-color: #261c29;
   border-radius: 12px;
-  border-left: 4px solid #F87676;
+  border-left: 4px solid #f65353;
   margin: 2em 0;
   padding: 16px 24px;
   position: relative;
   color: #FFF;
 }
 .markdown-section p.tip:before {
-  background-color: #F87676;
+  background-color: #f65353;
   border-radius: 50%;
-  color: #121826;
+  color: #261c29;
   content: '!';
   font-family: 'Dosis', 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
   font-size: 14px;

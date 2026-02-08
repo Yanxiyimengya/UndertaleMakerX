@@ -86,6 +86,6 @@ public partial class GameoverScene : Node
 		Tween _tween = CreateTween();
 		_tween.TweenProperty(GameoverBg, "modulate:a", 0.0, 1.0).From(1.0);
 		await ToSignal(_tween, Tween.SignalName.Finished);
-        UtmxBattleManager.EncounterBattleEnd();
+        UtmxBattleManager.EndEncounterBattle();
     }
 }

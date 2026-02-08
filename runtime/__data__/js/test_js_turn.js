@@ -1,4 +1,4 @@
-import { UTMX,Vector2, Vector4 } from "UTMX";
+import { UTMX,Vector2, Color } from "UTMX";
 import MyProjectile from "./test_js_projectile";
 import MySpr from "./test_js_sprite";
 
@@ -11,6 +11,10 @@ export default class MyBattleTurn extends UTMX.BattleTurn {
 	{
 		this.turnTime = 20.0; 
 		this.time = 0;
+		let t = Color.Red
+		t.r = 0.5;
+		UTMX.debug.log("1:", Color.Blue);
+		UTMX.debug.log("2:", t.add(Color.Blue));
 	}
 	
 	onTurnStart()
@@ -37,9 +41,6 @@ export default class MyBattleTurn extends UTMX.BattleTurn {
 	}
 
 	onTurnUpdate(delta) {
-		let pos = Vector2.Zero; // 创建一个零向量，你也可以使用 new Vector2(0, 0) 来创建同样内容
-		pos.add(2);
-		UTMX.debug.log(pos);
 
 		if (UTMX.input.isActionDown("ui_accept"))
 		{

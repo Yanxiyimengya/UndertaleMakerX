@@ -9,9 +9,9 @@ public class EngineProperties
     public const String DATAPACK_EXTENSION = "utmxpack";
 
 
-    public const String JAVASCRIPT_CREATE_CALLBACK = "create";
-    public const String JAVASCRIPT_ACTIVE_CALLBACK = "active";
-    public const String JAVASCRIPT_DISABLED_CALLBACK = "disabled";
+    public const String JAVASCRIPT_ON_LOAD_CALLBACK = "onLoad";
+    public const String JAVASCRIPT_START_CALLBACK = "start";
     public const String JAVASCRIPT_UPDATE_CALLBACK = "update";
+    public const String JAVASCRIPT_DISABLED_CALLBACK = "disabled";
     public const String JAVASCRIPT_DESTROY_CALLBACK = "destroy";
 }

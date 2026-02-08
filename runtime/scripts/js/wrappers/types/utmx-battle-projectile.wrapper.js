@@ -1,6 +1,6 @@
 
 import { __BattleProjectile, __logger } from "__UTMX";
-import { UtmxGameSprite } from "./utmx_game_sprite.wrapper";
+import { UtmxGameSprite } from "./utmx-game-sprite.wrapper";
 
 export class UtmxBattleProjectile extends UtmxGameSprite { 
 

@@ -1,5 +1,13 @@
 import { __Vector2, __Vector3, __Vector4 } from "__UTMX";
 
+__Vector2.prototype.copy = function(value) {
+    if (value instanceof __Vector2) {
+        this.x = value.x;
+        this.y = value.y;
+    }
+    return this;
+};
+
 __Vector2.prototype.add = function(value) {
     if (value instanceof __Vector2) {
         this.x += value.x;
@@ -45,6 +53,15 @@ __Vector2.prototype.divide = function(value) {
 };
 
 // --- Vector3 实现 ---
+__Vector3.prototype.copy = function(value) {
+    if (value instanceof __Vector3) {
+        this.x = value.x;
+        this.y = value.y;
+        this.z = value.z;
+    }
+    return this;
+};
+
 __Vector3.prototype.add = function(value) {
     if (value instanceof __Vector3) {
         this.x += value.x; this.y += value.y; this.z += value.z;
@@ -82,6 +99,16 @@ __Vector3.prototype.divide = function(value) {
 };
 
 // --- Vector4 实现 ---
+__Vector4.prototype.copy = function(value) {
+    if (value instanceof __Vector4) {
+        this.x = value.x;
+        this.y = value.y;
+        this.z = value.z;
+        this.w = value.w;
+    }
+    return this;
+};
+
 __Vector4.prototype.add = function(value) {
     if (value instanceof __Vector4) {
         this.x += value.x; this.y += value.y; this.z += value.z; this.w += value.w;

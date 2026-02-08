@@ -18,7 +18,9 @@ public partial class JavaScriptBattleProjectileProxy : BaseBattleProjectile, IOb
 		JavaScriptBattleProjectileProxy projectile =
 			UtmxBattleManager.GetBattleProjectileController().CreateProjectile<JavaScriptBattleProjectileProxy>();
 		projectile.JsInstance = objInstance;
-		return projectile;
+        if (((IJavaScriptObject)projectile).Has(EngineProperties.JAVASCRIPT_ON_LOAD_CALLBACK))
+            ((IJavaScriptObject)projectile).Invoke(EngineProperties.JAVASCRIPT_ON_LOAD_CALLBACK, []);
+        return projectile;
 	}
 	public override void OnHitPlayer(BattlePlayerSoul playerSoul)
 	{
@@ -57,10 +59,18 @@ public partial class JavaScriptBattleProjectileProxy : BaseBattleProjectile, IOb
 	private void OnAwake()
 	{
 		SetProcess(JsInstance.HasProperty(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK));
-		Invoke(EngineProperties.JAVASCRIPT_ACTIVE_CALLBACK);
+		Invoke(EngineProperties.JAVASCRIPT_START_CALLBACK);
 	}
 	private void OnDisabled()
 	{
 		Invoke(EngineProperties.JAVASCRIPT_DISABLED_CALLBACK);
-	}
+    }
+    public override void _Notification(int what)
+    {
+        if (what == NotificationPredelete)
+        {
+            if (((IJavaScriptObject)this).Has(EngineProperties.JAVASCRIPT_DESTROY_CALLBACK))
+                ((IJavaScriptObject)this).Invoke(EngineProperties.JAVASCRIPT_DESTROY_CALLBACK, []);
+        }
+    }
 }

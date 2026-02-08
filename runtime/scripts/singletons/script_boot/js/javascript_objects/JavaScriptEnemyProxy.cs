@@ -57,7 +57,6 @@ public partial class JavaScriptEnemyProxy : BaseEnemy, IJavaScriptObject
 	{
 		((IJavaScriptObject)this).Invoke("onDialogueEnding", []);
 	}
-
 	public override void _HandleAttack(AttackStatus status)
 	{
 		((IJavaScriptObject)this).Invoke("onHandleAttack", [status]);

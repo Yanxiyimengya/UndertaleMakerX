@@ -2,5 +2,6 @@
 
 [ext_resource type="Script" uid="uid://bb5vq8rp88wrh" path="res://scripts/singletons/UtmxInputManager.cs" id="1_6dxkd"]
 
-[node name="_UtmxInputManager" type="Node" unique_id=2096725957]
+[node name="_UtmxInputManager" type="Node2D" unique_id=754988394]
 script = ExtResource("1_6dxkd")
+metadata/_custom_type_script = "uid://bb5vq8rp88wrh"

@@ -1,4 +1,4 @@
-import { UtmxGameObject } from "./utmx_game_object.weapper.js";
+import { UtmxGameObject } from "./utmx-game-object.weapper.js";
 
 export class UtmxTextTyper extends UtmxGameObject {
     constructor()

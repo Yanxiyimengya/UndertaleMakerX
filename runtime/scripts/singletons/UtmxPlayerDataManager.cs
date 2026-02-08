@@ -15,7 +15,7 @@ public static class UtmxPlayerDataManager
 	public static double PlayerAttack = 0F;
 	public static double PlayerDefence = 0F;
 	public static double PlayerInvincibleTime = 0.75F;
-	public static int MaxInventoryCount = 8;
+	public static double MaxInventoryCount = 8;
 
 	public static List<BaseItem> Items = new List<BaseItem>() {};
 	public static BaseWeapon Weapon = new BaseWeapon();

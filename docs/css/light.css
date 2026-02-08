@@ -10,7 +10,6 @@
   box-sizing: border-box;
 }
 
-html,
 body {
   height: 100%;
   margin: 0;
@@ -23,7 +22,7 @@ body {
   letter-spacing: 0;
   overflow-x: hidden;
   /* Google 清新渐变背景 */
-  background: radial-gradient(ellipse at top center, #4285f41a 0%, rgba(248, 249, 250, 0.5) 70%) center top / 100% 40vh no-repeat, #ffffff;
+  background: radial-gradient(ellipse at top center, #4285f41e 0%, rgba(0,0,0,0) 60%) center top / 100% 40vh no-repeat, #ffffff;
 }
 
 /* 加载状态 */
@@ -61,7 +60,6 @@ div#app:empty::before {
   border-radius: 0 3px 3px 0;
 }
 
-/* 核心修改：搜索框置顶 + Google 亮色风格 */
 .search {
   position: relative;
   margin: 16px auto 24px;
@@ -476,15 +474,22 @@ main.hidden {
   margin-bottom: 1rem;
   overflow: auto;
   width: 100%;
-  background-color: #ffffff;
   border-radius: 12px;
+  /*
+  background-color: #ffffff;
   border: 1px solid #dadce0;
+  */
 }
 .markdown-section th {
   border: 1px solid #dadce0;
   font-weight: bold;
   padding: 12px 16px;
   background-color: #f8f9fa;
+  color: #202124;
+}
+.markdown-section td {
+  border: 1px solid #dadce0;
+  padding: 12px 16px;
   color: #202124;
 }
 .markdown-section td {
@@ -499,16 +504,16 @@ main.hidden {
 
 /* Markdown 提示/警告框（Google 亮色风格） */
 .markdown-section p.tip {
-  background-color: #fef7e0; /* Google 黄色提示背景 */
+  background-color: #fff4f4;
   border-radius: 12px;
-  border-left: 4px solid #F4B400; /* Google 黄色 */
+  border-left: 4px solid #F87676;
   margin: 2em 0;
   padding: 16px 24px;
   position: relative;
   color: #202124;
 }
 .markdown-section p.tip:before {
-  background-color: #F4B400;
+  background-color: #F87676;
   border-radius: 50%;
   color: #ffffff;
   content: '!';

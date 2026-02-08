@@ -21,8 +21,8 @@ public partial class JavaScriptNode : Node, IJavaScriptObject
 				if (javaScriptClass != null)
 				{
 					JsInstance = javaScriptClass.New();
-					if (((IJavaScriptObject)this).Has(EngineProperties.JAVASCRIPT_CREATE_CALLBACK))
-                        ((IJavaScriptObject)this).Invoke(EngineProperties.JAVASCRIPT_CREATE_CALLBACK, []);
+					if (((IJavaScriptObject)this).Has(EngineProperties.JAVASCRIPT_ON_LOAD_CALLBACK))
+                        ((IJavaScriptObject)this).Invoke(EngineProperties.JAVASCRIPT_ON_LOAD_CALLBACK, []);
 					_javaScriptCanUpdate = ((IJavaScriptObject)this).Has(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK);
 				}
 			}
@@ -50,10 +50,14 @@ public partial class JavaScriptNode : Node, IJavaScriptObject
 	
 	public override void _Ready()
 	{
-		if (((IJavaScriptObject)this).Has(EngineProperties.JAVASCRIPT_ACTIVE_CALLBACK))
-            ((IJavaScriptObject)this).Invoke(EngineProperties.JAVASCRIPT_ACTIVE_CALLBACK, []);
+		if (((IJavaScriptObject)this).Has(EngineProperties.JAVASCRIPT_START_CALLBACK))
+            ((IJavaScriptObject)this).Invoke(EngineProperties.JAVASCRIPT_START_CALLBACK, []);
 	}
-
+	public override void _Process(double delta)
+	{
+		if (_javaScriptCanUpdate)
+            ((IJavaScriptObject)this).Invoke(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK, [delta]);
+	}
     public override void _Notification(int what)
     {
 		if (what == NotificationPredelete)
@@ -61,11 +65,5 @@ public partial class JavaScriptNode : Node, IJavaScriptObject
 			if (((IJavaScriptObject)this).Has(EngineProperties.JAVASCRIPT_DESTROY_CALLBACK))
 				((IJavaScriptObject)this).Invoke(EngineProperties.JAVASCRIPT_DESTROY_CALLBACK, []);
 		}
-	}
-
-	public override void _Process(double delta)
-	{
-		if (_javaScriptCanUpdate)
-            ((IJavaScriptObject)this).Invoke(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK, [delta]);
 	}
 }

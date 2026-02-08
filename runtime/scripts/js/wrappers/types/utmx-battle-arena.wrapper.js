@@ -1,4 +1,4 @@
-import { UtmxGameObject } from "./utmx_game_object.weapper.js";
+import { UtmxGameObject } from "./utmx-game-object.weapper.js";
 
 class BattleArena extends UtmxGameObject
 {
@@ -80,5 +80,5 @@ class BattleArenaPolygon extends BattleArena
 export {
     BattleArenaRectangle,
     BattleArenaCircle,
-    BattleArenaPolygon,
+    BattleArenaPolygon
 }

@@ -1,0 +1,141 @@
+你现在负责生成 UTMX SDK 官方文档。
+
+必须严格遵守以下 Markdown 结构规范：
+
+# 一、整体结构规则
+
+1. 整个文档必须且只能有一个一级标题（# ClassName）
+2. 不允许出现第二个一级标题
+3. 所有分隔使用 ---（三个横线）
+4. 不允许使用 emoji
+5. 不允许插入无关说明
+6. 不允许添加“总结”“结语”“推荐”等 AI 话术
+7. 文档必须是正式技术文档语气
+
+---
+
+# 二、标准结构顺序（必须按顺序）
+
+# ClassName
+
+简要说明类是什么（1~3行）
+
+补充说明与 Godot 的关系：
+- 是否为 Godot 包装
+- 是否有差异
+- 文档仅列出扩展部分
+
+---
+
+## 常量（Constants）【如果存在】
+
+使用表格格式：
+
+| Name | Type | Description |
+|------|------|------------|
+
+要求：
+- Name 写完整访问路径（例如 Vector3.Zero）
+- Type 必须写类型名
+- Description 简洁
+- 不写废话
+- 不写实现细节
+
+---
+
+## 核心属性（Properties）【如果存在】
+
+使用表格格式：
+
+| Property | Type | Default | Description |
+
+规则：
+- Default 只写真实默认值
+- 不允许写 "-"
+- 类型统一为 number / string / boolean / ClassName
+
+---
+
+## 方法（Methods）
+
+每个方法必须使用以下结构：
+
+### methodName
+
+```javascript
+methodName(param: Type) -> ReturnType
+````
+
+方法说明（1~4行）
+
+* 用 * 号列出不同参数行为（如 number / Vector3）
+
+**Returns**
+ReturnType — 简短说明
+
+参数表：
+
+| Parameter | Type | Description |
+
+规则：
+
+* 参数表必须存在
+* 不允许写“可选/默认值”列，除非真的存在默认参数
+* Type 使用 number | ClassName 形式
+* 不写实现原理
+* 不写源码细节
+
+---
+
+## 其他 API
+
+一句话说明参考 Godot 官方文档。
+
+---
+
+#### 使用示例
+
+必须包含示例代码：
+
+```javascript
+import { UTMX, ClassName } from "UTMX";
+```
+
+示例必须：
+
+* 简洁
+* 不出现解释性废话
+* 不包含 console.log 以外的演示
+* 不包含调试说明文字
+
+---
+
+# 三、风格规则
+
+* 不允许 emoji
+* 不允许聊天语气
+* 不允许 AI 解释性文本
+* 不允许多余标题
+* 不允许额外章节
+* 不允许改变章节顺序
+* 必须是企业级 SDK 文档风格
+* 保持和 Vector3 文档结构完全一致
+
+---
+
+# 四、特殊规则
+
+1. 静态常量如果是 getter，每次返回新实例，需要写明：
+   “每次访问都会创建新的实例，不共享引用。”
+
+2. 如果是 Godot 包装类：
+   必须写：
+   “该类型为 Jint 引擎对 Godot XXX 的包装对象。”
+
+3. 所有代码块必须使用 javascript 标记
+
+---
+
+严格按照以上规范生成，不允许偏离结构。
+
+```

@@ -11,6 +11,8 @@ public partial class JavaScriptGameSpriteProxy : GameSprite2D, IJavaScriptObject
 	{
 		JavaScriptGameSpriteProxy sprite = UtmxSceneManager.CreateSprite<JavaScriptGameSpriteProxy>();
 		sprite.JsInstance = objInstance;
+		if (((IJavaScriptObject)sprite).Has(EngineProperties.JAVASCRIPT_ON_LOAD_CALLBACK))
+			((IJavaScriptObject)sprite).Invoke(EngineProperties.JAVASCRIPT_ON_LOAD_CALLBACK, []);
 		return sprite;
 	}
 
@@ -39,7 +41,7 @@ public partial class JavaScriptGameSpriteProxy : GameSprite2D, IJavaScriptObject
 	private void OnAwake()
 	{
 		SetProcess(JsInstance.HasProperty(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK));
-		Invoke(EngineProperties.JAVASCRIPT_ACTIVE_CALLBACK);
+		Invoke(EngineProperties.JAVASCRIPT_START_CALLBACK);
 	}
 	private void OnDisabled()
 	{

@@ -3,24 +3,24 @@ using System;
 using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 [GlobalClass]
-public partial class UtmxInputManager : Node
+public partial class UtmxInputManager : Node2D
 {
 	public static UtmxInputManager Instance;
 	public override void _EnterTree()
-    {
-        if (Instance != null && Instance != this)
-        {
-            QueueFree();
-            return;
-        }
-        Instance = this;
-    }
-    public override void _ExitTree()
-    {
-        Instance = null;
-    }
+	{
+		if (Instance != null && Instance != this)
+		{
+			QueueFree();
+			return;
+		}
+		Instance = this;
+	}
+	public override void _ExitTree()
+	{
+		Instance = null;
+	}
 
-    public static void AddAction(string actionName)
+	public static void AddAction(string actionName)
 	{
 		InputMap.AddAction(actionName);
 	}
@@ -46,13 +46,13 @@ public partial class UtmxInputManager : Node
 	public static bool ActionAddKeyButton(string actionName, double keyButton)
 	{
 		return ActionAddKeyButton(actionName, (Key)keyButton);
-    }
-    public static bool ActionAddKeyButton(string actionName, string keyButton)
-    {
-        return ActionAddKeyButton(actionName, (Key)(long)keyButton[0]);
-    }
+	}
+	public static bool ActionAddKeyButton(string actionName, string keyButton)
+	{
+		return ActionAddKeyButton(actionName, (Key)(long)keyButton[0]);
+	}
 
-    public static bool ActionAddMouseButton(string actionName, MouseButton buttonIndex)
+	public static bool ActionAddMouseButton(string actionName, MouseButton buttonIndex)
 	{
 		if (InputMap.HasAction(actionName))
 		{
@@ -64,13 +64,13 @@ public partial class UtmxInputManager : Node
 			return true;
 		}
 		return false;
-    }
-    public static bool ActionAddMouseButton(string actionName, double buttonIndex)
-    {
+	}
+	public static bool ActionAddMouseButton(string actionName, double buttonIndex)
+	{
 		return ActionAddMouseButton(actionName, (MouseButton)buttonIndex);
-    }
+	}
 
-    public static bool IsActionPressed(string action)
+	public static bool IsActionPressed(string action)
 	{
 		return Input.IsActionPressed(action);
 	}
@@ -102,11 +102,19 @@ public partial class UtmxInputManager : Node
 		return Input.IsMouseButtonPressed((MouseButton)button);
 	}
 
-	public Vector2? GetMouseGlobalPosition()
+	public Vector2 GetMousePosition()
+	{
+		return GetGlobalMousePosition();
+	}
+	public Vector2 GetViewportMousePosition()
 	{
 		Viewport viewport = GetViewport();
 		if (viewport != null)
 			return viewport.GetMousePosition();
-		return null;
+		return GetGlobalMousePosition();
+	}
+	public Vector2 GetScreenMousePosition()
+	{
+		return (Vector2)DisplayServer.MouseGetPosition();
 	}
 }

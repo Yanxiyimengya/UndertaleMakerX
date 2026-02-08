@@ -10,6 +10,8 @@ public partial class JavaScriptDrawableObjectProxy : DrawableObject, IObjectPool
     {
         JavaScriptDrawableObjectProxy obj = UtmxSceneManager.CreateDrawableObject<JavaScriptDrawableObjectProxy>();
         obj.JsInstance = objInstance;
+        if (((IJavaScriptObject)obj).Has(EngineProperties.JAVASCRIPT_ON_LOAD_CALLBACK))
+            ((IJavaScriptObject)obj).Invoke(EngineProperties.JAVASCRIPT_ON_LOAD_CALLBACK, []);
         return obj;
     }
 
@@ -39,11 +41,19 @@ public partial class JavaScriptDrawableObjectProxy : DrawableObject, IObjectPool
     private void OnAwake()
     {
         SetProcess(JsInstance.HasProperty(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK));
-        Invoke(EngineProperties.JAVASCRIPT_ACTIVE_CALLBACK);
+        Invoke(EngineProperties.JAVASCRIPT_START_CALLBACK);
     }
     private void OnDisabled()
     {
         Invoke(EngineProperties.JAVASCRIPT_DISABLED_CALLBACK);
+    }
+    public override void _Notification(int what)
+    {
+        if (what == NotificationPredelete)
+        {
+            if (((IJavaScriptObject)this).Has(EngineProperties.JAVASCRIPT_DESTROY_CALLBACK))
+                ((IJavaScriptObject)this).Invoke(EngineProperties.JAVASCRIPT_DESTROY_CALLBACK, []);
+        }
     }
 
 }

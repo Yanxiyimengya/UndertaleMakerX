@@ -5,6 +5,7 @@
     "typeReferenceBoolean": "<a href='https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Boolean' target='_blank' rel='noopener'>Boolean</a>",
     "typeReferenceVector2": "<a href='#/types/vector2' target='_self' rel='noopener'>Vector2</a>",
     "typeReferenceVector3": "<a href='#/types/vector3' target='_self' rel='noopener'>Vector3</a>",
-    "typeReferenceVector4": "<a href='#/types/vector4' target='_self' rel='noopener'>Vector4</a>"
+    "typeReferenceVector4": "<a href='#/types/vector4' target='_self' rel='noopener'>Vector4</a>",
+    "typeReferenceColor": "<a href='#/types/color' target='_self' rel='noopener'>Color</a>",
   }
 }

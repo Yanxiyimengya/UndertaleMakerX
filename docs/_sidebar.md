@@ -1,6 +1,7 @@
 * [首页](/)
 * [模块](modules/)
-    * [Audio 模块](modules/audio-player.md)
+    * [Audio 模块](modules/audio.md)
+    * [Battle 模块](modules/battle.md)
     * [Debugger 模块](modules/debugger.md)
     * [GameRegisterDB 模块](modules/game-register-db.md)
     * [Input 模块](modules/input.md)
@@ -9,4 +10,5 @@
     * [Vector2](types/vector2.md)
     * [Vector3](types/vector3.md)
     * [Vector4](types/vector4.md)
+    * [Color](types/color.md)
     

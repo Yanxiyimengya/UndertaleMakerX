@@ -1,110 +1,152 @@
 # Vector2
-包含两个 ${$.var.typeReferenceNumber} 元素的，可用于代表 2D 坐标或任何数值的二元组。
 
-这个类实际上只是 Jint 引擎对 Godot Vector2 类的包装，因此你可以通过 Godot API 直接访问其内部的任何属性/方法。
+Vector2 是包含两个 `number` 分量的二维向量类型，可用于表示 2D 坐标或任意二元数值组合。
 
-关于与 Godot API 的差异部分，本文档会列出。
+该类型为 Jint 引擎对 Godot `Vector2` 的包装对象，因此可以直接访问 Godot API 中的大部分属性与方法。
+本文档仅列出 UTMX 层扩展或与 Godot 存在差异的部分。
 
-## 常量
-- Vector2.Zero = `Vector2(0, 0)`
+---
 
-    零向量，所有分量都设置为 `0` 的向量。<br><br>
+## 常量（Constants）
 
-- Vector2.One = `Vector2(1, 1)`
+?> 可以使用常量快速初始化特定值的 Vector2
 
-    一向量，所有分量都设置为 `1` 的向量。<br><br>
+<br>
 
-- Vector2.Inf = `Vector2(Infinity, Infinity)`
+| Name          | Type    | Description                         |
+| ------------- | ------- | ----------------------------------- |
+| Vector2.Zero  | Vector2 | `Vector2(0, 0)`，零向量                 |
+| Vector2.One   | Vector2 | `Vector2(1, 1)`，一向量                 |
+| Vector2.Inf   | Vector2 | `Vector2(Infinity, Infinity)`，无穷大向量 |
+| Vector2.Left  | Vector2 | `Vector2(-1, 0)`，左单位向量              |
+| Vector2.Right | Vector2 | `Vector2(1, 0)`，右单位向量               |
+| Vector2.Up    | Vector2 | `Vector2(0, -1)`，上单位向量（2D 中 Y 轴向下）  |
+| Vector2.Down  | Vector2 | `Vector2(0, 1)`，下单位向量（2D 中 Y 轴向下）   |
 
-    无穷大向量，所有分量都设置为 `Infinity` 的向量。<br><br>
+---
 
-- Vector2.Left = `Vector2(-1, 0)`
+## 核心属性（Properties）
 
-    左单位向量。代表左的方向。<br><br>
+| Property | Type   | Default | Description |
+| -------- | ------ | ------- | ----------- |
+| x        | number | `0`     | 向量的 X 分量    |
+| y        | number | `0`     | 向量的 Y 分量    |
 
--  Vector2.Right = `Vector2(1, 0)`
+---
 
-    右单位向量。代表右的方向。<br><br>
-
-- Vector2.Up = `Vector2(0, -1)`
-
-    上单位向量。在 2D 中 Y 是向下的，所以这个向量指向 -Y。<br><br>
-
-- Vector2.Down = `Vector2(0, 1)`
-
-    下单位向量。在 2D 中 Y 是向下的，所以这个向量指向 +Y。<br><br>
-
-## 方法列表
+## 方法（Methods）
 
 ### add
-用于替代 Godot 加法运算符重载。
 
-若传入的参数是 ${$.var.typeReferenceNumber}，则将该 Vector2 的每个分量加上该数值。  
-若传入的参数是 ${$.var.typeReferenceVector2}，则将该 Vector2 的每个分量加上给定 Vector2 的对应分量。
+```javascript
+add(value: number | Vector2) -> Vector2
+```
 
-**返回值** : ${$.var.typeReferenceVector2} (返回自身实例以支持链式调用)
+替代 Godot 加法运算符重载。
 
-| 参数 | 类型 | 可选 | 默认值 | 简介 |
-| :----- | :---- | :---- | :---- | :---- |
-| value | ${$.var.typeReferenceNumber} / ${$.var.typeReferenceVector2} | ❌ | - | 加数 |
+* 传入 `number` 时：对每个分量执行数值相加
+* 传入 `Vector2` 时：对每个分量执行对应相加
+
+**Returns**
+`Vector2` — 返回当前实例
+
+| Parameter | Type             | Description |
+| --------- | ---------------- | ----------- |
+| value     | number | Vector2 | 加数          |
 
 ---
 
 ### subtract
-用于替代 Godot 减法运算符重载。
 
-若传入的参数是 ${$.var.typeReferenceNumber}，则将该 Vector2 的每个分量减去该数值。  
-若传入的参数是 ${$.var.typeReferenceVector2}，则将该 Vector2 的每个分量减去给定 Vector2 的对应分量。
+```javascript
+subtract(value: number | Vector2) -> Vector2
+```
 
-**返回值** : ${$.var.typeReferenceVector2} (返回自身实例以支持链式调用)
+替代 Godot 减法运算符重载。
 
-| 参数 | 类型 | 可选 | 默认值 | 简介 |
-| :----- | :---- | :---- | :---- | :---- |
-| value | ${$.var.typeReferenceNumber} / ${$.var.typeReferenceVector2} | ❌ | - | 减数 |
+* 传入 `number` 时：对每个分量执行数值相减
+* 传入 `Vector2` 时：对每个分量执行对应相减
+
+**Returns**
+`Vector2` — 返回当前实例
+
+| Parameter | Type             | Description |
+| --------- | ---------------- | ----------- |
+| value     | number | Vector2 | 减数          |
 
 ---
 
 ### multiply
-用于替代 Godot 乘法运算符重载。
 
-若传入的参数是 ${$.var.typeReferenceNumber}，则将该 Vector2 的每个分量乘以该数值（缩放）。  
-若传入的参数是 ${$.var.typeReferenceVector2}，则将该 Vector2 的每个分量乘以给定 Vector2 的对应分量。
+```javascript
+multiply(value: number | Vector2) -> Vector2
+```
 
-**返回值** : ${$.var.typeReferenceVector2} (返回自身实例以支持链式调用)
+替代 Godot 乘法运算符重载。
 
-| 参数 | 类型 | 可选 | 默认值 | 简介 |
-| :----- | :---- | :---- | :---- | :---- |
-| value | ${$.var.typeReferenceNumber} / ${$.var.typeReferenceVector2} | ❌ | - | 乘数 |
+* 传入 `number` 时：对每个分量执行数值缩放
+* 传入 `Vector2` 时：对每个分量执行对应相乘
+
+**Returns**
+`Vector2` — 返回当前实例
+
+| Parameter | Type             | Description |
+| --------- | ---------------- | ----------- |
+| value     | number | Vector2 | 乘数          |
 
 ---
 
 ### divide
-用于替代 Godot 除法运算符重载。
 
-若传入的参数是 ${$.var.typeReferenceNumber}，则将该 Vector2 的每个分量除以该数值。  
-若传入的参数是 ${$.var.typeReferenceVector2}，则将该 Vector2 的每个分量除以给定 Vector2 的对应分量。
-
-**返回值** : ${$.var.typeReferenceVector2} (返回自身实例以支持链式调用)
-
-| 参数 | 类型 | 可选 | 默认值 | 简介 |
-| :----- | :---- | :---- | :---- | :---- |
-| value | ${$.var.typeReferenceNumber} / ${$.var.typeReferenceVector2} | ❌ | - | 除数 |
-
-### 其他API
-
-详细请阅读 [Godot 中的 Vector2](https://docs.godotengine.org/zh-cn/4.x/classes/class_vector2.html)
-
-## 核心属性
-
-| 属性 | 类型 | 默认值 | 简介 |
-| :----- | :---- | :---- | :---- |
-| x | ${$.var.typeReferenceNumber} | `0` | 向量的 X 分量 |
-| y | ${$.var.typeReferenceNumber} | `0` | 向量的 Y 分量）|
-
-## 使用示例
 ```javascript
-import { UTMX, Vector2 } from "UTMX"; // 从 UTMX 包中导入 Vector2 类型
-let pos = Vector2.Zero; // 创建一个零向量，你也可以使用 new Vector2(0, 0) 来创建同样内容
+divide(value: number | Vector2) -> Vector2
+```
+
+替代 Godot 除法运算符重载。
+
+* 传入 `number` 时：对每个分量执行数值相除
+* 传入 `Vector2` 时：对每个分量执行对应相除
+
+**Returns**
+`Vector2` — 返回当前实例
+
+| Parameter | Type             | Description |
+| --------- | ---------------- | ----------- |
+| value     | number | Vector2 | 除数          |
+
+---
+
+### copy
+
+```javascript
+copy(value: Vector2) -> Vector2
+```
+
+将指定 Vector2 类型中的每个分量拷贝到自身
+
+**Returns**
+`Vector2` — 返回当前实例
+
+| Parameter | Type             | Description |
+| --------- | ---------------- | ----------- |
+| value     | Vector2          | 目标 Vector2 |
+---
+
+## 其他 API
+
+完整功能请参考 Godot 官方文档中的 `Vector2` 类说明。
+
+[Godot 中的 Vector2](https://docs.godotengine.org/zh-cn/stable/classes/class_vector2.html)
+
+---
+
+#### 使用示例
+
+```javascript
+import { UTMX, Vector2 } from "UTMX";
+
+let pos = Vector2.Zero; 
 pos.add(2);
-UTMX.debug.log(pos); // 打印 (2, 2)
+
+UTMX.debug.log(pos); // (2, 2)
 ```

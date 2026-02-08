@@ -1,5 +1,5 @@
 import { __scene_manager , __GameSprite , __TextTyper , __logger } from "__UTMX";
-import { UtmxTextTyper } from "./utmx_text_typer.wrapper.js";
+import { UtmxTextTyper } from "./types/utmx-text-typer.wrapper.js";
 
 export class UtmxSceneManager
 {

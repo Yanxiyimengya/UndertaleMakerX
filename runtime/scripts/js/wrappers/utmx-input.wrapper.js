@@ -269,6 +269,14 @@ export class UtmxInput {
 	}
 
 	static getMousePosition() {
-		return __input.Instance.GetMouseGlobalPosition();
+		return __input.Instance.GetGlobalMousePosition();
+	}
+
+	static getViewportMousePosition() {
+		return __input.Instance.GetViewportMousePosition();
+	}
+
+	static getScreenMousePosition() {
+		return __input.Instance.GetScreenMousePosition();
 	}
 }

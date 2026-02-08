@@ -11,10 +11,9 @@ public partial class UtmxGameManager : Node
 	public delegate void GameEndEventHandler();
 
 	public static UtmxGameManager Instance;
+	public static JavaScriptGameManagerBoot Boot;
 
-	private static JavaScriptGameManagerBoot boot;
-
-	public override void _EnterTree()
+    public override void _EnterTree()
 	{
 		if (Instance != null && Instance != this)
 		{
@@ -22,7 +21,7 @@ public partial class UtmxGameManager : Node
 			return;
 		}
 		Instance = this;
-		boot = new JavaScriptGameManagerBoot();
+		Boot = new();
 	}
 	public override void _ExitTree()
 	{

@@ -29,25 +29,28 @@ public partial class UtmxBattleManager
 	private static Color _playerSoulColor = Colors.Red;
 	private static string _prevScenePath = "";
 
-	public static void EncounterBattleStart(string encounterId)
+	public static bool StartEncounterBattle(string encounterId)
 	{
 		if (UtmxGameRegisterDB.TryGetEncounter(encounterId, out BaseEncounter encounter))
 		{
+			if (_isInBattle) EndEncounterBattle();
 			_battleEncounter = encounter;
 			Endded = false;
 			PrevScenePath = UtmxSceneManager.Instance.GetCurrentScenePath();
 			UtmxSceneManager.Instance.ChangeSceneToFile(UtmxSceneManager.Instance.EncounterBattleScenePath);
-		}
+            return true;
+        }
 		else
 		{
 			UtmxLogger.Error($"{TranslationServer.Translate("Failed to start battle: invalid encounter")}: {encounterId}");
 		}
+		return false;
 	}
-	public static void EncounterBattleEnd()
+	public static void EndEncounterBattle()
 	{
-		Endded = true;
-		if (IsInBattle())
+		if (_isInBattle)
 		{
+			Endded = true;
 			UtmxSceneManager.Instance.ChangeSceneToFile(UtmxBattleManager.PrevScenePath);
 			foreach (BaseEnemy enemy in UtmxBattleManager.GetBattleEnemyController().EnemiesList)
 				enemy._OnBattleEnd();
@@ -68,8 +71,9 @@ public partial class UtmxBattleManager
 	public static void GameOver()
 	{
 		if (_isInBattle)
-		{
-			BattlePlayerSoul soul = GetBattlePlayerController().PlayerSoul;
+        {
+            _isInBattle = false;
+            BattlePlayerSoul soul = GetBattlePlayerController().PlayerSoul;
 			Camera2D camera = soul.GetViewport().GetCamera2D();
 			_playerSoulTransform = soul.Sprite.GlobalTransform;
 			PlayerSoulColor = soul.SoulColor;

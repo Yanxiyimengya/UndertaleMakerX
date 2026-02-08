@@ -17,7 +17,7 @@ public partial class BattleEndState : StateNode
 		{
 			if (Input.IsActionJustPressed("confirm"))
 			{
-				UtmxBattleManager.EncounterBattleEnd();
+				UtmxBattleManager.EndEncounterBattle();
 			}
 		}
 	}

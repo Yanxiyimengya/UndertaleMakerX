@@ -17,11 +17,11 @@ public class JavaScriptGameManagerBoot
         UtmxGameManager.Instance.Connect(UtmxGameManager.SignalName.GameEnd, Callable.From(OnGameEnd));
     }
 
-    public void OnGameStart()
+    public static void OnGameStart()
     {
         JavaScriptBridge.InvokeFunction(_mainScriptObject, "onGameStart", []);
     }
-    public void OnGameEnd()
+    public static void OnGameEnd()
     {
         JavaScriptBridge.InvokeFunction(_mainScriptObject, "onGameEnd", []);
     }

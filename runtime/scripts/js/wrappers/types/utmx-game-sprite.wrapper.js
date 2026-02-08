@@ -1,5 +1,5 @@
-import { UtmxDrawableObject } from "./utmx_drawable_object.wrapper";
-import { __Color , __GameSprite } from "__UTMX";
+import { UtmxDrawableObject } from "./utmx-drawable-object.wrapper";
+import { __GameSprite } from "__UTMX";
 
 export class UtmxGameSprite extends UtmxDrawableObject {
     static new()

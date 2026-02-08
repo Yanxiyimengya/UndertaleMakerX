@@ -23,14 +23,11 @@ public partial class BattleEnemyState : StateNode
 
 	public override void _Process(double delta)
 	{
-        if (UtmxBattleManager.IsInBattle())
-        {
-			if (started && !UtmxBattleManager.GetBattleTurnController().IsTurnInProgress())
-			{
-				EndEnemyTurn();
-				started = false;
-			}
-        }
+		if (started && !UtmxBattleManager.GetBattleTurnController().IsTurnInProgress())
+		{
+			EndEnemyTurn();
+			started = false;
+		}
 	}
 
 	private async void EndEnemyTurn()

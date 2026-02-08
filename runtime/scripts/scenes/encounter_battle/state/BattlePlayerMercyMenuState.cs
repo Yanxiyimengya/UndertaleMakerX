@@ -31,7 +31,7 @@ public partial class BattlePlayerMercyMenuState : StateNode
 			{
 				if (Input.IsActionJustPressed("confirm"))
 				{
-					UtmxBattleManager.EncounterBattleEnd();
+					UtmxBattleManager.EndEncounterBattle();
 				}
 			}
 		}
