@@ -47,6 +47,7 @@ public partial class BattlePlayerChoiceActionState : StateNode
 		TextMenu.ShowEncounterText(UtmxBattleManager.GetEncounterInstance()?.EncounterText);
 		BattlePlayerSoul soul = UtmxBattleManager.GetBattlePlayerController().PlayerSoul;
 		soul.Movable = false;
+		soul.EnabledCollision = false;
 		soul.Show();
 
 		string id = BattleButtonManager.GetCurrentHoverdBattleButtonId();

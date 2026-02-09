@@ -11,6 +11,8 @@ import { UTMX } from "UTMX"; // 引入 UTMX 包
 
 在某些模块内部还会包含一些 **子模块** ，这些子模块也是以静态访问的，例如我们可以通过 `UTMX.player.inventory` 访问 `Player` 模块的 `Inventroy` 子模块。
 
+### 一些限制
+
 !> 从模块中直接返回的类型大多数不是 UTMX 封装的类型，而是与之对应的 `Godot .Net Clr` 类型，
 
 因此，如果需要在执行 UTMX 拓展属性/方法，请在引擎返回的对应类型中使用对应类型的 `copy` 方法，例如：

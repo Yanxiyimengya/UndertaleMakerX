@@ -33,7 +33,7 @@ public partial class BattleTurnController : Node
 		}
 		foreach (BaseBattleTurn turn in _currentTurnList)
 		{
-			turn._OnTurnInitialize();
+			turn._OnTurnInit();
 		}
 	}
 	public bool TurnStart()
@@ -90,15 +90,13 @@ public partial class BattleTurnController : Node
 	}
 	public Vector2 GetTurnSoulInitializePosition()
 	{
-		if (_currentTurnList.Count > 0)
-		{
-			return _currentTurnList[0].SoulInitializePosition;
-		}
-		else
-		{
-			BattleMainArenaExpand mainArena = UtmxBattleManager.GetBattleArenaController().MainArena;
-			return mainArena.GlobalPosition - new Vector2(0F, mainArena.Size.Y * 0.5F);
-		}
+		BattleMainArenaExpand mainArena = UtmxBattleManager.GetBattleArenaController().MainArena;
+		Vector2 soulPosition = mainArena.GlobalPosition - new Vector2(0F, mainArena.Size.Y * 0.5F);
+
+		if (_currentTurnList.Count == 0)
+			return soulPosition;
+
+		return soulPosition + _currentTurnList[0].SoulInitializePosition;
 	}
 	public Vector2 GetTurnArenaInitializeSize()
 	{

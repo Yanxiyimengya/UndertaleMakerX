@@ -1,9 +1,6 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
-
 [GlobalClass]
 public partial class BattlePlayerSoul : CharacterBody2D
 {
@@ -39,8 +36,6 @@ public partial class BattlePlayerSoul : CharacterBody2D
 				PhysicsServer2D.BodySetMode(GetRid(), PhysicsServer2D.BodyMode.Static);
 				CollisionLayer = _collisionLayer;
 				CollisionMask = _collisionMask;
-				HitBox.CollisionLayer = _collisionLayer;
-				HitBox.CollisionMask = _collisionMask;
 			}
 			else
 			{
@@ -49,6 +44,23 @@ public partial class BattlePlayerSoul : CharacterBody2D
 				_collisionMask = CollisionMask;
 				CollisionLayer = 0;
 				CollisionMask = 0;
+			}
+		}
+	}
+	[Export]
+	public bool EnabledHitBoxCollision
+	{
+		get => _enabledHitBoxCollision;
+		set
+		{
+			_enabledHitBoxCollision = value;
+			if (value)
+			{
+				HitBox.CollisionLayer = _collisionLayer;
+				HitBox.CollisionMask = _collisionMask;
+			}
+			else
+			{
 				HitBox.CollisionLayer = 0;
 				HitBox.CollisionMask = 0;
 			}
@@ -99,7 +111,8 @@ public partial class BattlePlayerSoul : CharacterBody2D
 	private uint _collisionLayer = 0;
 	private uint _collisionMask = 0;
 	private double _collisionRadius = 0;
-	private bool _enabledCollision = true;
+	private bool _enabledCollision = false;
+	private bool _enabledHitBoxCollision = true;
 	private bool _movable = true;
 	private bool _freed = false;
 	private double _invincibleTimer = 0.0F;
@@ -108,12 +121,16 @@ public partial class BattlePlayerSoul : CharacterBody2D
 	public const float MOVE_SPEED = 130.0f;
 	public BattlePlayerSoul()
 	{
+		_collisionLayer = (int)UtmxBattleManager.BattleCollisionLayers.Player;
+		_collisionMask = (int)UtmxBattleManager.BattleCollisionLayers.Player;
 		CollisionLayer = (int)UtmxBattleManager.BattleCollisionLayers.Player;
 		CollisionMask = (int)UtmxBattleManager.BattleCollisionLayers.Player;
 	}
 
 	public override void _Process(double delta)
 	{
+		
+		GD.Print("VELOCITY", Velocity);
 		if (_invincibleTimer > 0)
 		{
 			_invincibleTimer -= delta;
@@ -131,20 +148,23 @@ public partial class BattlePlayerSoul : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (_movable)
-		{
-			ProcessMove(delta);
-		}
+		ProcessMove(delta);
 	}
 
 	public void ProcessMove(double delta)
 	{
-		Vector2 inputDir = Input.GetVector("left", "right", "up", "down").Normalized().Rotated(GlobalRotation);
-		Vector2 targetPos = Position + inputDir * (float)delta * 
-			(Input.IsActionPressed("cancel") ? (MOVE_SPEED * 0.5F) : MOVE_SPEED);
-		TryMoveTo(targetPos);
-        Velocity = Vector2.Zero;
-        MoveAndSlide();
+		Vector2 targetPos = Position;
+		if (_movable)
+		{
+			Vector2 inputDir = Input.GetVector("left", "right", "up", "down").Normalized().Rotated(GlobalRotation);
+			targetPos = Position + inputDir * (float)delta *
+				(Input.IsActionPressed("cancel") ? (MOVE_SPEED * 0.5F) : MOVE_SPEED);
+			if (inputDir.X != 0 || inputDir.Y != 0)
+			{
+				TryMoveTo(targetPos);
+			}
+		}
+		MoveAndSlide();
 	}
 
 	private bool IsInsideArena(Vector2 center)
@@ -153,25 +173,37 @@ public partial class BattlePlayerSoul : CharacterBody2D
 		foreach (Vector2 offset in _checkPoints)
 		{
 			Vector2 worldPoint = center + offset;
-			if (!ArenaGroup.IsPointInArenas(worldPoint))
+			if (! ArenaGroup.IsPointInArenas(worldPoint, true))
 			{
 				return false;
 			}
 		}
 		return true;
 	}
+	public bool IsOnArenaFloor()
+	{
+		if (!_enabledCollision) return true;
+		float radius = (float)_collisionRadius + 2F;
+		return	(!ArenaGroup.IsPointInArenas(GlobalPosition + new Vector2(-0.8F, 1).Normalized().Rotated(Rotation) * radius)) ||
+				(!ArenaGroup.IsPointInArenas(GlobalPosition + new Vector2(0.8F, 1).Normalized().Rotated(Rotation) * radius)) ||
+				(!ArenaGroup.IsPointInArenas(GlobalPosition + Vector2.Down.Normalized().Rotated(Rotation) * radius))
+		|| IsOnFloor();
+	}
+	public bool IsOnArenaCeiling()
+	{
+		if (!_enabledCollision) return true;
+		float radius = (float)_collisionRadius + 1.5F;
+		return !ArenaGroup.IsPointInArenas(
+			GlobalPosition + Vector2.Up.Rotated(Rotation) * radius)
+		|| IsOnCeiling();
+	}
 
 	public void TryMoveTo(Vector2 targetPos)
 	{
-		if (ArenaGroup.EnabledArenaCount > 0 && !IsInsideArena(targetPos))
-		{
-			Position = targetPos;
-            Position = ArenaGroup.PushBackInside(Position, _checkPoints.ToArray(), 1.0F);
-		}
-		else
-		{
-			Position = targetPos;
-		}
+		Position = targetPos;
+		Velocity = Vector2.Zero;
+		if (! IsInsideArena(Position))
+			Position = ArenaGroup.PushBackInside(Position, _checkPoints.ToArray(), 1.0F);
 	}
 
 	public void Hurt(double damage, double invtime = -1)
@@ -181,12 +213,12 @@ public partial class BattlePlayerSoul : CharacterBody2D
 			UtmxPlayerDataManager.PlayerHp -= damage;
 			if (invtime >= 0)
 			{
-                _invincibleTimer = invtime;
-            }
+				_invincibleTimer = invtime;
+			}
 			else
 			{
-                _invincibleTimer = UtmxPlayerDataManager.PlayerInvincibleTime;
-            }
+				_invincibleTimer = UtmxPlayerDataManager.PlayerInvincibleTime;
+			}
 			if (GetViewport().GetCamera2D() is BattleCamera camera)
 				camera.StartShake(0.1f, Vector2.One, new Vector2(30, 30));
 			UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("HURT"));
@@ -196,5 +228,5 @@ public partial class BattlePlayerSoul : CharacterBody2D
 	public void SetInvincibleTimer(double timer = 0.0)
 	{
 		_invincibleTimer = timer;
-    }
+	}
 }

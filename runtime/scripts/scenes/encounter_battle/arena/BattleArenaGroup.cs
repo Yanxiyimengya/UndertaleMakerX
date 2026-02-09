@@ -176,22 +176,66 @@ public partial class BattleArenaGroup : Node2D
 		}
 	}
 
-	public bool IsPointInArenas(Vector2 pos)
+
+	private static PhysicsPointQueryParameters2D _arenaSegmentPointQuery = new PhysicsPointQueryParameters2D()
+	{
+		Position = Vector2.Zero,
+		CollideWithAreas = false,
+		CollideWithBodies = true,
+		CollisionMask = (uint)UtmxBattleManager.BattleCollisionLayers.Arena
+	};
+	public bool IsPointInArenas(Vector2 pos, bool ignoreCulling = false)
 	{
 		if (EnabledArenaCount == 0) return false;
+
+		if (! ignoreCulling)
+		{
+			PhysicsDirectSpaceState2D spaceState = GetWorld2D().DirectSpaceState;
+			if (spaceState != null)
+			{
+				_arenaSegmentPointQuery.Position = pos;
+				if (spaceState.IntersectPoint(_arenaSegmentPointQuery).Count > 0)
+				{
+					return false;
+				}
+			}
+		}
 		foreach (Node child in GetChildren())
 		{
 			if (child is not BattleArenaExpand arena || !arena.Enabled) continue;
 			var localPoint = arena.GlobalTransform.AffineInverse() * pos;
-			var insideChild = arena.IsPointInArena(localPoint);
-			if (insideChild) return true;
+			if (arena.IsPointInArena(localPoint))
+			{
+				return true;
+			}
 		}
 		return false;
 	}
 
-	public bool IsLineInArenas(Vector2 from, Vector2 to)
+	private static PhysicsShapeQueryParameters2D _arenaSegmentLineQuery = new PhysicsShapeQueryParameters2D()
+	{
+		Shape = new SegmentShape2D(),
+		Transform = Transform2D.Identity,
+		CollideWithAreas = false,
+		CollideWithBodies = true,
+		CollisionMask = (uint)UtmxBattleManager.BattleCollisionLayers.Arena
+	};
+	public bool IsLineInArenas(Vector2 from, Vector2 to, bool ignoreCulling = false)
 	{
 		if (EnabledArenaCount == 0) return false;
+		if (! ignoreCulling)
+		{
+			PhysicsDirectSpaceState2D spaceState = GetWorld2D().DirectSpaceState;
+			if (spaceState != null)
+			{
+				((SegmentShape2D)_arenaSegmentLineQuery.Shape).A = from;
+				((SegmentShape2D)_arenaSegmentLineQuery.Shape).B = to;
+				if (spaceState.IntersectShape(_arenaSegmentLineQuery).Count > 0)
+				{
+					return false;
+				}
+			}
+		}
 		foreach (Node child in GetChildren())
 		{
 			if (child is not BattleArenaExpand arena || !arena.Enabled) continue;

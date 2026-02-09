@@ -31,8 +31,9 @@ public partial class BattleEnemyDialogueState : StateNode
 	}
 
 	public async override void _EnterState()
-	{
-		MenuManager.CloseAllMenu();
+    {
+        SetProcess(false);
+        MenuManager.CloseAllMenu();
 		UtmxBattleManager.GetBattleTurnController().TurnInitialize();
 		BattlePlayerSoul soul = UtmxBattleManager.GetBattlePlayerController().PlayerSoul;
 		soul.GlobalPosition = UtmxBattleManager.GetBattleTurnController().GetTurnSoulInitializePosition();
@@ -45,7 +46,8 @@ public partial class BattleEnemyDialogueState : StateNode
             enemy._OnDialogueStarting();
         }
         NextStep();
-	}
+        SetProcess(true);
+    }
 
 	public override void _ExitState()
     {

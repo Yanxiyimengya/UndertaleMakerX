@@ -1,5 +1,6 @@
 using Godot;  
-using System;  
+using System;
+using System.Threading.Tasks;
 
 [Tool]
 [GlobalClass]
@@ -45,10 +46,19 @@ public partial class BattleCircleArenaExpand : BattleArenaExpand
 	{
 		return Geometry2D.IsPointInCircle(point, Vector2.Zero, _radius);
 	}
-
 	public override bool IsSegmentInArena(Vector2 from, Vector2 to)
 	{
 		float intersection = Geometry2D.SegmentIntersectsCircle(from, to, Vector2.Zero, _radius);
-		return intersection >= 0;
+		return intersection != -1;
 	}
+
+    Tween _tween;
+    public async Task Resize(double radius, double duration = 0.4)
+    {
+        if (_tween != null && _tween.IsRunning())
+            _tween.Kill();
+        _tween = CreateTween();
+        _tween.TweenProperty(this, "Radius", radius, duration);
+        await ToSignal(_tween, Tween.SignalName.Finished);
+    }
 }

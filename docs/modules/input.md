@@ -155,8 +155,6 @@ actionAddMouseButton(actionId: string, mouseButton: number) -> void
 
 ## Action 查询
 
----
-
 ### isActionHeld
 
 ```javascript
@@ -173,10 +171,10 @@ isActionHeld(actionId: string) -> boolean
 
 ---
 
-### isActionDown
+### isActionPressed
 
 ```javascript
-isActionDown(actionId: string) -> boolean
+isActionPressed(actionId: string) -> boolean
 ```
 
 检测指定动作是否在当前帧被按下（单次触发）。
@@ -205,9 +203,39 @@ isActionReleased(actionId: string) -> boolean
 
 ---
 
-## 直接输入查询
+### getActionStrength
+
+```javascript
+getActionStrength(action) -> number
+```
+返回一个介于 `0` 和 `1` 之间的值，表示给定动作的强度。
+
+**Returns** `number`
+
+| Parameter | Type   | Description  |
+| --------- | ------ | ------------ |
+| action  | string | 自定义动作唯一标识 ID |
 
 ---
+
+### getActionAxis
+
+```javascript
+getActionAxis(negativeAction, positiveAction) -> number
+```
+
+通过指定两个动作来获取轴的输入，一个是负的，一个是正的。
+
+**Returns** `number`
+
+| Parameter | Type   | Description  |
+| --------- | ------ | ------------ |
+| negativeAction  | string | 负方向，自定义动作唯一标识 ID |
+| positiveAction  | string | 正方向，自定义动作唯一标识 ID |
+
+---
+
+## 直接输入查询
 
 ### isKeyPressed
 

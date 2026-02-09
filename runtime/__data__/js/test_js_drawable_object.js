@@ -14,9 +14,9 @@ export default class MyDO extends UTMX.DrawableObject
 	}
     update(delta)
     {
-		if (UTMX.input.isActionDown("ui_accept"))
+		if (UTMX.input.isActionPressed("ui_accept"))
 			this.redraw();
-		if (UTMX.input.isActionDown("up"))
+		if (UTMX.input.isActionPressed("up"))
 		{
 			this.drawTexturePos(
 				"s.png",

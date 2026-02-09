@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 [Tool]
 [GlobalClass]
@@ -44,5 +45,15 @@ public partial class BattleRectangleArenaCulling : BattleArenaCulling
     {
         Vector2 borderSize = Vector2.One * BorderWidth * 2F;
         PhysicsServer2D.ShapeSetData(shape, (_size + borderSize) / 2F);
+    }
+
+    Tween _tween;
+    public async Task Resize(Vector2 size, double duration = 0.4)
+    {
+        if (_tween != null && _tween.IsRunning())
+            _tween.Kill();
+        _tween = CreateTween();
+        _tween.TweenProperty(this, "Size", size, duration);
+        await ToSignal(_tween, Tween.SignalName.Finished);
     }
 }

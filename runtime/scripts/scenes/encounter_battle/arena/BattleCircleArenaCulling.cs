@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 [Tool]
 [GlobalClass]
@@ -45,5 +46,15 @@ public partial class BattleCircleArenaCulling : BattleArenaCulling
     protected override void UpdateCollisionShape(Rid shape)
     {
         PhysicsServer2D.ShapeSetData(_shape, _radius + BorderWidth);
+    }
+
+    Tween _tween;
+    public async Task Resize(double radius, double duration = 0.4)
+    {
+        if (_tween != null && _tween.IsRunning())
+            _tween.Kill();
+        _tween = CreateTween();
+        _tween.TweenProperty(this, "Radius", radius, duration);
+        await ToSignal(_tween, Tween.SignalName.Finished);
     }
 }

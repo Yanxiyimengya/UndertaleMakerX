@@ -90,7 +90,7 @@ public interface IJavaScriptObject
 		return true;
 	}
 
-    public virtual void Destroy()
-    {
-    }
+	public virtual void Destroy()
+	{
+	}
 }

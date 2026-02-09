@@ -555,12 +555,12 @@ main.hidden {
   border-bottom: 1px solid #dadce0;
 }
 .markdown-section h2 {
-  font-size: 1.75rem;
+  font-size: 1.6rem;
   margin: 45px 0 0.8rem;
   padding-bottom: 8px;
   border-bottom: 1px solid #dadce0;
 }
-.markdown-section h3 { font-size: 1.5rem; margin: 40px 0 0.6rem; }
+.markdown-section h3 { font-size: 1.3rem; margin: 40px 0 0.6rem; }
 .markdown-section h4 { font-size: 1.25rem; }
 .markdown-section h5 { font-size: 1rem; }
 .markdown-section h6 { color: #5f6368; font-size: 1rem; }

@@ -1,7 +1,5 @@
 using Godot;
 using System;
-using System.Threading.Tasks;
-using static Godot.WebSocketPeer;
 
 [GlobalClass]
 public partial class BattleEnemyState : StateNode
@@ -16,7 +14,8 @@ public partial class BattleEnemyState : StateNode
 		_battleMainArena = UtmxBattleManager.GetBattleArenaController().MainArena;
 		BattlePlayerSoul soul = UtmxBattleManager.GetBattlePlayerController().PlayerSoul;
 		soul.Movable = true;
-		started = UtmxBattleManager.GetBattleTurnController().TurnStart();
+		soul.EnabledCollision = true;
+        started = UtmxBattleManager.GetBattleTurnController().TurnStart();
 	}
 
 	public override void _ExitState() { }
@@ -45,5 +44,6 @@ public partial class BattleEnemyState : StateNode
         await _battleMainArena.Resize(new Vector2(565, 130), 0.4);
         UtmxBattleManager.GetBattleController().ChangeToPlayerTurnState();
 		soul.Movable = false;
-	}
+        soul.EnabledCollision = false;
+    }
 }

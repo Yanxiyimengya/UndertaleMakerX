@@ -248,7 +248,7 @@ export class UtmxInput {
 		return __input.IsActionPressed(action);
 	}
 
-	static isActionDown(action) {
+	static isActionPressed(action) {
 		return __input.IsActionJustPressed(action);
 	}
 
@@ -262,6 +262,10 @@ export class UtmxInput {
 
 	static isPhysicalKeyPressed(key) {
 		return __input.IsPhysicalKeyPressed(key);
+	}
+
+	static getActionAxis(negativeAction, positiveAction) {
+		return __input.GetActionAxis(negativeAction, positiveAction);
 	}
 
 	static isMouseButtonPressed(mouseButton) {

@@ -28,7 +28,7 @@ public class JavaScriptBridge
 			builder.ExportType<JavaScriptFileAccess>("File");
 		});
 
-        MainEngine.Modules.Add(JavaScriptCoreInterface.ModuleName, (builder) =>
+		MainEngine.Modules.Add(JavaScriptCoreInterface.ModuleName, (builder) =>
 		{
 			Dictionary<string, Type> exportTypes = JavaScriptCoreInterface._GetCoreExportTypes();
 			var method = typeof(Jint.Runtime.Modules.ModuleBuilder).GetMethod("ExportType",
@@ -107,73 +107,73 @@ public class JavaScriptBridge
 		{
 			ObjectInstance jsNamespace = MainEngine.Modules.Import(id);
 			return jsNamespace;
-        }
-        catch (JavaScriptException jsEx)
+		}
+		catch (JavaScriptException jsEx)
 		{
-            string errorInfo = $"--- JavaScript Error ---\n" +
-                               $"Module: {id}\n" +
-                               $"Error: {jsEx.Message}\n" +
-                               $"File: {jsEx.Location.SourceFile ?? "Unknown"}\n" +
-                               $"Line: {jsEx.Location.Start.Line}\n" +
-                               $"JS Stack: \n{jsEx.JavaScriptStackTrace}";
+			string errorInfo = $"--- JavaScript Error ---\n" +
+							   $"Module: {id}\n" +
+							   $"Error: {jsEx.Message}\n" +
+							   $"File: {jsEx.Location.SourceFile ?? "Unknown"}\n" +
+							   $"Line: {jsEx.Location.Start.Line}\n" +
+							   $"JS Stack: \n{jsEx.JavaScriptStackTrace}";
 
-            UtmxLogger.Error(new object[] { errorInfo });
-            return null;
-        }
-        catch (Exception ex)
-        {
-            UtmxLogger.Error(new object[] { $"[Bridge Fatal] {ex.Message}\n{ex.StackTrace}" });
-            return null;
-        }
-    }
+			UtmxLogger.Error(new object[] { errorInfo });
+			return null;
+		}
+		catch (Exception ex)
+		{
+			UtmxLogger.Error(new object[] { $"[Bridge Fatal] {ex.Message}\n{ex.StackTrace}" });
+			return null;
+		}
+	}
 
-    public static JsValue InvokeFunction(ObjectInstance ins, string method, params object[] args)
-    {
-        if (string.IsNullOrEmpty(method))
-        {
-            UtmxLogger.Error(new object[] { "Method name cannot be empty" });
-            return null;
-        }
+	public static JsValue InvokeFunction(ObjectInstance ins, string method, params object[] args)
+	{
+		if (string.IsNullOrEmpty(method))
+		{
+			UtmxLogger.Error(new object[] { "Method name cannot be empty" });
+			return null;
+		}
 
-        try
-        {
-            JsValue methodValue = ins.Get(method);
-            if (methodValue.IsObject())
-            {
-                var methodObj = methodValue.AsObject();
-                JsValue[] jsValues = new JsValue[args.Length];
-                for (int i = 0; i < args.Length; i++)
-                {
-                    jsValues[i] = JsValue.FromObject(MainEngine, args[i]);
-                }
-                return MainEngine.Invoke(methodValue, ins, jsValues);
-            }
-            else
-            {
-                UtmxLogger.Error(new object[] { $"[JS Error] '{method}' is not a function (Type: {methodValue.Type})" });
-                return null;
-            }
-        }
-        catch (JavaScriptException jsEx)
-        {
-            string errorInfo = $"--- JavaScript Error ---\n" +
-                               $"Method: {method}\n" +
-                               $"Error: {jsEx.Message}\n" +
-                               $"File: {jsEx.Location.SourceFile ?? "Unknown"}\n" +
-                               $"Line: {jsEx.Location.Start.Line}\n" +
-                               $"JS Stack: \n{jsEx.JavaScriptStackTrace}";
+		try
+		{
+			JsValue methodValue = ins.Get(method);
+			if (methodValue.IsObject())
+			{
+				var methodObj = methodValue.AsObject();
+				JsValue[] jsValues = new JsValue[args.Length];
+				for (int i = 0; i < args.Length; i++)
+				{
+					jsValues[i] = JsValue.FromObject(MainEngine, args[i]);
+				}
+				return MainEngine.Invoke(methodValue, ins, jsValues);
+			}
+			else
+			{
+				UtmxLogger.Error(new object[] { $"[JS Error] '{method}' is not a function (Type: {methodValue.Type})" });
+				return null;
+			}
+		}
+		catch (JavaScriptException jsEx)
+		{
+			string errorInfo = $"--- JavaScript Error ---\n" +
+							   $"Method: {method}\n" +
+							   $"Error: {jsEx.Message}\n" +
+							   $"File: {jsEx.Location.SourceFile ?? "Unknown"}\n" +
+							   $"Line: {jsEx.Location.Start.Line}\n" +
+							   $"JS Stack: \n{jsEx.JavaScriptStackTrace}";
 
-            UtmxLogger.Error(new object[] { errorInfo });
-            return null;
-        }
-        catch (Exception ex)
-        {
-            UtmxLogger.Error(new object[] { $"[Bridge Fatal] {ex.Message}\n{ex.StackTrace}" });
-            return null;
-        }
-    }
+			UtmxLogger.Error(new object[] { errorInfo });
+			return null;
+		}
+		catch (Exception ex)
+		{
+			UtmxLogger.Error(new object[] { $"[Bridge Fatal] {ex.Message}\n{ex.StackTrace}" });
+			return null;
+		}
+	}
 
-    public static object ConvertToObject(JsValue jsValue)
+	public static object ConvertToObject(JsValue jsValue)
 	{
 		if (jsValue is Function)
 		{

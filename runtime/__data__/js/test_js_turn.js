@@ -1,62 +1,56 @@
-import { UTMX,Vector2, Color } from "UTMX";
-import MyProjectile from "./test_js_projectile";
-import MySpr from "./test_js_sprite";
+import { UTMX, Vector2, Color } from "UTMX";
 
-
-export default class MyBattleTurn extends UTMX.BattleTurn {
-	
-	static a = false;
-
-	onTurnInitialize()
-	{
-		this.turnTime = 20.0; 
-		this.time = 0;
-		let t = Color.Red
-		t.r = 0.5;
-		UTMX.debug.log("1:", Color.Blue);
-		UTMX.debug.log("2:", t.add(Color.Blue));
-	}
-	
-	onTurnStart()
-	{
-		this.typing_chicken = UTMX.scene.createTextTyper(
-			"[color=red][font='built-in-resources/fonts/Text.ttf']Hello, [hello sb=10]World[play_sound=SeaTea.wav][end]");
-		this.typing_chicken.position = new Vector2(320, 100);
-		this.typing_chicken.z = 2000;
-
-		this.proj = MyProjectile.new();
-		this.proj.textures = "a.png";
-		this.proj.damage = 2;
-		this.proj.position = new Vector2(320, 320);
-		this.proj.collisionMode = UTMX.battle.ProjectileCollisionMode.PRECISE;
-		this.proj.useMask = true;
-
-		UTMX.battle.arena.resize(new Vector2(600, 600), 0.8);
-		this.circleArena = UTMX.battle.arena.createRectangleCulling(new Vector2(320, 100), new Vector2(100, 100));
+export default class MyCustomTurn extends UTMX.BattleTurn {
+	constructor() {
+		super();
+		this.soulInitPosition = new Vector2(0, UTMX.battle.arena.getMainArena().size.y / 2 - 9);
+		this.jumping = false;
+		this.moveSpeed = 130.0;
+		this.gravity = 300.0;
+		this.jumpSpeed = 0.0;
 	}
 
-	onTurnEnd()
-	{
-		this.circleArena.destroy();
+	onTurnInit() {
+		UTMX.battle.soul.sprite.color = Color.Blue;
+	}
+
+	onTurnStart() {
+		UTMX.battle.soul.movable = false; // 禁用移动，实现自定义控制器
 	}
 
 	onTurnUpdate(delta) {
-
-		if (UTMX.input.isActionDown("ui_accept"))
-		{
-			//UTMX.audio.playSound("built-in-resources/sounds/sfx/snd_break1.wav");
-			this.proj.x += 10;
-			this.proj.rotation += 50;
-			this.proj.useMask = !this.proj.useMask;
+		let moveSpeed = new Vector2(0, 0);
+		
+		// 检测是否在地面
+		if (UTMX.battle.soul.isOnArenaFloor()) {
+			if (UTMX.input.isActionHeld("up") && !this.jumping) {
+				this.jumping = true;
+				this.jumpSpeed = -200; // 向上的初始速度
+				moveSpeed.y = this.jumpSpeed;
+			} else {
+				this.jumping = false;
+				this.jumpSpeed = 0.0;
+			}
 		}
-		if (UTMX.input.isActionDown("menu"))
+		else
 		{
-			this.proj.enabled = !this.proj.enabled;
+			this.jumpSpeed += this.gravity * delta;
+			moveSpeed.y = this.jumpSpeed;
 		}
-		this.time += 1;
-		UTMX.battle.player.sprite.rotation += 1;
-
-		this.circleArena.position = UTMX.input.getMousePosition();
-		this.circleArena.rotation += delta * 45;
+		
+		// 触顶或松开上键，停止跳跃
+		if (this.jumping && moveSpeed.y < 0) {
+			if (UTMX.input.isActionReleased("up") || UTMX.battle.soul.isOnArenaCeiling()) {
+				this.jumping = false;
+				this.jumpSpeed = 0.0;
+			}
+		}
+		
+		moveSpeed.x = UTMX.input.getActionAxis("left", "right") * this.moveSpeed; // 处理水平移动
+		let soulPosition = new Vector2().copy(UTMX.battle.soul.position);
+		UTMX.battle.soul.tryMoveTo(
+			soulPosition.add(moveSpeed.multiply(delta).rotated(UTMX.battle.soul.rotation * Math.PI / 180)));
 	}
+	
+	onTurnEnd() {}
 }

@@ -6,8 +6,9 @@ public partial class UtmxBattleManager
 {
 	public enum BattleCollisionLayers
 	{
-		Player = 0b10,
-		Projectile = 0b100,
+		Arena = 0b10,
+		Player = 0b100,
+		Projectile = 0b1000,
 	};
 	public enum BattleStatus
 	{
@@ -38,8 +39,8 @@ public partial class UtmxBattleManager
 			Endded = false;
 			PrevScenePath = UtmxSceneManager.Instance.GetCurrentScenePath();
 			UtmxSceneManager.Instance.ChangeSceneToFile(UtmxSceneManager.Instance.EncounterBattleScenePath);
-            return true;
-        }
+			return true;
+		}
 		else
 		{
 			UtmxLogger.Error($"{TranslationServer.Translate("Failed to start battle: invalid encounter")}: {encounterId}");
@@ -71,9 +72,9 @@ public partial class UtmxBattleManager
 	public static void GameOver()
 	{
 		if (_isInBattle)
-        {
-            _isInBattle = false;
-            BattlePlayerSoul soul = GetBattlePlayerController().PlayerSoul;
+		{
+			_isInBattle = false;
+			BattlePlayerSoul soul = GetBattlePlayerController().PlayerSoul;
 			Camera2D camera = soul.GetViewport().GetCamera2D();
 			_playerSoulTransform = soul.Sprite.GlobalTransform;
 			PlayerSoulColor = soul.SoulColor;

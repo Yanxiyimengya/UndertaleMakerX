@@ -50,24 +50,83 @@ class BattleCamera extends UtmxGameObject
 		battleCamera.RotationDegrees = value;
 	}
 }
-class BattlePlayer extends UtmxGameObject
+class BattleSoul extends UtmxGameObject
 {
 	static get enabledCollision() {
-		if (! __battle_manager.IsInBattle()) return false;
 		return __battle_manager.GetBattlePlayerController().PlayerSoul.EnabledCollision;
 	}
 	static set enabledCollision(value) {
-		if (! __battle_manager.IsInBattle()) return;
 		__battle_manager.GetBattlePlayerController().PlayerSoul.EnabledCollision = value;
 	}
 	
 	static get movable() {
-		if (! __battle_manager.IsInBattle()) return false;
 		return __battle_manager.GetBattlePlayerController().PlayerSoul.Movable;
 	}
 	static set movable(value) {
-		if (! __battle_manager.IsInBattle()) return;
 		__battle_manager.GetBattlePlayerController().PlayerSoul.Movable = value;
+	}
+	
+	static get position() {
+		return __battle_manager.GetBattlePlayerController().PlayerSoul.Position;
+	}
+	static set position(value) {
+		__battle_manager.GetBattlePlayerController().PlayerSoul.Position = value;
+	}
+	static get x() {
+		return __battle_manager.GetBattlePlayerController().PlayerSoul.Position.X;
+	}
+	static set x(value) {
+		let newPosition = __battle_manager.GetBattlePlayerController().PlayerSoul.Position;
+		newPosition.X = value;
+		__battle_manager.GetBattlePlayerController().PlayerSoul.Position = newPosition;
+	}
+	static get y() {
+		return __battle_manager.GetBattlePlayerController().PlayerSoul.Position.Y;
+	}
+	static set y(value) {
+		let newPosition = __battle_manager.GetBattlePlayerController().PlayerSoul.Position;
+		newPosition.Y = value;
+		__battle_manager.GetBattlePlayerController().PlayerSoul.Position = newPosition;
+	}
+	static get z() {
+		return __battle_manager.GetBattlePlayerController().PlayerSoul.ZIndex;
+	}
+	static set z(value) {
+		__battle_manager.GetBattlePlayerController().PlayerSoul.ZIndex = value;
+	}
+	static get rotation() {
+		return __battle_manager.GetBattlePlayerController().PlayerSoul.RotationDegrees;
+	}
+	static set rotation(value) {
+		__battle_manager.GetBattlePlayerController().PlayerSoul.RotationDegrees = value;
+	}
+	static get xscale() {
+		return __battle_manager.GetBattlePlayerController().PlayerSoulScale.X;
+	}
+	static set xscale(value) {
+		let newScale = __battle_manager.GetBattlePlayerController().PlayerSoul.Scale;
+		newScale.X = value;
+		__battle_manager.GetBattlePlayerController().PlayerSoul.Scale = newScale;
+	}
+	static get yscale() {
+		return __battle_manager.GetBattlePlayerController().PlayerSoul.Scale.Y;
+	}
+	static set yscale(value) {
+		let newScale = __battle_manager.GetBattlePlayerController().PlayerSoul.Scale;
+		newScale.Y = value;
+		__battle_manager.GetBattlePlayerController().PlayerSoul.Scale = newScale;
+	}
+	static get scale() {
+		return __battle_manager.GetBattlePlayerController().PlayerSoul.Scale;
+	}
+	static set scale(value) {
+		__battle_manager.GetBattlePlayerController().PlayerSoul.Scale = value;
+	}
+	static get skew() {
+		return __battle_manager.GetBattlePlayerController().PlayerSoul.Skew;
+	}
+	static set skew(value) {
+		__battle_manager.GetBattlePlayerController().PlayerSoul.Skew = value;
 	}
 	
 	static __sprite = new UtmxGameSprite();
@@ -77,54 +136,31 @@ class BattlePlayer extends UtmxGameObject
 		return this.__sprite;
 	}
 	static set sprite(value) { } // 只读
+
+	static tryMoveTo(target)
+	{
+		__battle_manager.GetBattlePlayerController().PlayerSoul.TryMoveTo(target);
+	}
+	static isOnArenaFloor()
+	{
+		return __battle_manager.GetBattlePlayerController().PlayerSoul.IsOnArenaFloor();
+	}
+	static isOnArenaCeiling()
+	{
+		return __battle_manager.GetBattlePlayerController().PlayerSoul.IsOnArenaCeiling();
+	}
 }
 class BattleArenaAccess
 {
-	static get x() {
-		let mainArena = __battle_manager.GetBattleArenaController().MainArena;
-		return mainArena.Position.X;
-	}
-	static set x(value) {
-		let mainArena = __battle_manager.GetBattleArenaController().MainArena;
-		let newPosition = mainArena.Position;
-		newPosition.X = value;
-		mainArena.Position = newPosition;
-	}
-	static get y() {
-		let mainArena = __battle_manager.GetBattleArenaController().MainArena;
-		return mainArena.Position.Y;
-	}
-	static set y(value) {
-		let mainArena = __battle_manager.GetBattleArenaController().MainArena;
-		let newPosition = mainArena.Position;
-		newPosition.Y = value;
-		mainArena.Position = newPosition;
-	}
-	static get rotation() {
-		let mainArena = __battle_manager.GetBattleArenaController().MainArena;
-		if (mainArena != null) {
-			return mainArena.RotationDegrees;
-		}
-	}
-	static set rotation(value) {
-		let mainArena = __battle_manager.GetBattleArenaController().MainArena;
-		mainArena.RotationDegrees = value;
-	}
-	static get size() {
-		let mainArena = __battle_manager.GetBattleArenaController().MainArena;
-		if (mainArena != null) {
-			return mainArena.Size;
-		}
-	}
-	static set size(value) {
-		let mainArena = __battle_manager.GetBattleArenaController().MainArena;
-		mainArena.Size = value;
-	}
-
-	static resize(value)
+	static __mainArena = new BattleArenaRectangle();
+	static getMainArena()
 	{
-		let mainArena = __battle_manager.GetBattleArenaController().MainArena;
-		mainArena.Resize(value);
+		this.__mainArena.__instance = __battle_manager.GetBattleArenaController().MainArena;
+		return this.__mainArena;
+	}
+	static isPointInArenas(pos)
+	{
+		return __battle_manager.GetBattleArenaController().ArenaGroup.IsPointInArenas(pos);
 	}
 
 	static createRectangleExpand(pos = new Vector2(320, 320), size = new Vector2(130, 130))
@@ -178,14 +214,7 @@ class BattleArenaAccess
 export class UtmxBattleManager {
 	InitializeBattle = null;
 	// 不公开的函数引用
-	
-	static ProjectileCollisionMode = Object.freeze({
-		FULL_TEXTURE : 0,
-		USED_RECT : 1,
-		PRECISE : 2
-	});
-
-	static player = BattlePlayer;
+	static soul = BattleSoul;
 	static camera = BattleCamera;
 	static arena = BattleArenaAccess;
 

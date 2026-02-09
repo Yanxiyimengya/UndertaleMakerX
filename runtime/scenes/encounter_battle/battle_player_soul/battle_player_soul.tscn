@@ -84,7 +84,7 @@ _data = {
 [node name="BattlePlayerSoul" type="CharacterBody2D" unique_id=1005979490 node_paths=PackedStringArray("Sprite", "AnimPlayer", "HitBox")]
 motion_mode = 1
 script = ExtResource("1_4pjqo")
-CollisionRadius = 8.5
+CollisionRadius = 8.0
 Sprite = NodePath("GameSprite2D")
 AnimPlayer = NodePath("AnimationPlayer")
 HitBox = NodePath("HitBox")

@@ -83,11 +83,16 @@ public partial class UtmxInputManager : Node2D
 	public static bool IsActionJustReleased(string action)
 	{
 		return Input.IsActionJustReleased(action);
-	}
+    }
+    public static double GetActionAxis(string negativeAction, string positiveAction)
+    {
+        return Input.GetAxis(negativeAction, positiveAction);
+    }
 
-	// ==--==--==--==--==
 
-	public static bool IsKeyPressed(long keycode)
+    // ==--==--==--==--==
+
+    public static bool IsKeyPressed(long keycode)
 	{
 		return Input.IsKeyPressed((Key)keycode);
 	}

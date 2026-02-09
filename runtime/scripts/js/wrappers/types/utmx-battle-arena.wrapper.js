@@ -54,6 +54,11 @@ class BattleArenaRectangle extends BattleArena
     set size(value) {
         this.__instance.Size = value;
     }
+    
+    static resize(value)
+    {
+        this.__instance.Resize(value);
+    }
 }
 
 class BattleArenaCircle extends BattleArena

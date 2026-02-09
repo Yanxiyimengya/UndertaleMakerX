@@ -4,7 +4,7 @@ using System;
 public partial class BattleArenaController : Node
 {
 	[Export]
-	BattleArenaGroup ArenaGroup;
+	public BattleArenaGroup ArenaGroup;
 	[Export]
 	public BattleMainArenaExpand MainArena;
 

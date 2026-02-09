@@ -3,6 +3,12 @@ import { __BattleProjectile, __logger } from "__UTMX";
 import { UtmxGameSprite } from "./utmx-game-sprite.wrapper";
 
 export class UtmxBattleProjectile extends UtmxGameSprite { 
+    
+	static ProjectileCollisionMode = Object.freeze({
+		FULL_TEXTURE : 0,
+		USED_RECT : 1,
+		PRECISE : 2
+	});
 
     static new()
     {

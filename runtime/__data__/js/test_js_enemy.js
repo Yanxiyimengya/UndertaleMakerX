@@ -56,14 +56,6 @@ export default class PapyrusEnemy extends UTMX.Enemy {
 
 	onGetNextTurn() {
 		UTMX.debug.print("PapyrusEnemy: onGetNextTurn called");
-		let turn = MyBattleTurn.new();
-		
-		if (!turn) {
-			UTMX.debug.print("ERROR: MyBattleTurn created null/undefined turn object!");
-		} else {
-			UTMX.debug.print("PapyrusEnemy: Returning new turn object");
-		}
-		
 		return "js/test_js_turn";
 	}
 }

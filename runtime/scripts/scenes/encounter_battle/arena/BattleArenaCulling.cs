@@ -34,10 +34,10 @@ public abstract partial class BattleArenaCulling : BaseBattleArena
     public BattleArenaCulling()
     {
         _arenaPhysicBody = PhysicsServer2D.BodyCreate();
-        PhysicsServer2D.BodySetMode(_arenaPhysicBody, Engine.IsEditorHint() ?
-            PhysicsServer2D.BodyMode.Static : PhysicsServer2D.BodyMode.Kinematic);
-        PhysicsServer2D.BodySetCollisionLayer(_arenaPhysicBody, (int)UtmxBattleManager.BattleCollisionLayers.Player);
-        PhysicsServer2D.BodySetCollisionMask(_arenaPhysicBody, (int)UtmxBattleManager.BattleCollisionLayers.Player);
+        PhysicsServer2D.BodySetMode(_arenaPhysicBody, PhysicsServer2D.BodyMode.Kinematic);
+        PhysicsServer2D.BodySetCollisionLayer(_arenaPhysicBody,
+            (uint)UtmxBattleManager.BattleCollisionLayers.Player | (uint)UtmxBattleManager.BattleCollisionLayers.Arena);
+        PhysicsServer2D.BodySetCollisionMask(_arenaPhysicBody, (uint)UtmxBattleManager.BattleCollisionLayers.Player);
         _shape = GenerateCollisionShape();
         if (_shape.IsValid)
         {

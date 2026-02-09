@@ -13,10 +13,10 @@ export class UtmxBattleTurn extends __BattleTurn {
     set arenaInitializeSize(value) {
         this.ArenaInitializeSize = value;
     }
-    get soulInitializePosition() {
+    get soulInitPosition() {
         return this.SoulInitializePosition;
     }
-    set soulInitializePosition(value) {
+    set soulInitPosition(value) {
         this.SoulInitializePosition = value;
     }
     get turnTime() {
