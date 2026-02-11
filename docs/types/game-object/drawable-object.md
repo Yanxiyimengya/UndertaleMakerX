@@ -108,7 +108,7 @@ drawLine(from: Vector2, to: Vector2, color: Color = new Color(1,1,1), width: num
 ### drawTextureRect
 
 ```javascript
-drawTextureRect(path: string, x: number, y: number, width: number, height: number, color: Color = new Color(1,1,1)) -> void
+drawTextureRect(path: string, pos: Vector2, size: Vector2, color: Color = new Color(1,1,1)) -> void
 ```
 
 绘制纹理矩形。
@@ -121,10 +121,8 @@ drawTextureRect(path: string, x: number, y: number, width: number, height: numbe
 | Parameter | Type    | Default         | Description |
 | --------- | ------- | --------------- | ----------- |
 | path      | string  | -               | 纹理资源的路径 |
-| x         | number  | -               | 矩形的x坐标 |
-| y         | number  | -               | 矩形的y坐标 |
-| width     | number  | -               | 矩形的宽度 |
-| height    | number  | -               | 矩形的高度 |
+| pos       | Vector2 | -               | 矩形的坐标 |
+| size      | Vector2 | -               | 矩形的长宽 |
 | color     | Color   | Color(1,1,1) | 纹理矩形的颜色 |
 
 ---
@@ -173,3 +171,24 @@ drawPolygon(vertices: Vector2[], colors: Color[], uvs: Vector2[] = [], path: str
 | colors    | Color[]    | []      | 顶点对应的颜色数组 |
 | uvs       | Vector2[]  | []      | 纹理 UV 坐标数组 |
 | path      | string     | ""      | 纹理资源的路径 |
+
+---
+
+### drawText
+
+```javascript
+drawText(pos: Vector2, text: string, color: Color = Color.White, size: number = 16, font: string = "") -> void
+```
+
+在指定位置绘制字符串文本。允许指定绘制颜色、字体、字体大小。
+
+**Returns**
+`void`
+
+| Parameter | Type       | Default | Description |
+| --------- | ---------- | ------- | ----------- |
+| pos       | Vector2    | -       | 绘制文本的坐标 |
+| text      | string     | -       | 指定文本 |
+| color     | Color      | Color.White  | 文字颜色|
+| size      | number     | 16      | 文字大小 |
+| font      | string     | ""      | 字体资源的路径 |

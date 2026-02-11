@@ -11,11 +11,15 @@ public partial class BattleEnemyState : StateNode
 
 	public override void _EnterState()
 	{
-		_battleMainArena = UtmxBattleManager.GetBattleArenaController().MainArena;
+        _battleMainArena = UtmxBattleManager.GetBattleArenaController().MainArena;
 		BattlePlayerSoul soul = UtmxBattleManager.GetBattlePlayerController().PlayerSoul;
 		soul.Movable = true;
 		soul.EnabledCollision = true;
         started = UtmxBattleManager.GetBattleTurnController().TurnStart();
+        foreach (BaseEnemy enemy in UtmxBattleManager.GetBattleEnemyController().EnemiesList)
+        {
+            enemy._OnTurnStarting();
+        }
 	}
 
 	public override void _ExitState() { }

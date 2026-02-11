@@ -6,6 +6,27 @@ Battle 是 **UTMX 框架的战斗管理模块**，用于统一管理 `Encounter`
 
 !> 虽然 Battle 是一个全局模块，但其中的子模块依赖战斗场景元素，在使用时请务必确保是否已经开始战斗。
 
+
+## 常量（Constants）
+
+### BattleStatus
+
+| Property | Type   | Default | Description |
+| -------- | ------ | ------- | ----------- |
+| PLAYER   | number | 0       | 表示玩家回合的状态 |
+| PLAYER_DIALOGUE   | number | 1       | 表示玩家回合显示对话的状态 |
+| ENEMY_DIALOGUE   | number | 2       | 表示怪物回合显示怪物对话的状态 |
+| ENEMY   | number | 3       | 表示怪物回合的状态 |
+| END   | number | 4       | 表示游戏结束的状态 |
+
+### AttackStatus
+
+| Property | Type   | Default | Description |
+| -------- | ------ | ------- | ----------- |
+| SELECTED   | number | 0       | 表示怪物在 `FIGHT` 菜单被选中时的状态 |
+| HIT   | number | 1       | 表示怪物在菜单中被选中后确认进行攻击的状态 |
+| MISSED   | number | 2       | 表示怪物在菜单中被选中，但未按下攻击键的状态。 |
+
 ## 战斗管理
 
 ### isInBattle

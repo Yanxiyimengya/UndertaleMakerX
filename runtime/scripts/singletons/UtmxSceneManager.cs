@@ -11,9 +11,9 @@ public partial class UtmxSceneManager : CanvasLayer
 	[Export(PropertyHint.File, "*.tscn")]
 	public string GameoverScenePath = "";
 
-	private string _prevScene = "";
-	private string _currentScene = ProjectSettings.GetSetting("application/run/main_scene", "").ToString();
-	private string _mainScene = "";
+	private static string _prevScene = "";
+	private static string _currentScene = ProjectSettings.GetSetting("application/run/main_scene", "").ToString();
+	private static string _mainScene = "";
 	private static Dictionary<string , Node> singletons = new();
 	public static UtmxSceneManager Instance { get; private set; }
 	
@@ -41,10 +41,10 @@ public partial class UtmxSceneManager : CanvasLayer
 		singletons.Clear();
 	}
 
-	public void ChangeSceneToFile(string filePath)
+	public static void ChangeSceneToFile(string filePath)
 	{
 		_prevScene = _currentScene;
-		_currentScene = filePath;
+        _currentScene = filePath;
 		filePath = UtmxResourceLoader.ResolvePath(filePath);
 		if (! ResourceLoader.Exists(filePath))
 		{
@@ -53,10 +53,10 @@ public partial class UtmxSceneManager : CanvasLayer
 		}
 		if ( !filePath.EndsWith(".tscn") && !filePath.StartsWith("uid://") )
 			filePath += ".tscn";
-		GetTree()?.ChangeSceneToFile(filePath);
+        Instance.GetTree()?.ChangeSceneToFile(filePath);
 	}
 
-	public void AddSingleton(string name, Node node)
+	public static void AddSingleton(string name, Node node)
 	{
 		if (string.IsNullOrEmpty(name))
 		{
@@ -81,9 +81,21 @@ public partial class UtmxSceneManager : CanvasLayer
 			UtmxLogger.Error(TranslationServer.Translate("Unable to add singleton, singleton object is invalid"), name);
 			return;
 		}
-	}
+    }
+    public static void RemoveSingleton(string name)
+    {
+        if (singletons.ContainsKey(name))
+        {
+			Node node = singletons[name];
+            Instance.RemoveChild(node);
+			if (IsInstanceValid(Instance?.GetTree()?.CurrentScene) && !node.IsQueuedForDeletion())
+			{
+                Instance.GetTree().CurrentScene.AddChild(node);
+            }
+        }
+    }
 
-	public Node GetSingleton(string name)
+    public static Node GetSingleton(string name)
 	{
 		if (singletons.ContainsKey(name))
 		{
@@ -92,15 +104,15 @@ public partial class UtmxSceneManager : CanvasLayer
 		return null;
 	}
 
-	public string GetMainScenePath()
+    public static string GetMainScenePath()
 	{
 		return _mainScene;
 	}
-	public string GetCurrentScenePath()
+	public static string GetCurrentScenePath()
 	{
 		return _currentScene;
 	}
-	public string GetPreviousScenePath()
+	public static string GetPreviousScenePath()
 	{
 		return _prevScene;
 	}

@@ -54,7 +54,7 @@ public partial class GameSprite2D : AnimatedSprite2D, IObjectPoolObject
 	protected string[] _texturesPath;
     protected GameShader _shaderInstance;
 
-    public void SetTextures(string[] texturesPath)
+    public virtual void SetTextures(string[] texturesPath)
 	{
 		if (SpriteFrames == null) SpriteFrames = new();
         if (SpriteFrames.HasAnimation(DEFAULT_ANIM_NAME))

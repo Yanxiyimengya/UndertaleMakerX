@@ -22,8 +22,10 @@ public partial class BattleEndState : StateNode
 		}
 	}
 	public override async void _EnterState()
-	{
-		await MenuManager.OpenMenu("EncounterTextMenu");
+    {
+        BattlePlayerSoul soul = UtmxBattleManager.GetBattlePlayerController().PlayerSoul;
+        soul.Visible = false;
+        await MenuManager.OpenMenu("EncounterTextMenu");
 		BattleButtonManager.ResetAllBattleButton();
 		TextMenu.ShowEncounterText(UtmxBattleManager.GetEncounterInstance()?.EndText);
 	}

@@ -2,7 +2,6 @@ import { UTMX } from "UTMX";
 import MyDO from "./test_js_drawable_object";
 
 export default class MyEncounter extends UTMX.Encounter {
-	
 	constructor() {
 		super();
 		this.freeText = "这是一个测试遭遇战！我跑了！";

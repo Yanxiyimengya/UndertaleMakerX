@@ -50,7 +50,6 @@ public partial class BattlePlayerFightMenuState : StateNode
 		if (UtmxPlayerDataManager.Weapon != null && !missed)
 		{
 			_damage = (float)UtmxPlayerDataManager.Weapon.onAttack(hitValue, targetEnemy);
-            targetEnemy.Hp -= _damage;
             SpawnAttackAnimation(targetEnemy);
 		}
 		if (_attackAnimation == null)
@@ -62,10 +61,12 @@ public partial class BattlePlayerFightMenuState : StateNode
 
 	private void ShowDamageText(BaseEnemy targetEnemy)
 	{
-		_attackDamageText = (BattleDamageText)DamageTextPackedScene?.Instantiate();
-		_attackDamageText.Position = targetEnemy.CenterPosition;
-		targetEnemy.AddChild(_attackDamageText);
-		_state = STATE_SHOW_DAMAGE;
+        _attackDamageText = (BattleDamageText)DamageTextPackedScene?.Instantiate();
+		UtmxBattleManager.GetBattleEnemyController().EnemiesNode.AddChild(_attackDamageText);
+		_attackDamageText.Start(targetEnemy.Position + targetEnemy.CenterPosition);
+        targetEnemy.hurt(_damage);
+
+        _state = STATE_SHOW_DAMAGE;
 
 		_attackDamageText.Connect(
 			BattleDamageText.SignalName.Ended,
@@ -93,8 +94,8 @@ public partial class BattlePlayerFightMenuState : StateNode
 		_attackAnimation = new BattleAttackAnimationFrame();
 		_attackAnimation.TexturesPath = currentWeapon.AttackAnimation;
 		_attackAnimation.Play();
+        UtmxBattleManager.GetBattleEnemyController().EnemiesNode.AddChild(_attackAnimation);
         _attackAnimation.GlobalPosition = targetEnemy.GlobalPosition + targetEnemy.CenterPosition;
-        AddChild(_attackAnimation);
 
         _attackAnimation.Connect(
         	BattleAttackAnimation.SignalName.Finished,

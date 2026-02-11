@@ -11,21 +11,17 @@ public partial class BattleDamageText : Node2D
 
     [Export]
     public TextTyper DamageTextTyper;
+    public double Ystart { get => _ystart; set => _ystart = value; }
 
 
-    private float _ystart = 0.0F;
+    private double _ystart = 0.0F;
     private double vspeed = -140;
     private double gravity = 600;
     private double waitting = 0.75;
 
-    public override void _EnterTree()
-    {
-        _ystart = Position.Y;
-    }
-
     public override void _Process(double delta)
     {
-        if (Position.Y <= _ystart)
+        if (Position.Y <= Ystart)
         {
             Position = new Vector2(Position.X, Position.Y + (float)(vspeed * delta));
             vspeed += gravity * delta;
@@ -51,22 +47,21 @@ public partial class BattleDamageText : Node2D
         DamageTextTyper.TyperColor = Color.Color8(0xC0, 0xC0, 0xC0);
         DamageTextTyper.Instant = true;
         DamageTextTyper.Start(text);
-        Start();
     }
     public void SetNumber(int number)
     {
         DamageTextTyper.TyperColor = Colors.Red;
         DamageTextTyper.Instant = true;
         DamageTextTyper.Start(number.ToString());
-        Start();
     }
 
     public void End()
     {
         EmitSignal(SignalName.Ended, []);
     }
-    private void Start()
+    public void Start(Vector2 position)
     {
+        Position = position;
+        _ystart = position.Y;
     }
-
 }

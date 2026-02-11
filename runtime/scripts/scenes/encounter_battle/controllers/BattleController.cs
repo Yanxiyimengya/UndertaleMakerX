@@ -71,8 +71,13 @@ public partial class BattleController : Node
 		_battleStatus = UtmxBattleManager.BattleStatus.Enemy;
 		SwitchToState("BattleEnemyState");
 		UtmxBattleManager.GetEncounterInstance()?._OnEnemyTurn();
-	}
-	public UtmxBattleManager.BattleStatus GetCurrentStatus()
+    }
+    public void ChangeToEndState()
+    {
+        _battleStatus = UtmxBattleManager.BattleStatus.End;
+        SwitchToState("BattleEndState");
+    }
+    public UtmxBattleManager.BattleStatus GetCurrentStatus()
 	{
 		return _battleStatus;
 	}

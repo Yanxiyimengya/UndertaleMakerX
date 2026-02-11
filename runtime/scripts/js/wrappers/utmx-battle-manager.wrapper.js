@@ -182,6 +182,14 @@ class BattleArenaAccess
 export class UtmxBattleManager {
 	InitializeBattle = null;
 	// 不公开的函数引用
+	static BattleStatus = Object.freeze({
+		PLAYER : 0,
+		PLAYER_DIALOGUE : 1,
+		ENEMY_DIALOGUE : 2,
+		ENEMY : 3,
+		END : 4,
+	});
+
 	static soul = BattleSoul;
 	static camera = BattleCamera;
 	static arena = BattleArenaAccess;

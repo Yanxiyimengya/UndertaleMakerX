@@ -5,7 +5,7 @@ Shader 表示一个 UTMX 的着色器资源，它使用 Godot 着色语言实现
 
 通过 `UTMX.Shader` 访问。
 
-你可以在 Shader 中通过 `uniform` 导出一些参数，这样你就可以通过[setParameter](#setParameter)设置这些值，Shader会使用这些值。
+你可以在 Shader 中通过 `uniform` 导出一些参数，这样你就可以通过 [setParameter](#setParameter) 设置这些值，Shader会使用这些值。
 
 关于 JavaScript 类型如何对应到 Shader 中的类型，如下表所示：
 

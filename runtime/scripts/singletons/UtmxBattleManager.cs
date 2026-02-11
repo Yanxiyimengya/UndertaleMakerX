@@ -12,12 +12,20 @@ public partial class UtmxBattleManager
 	};
 	public enum BattleStatus
 	{
-		Player,
-		PlayerDialogue,
-		EnemyDialogue,
-		Enemy,
-	}
-	public static bool Endded { get => _endded; set => _endded = value; }
+		Player = 0,
+		PlayerDialogue = 1,
+		EnemyDialogue = 2,
+		Enemy = 3,
+		End = 4,
+	};
+    public enum AttackStatus
+    {
+        Selected = 0,  // 菜单中被选中
+        Hit = 1,     // 确认攻击
+        Missed = 2      // 未确认
+    };
+
+    public static bool Endded { get => _endded; set => _endded = value; }
 	public static Transform2D PlayerSoulTransform { get => _playerSoulTransform; set => _playerSoulTransform = value; }
 	public static Color PlayerSoulColor { get => _playerSoulColor; set => _playerSoulColor = value; }
 	public static string PrevScenePath { get => _prevScenePath; set => _prevScenePath = value; }
@@ -37,8 +45,8 @@ public partial class UtmxBattleManager
 			if (_isInBattle) EndEncounterBattle();
 			_battleEncounter = encounter;
 			Endded = false;
-			PrevScenePath = UtmxSceneManager.Instance.GetCurrentScenePath();
-			UtmxSceneManager.Instance.ChangeSceneToFile(UtmxSceneManager.Instance.EncounterBattleScenePath);
+			PrevScenePath = UtmxSceneManager.GetCurrentScenePath();
+			UtmxSceneManager.ChangeSceneToFile(UtmxSceneManager.Instance.EncounterBattleScenePath);
 			return true;
 		}
 		else
@@ -52,9 +60,7 @@ public partial class UtmxBattleManager
 		if (_isInBattle)
 		{
 			Endded = true;
-			UtmxSceneManager.Instance.ChangeSceneToFile(UtmxBattleManager.PrevScenePath);
-			foreach (BaseEnemy enemy in UtmxBattleManager.GetBattleEnemyController().EnemiesList)
-				enemy._OnBattleEnd();
+			UtmxSceneManager.ChangeSceneToFile(UtmxBattleManager.PrevScenePath);
 			GetEncounterInstance()._OnBattleEnd();
 			_battleEncounter = null;
 			_battleController = null;

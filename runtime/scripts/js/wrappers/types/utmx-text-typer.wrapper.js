@@ -34,6 +34,8 @@ export class UtmxTextTyper extends UtmxTransformableObject {
     set noskip(value) {
         this.__instance.NoSkip = value;
     }
+	get shader() { return this.__instance.ShaderInstance; }
+	set shader(value) { this.__instance.ShaderInstance = value; }
     //processCmd = null;
 
     start(text)

@@ -44,7 +44,7 @@ log(...message: any[]) -> void
 
 | Parameter | Type  | Description      |
 | --------- | ----- | ---------------- |
-| message   | any[] | 要输出的日志内容（支持多个参数） |
+| message   | ...any | 要输出的日志内容 |
 
 ---
 

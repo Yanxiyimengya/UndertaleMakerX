@@ -1,18 +1,22 @@
 import { __UtmxEnemy } from "__UTMX";
+import { UtmxGameSprite } from "./utmx-game-sprite.wrapper";
 
 export class UtmxBaseEnemy extends __UtmxEnemy  
 {
+	constructor()
+	{
+		super();
+		this.__sprite = new UtmxGameSprite();
+		this.__sprite.__instance = this;
+	}
+    get sprite() { return this.__sprite; }
+    set sprite(value) { }
+
 	set displayName(value) {
 		this.DisplayName = value;
 	}
 	get displayName() {
 		return this.DisplayName;
-	}
-	get slot() {
-		return this.EnemySlot;
-	}
-	set slot(value) {	
-		this.EnemySlot = value;
 	}
 	get attack() {
 		return this.Attack;
@@ -69,18 +73,24 @@ export class UtmxBaseEnemy extends __UtmxEnemy
         this.CenterPosition = value;
     }
 
-    onSpare() {}
     onHandleAction(action) {}
 	onHandleAttack(status) {}
 	onGetNextTurn() {}
-    onBattleStart() {}
-    onBattleEnd() {}
     onDialogueStarting() {}
-    onDialogueEnding() {}
+    onTurnStarting() {}
+    onSpare() {}
+	onDead() {}
 
-
-    appendDialogue(...dialogues)
-    {
+	hurt(damage) {
+		this.Hurt(damage);
+	}
+	kill() {
+		this.Kill(damage);
+	}
+	getSlot() {
+		return this.EnemySlot;
+	}
+    appendDialogue(...dialogues) {
         this.AppendEnemyDialogue(...dialogues);
     }
 }

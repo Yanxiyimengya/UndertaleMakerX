@@ -13,8 +13,12 @@ let col = Color.Red;
 
 ## 类型列表
 
+- [BattleTurn](types/battle-turn.md)
 - [Color](types/color.md)
+- [Encounter](types/encounter.md)
+- [Enemy](types/enemy.md)
 - [GameObject 及其派生类型](types/game-object/)
+- [Shader](types/shader.md)
 - [Vector2](types/vector2.md)
 - [Vector3](types/vector3.md)
 - [Vector4](types/vector4.md)

@@ -14,16 +14,6 @@ public partial class BattleEnemyController : Node
 	{
 		foreach (BaseEnemy enemy in _enemiesList) enemy.Free();
 		_enemiesList.Clear();
-
-		foreach (string enemyId in UtmxBattleManager.GetEncounterInstance().Enemies)
-		{
-			if (UtmxGameRegisterDB.TryGetEnemy(enemyId, out BaseEnemy enemy))
-			{
-				_enemiesList.Add(enemy);
-				enemy._OnBattleStart();
-			}
-		}
-
 		for (int i = 0; i < _enemiesList.Count; i++)
 		{
 			BaseEnemy enemy = _enemiesList[i];
@@ -51,4 +41,15 @@ public partial class BattleEnemyController : Node
 	{
 		return EnemiesList[slot];
 	}
+
+	public void KillEnemy(int slot)
+	{
+		BaseEnemy enemy = EnemiesList[slot];
+		if (IsInstanceValid(enemy))
+		{
+            enemy._OnDead();
+            _enemiesList.Remove(enemy);
+            enemy.QueueFree();
+        }
+    }
 }

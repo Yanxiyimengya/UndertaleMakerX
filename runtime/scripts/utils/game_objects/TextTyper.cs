@@ -51,14 +51,24 @@ public partial class TextTyper : Godot.RichTextLabel, IObjectPoolObject
 
 	[Export]
 	public AudioStream Voice = null;
+    public GameShader ShaderInstance
+    {
+        get => _shaderInstance;
+        set
+        {
+            _shaderInstance = value;
+            Material = value.GetShaderMaterial();
+        }
+    }
 
-	private double _typerTimer = 0.0;
+    private double _typerTimer = 0.0;
 	private int _typerSize = 16;
 	private double _typerWattingTimer = 0.0;
 	private int _typerProgress = 0;
 	private Font _typerFont = ThemeDB.FallbackFont;
 	private Color _typerColor = Colors.White;
 	private object _waitForKeyAction = null;
+    protected GameShader _shaderInstance;
 
 	public TextTyper()
 	{

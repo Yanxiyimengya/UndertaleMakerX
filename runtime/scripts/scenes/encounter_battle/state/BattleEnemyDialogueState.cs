@@ -51,10 +51,6 @@ public partial class BattleEnemyDialogueState : StateNode
 
 	public override void _ExitState()
     {
-        foreach (BaseEnemy enemy in UtmxBattleManager.GetBattleEnemyController().EnemiesList)
-        {
-            enemy._OnDialogueEnding();
-        }
     }
 
 

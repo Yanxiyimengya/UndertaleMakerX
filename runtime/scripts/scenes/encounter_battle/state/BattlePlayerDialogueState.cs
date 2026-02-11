@@ -44,7 +44,11 @@ public partial class BattlePlayerDialogueState : StateNode
 		}
 		else
 		{
-			if (!UtmxBattleManager.Endded)
+			if (UtmxBattleManager.GetBattleEnemyController().GetEnemiesCount() == 0)
+			{
+                UtmxBattleManager.GetBattleController().ChangeToEndState();
+            }
+			else
 			{
 				UtmxBattleManager.GetBattleController().ChangeToEnemyDialogueState();
 			}

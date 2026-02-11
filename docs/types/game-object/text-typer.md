@@ -54,6 +54,7 @@ UTMX 拓展了 BBCode，它们被称为 **文本命令**，当打字机文本打
 | instant  | boolean | false  | 若为 `true` 则使打字机一瞬间显示所有文本，直到文本末尾 |
 | noskip   | boolean | false  | 若为 `true` 则禁止当 `cancel` 触发后跳过文本 |
 | processCmd  | function | undefined  | 用于处理文本命令的回调函数 |
+| shader | UTMX.Shader | null     | 该 `DrawableObject` 使用的着色器 |
 
 ### processCmd
 

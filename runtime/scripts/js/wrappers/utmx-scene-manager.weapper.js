@@ -5,16 +5,20 @@ export class UtmxSceneManager
 {
     static changeScene(path)
     {
-        __scene_manager.Instance.ChangeSceneToFile(path);
+        __scene_manager.ChangeSceneToFile(path);
     }
     
     static addSingleton(name, object)
     {
         if (object instanceof UtmxGameObject)
-            __scene_manager.Instance.AddSingleton(name, object.__instance);
+            __scene_manager.AddSingleton(name, object.__instance);
+    }
+    static removeSingleton(name)
+    {
+        return __scene_manager.RemoveSingleton(name);
     }
     static getSingleton(name)
     {
-        return __scene_manager.Instance.GetSingleton(name);
+        return __scene_manager.GetSingleton(name);
     }
 }

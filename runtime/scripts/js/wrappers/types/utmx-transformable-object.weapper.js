@@ -1,6 +1,6 @@
-import { __resource_loader } from "__UTMX";
+import { UtmxGameObject } from "./utmx-game-object.weapper.js";
 
-export class UtmxTransformableObject
+export class UtmxTransformableObject extends UtmxGameObject
 {
 	get position() {
 		return this.__instance.Position;

@@ -11,12 +11,13 @@ export default class PapyrusEnemy extends UTMX.Enemy {
 		this.maxHp = 10;
 		this.attack = 20;
 		this.defense = 5;
-
-		// 这里是之前报错可能相关的地方，检查 Vector2 是否成功创建
+		
 		this.centerPosition = new Vector2(0.0, -70.0);
 		UTMX.debug.print("PapyrusEnemy: CenterPosition set to " + JSON.stringify(this.centerPosition)); 
 
 		UTMX.debug.print("PapyrusEnemy: Constructor Finished"); // 2. 检查构造结束
+
+		this.sprite.textures = "a.jpg";
 	}
 
 	onSpare() {

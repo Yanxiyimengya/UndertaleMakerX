@@ -5,9 +5,9 @@ using Jint.Native.Object;
 public partial class JavaScriptNode : Node, IJavaScriptObject
 {
 	public ObjectInstance JsInstance { get; set; }
-    public string JsScriptPath { get; set; }
+	public string JsScriptPath { get; set; }
 
-    [Export(PropertyHint.FilePath, "*.js")]
+	[Export(PropertyHint.FilePath, "*.js")]
 	public string JavaScriptFile
 	{
 		get => _javaScriptFile;
@@ -22,7 +22,7 @@ public partial class JavaScriptNode : Node, IJavaScriptObject
 				{
 					JsInstance = javaScriptClass.New();
 					if (((IJavaScriptObject)this).Has(EngineProperties.JAVASCRIPT_ON_LOAD_CALLBACK))
-                        ((IJavaScriptObject)this).Invoke(EngineProperties.JAVASCRIPT_ON_LOAD_CALLBACK, []);
+						((IJavaScriptObject)this).Invoke(EngineProperties.JAVASCRIPT_ON_LOAD_CALLBACK, []);
 					_javaScriptCanUpdate = ((IJavaScriptObject)this).Has(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK);
 				}
 			}
@@ -31,35 +31,35 @@ public partial class JavaScriptNode : Node, IJavaScriptObject
 	public string _javaScriptFile;
 	public bool _javaScriptCanUpdate = false;
 
-    public static ObjectInstance New(string path)
-    {
+	public static ObjectInstance New(string path)
+	{
 		SceneTree sceneTree = UtmxSceneManager.Instance.GetTree();
-        if (sceneTree == null) return null;
+		if (sceneTree == null) return null;
 
-        JavaScriptNode result = new JavaScriptNode();
-        result.JsScriptPath = path;
-        result.JavaScriptFile = path;
+		JavaScriptNode result = new JavaScriptNode();
+		result.JsScriptPath = path;
+		result.JavaScriptFile = path;
 		if (result.JsInstance == null)
 		{
 			result.QueueFree();
 			return null;
 		}
-        sceneTree.Root.AddChild(result);
-        return result.JsInstance;
-    }
+		sceneTree.Root.AddChild(result);
+		return result.JsInstance;
+	}
 	
 	public override void _Ready()
 	{
 		if (((IJavaScriptObject)this).Has(EngineProperties.JAVASCRIPT_START_CALLBACK))
-            ((IJavaScriptObject)this).Invoke(EngineProperties.JAVASCRIPT_START_CALLBACK, []);
+			((IJavaScriptObject)this).Invoke(EngineProperties.JAVASCRIPT_START_CALLBACK, []);
 	}
 	public override void _Process(double delta)
 	{
 		if (_javaScriptCanUpdate)
-            ((IJavaScriptObject)this).Invoke(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK, [delta]);
+			((IJavaScriptObject)this).Invoke(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK, [delta]);
 	}
-    public override void _Notification(int what)
-    {
+	public override void _Notification(int what)
+	{
 		if (what == NotificationPredelete)
 		{
 			if (((IJavaScriptObject)this).Has(EngineProperties.JAVASCRIPT_DESTROY_CALLBACK))

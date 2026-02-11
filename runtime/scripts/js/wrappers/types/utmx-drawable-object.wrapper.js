@@ -49,9 +49,9 @@ export class UtmxDrawableObject extends UtmxTransformableObject {
 	{
 		this.__instance.DrawLine(from, to, color, width);
 	}
-	drawTextureRect(path, x, y, width, height, color = new __Color(1,1,1))
+	drawTextureRect(path, pos, size, color = new __Color(1,1,1))
 	{
-		this.__instance.DrawTextureRect(new __Vector2(x, y), new __Vector2(width, height), path, color);
+		this.__instance.DrawTextureRect(pos, size, path, color);
 	}
 	drawTexturePos(path, tl, tr, br, bl, colors = [])
 	{
@@ -61,7 +61,10 @@ export class UtmxDrawableObject extends UtmxTransformableObject {
 	{
 		this.__instance.DrawPolygon(vertices, colors, uvs, path);
 	}
-
+	drawText(pos, text, color = Color.White, size = 16, font = "")
+	{
+		this.__instance.DrawText(pos, text, color, size, font);
+	}
 	redraw() {
 		this.__instance.Redraw();
 	}

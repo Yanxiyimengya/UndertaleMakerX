@@ -7,7 +7,6 @@ using Jint.Runtime.Modules;
 public sealed class JavaScriptModuleResolver : IModuleLoader
 {
     private readonly Dictionary<string, Module> _moduleCache = new();
-    private static HashSet<string> visitedModules = new HashSet<string>();
 
     public static string ResolvePath(string referencingModuleLocation, string specifier)
         => ResolvePathInternal(referencingModuleLocation, specifier);

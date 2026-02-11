@@ -44,7 +44,6 @@ public partial class UtmxGameManager : Node
 		EmitSignal(SignalName.GameEnd, []);
 	}
 
-
 	public static void QuitGame()
 	{
 		Instance.GetTree().Quit();

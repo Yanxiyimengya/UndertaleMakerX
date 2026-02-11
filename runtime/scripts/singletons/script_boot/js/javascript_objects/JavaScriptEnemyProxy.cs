@@ -32,32 +32,24 @@ public partial class JavaScriptEnemyProxy : BaseEnemy, IJavaScriptObject
 	}
 
 	public override void _Process(double delta)
-	{
-		if (JsInstance.HasProperty(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK))
+    {
+        base._Process(delta);
+        if (JsInstance.HasProperty(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK))
 			JavaScriptBridge.InvokeFunction(JsInstance, EngineProperties.JAVASCRIPT_UPDATE_CALLBACK, [delta]);
 	}
 	public override void _OnSpare()
 	{
 		((IJavaScriptObject)this).Invoke("onSpare", []);
 	}
-
-	public override void _OnBattleStart()
-	{
-		((IJavaScriptObject)this).Invoke("onBattleStart", []);
-	}
-	public override void _OnBattleEnd()
-	{
-		((IJavaScriptObject)this).Invoke("onBattleEnd", []);
-	}
 	public override void _OnDialogueStarting()
 	{
 		((IJavaScriptObject)this).Invoke("onDialogueStarting", []);
 	}
-	public override void _OnDialogueEnding()
+	public override void _OnTurnStarting()
 	{
-		((IJavaScriptObject)this).Invoke("onDialogueEnding", []);
+		((IJavaScriptObject)this).Invoke("onTurnStarting", []);
 	}
-	public override void _HandleAttack(AttackStatus status)
+	public override void _HandleAttack(UtmxBattleManager.AttackStatus status)
 	{
 		((IJavaScriptObject)this).Invoke("onHandleAttack", [status]);
 	}

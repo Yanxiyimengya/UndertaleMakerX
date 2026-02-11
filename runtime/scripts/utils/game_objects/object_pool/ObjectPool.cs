@@ -12,7 +12,7 @@ public partial class ObjectPool<T> : RefCounted where T : Godot.Node, IObjectPoo
         {
             foreach (T node in _pool)
             {
-                if (node != null && IsInstanceIdValid(node.GetInstanceId()))
+                if (node != null && IsInstanceValid(node))
                 {
                     node.QueueFree();
                 }

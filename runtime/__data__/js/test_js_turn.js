@@ -15,7 +15,7 @@ export default class MyCustomTurn extends UTMX.BattleTurn {
 	onTurnInit() {
 		UTMX.battle.soul.sprite.color = Color.Blue;
 		this.spr = UTMX.Sprite.new();
-		this.spr.textures = "a.png";
+		this.spr.textures = "a.jpg";
 		this.spr.position = new Vector2(320, 320);
 		this.spr.z = 1000;
 	}
@@ -40,9 +40,10 @@ export default class MyCustomTurn extends UTMX.BattleTurn {
 		`;
 
 		let drawableObject = UTMX.DrawableObject.new();
-		drawableObject.shader = shader;
+		UTMX.scene.addSingleton("DrawO", drawableObject);
 		drawableObject.z = 4096;
-		drawableObject.drawRect(new Vector2(0, 0), new Vector2(640,  480));
+		//drawableObject.drawRect(new Vector2(0, 0), new Vector2(640,  480));
+		drawableObject.drawText(new Vector2(200, 200), "Hello, World", Color.Red, 16, "built-in-resources/fonts/Papyrus.ttf");
 	}
 
 	onTurnUpdate(delta) {

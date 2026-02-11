@@ -97,4 +97,18 @@ public partial class DrawableObject : Node2D, IObjectPoolObject
             colors, 
             [Vector2.Zero, new Vector2(1, 0), Vector2.One, new Vector2(0, 1)], path);
     }
+    public void DrawText(Vector2 pos, string text, Color color = default, double size = 16, string fontPath = "")
+    {
+        Font font;
+        if (!string.IsNullOrEmpty(fontPath))
+        {
+            Resource res = UtmxResourceLoader.Load(fontPath);
+            font = (res as Font) ?? ThemeDB.FallbackFont;
+        }
+        else
+        {
+            font = ThemeDB.FallbackFont;
+        }
+        font.DrawString(canvasItemRid, pos, text, HorizontalAlignment.Left, -1F, (int)size, color);
+    }
 }
