@@ -36,6 +36,39 @@ Vector2 是包含两个 `number` 分量的二维向量类型，可用于表示 2
 
 ## 方法（Methods）
 
+### 构造函数 constructor
+
+```javascript
+new Vector2()
+```
+
+同`Vector2.Zero`，构造一个Vector2零向量。
+
+---
+
+```javascript
+new Vector2(x: number, y: number)
+```
+
+| Parameter | Type             | Description |
+| --------- | ---------------- | ----------- |
+| x         | number           | 向量的 X 分量 |
+| y         | number           | 向量的 Y 分量 |
+
+---
+
+```javascript
+new Vector2(from: Vector2)
+```
+
+| Parameter | Type             | Description |
+| --------- | ---------------- | ----------- |
+| from   | Vector2             | 目标向量 |
+
+同 `copy`，构造给定向量的副本。
+
+---
+
 ### add
 
 ```javascript

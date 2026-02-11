@@ -69,8 +69,8 @@ public partial class TextTyper : Godot.RichTextLabel, IObjectPoolObject
 	}
 
 	public override void _Process(double delta)
-    {
-        if (!_CanRunning())
+	{
+		if (!_CanRunning())
 		{
 			if (_waitForKeyAction != null)
 			{
@@ -80,8 +80,8 @@ public partial class TextTyper : Godot.RichTextLabel, IObjectPoolObject
 			}
 		}
 		else
-        {
-            if (_typerWattingTimer > 0.0) _typerWattingTimer -= delta;
+		{
+			if (_typerWattingTimer > 0.0) _typerWattingTimer -= delta;
 			else
 			{
 				if (_typerTimer > 0.0) _typerTimer -= delta;
@@ -91,17 +91,16 @@ public partial class TextTyper : Godot.RichTextLabel, IObjectPoolObject
 					_ProcessText();
 				}
 
-                if (!NoSkip && !Instant && !Engine.IsEditorHint())
-                {
-                    if (Input.IsActionJustPressed("cancel"))
-                    {
-                        Instant = true;
-                        _typerTimer = 0.0;
-
-                    }
-                }
-            }
-        }
+				if (!NoSkip && !Instant && !Engine.IsEditorHint())
+				{
+					if (Input.IsActionJustPressed("cancel"))
+					{
+						Instant = true;
+						_typerTimer = 0.0;
+					}
+				}
+			}
+		}
 	}
 
 	private void _ProcessText()
@@ -360,13 +359,13 @@ public partial class TextTyper : Godot.RichTextLabel, IObjectPoolObject
 				Instant = false;
 				break;
 			}
-            case "end":
-                {
-                    Destroy();
-                    break;
-                }
+			case "end":
+				{
+					Destroy();
+					break;
+				}
 
-            case "img":
+			case "img":
 			{
 				if (args.TryGetValue("path", out string imgPath) && !string.IsNullOrEmpty(imgPath))
 				{
@@ -489,9 +488,13 @@ public partial class TextTyper : Godot.RichTextLabel, IObjectPoolObject
 	public new bool IsFinished()
 	{
 		return _typerProgress >= TyperText.Length;
-	}
+    }
+    public int GetProgress()
+    {
+        return _typerProgress;
+    }
 
-	public void ResetData()
+    public void ResetData()
 	{
 		_typerProgress = 0;
 		_typerTimer = 0.0;
@@ -503,22 +506,22 @@ public partial class TextTyper : Godot.RichTextLabel, IObjectPoolObject
 		Instant = false;
 		Modulate = Colors.White;
 		TyperText = "";
-    }
+	}
 
 	public virtual void Awake()
 	{
 		Position = Vector2.Zero;
 		Scale = Vector2.One;
-        Start(null);
-    }
+		Start(null);
+	}
 
 	public virtual void Disabled()
-    {
-    }
+	{
+	}
 
 
-    public virtual void Destroy()
-    {
-        UtmxSceneManager.DeleteTextTyper(this);
-    }
+	public virtual void Destroy()
+	{
+		UtmxSceneManager.DeleteTextTyper(this);
+	}
 }

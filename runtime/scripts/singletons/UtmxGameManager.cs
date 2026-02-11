@@ -23,7 +23,13 @@ public partial class UtmxGameManager : Node
 		Instance = this;
 		Boot = new();
 	}
-	public override void _ExitTree()
+
+    public override void _Ready()
+    {
+        base._Ready();
+    }
+
+    public override void _ExitTree()
 	{
 		Instance = null;
 		_GameEnd();
@@ -32,7 +38,6 @@ public partial class UtmxGameManager : Node
 	public void _GameStart()
 	{
 		EmitSignal(SignalName.GameStart, []);
-
 	}
 	public void _GameEnd()
 	{

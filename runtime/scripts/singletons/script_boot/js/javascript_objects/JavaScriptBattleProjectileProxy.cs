@@ -63,14 +63,6 @@ public partial class JavaScriptBattleProjectileProxy : BaseBattleProjectile, IOb
 	}
 	private void OnDisabled()
 	{
-		Invoke(EngineProperties.JAVASCRIPT_DISABLED_CALLBACK);
-    }
-    public override void _Notification(int what)
-    {
-        if (what == NotificationPredelete)
-        {
-            if (((IJavaScriptObject)this).Has(EngineProperties.JAVASCRIPT_DESTROY_CALLBACK))
-                ((IJavaScriptObject)this).Invoke(EngineProperties.JAVASCRIPT_DESTROY_CALLBACK, []);
-        }
+		Invoke(EngineProperties.JAVASCRIPT_DESTROY_CALLBACK);
     }
 }

@@ -26,7 +26,9 @@ playSound(soundFilePath: string) -> number
 
 播放指定路径的音效文件。
 
-**Returns** `number` — 音效实例唯一 ID，用于后续停止播放。
+返回音效实例唯一 ID，用于后续停止播放。
+
+**Returns** `number`
 
 | Parameter     | Type   | Description |
 | ------------- | ------ | ----------- |
@@ -131,9 +133,9 @@ getBgmPitch(bgmId: string) -> number
 ```
 
 获取背景音乐当前音调。
-
-**Returns** `number` — 当前音调
 `1.0` 为原速，大于 `1.0` 加速，小于 `1.0` 减速。
+
+**Returns** `number`
 
 | Parameter | Type   | Description |
 | --------- | ------ | ----------- |

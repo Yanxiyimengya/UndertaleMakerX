@@ -1,11 +1,12 @@
 export class UtmxGameObject {
-    constructor() {}
+    __instance = null;
 
-    set instance(value) {
-        this.__instance = value;
+    constructor() {
     }
-    get instance() {
-        return this.__instance;
+
+    static new()
+    {
+        return null;
     }
 
     destroy()

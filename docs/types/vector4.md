@@ -20,6 +20,41 @@ Vector4 是包含四个 `number` 分量的四维向量类型，可用于表示 3
 
 ## 方法（Methods）
 
+### 构造函数 constructor
+
+```javascript
+new Vector4()
+```
+
+构造一个Vector4零向量。
+
+---
+
+```javascript
+new Vector4(x: number, y: number, z: number, w: number)
+```
+
+| Parameter | Type             | Description |
+| --------- | ---------------- | ----------- |
+| x         | number           | 向量的 X 分量 |
+| y         | number           | 向量的 Y 分量 |
+| z         | number           | 向量的 Z 分量 |
+| w         | number           | 向量的 W 分量 |
+
+---
+
+```javascript
+new Vector4(from: Vector4)
+```
+
+同 `copy`，构造给定向量的副本。
+
+| Parameter | Type             | Description |
+| --------- | ---------------- | ----------- |
+| from      | Vector4             | 目标向量 |
+
+---
+
 ### add
 
 ```javascript

@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dm8esbpdjcgsv" path="res://__data__/built-in-resources/textures/soul/spr_heartbreak_0.png" id="2_ffyyg"]
 [ext_resource type="Texture2D" uid="uid://bi04oi56jlyi3" path="res://__data__/built-in-resources/textures/soul/spr_soul_battle-0.png" id="2_jg54t"]
 [ext_resource type="Texture2D" uid="uid://be7tjrap5mupx" path="res://__data__/built-in-resources/textures/ui/gameover/spr_gameoverbg_0.png" id="2_o25v4"]
-[ext_resource type="Script" uid="uid://dmq4qew4auuss" path="res://scripts/utils/text_typer/TextTyper.cs" id="3_jg54t"]
+[ext_resource type="Script" uid="uid://cjyho7by408k4" path="res://scripts/utils/game_objects/TextTyper.cs" id="3_jg54t"]
 [ext_resource type="Texture2D" uid="uid://84ot5rinyrk3" path="res://__data__/built-in-resources/textures/soul/spr_heartshards_sheet.png" id="3_llsh4"]
 [ext_resource type="FontFile" uid="uid://v628opivhevj" path="res://__data__/built-in-resources/fonts/Text.ttf" id="4_llsh4"]
 [ext_resource type="AudioStream" uid="uid://ddlvbybr05c6i" path="res://__data__/built-in-resources/sounds/voice/snd_txtasg.wav" id="5_ffyyg"]
@@ -80,4 +80,3 @@ TyperSpeed = 0.1
 TyperSize = 24
 TyperFont = ExtResource("4_llsh4")
 Voice = ExtResource("5_ffyyg")
-metadata/_custom_type_script = "uid://dmq4qew4auuss"

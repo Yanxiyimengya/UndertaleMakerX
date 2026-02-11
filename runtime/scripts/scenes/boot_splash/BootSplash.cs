@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 public partial class BootSplash : Control
 {
@@ -59,6 +60,7 @@ public partial class BootSplash : Control
 	{
 		if (!string.IsNullOrEmpty(FirstScene))
 			UtmxSceneManager.Instance.ChangeSceneToFile(FirstScene);
+		//await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 		UtmxGameManager.Instance._GameStart();
 	}
 }

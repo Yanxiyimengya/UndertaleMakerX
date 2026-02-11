@@ -41,3 +41,4 @@ UTMX.debug.log(mousePosition.add(Vector2.One)); // 这样就可以调用 UTMX �
 - [GameRegisterDB 模块](modules/game-register-db.md)
 - [Input 模块](modules/input.md)
 - [Player 模块](modules/player.md)
+- [Scene 模块](modules/scene.md)

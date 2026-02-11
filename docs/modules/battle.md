@@ -2,7 +2,7 @@
 
 Battle 是 **UTMX 框架的战斗管理模块**，用于统一管理 `Encounter` 战斗。
 
-访问或调用 Battle 模块的大部分属性/方法之前，请务必确保已经开始战斗，调用[isInBattle](#isInBattle)方法可以查询是否在正在战斗中。
+访问或调用 Battle 模块的大部分属性/方法之前，请务必确保已经开始战斗，调用 [isInBattle](#isInBattle) 方法可以查询是否在正在战斗中。
 
 !> 虽然 Battle 是一个全局模块，但其中的子模块依赖战斗场景元素，在使用时请务必确保是否已经开始战斗。
 
@@ -16,6 +16,8 @@ isInBattle() -> boolean
 
 查询战斗是否开始，当玩家处于战斗中时，该方法返回 true。
 
+**Returns** `void`
+
 ### startEncounter
 
 ```javascript
@@ -23,6 +25,8 @@ startEncounter(encounterId: string) -> void
 ```
 
 开启一场指定的遭遇战斗，如果战斗已经开始，则会立刻结束先前的战斗。
+
+**Returns** `void`
 
 #### 使用示例
 
@@ -45,6 +49,8 @@ endEncounter() -> void
 
 立即结束当前的遭遇战斗，如果处于战斗场景，则会回退到发起战斗之前的场景，无论处于什么状态。
 
+**Returns** `void`
+
 ---
 
 ### gameOver
@@ -54,6 +60,8 @@ gameOver() -> void
 ```
 
 结束当前的遭遇战斗，如果处于战斗场景 ，则会跳转到 `GameOver` 场景。
+
+**Returns** `void`
 
 ---
 
@@ -72,6 +80,8 @@ createRectangleExpand(position: Vector2, size: Vector2) -> BattleArenaRectangle
 
 在 `position` 位置创建一个大小为 `size` 的矩形加框。
 
+**Returns** `BattleArenaRectangle`
+
 ---
 
 ### createRectangleCulling
@@ -81,6 +91,8 @@ createRectangleCulling(position: Vector2, size: Vector2) -> BattleArenaRectangle
 ```
 
 在 `position` 位置创建一个大小为 `size` 的矩形剔除框。
+
+**Returns** `BattleArenaRectangle`
 
 ---
 
@@ -92,6 +104,8 @@ createCircleExpand(position: Vector2, radius: float) -> BattleArenaCircle
 
 在 `position` 位置创建一个半径为 `radius` 的圆形加框。
 
+**Returns** `BattleArenaCircle`
+
 ---
 
 ### createCircleCulling
@@ -101,6 +115,8 @@ createCircleCulling(position: Vector2, radius: float) -> BattleArenaCircle
 ```
 
 在 `position` 位置创建一个半径为 `radius` 的圆形剔除框。
+
+**Returns** `BattleArenaCircle`
 
 ---
 
@@ -114,6 +130,8 @@ createPolygonArenaExpand(position: Vector2, vertices: Array(Vector2)) -> BattleA
 
 !> 多边形的顶点数必须 大于等于 `3`。
 
+**Returns** `BattleArenaPolygon`
+
 ---
 
 ### createPolygonArenaCulling
@@ -126,6 +144,8 @@ createPolygonArenaCulling(position: Vector2, vertices: Array(Vector2)) -> Battle
 
 !> 多边形的顶点数必须 大于等于 `3`。
 
+**Returns** `BattleArenaPolygon`
+
 ---
 
 # Camera 子模块
@@ -137,8 +157,6 @@ Camera 为 Battle 的内置子模块，用于管理玩家在战斗中的 **摄�
 
 | Property          | Type    | Default   | Description                                      |
 | ----------------- | ------- | --------- | ------------------------------------------------ |
-| x  | number | 0      | 摄像机的 X 轴位置（相当于世界原点） |
-| y  | number | 0      | 摄像机的 Y 轴位置（相当于世界原点） |
 | position  | Vector2 | (0, 0)      | 摄像机的位置（相当于世界原点） |
 | zoom  | Vector2 | (1, 1)      | 摄像机的视角缩放 |
 | rotation  | number | 0      | 摄像机的旋转角度（单位为角度） |
@@ -152,17 +170,13 @@ Soul 为 Battle 的内置子模块，用于管理玩家在战斗中的 **灵魂*
 
 | Property          | Type    | Default   | Description                                      |
 | ----------------- | ------- | --------- | ------------------------------------------------ |
-| x  | number | 0      | 玩家灵魂的 X 轴位置（相当于世界原点） |
-| y  | number | 0      | 玩家灵魂的 Y 轴位置（相当于世界原点） |
 | position  | Vector2 | (0, 0)      | 玩家灵魂的位置（相当于世界原点） |
 | rotation  | number | 0      | 玩家灵魂的旋转角度（单位为角度） |
-| xscale  | number | 1      | 玩家灵魂的水平缩放 |
-| yscale  | number | 1      | 玩家灵魂的垂直缩放 |
 | scale  | Vector2 | (1, 1) | 玩家灵魂的缩放     |
 | skew  | number | 0 | 玩家灵魂的倾斜（单位为弧度）     |
 | enabledCollision  | boolean | true      | 是否启用碰撞，这会影响与 Arena 和 Projectile 的碰撞。 |
 | movable | boolean | true | 是否停用移动，如果停用移动，引擎就不会代理灵魂的移动，这对自定义灵魂行为很有帮助。|
-| sprite | Sprite | - | （只读）玩灵魂对应的 Sprite 访问对象。 |
+| sprite | Sprite | null | （只读）玩灵魂对应的 Sprite 访问对象。 |
 
 ---
 
@@ -173,6 +187,8 @@ tryMoveTo(target: Vector2) -> void
 ```
  
 尝试移动玩家灵魂，这会使灵魂受到 Arena 的阻碍从而阻止移动，通常我们需要这个方法安全地移动灵魂。
+
+**Returns** `void`
 
 ---
 
@@ -186,6 +202,8 @@ isOnArenaFloor() -> void
 
 这便于我们实现横板平台跳跃的游戏机制。
 
+**Returns** `void`
+
 ---
 
 ### IsOnArenaCeiling
@@ -195,6 +213,8 @@ IsOnArenaCeiling() -> void
 ```
  
 判断灵魂是否处于战斗框中的“天花板”上。
+
+**Returns** `void`
 
 ---
 

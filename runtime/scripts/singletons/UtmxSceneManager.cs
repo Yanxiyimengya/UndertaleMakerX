@@ -1,5 +1,7 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using System.Xml.Linq;
 
 [GlobalClass]
 public partial class UtmxSceneManager : CanvasLayer
@@ -12,7 +14,9 @@ public partial class UtmxSceneManager : CanvasLayer
 	private string _prevScene = "";
 	private string _currentScene = ProjectSettings.GetSetting("application/run/main_scene", "").ToString();
 	private string _mainScene = "";
+	private static Dictionary<string , Node> singletons = new();
 	public static UtmxSceneManager Instance { get; private set; }
+	
 	public override void _EnterTree()
 	{
 		if (Instance != null && Instance != this)
@@ -24,11 +28,17 @@ public partial class UtmxSceneManager : CanvasLayer
 		_mainScene = UtmxResourceLoader.ResolvePath(
 			(string)UtmxRuntimeProjectConfig.TryGetDefault("application/main_scene", string.Empty)
 		);
+		ProcessMode = ProcessModeEnum.Always;
 	}
 
 	public override void _ExitTree()
 	{
 		Instance = null;
+		foreach (Node node in singletons.Values)
+		{
+			node.QueueFree();
+		}
+		singletons.Clear();
 	}
 
 	public void ChangeSceneToFile(string filePath)
@@ -46,6 +56,42 @@ public partial class UtmxSceneManager : CanvasLayer
 		GetTree()?.ChangeSceneToFile(filePath);
 	}
 
+	public void AddSingleton(string name, Node node)
+	{
+		if (string.IsNullOrEmpty(name))
+		{
+			UtmxLogger.Error(TranslationServer.Translate("Cannot add singleton, singleton name is invalid:"), name);
+			return;
+		}
+		if (singletons.ContainsKey(name))
+		{
+			UtmxLogger.Error(TranslationServer.Translate("Cannot add singleton, singleton already exists:"), name);
+			return;
+		}
+		if (node != null && IsInstanceValid(node))
+		{
+			node.Name = name;
+			if (node.GetParent() == null)
+				 Instance.AddChild(node);
+			else node.Reparent(Instance);
+			singletons.Add(name, node);
+		}
+		else
+		{
+			UtmxLogger.Error(TranslationServer.Translate("Unable to add singleton, singleton object is invalid"), name);
+			return;
+		}
+	}
+
+	public Node GetSingleton(string name)
+	{
+		if (singletons.ContainsKey(name))
+		{
+			return singletons[name];
+		}
+		return null;
+	}
+
 	public string GetMainScenePath()
 	{
 		return _mainScene;
@@ -60,47 +106,48 @@ public partial class UtmxSceneManager : CanvasLayer
 	}
 
 
-    #region 渲染对象管理
+	#region 渲染对象管理
 
-    private static ObjectPool<DrawableObject> _drawableObjectPool = new();
-    public static DrawableObject CreateDrawableObject()
-    {
-        return CreateDrawableObject<DrawableObject>();
-    }
-    public static T CreateDrawableObject<T>() where T : DrawableObject, new()
-    {
-        T node = _drawableObjectPool.GetObject<T>();
+	private static ObjectPool<DrawableObject> _drawableObjectPool = new();
+	public static DrawableObject CreateDrawableObject()
+	{
+		return CreateDrawableObject<DrawableObject>();
+	}
+	public static T CreateDrawableObject<T>() where T : DrawableObject, new()
+	{
+		T node = _drawableObjectPool.GetObject<T>();
 		Node parent = node.GetParent();
-        Node targetParent = Instance.GetTree().CurrentScene;
-        if (parent == null) targetParent.CallDeferred("add_child", node);
-        else if (parent != targetParent) targetParent.CallDeferred("reparent", node);
-        return node;
-    }
+		Node targetParent = Instance.GetTree().CurrentScene;
+		if (parent == null) targetParent.AddChild(node);
+		else if (parent != targetParent) targetParent.Reparent(node);
 
-    public static void DeleteDrawableObject(DrawableObject typer)
-    {
-        if (typer == null) return;
-        _drawableObjectPool.DisabledObject(typer);
-    }
-    #endregion
+		return node;
+	}
 
-    #region 精灵管理
+	public static void DeleteDrawableObject(DrawableObject obj)
+	{
+		if (obj == null) return;
+		_drawableObjectPool.DisabledObject(obj);
+	}
+	#endregion
 
-    private static ObjectPool<GameSprite2D> _spritePool = new(); 
+	#region 精灵管理
+
+	private static ObjectPool<GameSprite2D> _spritePool = new(); 
 	public static GameSprite2D CreateSprite()
 	{
 		return CreateSprite<GameSprite2D>();
 	}
-    public static T CreateSprite<T>() where T : GameSprite2D, new()
-    {
-        T node = _spritePool.GetObject<T>();
-        Node parent = node.GetParent();
-        Node targetParent = Instance.GetTree().CurrentScene;
-        if (parent == null) targetParent.CallDeferred("add_child", node);
-        else if (parent != targetParent) targetParent.CallDeferred("reparent", node);
-        return node;
-    }
-    public static void DeleteSprite(GameSprite2D sprite)
+	public static T CreateSprite<T>() where T : GameSprite2D, new()
+	{
+		T node = _spritePool.GetObject<T>();
+		Node parent = node.GetParent();
+		Node targetParent = Instance.GetTree().CurrentScene;
+		if (parent == null) targetParent.AddChild(node);
+		else if (parent != targetParent) targetParent.Reparent(node);
+		return node;
+	}
+	public static void DeleteSprite(GameSprite2D sprite)
 	{
 		if (sprite == null) return;
 		_spritePool.DisabledObject(sprite);
@@ -115,14 +162,14 @@ public partial class UtmxSceneManager : CanvasLayer
 		return CreateTextTyper<TextTyper>();
 	}
 	public static T CreateTextTyper<T>() where T : TextTyper, new()
-    {
-        T node = _textTyperPool.GetObject<T>();
-        Node parent = node.GetParent();
-        Node targetParent = Instance.GetTree().CurrentScene;
-        if (parent == null) targetParent.CallDeferred("add_child", node);
-        else if (parent != targetParent) targetParent.CallDeferred("reparent", node);
-        return node;
-    }
+	{
+		T node = _textTyperPool.GetObject<T>();
+		Node parent = node.GetParent();
+		Node targetParent = Instance.GetTree().CurrentScene;
+		if (parent == null) targetParent.AddChild(node);
+		else if (parent != targetParent) targetParent.Reparent(node);
+		return node;
+	}
 
 	public static void DeleteTextTyper(TextTyper typer)
 	{

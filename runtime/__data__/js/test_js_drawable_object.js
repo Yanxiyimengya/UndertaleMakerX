@@ -8,9 +8,11 @@ export default class MyDO extends UTMX.DrawableObject
 
 	active()
 	{
+		UTMX.debug.print("active");
 	}
 	disabled()
 	{
+		UTMX.debug.print("disabled");
 	}
     update(delta)
     {
@@ -27,6 +29,5 @@ export default class MyDO extends UTMX.DrawableObject
 				[new Color(1, 0, 0), new Color(0, 1, 0), new Color(0, 0, 1), new Color(1, 1, 0)]
 			);
 		}
-		UTMX.debug.print(UTMX.input.getMousePosition().length());
     }
 }

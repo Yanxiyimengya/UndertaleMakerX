@@ -211,42 +211,6 @@ public partial class BattleArenaGroup : Node2D
 		}
 		return false;
 	}
-
-	private static PhysicsShapeQueryParameters2D _arenaSegmentLineQuery = new PhysicsShapeQueryParameters2D()
-	{
-		Shape = new SegmentShape2D(),
-		Transform = Transform2D.Identity,
-		CollideWithAreas = false,
-		CollideWithBodies = true,
-		CollisionMask = (uint)UtmxBattleManager.BattleCollisionLayers.Arena
-	};
-	public bool IsLineInArenas(Vector2 from, Vector2 to, bool ignoreCulling = false)
-	{
-		if (EnabledArenaCount == 0) return false;
-		if (! ignoreCulling)
-		{
-			PhysicsDirectSpaceState2D spaceState = GetWorld2D().DirectSpaceState;
-			if (spaceState != null)
-			{
-				((SegmentShape2D)_arenaSegmentLineQuery.Shape).A = from;
-				((SegmentShape2D)_arenaSegmentLineQuery.Shape).B = to;
-				if (spaceState.IntersectShape(_arenaSegmentLineQuery).Count > 0)
-				{
-					return false;
-				}
-			}
-		}
-		foreach (Node child in GetChildren())
-		{
-			if (child is not BattleArenaExpand arena || !arena.Enabled) continue;
-			var insideChild = arena.IsSegmentInArena(
-				arena.GlobalTransform.AffineInverse() * from,
-				arena.GlobalTransform.AffineInverse() * to);
-			if (insideChild) return true;
-		}
-		return false;
-	}
-
 	public Vector2 PushBackInside(Vector2 center, Vector2[] checkPoints, float tolerance = 0.001f)
 	{
 		if (EnabledArenaCount == 0) return center;

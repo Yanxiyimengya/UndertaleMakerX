@@ -13,7 +13,8 @@ let col = Color.Red;
 
 ## 类型列表
 
+- [Color](types/color.md)
+- [GameObject 及其派生类型](types/game-object/)
 - [Vector2](types/vector2.md)
 - [Vector3](types/vector3.md)
 - [Vector4](types/vector4.md)
-- [Color](types/color.md)

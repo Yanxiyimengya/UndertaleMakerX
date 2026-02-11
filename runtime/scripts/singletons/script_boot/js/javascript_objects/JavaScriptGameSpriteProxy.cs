@@ -45,6 +45,6 @@ public partial class JavaScriptGameSpriteProxy : GameSprite2D, IJavaScriptObject
 	}
 	private void OnDisabled()
 	{
-		Invoke(EngineProperties.JAVASCRIPT_DISABLED_CALLBACK);
+		Invoke(EngineProperties.JAVASCRIPT_DESTROY_CALLBACK);
 	}
 }

@@ -12,6 +12,5 @@ public class EngineProperties
     public const String JAVASCRIPT_ON_LOAD_CALLBACK = "onLoad";
     public const String JAVASCRIPT_START_CALLBACK = "start";
     public const String JAVASCRIPT_UPDATE_CALLBACK = "update";
-    public const String JAVASCRIPT_DISABLED_CALLBACK = "disabled";
-    public const String JAVASCRIPT_DESTROY_CALLBACK = "destroy";
+    public const String JAVASCRIPT_DESTROY_CALLBACK = "onDestroy";
 }

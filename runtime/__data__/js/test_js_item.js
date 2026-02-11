@@ -8,7 +8,7 @@ export default class MyItem extends UTMX.Item {
 	}
 	
 	onUse() {
-		UTMX.player.heal(30);
+		UTMX.player.hurt(30);
 		this.removeSelf();
 		UTMX.audio.playSound("built-in-resources/sounds/sfx/heal.wav");
 		this.usedText2 = "你使用了我的物品！";

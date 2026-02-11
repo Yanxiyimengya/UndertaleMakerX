@@ -1,4 +1,3 @@
-
 import { __BattleProjectile, __logger } from "__UTMX";
 import { UtmxGameSprite } from "./utmx-game-sprite.wrapper";
 

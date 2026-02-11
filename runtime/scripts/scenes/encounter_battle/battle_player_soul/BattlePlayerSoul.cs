@@ -129,8 +129,6 @@ public partial class BattlePlayerSoul : CharacterBody2D
 
 	public override void _Process(double delta)
 	{
-		
-		GD.Print("VELOCITY", Velocity);
 		if (_invincibleTimer > 0)
 		{
 			_invincibleTimer -= delta;

@@ -32,7 +32,7 @@ isItemRegistered(itemId: string) -> boolean
 
 检查指定物品是否已完成注册。
 
-**Returns** `boolean` — 是否已注册
+**Returns** `boolean`
 
 | Parameter | Type   | Description |
 | --------- | ------ | ----------- |
@@ -95,7 +95,7 @@ isEnemyRegistered(enemyId: string) -> boolean
 
 检查指定敌人是否已完成注册。
 
-**Returns** `boolean` — 是否已注册
+**Returns** `boolean`
 
 | Parameter | Type   | Description |
 | --------- | ------ | ----------- |
@@ -158,7 +158,7 @@ isEncounterRegistered(encounterId: string) -> boolean
 
 检查指定遭遇是否已完成注册。
 
-**Returns** `boolean` — 是否已注册
+**Returns** `boolean`
 
 | Parameter   | Type   | Description |
 | ----------- | ------ | ----------- |

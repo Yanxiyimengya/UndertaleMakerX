@@ -21,7 +21,7 @@ Player 是 **UTMX 框架的核心玩家管理模块**，负责维护玩家基础
 | attack         | number | `0`       | 基础攻击力（不含装备加成）      |
 | defence        | number | `0`       | 基础防御力（不含装备加成）      |
 | invincibleTime | number | `0.75`    | 受击后的默认无敌时间（秒）      |
- 
+
 ---
 
 ## 方法（Methods）
@@ -38,8 +38,7 @@ hurt(damage: number, invtime?: number) -> void
 * 若处于战斗场景，将触发无敌保护时间
 * 无敌时间优先级：`invtime > invincibleTime`
 
-**Returns**
-`void`
+**Returns** `void`
 
 | Parameter | Type   | Default | Description         |
 | --------- | ------ | ------- | ------------------- |
@@ -59,8 +58,7 @@ heal(amount: number) -> void
 * 自动播放治疗音效
 * 恢复后的生命值不会超过 `maxHp`
 
-**Returns**
-`void`
+**Returns** `void`
 
 | Parameter | Type   | Description |
 | --------- | ------ | ----------- |
@@ -95,8 +93,7 @@ addItem(id: string) -> void
 
 > 物品必须先通过 `UTMX.registerDB` 注册，否则添加无效。
 
-**Returns**
-`void`
+**Returns** `void`
 
 | Parameter | Type   | Description |
 | --------- | ------ | ----------- |
@@ -126,8 +123,7 @@ setItem(slot: number, id: string) -> void
 * 槽位必须有效 (大于 `0` 且小于 `maxInventoryCount`)
 * 新物品必须已注册
 
-**Returns**
-`void`
+**Returns** `void`
 
 | Parameter | Type   | Description  |
 | --------- | ------ | ------------ |
@@ -146,8 +142,7 @@ removeItem(slot: number) -> void
 
 * 若槽位为空或无效，则无效果
 
-**Returns**
-`void`
+**Returns** `void`
 
 | Parameter | Type   | Description  |
 | --------- | ------ | ------------ |
@@ -165,8 +160,7 @@ getItem(slot: number) -> object | null
 
 * 若槽位为空或无效，返回 `null`
 
-**Returns**
-`object | null` — 物品包装对象或空值
+**Returns** `object | null`
 
 | Parameter | Type   | Description  |
 | --------- | ------ | ------------ |
@@ -182,5 +176,4 @@ getItemCount() -> number
 
 返回当前库存中的物品总数量。
 
-**Returns**
-`number` — 当前库存物品数量
+**Returns** `number`

@@ -72,22 +72,6 @@ class BattleSoul extends UtmxGameObject
 	static set position(value) {
 		__battle_manager.GetBattlePlayerController().PlayerSoul.Position = value;
 	}
-	static get x() {
-		return __battle_manager.GetBattlePlayerController().PlayerSoul.Position.X;
-	}
-	static set x(value) {
-		let newPosition = __battle_manager.GetBattlePlayerController().PlayerSoul.Position;
-		newPosition.X = value;
-		__battle_manager.GetBattlePlayerController().PlayerSoul.Position = newPosition;
-	}
-	static get y() {
-		return __battle_manager.GetBattlePlayerController().PlayerSoul.Position.Y;
-	}
-	static set y(value) {
-		let newPosition = __battle_manager.GetBattlePlayerController().PlayerSoul.Position;
-		newPosition.Y = value;
-		__battle_manager.GetBattlePlayerController().PlayerSoul.Position = newPosition;
-	}
 	static get z() {
 		return __battle_manager.GetBattlePlayerController().PlayerSoul.ZIndex;
 	}
@@ -99,22 +83,6 @@ class BattleSoul extends UtmxGameObject
 	}
 	static set rotation(value) {
 		__battle_manager.GetBattlePlayerController().PlayerSoul.RotationDegrees = value;
-	}
-	static get xscale() {
-		return __battle_manager.GetBattlePlayerController().PlayerSoulScale.X;
-	}
-	static set xscale(value) {
-		let newScale = __battle_manager.GetBattlePlayerController().PlayerSoul.Scale;
-		newScale.X = value;
-		__battle_manager.GetBattlePlayerController().PlayerSoul.Scale = newScale;
-	}
-	static get yscale() {
-		return __battle_manager.GetBattlePlayerController().PlayerSoul.Scale.Y;
-	}
-	static set yscale(value) {
-		let newScale = __battle_manager.GetBattlePlayerController().PlayerSoul.Scale;
-		newScale.Y = value;
-		__battle_manager.GetBattlePlayerController().PlayerSoul.Scale = newScale;
 	}
 	static get scale() {
 		return __battle_manager.GetBattlePlayerController().PlayerSoul.Scale;
@@ -132,7 +100,7 @@ class BattleSoul extends UtmxGameObject
 	static __sprite = new UtmxGameSprite();
 	static get sprite() {
 		if (! __battle_manager.IsInBattle()) return null;
-		this.__sprite.instance = __battle_manager.GetBattlePlayerController().PlayerSoul.Sprite;
+		this.__sprite.__instance = __battle_manager.GetBattlePlayerController().PlayerSoul.Sprite;
 		return this.__sprite;
 	}
 	static set sprite(value) { } // 只读
@@ -201,7 +169,7 @@ class BattleArenaAccess
 		arenaWrapper.vertices = vertices;
 		return arenaWrapper;
 	}
-	static createPolygonArenaExpand(pos = new Vector2(320, 320), vertices = [])
+	static createPolygonArenaCulling(pos = new Vector2(320, 320), vertices = [])
 	{
 		if (vertices.length < 3) return;
 		let arenaWrapper = new BattleArenaPolygon();

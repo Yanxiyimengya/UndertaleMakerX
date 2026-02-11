@@ -1,7 +1,7 @@
-import { UtmxDrawableObject } from "./utmx-drawable-object.wrapper";
-import { __GameSprite } from "__UTMX";
+import { UtmxTransformableObject } from "./utmx-transformable-object.weapper.js";
+import { __GameSprite , __Color } from "__UTMX";
 
-export class UtmxGameSprite extends UtmxDrawableObject {
+export class UtmxGameSprite extends UtmxTransformableObject {
     static new()
     {
         let ins = new this();
@@ -22,26 +22,64 @@ export class UtmxGameSprite extends UtmxDrawableObject {
             this.__instance.TexturesPath = value;
         }
     }
+    get frame() {
+        return this.__instance.Frame;
+    }
+    set frame(value) {
+        this.__instance.Frame = value;
+    }
     get offset() {
         return this.__instance.Offset;
     }
     set offset(value) {
         this.__instance.Offset = value;
     }
-    get speed() {
+    get frameSpeed() {
         return this.__instance.SpeedScale;
     }
-    set speed(value) {
+    set frameSpeed(value) {
         this.__instance.SpeedScale = value;
     }
+    get loop() {
+        return this.__instance.Loop;
+    }
+    set loop(value) {
+        this.__instance.Loop = value;
+    }
+    
+	get color() { return this.__instance.Modulate; }
+	set color(value) {
+		if (value instanceof __Color || typeof value == 'object')
+		{
+			this.__instance.Modulate = value;
+		}
+		else if (value instanceof String || typeof value == 'string')
+		{
+			this.__instance.Modulate = __Color.FromString(value, this.__instance.Modulate);
+		}
+	}
+    
+	get shader() { return this.__instance.ShaderInstance; }
+	set shader(value) { this.__instance.ShaderInstance = value; }
     
     play()
     {
-        this.__instance.Play();
+        this.__instance.PlayAnimation();
     }
-
-    setLoop(loop)
+    stop()
     {
-        this.__instance.SetLoop(loop);
+        this.__instance.Stop();
+    }
+    pause()
+    {
+        this.__instance.Pause();
+    }
+    resume()
+    {
+        this.__instance.Resume();
+    }
+    isPlaying()
+    {
+        return this.__instance.IsPlaying();
     }
 }

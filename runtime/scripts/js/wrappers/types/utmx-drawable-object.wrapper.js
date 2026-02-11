@@ -1,8 +1,8 @@
 import { __Vector2 , __DrawableObject } from "__UTMX";
 import { __Color } from "res://scripts/js/wrappers/types/utmx-color.weapper.js";
-import { UtmxGameObject } from "./utmx-game-object.weapper.js";
+import { UtmxTransformableObject } from "./utmx-transformable-object.weapper.js";
 
-export class UtmxDrawableObject extends UtmxGameObject {
+export class UtmxDrawableObject extends UtmxTransformableObject {
 	static new()
 	{
 		let ins = new this();
@@ -10,69 +10,6 @@ export class UtmxDrawableObject extends UtmxGameObject {
 		return ins;
 	}
 
-	get position() {
-		return this.__instance.Position;
-	}
-	set position(value) {
-		this.__instance.Position = value;
-	}
-	get x() {
-		return this.__instance.Position.X;
-	}
-	set x(value) {
-		let newPosition = this.__instance.Position;
-		newPosition.X = value;
-		this.__instance.Position = newPosition;
-	}
-	get y() {
-		return this.__instance.Position.Y;
-	}
-	set y(value) {
-		let newPosition = this.__instance.Position;
-		newPosition.Y = value;
-		this.__instance.Position = newPosition;
-	}
-	get z() {
-		return this.__instance.ZIndex;
-	}
-	set z(value) {
-		this.__instance.ZIndex = value;
-	}
-	get rotation() {
-		return this.__instance.RotationDegrees;
-	}
-	set rotation(value) {
-		this.__instance.RotationDegrees = value;
-	}
-	get xscale() {
-		return this.__instance.Scale.X;
-	}
-	set xscale(value) {
-		let newScale = this.__instance.Scale;
-		newScale.X = value;
-		this.__instance.Scale = newScale;
-	}
-	get yscale() {
-		return this.__instance.Scale.Y;
-	}
-	set yscale(value) {
-		let newScale = this.__instance.Scale;
-		newScale.Y = value;
-		this.__instance.Scale = newScale;
-	}
-	get scale() {
-		return this.__instance.Scale;
-	}
-	set scale(value) {
-		this.__instance.Scale = value;
-	}
-	get skew() {
-		return this.__instance.Skew;
-	}
-	set skew(value) {
-		this.__instance.Skew = value;
-	}
-	
 	get color() {
 		return this.__instance.Modulate;
 	}
@@ -97,6 +34,8 @@ export class UtmxDrawableObject extends UtmxGameObject {
 			this.__instance.Modulate = __Color.FromString(value, this.__instance.Modulate);
 		}
 	}
+	get shader() { return this.__instance.ShaderInstance; }
+	set shader(value) { this.__instance.ShaderInstance = value; }
 
 	drawCircle(pos, radius, color = new __Color(1,1,1))
 	{
@@ -118,9 +57,12 @@ export class UtmxDrawableObject extends UtmxGameObject {
 	{
 		this.__instance.DrawTexturePos(path, tl, tr, br, bl, colors);
 	}
-
-	redraw()
+	drawPolygon(vertices, colors = [], uvs = [], path = "")
 	{
+		this.__instance.DrawPolygon(vertices, colors, uvs, path);
+	}
+
+	redraw() {
 		this.__instance.Redraw();
 	}
 }

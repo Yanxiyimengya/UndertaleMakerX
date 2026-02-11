@@ -45,6 +45,40 @@ Vector3 是包含三个 `number` 分量的三维向量类型，可用于表示 3
 
 ## 方法（Methods）
 
+### 构造函数 constructor
+
+```javascript
+new Vector3()
+```
+
+同`Vector3.Zero`，构造一个Vector3零向量。
+
+---
+
+```javascript
+new Vector3(x: number, y: number, z: number)
+```
+
+| Parameter | Type             | Description |
+| --------- | ---------------- | ----------- |
+| x         | number           | 向量的 X 分量 |
+| y         | number           | 向量的 Y 分量 |
+| z         | number           | 向量的 Z 分量 |
+
+---
+
+```javascript
+new Vector3(from: Vector3)
+```
+
+| Parameter | Type             | Description |
+| --------- | ---------------- | ----------- |
+| from   | Vector3             | 目标向量 |
+
+同 `copy`，构造给定向量的副本。
+
+---
+
 ### add
 
 ```javascript

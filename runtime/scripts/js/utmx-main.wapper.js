@@ -16,6 +16,8 @@ import { UtmxBaseItem } from "res://scripts/js/wrappers/types/utmx-item.wrapper.
 import { UtmxBaseEnemy } from "res://scripts/js/wrappers/types/utmx-enemy.wrapper.js";
 import { UtmxBaseEncounter } from "res://scripts/js/wrappers/types/utmx-encounter.wrapper.js";
 import { UtmxBattleTurn } from "res://scripts/js/wrappers/types/utmx-battle-turn.wrapper.js";
+import { UtmxTextTyper } from "res://scripts/js/wrappers/types/utmx-text-typer.wrapper.js";
+import { UtmxShader } from "res://scripts/js/wrappers/types/utmx-shader.weapper.js";
 
 class UTMX {
 	static debug = UtmxDebugger;
@@ -34,6 +36,8 @@ class UTMX {
 	static BattleProjectile = UtmxBattleProjectile;
 	static Sprite = UtmxGameSprite;
 	static DrawableObject = UtmxDrawableObject;
+	static TextTyper = UtmxTextTyper;
+	static Shader = UtmxShader;
 }
 
 export {

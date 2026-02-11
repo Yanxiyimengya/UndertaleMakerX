@@ -29,8 +29,10 @@ public class JavaScriptCoreInterface
 			{ "__GameSprite" , typeof(JavaScriptGameSpriteProxy)},
 			{ "__TextTyper" , typeof(JavaScriptTextTyperProxy)},
 			{ "__DrawableObject" , typeof(JavaScriptDrawableObjectProxy)},
+            { "__UtmxShader" , typeof(JavaScriptGameShaderProxy)},
 
-			{ "__Vector2" , typeof(Vector2)},
+
+            { "__Vector2" , typeof(Vector2)},
 			{ "__Vector3" , typeof(Vector3)},
 			{ "__Vector4" , typeof(Vector4)},
 			{ "__Color" , typeof(Color)},

@@ -1,10 +1,22 @@
 using Godot;
-using System.IO;
 
 [GlobalClass]
 public partial class DrawableObject : Node2D, IObjectPoolObject
 {
-    Rid canvasItemRid;
+
+    public Rid canvasItemRid;
+    public GameShader ShaderInstance
+    {
+        get => _shaderInstance;
+        set
+        {
+            _shaderInstance = value;
+            Material = value.GetShaderMaterial();
+        }
+    }
+
+    protected GameShader _shaderInstance;
+
     public virtual void Awake()
     {
         Transform = Transform2D.Identity;
@@ -43,7 +55,7 @@ public partial class DrawableObject : Node2D, IObjectPoolObject
         RenderingServer.CanvasItemAddLine(canvasItemRid, from, to, 
             Color.FromString(color, Colors.White), (float)width);
     }
-    public void DrawPolygon(Vector2[] vertices, Color[] colors = default, Vector2[] UVs = default, string path = "")
+    public void DrawPolygon(Vector2[] vertices, Color[] colors = default, Vector2[] uvs = default, string path = "")
     {
         Resource res = UtmxResourceLoader.Load(path);
         Texture2D texture = null;
@@ -51,13 +63,20 @@ public partial class DrawableObject : Node2D, IObjectPoolObject
         {
             texture = (Texture2D)res;
         }
+        else
+        {
+            if (uvs.Length == 0)
+            {
+                uvs = new Vector2[vertices.Length];
+            }
+        }
         if (colors.Length == 0)
         {
             colors = new Color[vertices.Length];
             for (int i = 0; i < colors.Length; i++)
                 colors[i] = Colors.White;
         }
-        RenderingServer.CanvasItemAddPolygon(canvasItemRid, vertices, colors, UVs,
+        RenderingServer.CanvasItemAddPolygon(canvasItemRid, vertices, colors, uvs,
             (texture == null) ? default: texture.GetRid());
     }
 
@@ -78,10 +97,4 @@ public partial class DrawableObject : Node2D, IObjectPoolObject
             colors, 
             [Vector2.Zero, new Vector2(1, 0), Vector2.One, new Vector2(0, 1)], path);
     }
-
-
-
-
-
-
 }
