@@ -40,8 +40,12 @@ public partial class JavaScriptEnemyProxy : BaseEnemy, IJavaScriptObject
 	public override void _OnSpare()
 	{
 		((IJavaScriptObject)this).Invoke("onSpare", []);
-	}
-	public override void _OnDialogueStarting()
+    }
+    public override void _OnDead()
+    {
+        ((IJavaScriptObject)this).Invoke("onDead", []);
+    }
+    public override void _OnDialogueStarting()
 	{
 		((IJavaScriptObject)this).Invoke("onDialogueStarting", []);
 	}
