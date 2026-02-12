@@ -2,7 +2,6 @@ import { __BattleProjectile, __logger } from "__UTMX";
 import { UtmxGameSprite } from "./utmx-game-sprite.wrapper";
 
 export class UtmxBattleProjectile extends UtmxGameSprite { 
-    
 	static ProjectileCollisionMode = Object.freeze({
 		FULL_TEXTURE : 0,
 		USED_RECT : 1,
@@ -16,6 +15,12 @@ export class UtmxBattleProjectile extends UtmxGameSprite {
         return ins;
     }
 
+    get damage() {
+        return this.__instance.Damage;
+    }
+    set damage(value) {
+        this.__instance.Damage = value;
+    }
     get destroyOnTurnEnd() {
         return this.__instance.DestroyOnTurnEnd;
     }
@@ -29,18 +34,17 @@ export class UtmxBattleProjectile extends UtmxGameSprite {
         this.__instance.CollisionMode = value;
     }
 
-    get damage() {
-        return this.__instance.Damage;
-    }
-    set damage(value) {
-        this.__instance.Damage = value;
-    }
-
     get preciseEpsilon() {
         return this.__instance.PreciseEpsilon;
     }
     set preciseEpsilon(value) {
         this.__instance.PreciseEpsilon = value;
+    }
+    get useMask() {
+        return this.__instance.UseMask;
+    }
+    set useMask(value) {
+        this.__instance.UseMask = value;
     }
 
     get enabled() {
@@ -48,12 +52,5 @@ export class UtmxBattleProjectile extends UtmxGameSprite {
     }
     set enabled(value) {
         this.__instance.Enabled = value;
-    }
-
-    get useMask() {
-        return this.__instance.UseMask;
-    }
-    set useMask(value) {
-        this.__instance.UseMask = value;
     }
 }

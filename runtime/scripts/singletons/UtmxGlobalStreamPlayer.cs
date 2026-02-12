@@ -148,7 +148,7 @@ public partial class UtmxGlobalStreamPlayer : Node
 				bool _isLoop = player.GetMeta("loop").AsBool();
 				if (_isLoop)
 				{
-					player.Play();
+					player.Play(0);
 				}
 				else
 				{
@@ -159,7 +159,7 @@ public partial class UtmxGlobalStreamPlayer : Node
 			Instance.AddChild(player);
 		}
 		player.Stream = stream;
-		player.Play();
+		player.Play(0);
 		player.SetMeta("loop", loop);
 	}
 
@@ -183,7 +183,7 @@ public partial class UtmxGlobalStreamPlayer : Node
 			player.Stop();
 			return;
 		}
-		throw new ArgumentException($"Bgm player with id '{bgmId}' not found.");
+		UtmxLogger.Error($"Bgm player with id '{bgmId}' not found.");
 	}
 	public static void StopAll()
 	{
@@ -201,7 +201,7 @@ public partial class UtmxGlobalStreamPlayer : Node
 			player.StreamPaused = paused;
 			return;
 		}
-		throw new ArgumentException($"Bgm player with id '{bgmId}' not found.");
+		UtmxLogger.Error($"Bgm player with id '{bgmId}' not found.");
 	}
 	public static bool GetBgmPaused(string bgmId)
 	{
@@ -209,19 +209,21 @@ public partial class UtmxGlobalStreamPlayer : Node
 		{
 			return player.StreamPaused;
 		}
-		throw new ArgumentException($"Bgm player with id '{bgmId}' not found.");
-	}
+		UtmxLogger.Error($"Bgm player with id '{bgmId}' not found.");
+        return false;
+    }
 
-	public float GetBgmVolume(string bgmId)
+	public double GetBgmVolume(string bgmId)
 	{
 		if (bgmPlayers.TryGetValue(bgmId, out AudioStreamPlayer player))
 		{
 			return player.VolumeDb;
 		}
-		throw new ArgumentException($"Bgm player with id '{bgmId}' not found.");
-	}
+		UtmxLogger.Error($"Bgm player with id '{bgmId}' not found.");
+        return 0;
+    }
 
-	public static void SetBgmVolume(string bgmId, float volumeDb, float duration = 0)
+	public static void SetBgmVolume(string bgmId, double volumeDb, double duration = 0)
 	{
 		if (bgmPlayers.TryGetValue(bgmId, out AudioStreamPlayer player))
 		{
@@ -238,11 +240,11 @@ public partial class UtmxGlobalStreamPlayer : Node
 			}
 			else
 			{
-				player.VolumeDb = volumeDb;
+				player.VolumeDb = (float)volumeDb;
 			}
 			return;
 		}
-		throw new ArgumentException($"Bgm player with id '{bgmId}' not found.");
+		UtmxLogger.Error($"Bgm player with id '{bgmId}' not found.");
 	}
 	public static float GetBgmPitch(string bgmId)
 	{
@@ -250,10 +252,10 @@ public partial class UtmxGlobalStreamPlayer : Node
 		{
 			return player.PitchScale;
 		}
-		throw new ArgumentException($"Bgm player with id '{bgmId}' not found.");
+		UtmxLogger.Error($"Bgm player with id '{bgmId}' not found.");
+		return 0;
 	}
-
-	public static void SetBgmPitch(string bgmId, float pitch, float duration = 0)
+	public static void SetBgmPitch(string bgmId, double pitch, double duration = 0)
 	{
 		if (pitch < 0)
 		{
@@ -274,12 +276,29 @@ public partial class UtmxGlobalStreamPlayer : Node
 			}
 			else
 			{
-				player.PitchScale = pitch;
+				player.PitchScale = (float)pitch;
 			}
 			return;
 		}
-		throw new ArgumentException($"Bgm player with id '{bgmId}' not found.");
+		UtmxLogger.Error($"Bgm player with id '{bgmId}' not found.");
+    }
+    public static double GetBgmPosition(string bgmId)
+	{
+		if (bgmPlayers.TryGetValue(bgmId, out AudioStreamPlayer player))
+		{
+			return player.GetPlaybackPosition();
+		}
+		UtmxLogger.Error($"Bgm player with id '{bgmId}' not found.");
+		return 0;
 	}
+
+    public static void SetBgmPosition(string bgmId, double position)
+    {
+        if (bgmPlayers.TryGetValue(bgmId, out AudioStreamPlayer player))
+        {
+            player.Play((float)position);
+        }
+    }
 	public static void AppendStreamToLibrary(string id, AudioStream stream)
 	{
 		if (stream == null) return;

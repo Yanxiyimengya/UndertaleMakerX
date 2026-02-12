@@ -101,6 +101,8 @@ public partial class BattlePlayerSoul : CharacterBody2D
 		}
 	}
 
+	public bool IsMoving { get => _isMoving; set => _isMoving = value; }
+
 	[Export]
 	public AnimatedSprite2D Sprite;
 	[Export]
@@ -116,6 +118,8 @@ public partial class BattlePlayerSoul : CharacterBody2D
 	private bool _movable = true;
 	private bool _freed = false;
 	private double _invincibleTimer = 0.0F;
+	private bool _isMoving = false;
+	private Vector2 _prevPosition = Vector2.Zero;
 	private List<Vector2> _checkPoints = new List<Vector2>();
 
 	public const float MOVE_SPEED = 130.0f;
@@ -127,6 +131,10 @@ public partial class BattlePlayerSoul : CharacterBody2D
 		CollisionMask = (int)UtmxBattleManager.BattleCollisionLayers.Player;
 	}
 
+	public override void _Ready()
+	{
+		_prevPosition = Position;
+	}
 	public override void _Process(double delta)
 	{
 		if (_invincibleTimer > 0)
@@ -162,6 +170,8 @@ public partial class BattlePlayerSoul : CharacterBody2D
 				TryMoveTo(targetPos);
 			}
 		}
+		IsMoving = targetPos != _prevPosition;
+		_prevPosition = targetPos;
 		MoveAndSlide();
 	}
 

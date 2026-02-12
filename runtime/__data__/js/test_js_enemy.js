@@ -11,7 +11,8 @@ export default class PapyrusEnemy extends UTMX.Enemy {
 		this.maxHp = 10;
 		this.attack = 20;
 		this.defense = 5;
-		
+
+		this.position = new Vector2(0.0, -10.0);
 		this.centerPosition = new Vector2(0.0, -70.0);
 		UTMX.debug.print("PapyrusEnemy: CenterPosition set to " + JSON.stringify(this.centerPosition)); 
 

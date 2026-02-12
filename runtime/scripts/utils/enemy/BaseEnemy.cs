@@ -9,8 +9,8 @@ public partial class BaseEnemy : GameSprite2D
 	public int EnemySlot { get; set; } = 0;
 	public float Attack { get; set; } = 0.0F;
 	public float Defence { get; set; } = 0.0F;
-	public float Hp { get; set; } = 100.0F;
-	public float MaxHp { get; set; } = 100.0F;
+	public float Hp { get; set; } = 10.0F;
+	public float MaxHp { get; set; } = 10.0F;
 	public bool AllowSpare { get; set; } = true;
 	public bool CanSpare { get; set; } = false;
 	public string MissText { get; set; } = "MISS";

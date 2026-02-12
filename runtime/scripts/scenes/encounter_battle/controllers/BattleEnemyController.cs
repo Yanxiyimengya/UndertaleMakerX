@@ -6,6 +6,8 @@ public partial class BattleEnemyController : Node
 {
 	[Export]
 	public Node2D EnemiesNode;
+	[Export]
+	public BattleMainArenaExpand MainArena;
 	public List<BaseEnemy> EnemiesList { get => _enemiesList; set => _enemiesList = value; }
 
 	private List<BaseEnemy> _enemiesList = [];
@@ -14,6 +16,11 @@ public partial class BattleEnemyController : Node
 	{
 		foreach (BaseEnemy enemy in _enemiesList) enemy.Free();
 		_enemiesList.Clear();
+		foreach (string enemyId in UtmxBattleManager.GetEncounterInstance().Enemies)
+		{
+			if (UtmxGameRegisterDB.TryGetEnemy(enemyId, out BaseEnemy enemy))
+				_enemiesList.Add(enemy);
+		}
 		for (int i = 0; i < _enemiesList.Count; i++)
 		{
 			BaseEnemy enemy = _enemiesList[i];
@@ -33,6 +40,12 @@ public partial class BattleEnemyController : Node
 	{
 		base._ExitTree();
 	}
+
+	public override void _Process(double delta)
+	{
+		base._Process(delta);
+		EnemiesNode.GlobalPosition = new Vector2(320F, MainArena.GlobalPosition.Y - MainArena.Size.Y);
+	}
 	public int GetEnemiesCount()
 	{
 		return EnemiesList.Count;
@@ -47,9 +60,9 @@ public partial class BattleEnemyController : Node
 		BaseEnemy enemy = EnemiesList[slot];
 		if (IsInstanceValid(enemy))
 		{
-            enemy._OnDead();
-            _enemiesList.Remove(enemy);
-            enemy.QueueFree();
-        }
-    }
+			enemy._OnDead();
+			_enemiesList.Remove(enemy);
+			enemy.QueueFree();
+		}
+	}
 }

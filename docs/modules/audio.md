@@ -161,6 +161,40 @@ setBgmPitch(bgmId: string, pitch: number, duration?: number) -> void
 
 ---
 
+
+#### getBgmPosition
+
+```javascript
+getBgmPosition(bgmId: string) -> number
+```
+
+获取背景音乐当前播放的位置，以秒为单位。
+
+**Returns** `number`
+
+| Parameter | Type   | Description |
+| --------- | ------ | ----------- |
+| bgmId     | string | 背景音乐 ID     |
+
+---
+
+#### setBgmPosition
+
+```javascript
+setBgmPosition(bgmId: string, position: number) -> void
+```
+
+设置背景音乐当前播放的位置。
+
+**Returns** `void`
+
+| Parameter | Type   | Default | Description            |
+| --------- | ------ | ------- | ---------------------- |
+| bgmId     | string | —       | 背景音乐 ID             |
+| position  | number | `0`     | 播放位置（秒）           |
+
+---
+
 ## Control
 
 ---

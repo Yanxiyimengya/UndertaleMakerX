@@ -50,23 +50,23 @@ public partial class BattlePlayerFightMenuState : StateNode
 		if (UtmxPlayerDataManager.Weapon != null && !missed)
 		{
 			_damage = (float)UtmxPlayerDataManager.Weapon.onAttack(hitValue, targetEnemy);
-            SpawnAttackAnimation(targetEnemy);
+			SpawnAttackAnimation(targetEnemy);
 		}
 		if (_attackAnimation == null)
 		{
 			ShowDamageText(targetEnemy);
 		}
-		targetEnemy._HandleAttack(missed ? BaseEnemy.AttackStatus.Missed : BaseEnemy.AttackStatus.Hit);
+		targetEnemy._HandleAttack(missed ? UtmxBattleManager.AttackStatus.Missed : UtmxBattleManager.AttackStatus.Hit);
 	}
 
 	private void ShowDamageText(BaseEnemy targetEnemy)
 	{
-        _attackDamageText = (BattleDamageText)DamageTextPackedScene?.Instantiate();
+		_attackDamageText = (BattleDamageText)DamageTextPackedScene?.Instantiate();
 		UtmxBattleManager.GetBattleEnemyController().EnemiesNode.AddChild(_attackDamageText);
 		_attackDamageText.Start(targetEnemy.Position + targetEnemy.CenterPosition);
-        targetEnemy.hurt(_damage);
+		targetEnemy.hurt(_damage);
 
-        _state = STATE_SHOW_DAMAGE;
+		_state = STATE_SHOW_DAMAGE;
 
 		_attackDamageText.Connect(
 			BattleDamageText.SignalName.Ended,
@@ -94,13 +94,13 @@ public partial class BattlePlayerFightMenuState : StateNode
 		_attackAnimation = new BattleAttackAnimationFrame();
 		_attackAnimation.TexturesPath = currentWeapon.AttackAnimation;
 		_attackAnimation.Play();
-        UtmxBattleManager.GetBattleEnemyController().EnemiesNode.AddChild(_attackAnimation);
-        _attackAnimation.GlobalPosition = targetEnemy.GlobalPosition + targetEnemy.CenterPosition;
+		UtmxBattleManager.GetBattleEnemyController().EnemiesNode.AddChild(_attackAnimation);
+		_attackAnimation.GlobalPosition = targetEnemy.GlobalPosition + targetEnemy.CenterPosition;
 
-        _attackAnimation.Connect(
-        	BattleAttackAnimation.SignalName.Finished,
-        	Callable.From(() => ShowDamageText(targetEnemy)));
-    }
+		_attackAnimation.Connect(
+			BattleAttackAnimation.SignalName.Finished,
+			Callable.From(() => ShowDamageText(targetEnemy)));
+	}
 
 	private BaseEnemy GetTargetEnemy()
 	{

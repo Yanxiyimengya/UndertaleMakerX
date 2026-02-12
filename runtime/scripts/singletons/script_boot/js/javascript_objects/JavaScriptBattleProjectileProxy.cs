@@ -8,12 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 
 [GlobalClass]
-public partial class JavaScriptBattleProjectileProxy : BaseBattleProjectile, IObjectPoolObject , IJavaScriptObject
+public partial class JavaScriptBattleProjectileProxy : BaseBattleProjectile, IObjectPoolObject , IJavaScriptLifecyucle
 {
 	public ObjectInstance JsInstance { get; set; }
 	public string JsScriptPath { get; set; }
+    public JavaScriptLifecycleProxy LifecycleProxy { get; set; } = new();
+    public override void _Ready()
+    {
+        base._Ready();
+        AddChild(LifecycleProxy);
+    }
 
-	public static IJavaScriptObject New(ObjectInstance objInstance)
+    public static IJavaScriptObject New(ObjectInstance objInstance)
 	{
 		JavaScriptBattleProjectileProxy projectile =
 			UtmxBattleManager.GetBattleProjectileController().CreateProjectile<JavaScriptBattleProjectileProxy>();
@@ -24,45 +30,13 @@ public partial class JavaScriptBattleProjectileProxy : BaseBattleProjectile, IOb
 	}
 	public override void OnHitPlayer(BattlePlayerSoul playerSoul)
 	{
-		if (JsInstance.HasProperty("onHitPlayer"))
-		{
-			Invoke("onHitPlayer");
-		}
+		if (JsInstance.HasProperty("onHit"))
+        {
+            ((IJavaScriptObject)this).Invoke("onHit");
+        }
 		else
 		{
 			base.OnHitPlayer(playerSoul);
 		}
 	}
-
-	public override void Awake()
-	{
-		base.Awake();
-		CallDeferred(nameof(OnAwake));
-	}
-	public override void Disabled()
-	{
-		base.Disabled();
-		CallDeferred(nameof(OnDisabled));
-	}
-	public override void _Process(double delta)
-	{
-		Invoke(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK, new object[] { delta });
-	}
-	public JsValue Invoke(string method, params object[] args)
-	{
-		if (JsInstance == null || string.IsNullOrEmpty(method))
-			return null;
-		if (JsInstance.HasProperty(method))
-			return JavaScriptBridge.InvokeFunction(JsInstance, method, args);
-		return null;
-	}
-	private void OnAwake()
-	{
-		SetProcess(JsInstance.HasProperty(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK));
-		Invoke(EngineProperties.JAVASCRIPT_START_CALLBACK);
-	}
-	private void OnDisabled()
-	{
-		Invoke(EngineProperties.JAVASCRIPT_DESTROY_CALLBACK);
-    }
 }

@@ -239,6 +239,18 @@ IsOnArenaCeiling() -> void
 
 ---
 
+### isMoving
+
+```javascript
+isMoving() -> boolean
+```
+ 
+判断灵魂是否正在移动，若玩家移动，返回 `true`，这是通过判断上一帧的位置是否与当前帧一致实现的。
+
+**Returns** `boolean`
+
+---
+
 #### 使用示例
 
 该示例展示了如何在一个自定义的类中，实现一个完整的**蓝色**灵魂控制器。

@@ -7,11 +7,11 @@ export class UtmxBattleTurn extends __BattleTurn {
         return ins;
     }
 
-    get arenaInitializeSize() {
-        return this.ArenaInitializeSize;
+    get arenaInitSize() {
+        return this.arenaInitSize;
     }
-    set arenaInitializeSize(value) {
-        this.ArenaInitializeSize = value;
+    set arenaInitSize(value) {
+        this.arenaInitSize = value;
     }
     get soulInitPosition() {
         return this.SoulInitializePosition;

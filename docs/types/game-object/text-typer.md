@@ -1,5 +1,7 @@
 # TextTyper
 
+继承 [TransformableObject](types/game-object/transformable-object.md)
+
 TextTyper 实现了一个逐字符打印文本的处理系统，且支持 [文本命令](#文本命令)。
 
 通过 `UTMX.TextTyper` 访问。
@@ -37,10 +39,11 @@ UTMX 拓展了 BBCode，它们被称为 **文本命令**，当打字机文本打
 | noskip | `[noskip=<布尔值>]` / `[noskip]` | 设置是否禁止跳过打印：传入布尔值则按值设置，无参数则切换当前状态 |
 | clear | `[clear]` | 清空当前已打印的文本，并重置字体、字号、颜色等样式为默认值 |
 | end | `[end]` | 销毁当前 TextTyper 实例 |
-| img | `[img path=<图片路径> width=<宽度> height=<高度> color=<颜色值>]` | 在文本中插入图片：path 为图片资源路径，width/height 为显示尺寸，color 为图片混合颜色 |
+| img | `[img path=<图片路径> width=?<宽度> height=?<高度> color=?<颜色值>]` | 在文本中插入图片：path 为图片资源路径，width/height 为显示尺寸，color 为图片混合颜色 |
+| shader | `[shader=<着色器路径>` | 设置文本使用的着色器，应用的着色器效果是全局的 |
 | voice | `[voice=<音频路径>]` / `[voice=null]` | 设置打印字符时播放的语音音频：传入 null 则清空语音 |
 | play_sound | `[play_sound=<音频路径>]` | 播放指定路径的音效音频（一次性播放） |
-| play_bgm | `[play_bgm path=<音频路径> id=<标识> loop=<布尔值> pitch=<音调> volume=<音量>]` | 播放指定路径的背景音乐：<br>- id：BGM 标识（默认 "_TYPER_BGM"）<br>- loop：是否循环播放<br>- pitch：音调（默认不变）<br>- volume：音量（默认不变） |
+| play_bgm | `[play_bgm path=<音频路径> id=<标识> loop=?<布尔值> pitch=?<音调> volume=?<音量> position=?<起始位置>]` | 播放指定路径的背景音乐：<br>- id：BGM 标识（默认 "_TYPER_BGM"）<br>- loop：是否循环播放<br>- pitch：音调（默认不变）<br>- volume：音量（默认不变）<br>- position：播放位置（默认：0） |
 | stop_bgm | `[stop_bgm=<标识>]` / `[stop_bgm id=<标识>]` | 停止指定标识的背景音乐：无参数时停止默认标识 "_TYPER_BGM" 的 BGM |
 </details>
 
@@ -133,6 +136,10 @@ start(text: string) -> void
 清空先前的文本，以 `text` 开始重新打印文本。
 
 **Returns** `void`
+
+| Parameter   | Type   | Description |
+| ----------- | ------ | ----------- |
+| text | string | 打印的目标文本   |
 
 ---
 

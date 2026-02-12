@@ -1,52 +1,36 @@
 import { UTMX, Vector2, Color } from "UTMX";
+import BlueProjectile from "./test_js_projectile";
+import MyDO from "js/test_js_drawable_object.js"
 
 export default class MyCustomTurn extends UTMX.BattleTurn {
 	spr = null;
 
 	constructor() {
 		super();
+		this.arenaInitSize = new Vector2(140, 200);
 		this.soulInitPosition = new Vector2(0, UTMX.battle.arena.getMainArena().size.y / 2 - 9);
 		this.jumping = false;
 		this.moveSpeed = 130.0;
 		this.gravity = 300.0;
 		this.jumpSpeed = 0.0;
+		this.turnTime = 10.0;
 	}
 
 	onTurnInit() {
 		UTMX.battle.soul.sprite.color = Color.Blue;
-		this.spr = UTMX.Sprite.new();
-		this.spr.textures = "a.jpg";
-		this.spr.position = new Vector2(320, 320);
-		this.spr.z = 1000;
+		let d = MyDO.new();
+		UTMX.battle.soul.sprite.addChild(d);
 	}
 
 	onTurnStart() {
 		UTMX.battle.soul.movable = false; // 禁用移动，实现自定义控制器
-		
-		
-		let shader = new UTMX.Shader();
-		shader.shaderCode = `
-		shader_type canvas_item;
-
-		uniform sampler2D SCREEN_TEXTURE : hint_screen_texture;
-
-		void fragment() {
-			vec4 col = texture(SCREEN_TEXTURE, SCREEN_UV);
-
-			col.rgb = 1.0 - col.rgb;
-
-			COLOR = col;
-		}
-		`;
-
-		let drawableObject = UTMX.DrawableObject.new();
-		UTMX.scene.addSingleton("DrawO", drawableObject);
-		drawableObject.z = 4096;
-		//drawableObject.drawRect(new Vector2(0, 0), new Vector2(640,  480));
-		drawableObject.drawText(new Vector2(200, 200), "Hello, World", Color.Red, 16, "built-in-resources/fonts/Papyrus.ttf");
+		this.proj = BlueProjectile.new();
+		this.proj.textures = "a.jpg";
+		this.proj.position = new Vector2(320, 320);
 	}
 
-	onTurnUpdate(delta) {
+	onTurnUpdate(delta) 
+	{
 		let moveSpeed = new Vector2(0, 0);
 		// 检测是否在地面
 		if (UTMX.battle.soul.isOnArenaFloor()) {

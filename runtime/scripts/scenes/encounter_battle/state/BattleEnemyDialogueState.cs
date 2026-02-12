@@ -40,7 +40,7 @@ public partial class BattleEnemyDialogueState : StateNode
 		soul.Movable = false;
 		soul.Visible = true;
         BattleMainArenaExpand _battleMainArena = UtmxBattleManager.GetBattleArenaController().MainArena;
-        await _battleMainArena.Resize(UtmxBattleManager.GetBattleTurnController().GetTurnArenaInitializeSize(), 0.4);
+        await _battleMainArena.Resize(UtmxBattleManager.GetBattleTurnController().GetTurnarenaInitSize(), 0.4);
         foreach (BaseEnemy enemy in UtmxBattleManager.GetBattleEnemyController().EnemiesList)
         {
             enemy._OnDialogueStarting();

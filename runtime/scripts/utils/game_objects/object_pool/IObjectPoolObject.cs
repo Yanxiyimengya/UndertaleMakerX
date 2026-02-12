@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 public interface IObjectPoolObject
 {
-    public void Awake()
+    public virtual void Awake()
     {
     }
 
-    public void Disabled()
+    public virtual void Disabled()
     {
     }
 }

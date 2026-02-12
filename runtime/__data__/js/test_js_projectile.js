@@ -1,21 +1,17 @@
 import { UTMX } from "UTMX";
 
-
-export default class MyProjectile extends UTMX.BattleProjectile
+export default class BlueProjectile extends UTMX.BattleProjectile
 {
-	active()
-	{
-		this.timer = 0.0;
-		this.damage = 1;
-	}
+    start()
+    {
+        this.damage = 2;
+    }
 
-	disabled()
-	{
-	}
-
-	update(delta)
-	{
-		this.rotation = Math.sin(this.timer * 3.0) * 45;
-		this.timer += delta;
-	}
+    onHit()
+    {
+        if (UTMX.battle.soul.isMoving())
+        {
+            UTMX.player.hurt(this.damage);
+        }
+    }
 }

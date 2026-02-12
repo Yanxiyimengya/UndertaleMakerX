@@ -7,6 +7,8 @@ UTMX 中的一切 **场景实例** 都继承于它。
 !> 实例化一个 `GameObject` 通常没有任何意义，因为我们找不到任何与之绑定的 .Net 实例。UTMX 通过为每个对象的 JavaScript Wrapper 类实现自己独立的 `new` 方法，从而自定义初始化逻辑。
 **因此，UTMX 没有将这个类型暴露给 JavaScript**
 
+!> 请不要在 `GameObject` 的 `constructor` 函数中使用 UTMX 内部的属性，因为当 JavaScript 对象创建时，UTMX 还没有为其绑定有效的 `__instance`。
+
 ---
 
 

@@ -13,15 +13,17 @@ Enemy 表示一个活跃在战斗场景中的怪物对象。
 | Property | Type   | Default | Description |
 | -------- | ------ | ------- | ----------- |
 | displayName | string | "" | 怪物在菜单中显示的名字 |
-| attack | number | - | 该怪物的攻击力 |
-| defence | number | - | 该怪物的防御力 |
-| hp | number | - | 该怪物当前的生命值，当 hp 归零时，怪物会从战斗中移除 |
-| maxHp | number | - | 该怪物的最大生命值 |
-| allowSpare | boolean | - | 该怪物在战斗中是否允许玩家饶恕，如果战斗中有怪物允许被饶恕，在 `Mercy` 菜单中就会出现 `Spare` 选项 |
-| canSpare | boolean | - | 该怪物是可以被真正饶恕，当值为 `true` 时，该怪物在战斗菜单中显示的名字会变为黄色 |
-| missText | string | - | 当攻击造成 `Miss` 时，显示的文字 |
-| actions | string[] | - | 该怪物的行动列表 |
-| centerPosition | Vector2 | - | 该怪物的中心位置，这会影响攻击动画、伤害文字等显示的位置 |
+| attack | number | 0 | 该怪物的攻击力 |
+| defence | number | 0 | 该怪物的防御力 |
+| hp | number | 10 | 该怪物当前的生命值，当 hp 归零时，怪物会从战斗中移除 |
+| maxHp | number | 10 | 该怪物的最大生命值 |
+| allowSpare | boolean | true | 该怪物在战斗中是否允许玩家饶恕，如果战斗中有怪物允许被饶恕，在 `Mercy` 菜单中就会出现 `Spare` 选项 |
+| canSpare | boolean | false | 该怪物是可以被真正饶恕，当值为 `true` 时，该怪物在战斗菜单中显示的名字会变为黄色 |
+| missText | string | "MISS" | 当攻击造成 `Miss` 时，显示的文字 |
+| actions | string[] | ["CHECK"] | 该怪物的行动列表 |
+| position | Vector2 | (0, 0) | 该怪物的位置 |
+| centerPosition | Vector2 | (0, 0) | 该怪物的中心位置，基于 Enemy.position ，这会影响攻击动画、伤害文字等显示的位置 |
+| sprite | UTMX.Sprite | - | 该怪物使用的精灵图，以中下为原点，操作精灵图的属性会直接影响到 Enemy 本身（实际上，Enemy 在 UTMX 内部本身就是一个 Sprite） |
 
 ## 方法（Methods）
 

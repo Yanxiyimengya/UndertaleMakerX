@@ -66,6 +66,12 @@ export class UtmxBaseEnemy extends __UtmxEnemy
     set actions(value) {
         this.Actions = value;
     }
+    get position() {
+        return this.Position;
+    }
+    set position(value) {
+        this.Position = value;
+    }
     get centerPosition() {
         return this.CenterPosition;
     }

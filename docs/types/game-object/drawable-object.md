@@ -1,5 +1,7 @@
 # DrawableObject
 
+继承 [TransformableObject](types/game-object/transformable-object.md)
+
 DrawableObject 是一切可 2D 渲染对象的基类。当 `new` 被调用后，会自动将自身添加到当前场景中。
 
 通过 `UTMX.DrawableObject` 访问。我们可以继承这个类型，从而实现自定义绘图。

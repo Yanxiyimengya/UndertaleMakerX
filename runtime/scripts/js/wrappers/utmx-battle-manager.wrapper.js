@@ -117,6 +117,10 @@ class BattleSoul extends UtmxGameObject
 	{
 		return __battle_manager.GetBattlePlayerController().PlayerSoul.IsOnArenaCeiling();
 	}
+	static isMoving()
+	{
+		return __battle_manager.GetBattlePlayerController().PlayerSoul.IsMoving;
+	}
 }
 class BattleArenaAccess
 {

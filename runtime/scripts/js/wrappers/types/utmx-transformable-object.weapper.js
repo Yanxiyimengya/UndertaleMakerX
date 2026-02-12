@@ -56,4 +56,34 @@ export class UtmxTransformableObject extends UtmxGameObject
 	set globalSkew(value) {
 		this.__instance.globalSkew = value;
 	}
+
+	__prevParent = null;
+	getParent()
+	{
+		let parent = this.__instance.GetParent();
+		if (parent instanceof UtmxTransformableObject)
+			return parent;
+		return null;
+	}
+
+	addChild(child, resetTransform = false)
+	{
+		if (child instanceof UtmxTransformableObject)
+		{
+			child.__prevParent = child.__instance.GetParent();
+			if (child.__prevParent == null)
+				this.__instance.AddChild(child.__instance);
+			else 
+				child.__instance.Reparent(this.__instance, resetTransform);
+		}
+	}
+
+	removeChild(child,)
+	{
+		this.__instance.RemoveChild(child.__instance);
+		if (child.__prevParent != null)
+		{
+			child.__prevParent.AddChild(child.__instance);
+		}
+	}
 }

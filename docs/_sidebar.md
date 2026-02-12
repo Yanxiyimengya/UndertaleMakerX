@@ -13,6 +13,7 @@
     * [Encounter](types/encounter.md)
     * [Enemy](types/enemy.md)
     * [GameObject](types/game-object/)
+        * [BattleProjectile](types/game-object/battle-projectile.md)
         * [DrawableObject](types/game-object/drawable-object.md)
         * [Sprite](types/game-object/sprite.md)
         * [TextTyper](types/game-object/text-typer.md)
@@ -21,4 +22,4 @@
     * [Vector2](types/vector2.md)
     * [Vector3](types/vector3.md)
     * [Vector4](types/vector4.md)
-    
+* [指南](tutorials/)

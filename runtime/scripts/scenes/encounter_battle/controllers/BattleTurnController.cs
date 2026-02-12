@@ -98,11 +98,11 @@ public partial class BattleTurnController : Node
 
 		return soulPosition + _currentTurnList[0].SoulInitializePosition;
 	}
-	public Vector2 GetTurnArenaInitializeSize()
+	public Vector2 GetTurnarenaInitSize()
 	{
 		if (_currentTurnList.Count > 0)
 		{
-			return _currentTurnList[0].ArenaInitializeSize;
+			return _currentTurnList[0].arenaInitSize;
 		}
 		else
 		{

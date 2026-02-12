@@ -8,13 +8,9 @@ UndertaleMakerX 是一款基于由 [Godot](https://godotengine.org/) 开发的 U
 
 ## 入门
 
----
-
-关于如何开始使用 UndertaleMakerX 请查阅[入门教程](modules/)
+关于如何开始使用 UndertaleMakerX 请查阅 [指南](tutorials/)
 
 ## 贡献
-
----
 
 UndertaleMakerX 也期望同 Undertale 社区的朋友们同心协力，构建出一款强大的而开发工具，如果你不理解某些内容、在某些地方遇到了问题，请联系作者。
 

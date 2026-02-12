@@ -7,11 +7,18 @@ export default class MySpr extends UTMX.Sprite
 		this.timer = 0.0;
 	}
 
-	active()
+	start()
 	{
+		UTMX.debug.print(this.start);
 	}
 	
-	disabled()
+	onDestroy()
 	{
+		UTMX.debug.print(this.onDestroy);
+	}
+
+	update(delta)
+	{
+		UTMX.debug.print(delta);
 	}
 }

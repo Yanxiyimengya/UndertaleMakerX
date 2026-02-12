@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://o3ubysucd5hn"]
 
 [ext_resource type="Script" uid="uid://cf7kq3mwp7e6n" path="res://scripts/scenes/encounter_battle/controllers/BattleProjectileController.cs" id="2_3wf68"]
-[ext_resource type="Texture2D" uid="uid://cpt8lkhth2ikc" path="res://__data__/built-in-resources/textures/ui/battle_screen/bg/spr_battlebg_0.png" id="2_4xtxd"]
 [ext_resource type="Script" uid="uid://cctn2p527r38" path="res://scripts/utils/state_machine/StateMachine.cs" id="2_62htl"]
 [ext_resource type="Script" uid="uid://beqqcxbxsdem6" path="res://scripts/scenes/encounter_battle/controllers/BattleController.cs" id="2_mdx4q"]
 [ext_resource type="Script" uid="uid://c0ouwp06q4136" path="res://scripts/scenes/encounter_battle/state/BattlePlayerChoiceActionState.cs" id="3_18p8v"]
@@ -65,9 +64,10 @@ script = ExtResource("2_3wf68")
 ProjectilesNode = NodePath("../../Projectiles")
 ArenaMask = NodePath("../../BattleArenaGroup/BattleArenaMask")
 
-[node name="BattleEnemyController" type="Node" parent="BattleController" unique_id=1106917610 node_paths=PackedStringArray("EnemiesNode")]
+[node name="BattleEnemyController" type="Node" parent="BattleController" unique_id=1106917610 node_paths=PackedStringArray("EnemiesNode", "MainArena")]
 script = ExtResource("3_u6j2e")
 EnemiesNode = NodePath("../../Enemies")
+MainArena = NodePath("../../BattleArenaGroup/MainArena")
 
 [node name="BattleTurnController" type="Node" parent="BattleController" unique_id=1363596801]
 script = ExtResource("4_knxdc")
@@ -146,19 +146,6 @@ TextMenu = NodePath("../../UILayer/BattleMenuManager/EncounterTextMenu")
 MenuManager = NodePath("../../UILayer/BattleMenuManager")
 metadata/_custom_type_script = "uid://dxmt2vmf5f8bi"
 
-[node name="BackgroundLayer" type="Control" parent="." unique_id=2067686152]
-z_index = -300
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="BackgroundSprite" type="Sprite2D" parent="BackgroundLayer" unique_id=1850788853]
-position = Vector2(320, 127)
-texture = ExtResource("2_4xtxd")
-
 [node name="BattleArenaGroup" type="Node2D" parent="." unique_id=185318783]
 process_priority = 1
 z_index = -200
@@ -187,7 +174,9 @@ layout_mode = 0
 anchors_preset = 0
 anchor_right = 0.0
 anchor_bottom = 0.0
+offset_left = -2.0
 offset_top = 412.0
+offset_right = -2.0
 offset_bottom = 412.0
 grow_horizontal = 1
 grow_vertical = 1

@@ -36,4 +36,12 @@ export class UtmxAudioPlayer {
 	static setBgmPitch(bgmId, pitch, duration = 0) {
 		return __audio_player.SetBgmPitch(bgmId, pitch, duration);
 	}
+
+	static getBgmPosition(bgmId) {
+		return __audio_player.GetBgmPosition(bgmId);
+	}
+
+	static setBgmPosition(bgmId, position) {
+		return __audio_player.SetBgmPosition(bgmId, position);
+	}
 }

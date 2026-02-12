@@ -103,6 +103,7 @@ metadata/_custom_type_script = "uid://8fxros6kah3m"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox" unique_id=242093311]
 position = Vector2(0, 1)
 shape = SubResource("RectangleShape2D_4h8dk")
+debug_color = Color(0, 0.6, 0.7019608, 0.41960785)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1346916895]
 shape = SubResource("CircleShape2D_4pjqo")

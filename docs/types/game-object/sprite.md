@@ -1,5 +1,7 @@
 # Sprite
 
+继承 [TransformableObject](types/game-object/transformable-object.md)
+
 Sprite 允许渲染一张静态精灵，或一组动态序列帧。
 
 通过 `UTMX.Sprite` 访问。

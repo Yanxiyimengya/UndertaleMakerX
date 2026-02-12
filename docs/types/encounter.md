@@ -30,7 +30,7 @@ Encounter 表示一场遭遇战斗，你可以编写一个脚本，通过继承�
 | freeText | string | "" | 逃跑成功后显示的文本 |
 | deathText | string | "" | 游戏失败后显示的文本 |
 | endText | string | "" | 游戏获胜后显示的文本 |
-| encounterBattleFirstState | UTMX.battle.BattleStatus | UTMX.battle.BattleStatus.PLAYER | 战斗开始时最初始的状态 |
+| encounterBattleFirstState | UTMX.battle.BattleStatus | PLAYER | 战斗开始时最初始的状态 |
 | enemies | string[] | [] | 战斗中有效的怪物 ID 列表 |
 | canFree | boolean | true | 是否启用逃跑 |
 

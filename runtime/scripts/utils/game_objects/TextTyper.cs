@@ -400,11 +400,20 @@ public partial class TextTyper : Godot.RichTextLabel, IObjectPoolObject
 					}
 				}
 				break;
-			}
+                }
+            case "shader":
+                {
+                    if (args.TryGetValue("value", out string shaderPath) && !string.IsNullOrEmpty(shaderPath))
+                    {
+						ShaderInstance = new GameShader();
+						ShaderInstance.LoadFromFile(shaderPath);
+                    }
+                    break;
+                }
 
 
-			// INLINE COMMANDS
-			case "voice":
+            // INLINE COMMANDS
+            case "voice":
 				if (Instant) return true;
 				if (args.TryGetValue("value", out string voicePath) && !string.IsNullOrEmpty(voicePath))
 				{
@@ -451,11 +460,13 @@ public partial class TextTyper : Godot.RichTextLabel, IObjectPoolObject
 
 					UtmxGlobalStreamPlayer.PlayBgmFromStream(bgmId, bgmStream, loop);
 
-					if (args.TryGetValue("pitch", out string bgmPitchStr) && float.TryParse(bgmPitchStr, out float bgmPitch))
+					if (args.TryGetValue("pitch", out string bgmPitchStr) && double.TryParse(bgmPitchStr, out double bgmPitch))
 						UtmxGlobalStreamPlayer.SetBgmPitch(bgmId, bgmPitch);
-					if (args.TryGetValue("volume", out string bgmVolumeStr) && float.TryParse(bgmPitchStr, out float bgmVolume))
+					if (args.TryGetValue("volume", out string bgmVolumeStr) && double.TryParse(bgmPitchStr, out double bgmVolume))
 						UtmxGlobalStreamPlayer.SetBgmVolume(bgmId, bgmVolume);
-				}
+                    if (args.TryGetValue("position", out string bgmPositionStr) && double.TryParse(bgmPositionStr, out double bgmPosition))
+                            UtmxGlobalStreamPlayer.SetBgmPosition(bgmId, bgmPosition);
+                    }
 				break;
 			}
 
