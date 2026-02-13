@@ -5,10 +5,11 @@ import { UtmxPlayerDataManager } from "res://scripts/js/wrappers/utmx-player.wra
 import { UtmxBattleManager } from "res://scripts/js/wrappers/utmx-battle-manager.wrapper.js";
 import { UtmxGameRegisterDB } from "res://scripts/js/wrappers/utmx-game-register-db.wrapper.js";
 import { UtmxGameManager } from "res://scripts/js/wrappers/utmx-game-manager.wrapper.js";
-import { UtmxSceneManager } from "res://scripts/js/wrappers/utmx-scene-manager.weapper.js";
+import { UtmxSceneManager } from "res://scripts/js/wrappers/utmx-scene-manager.wrapper.js";
+import { UtmxTweenManager } from "res://scripts/js/wrappers/utmx-tween-manager.wrapper.js";
 
-import { __Color } from "res://scripts/js/wrappers/types/utmx-color.weapper.js";
-import { __Vector2, __Vector3, __Vector4 } from "res://scripts/js/wrappers/types/utmx-vector.weapper.js";
+import { __Color } from "res://scripts/js/wrappers/types/utmx-color.wrapper.js";
+import { __Vector2, __Vector3, __Vector4 } from "res://scripts/js/wrappers/types/utmx-vector.wrapper.js";
 import { UtmxBattleProjectile } from "res://scripts/js/wrappers/types/utmx-battle-projectile.wrapper.js";
 import { UtmxGameSprite } from "res://scripts/js/wrappers/types/utmx-game-sprite.wrapper.js";
 import { UtmxDrawableObject } from "res://scripts/js/wrappers/types/utmx-drawable-object.wrapper.js";
@@ -17,7 +18,9 @@ import { UtmxBaseEnemy } from "res://scripts/js/wrappers/types/utmx-enemy.wrappe
 import { UtmxBaseEncounter } from "res://scripts/js/wrappers/types/utmx-encounter.wrapper.js";
 import { UtmxBattleTurn } from "res://scripts/js/wrappers/types/utmx-battle-turn.wrapper.js";
 import { UtmxTextTyper } from "res://scripts/js/wrappers/types/utmx-text-typer.wrapper.js";
-import { UtmxShader } from "res://scripts/js/wrappers/types/utmx-shader.weapper.js";
+import { UtmxShader } from "res://scripts/js/wrappers/types/utmx-shader.wrapper.js";
+
+import { __tween_manager } from "__UTMX";
 
 class UTMX {
 	static debug = UtmxDebugger;
@@ -28,6 +31,7 @@ class UTMX {
 	static registerDB = UtmxGameRegisterDB;
 	static game = UtmxGameManager;
 	static scene = UtmxSceneManager;
+	static tween = UtmxTweenManager;
 
 	static Item = UtmxBaseItem;
 	static Enemy = UtmxBaseEnemy;

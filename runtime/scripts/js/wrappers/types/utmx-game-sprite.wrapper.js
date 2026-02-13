@@ -1,4 +1,4 @@
-import { UtmxTransformableObject } from "./utmx-transformable-object.weapper.js";
+import { UtmxTransformableObject } from "./utmx-transformable-object.wrapper.js";
 import { __GameSprite , __Color } from "__UTMX";
 
 export class UtmxGameSprite extends UtmxTransformableObject {

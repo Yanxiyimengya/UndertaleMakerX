@@ -19,6 +19,7 @@
 
 | Property | Type   | Default | Description |
 | -------- | ------ | ------- | ----------- |
+| visible | boolean | true     | 该 `TransformableObject` 的可见性 |
 | position | Vector2 | 0     | 该 `TransformableObject` 的局部坐标（相对于父节点） |
 | globalPosition | Vector2 | 0     | 该 `TransformableObject` 的全局坐标 |
 | z | number | 0     | 该 `TransformableObject` 的渲染排序优先级，值越大代表优先级越高，它的取值范围在 `-4096` - `+4096` 之间 |

@@ -14,7 +14,7 @@ internal static class UtmxResourceLoader
 
 		if (resourceCache.TryGetValue(resNewPath, out Resource res) && res != null)
 			return res;
-		Resource utmxRes = ResourceLoader.Load(resNewPath, "", ResourceLoader.CacheMode.Reuse);
+		Resource utmxRes = ResourceLoader.Load(resNewPath, "", ResourceLoader.CacheMode.Ignore);
 		if (utmxRes != null) 
 			resourceCache.Add(resNewPath, utmxRes);
 		return utmxRes;

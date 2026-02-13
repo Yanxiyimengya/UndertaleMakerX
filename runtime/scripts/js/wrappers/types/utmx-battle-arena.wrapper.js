@@ -1,4 +1,4 @@
-import { UtmxGameObject } from "./utmx-game-object.weapper.js";
+import { UtmxGameObject } from "./utmx-game-object.wrapper.js";
 
 class BattleArena extends UtmxGameObject
 {

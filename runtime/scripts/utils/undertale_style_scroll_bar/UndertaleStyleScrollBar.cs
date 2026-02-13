@@ -133,7 +133,6 @@ public partial class UndertaleStyleScrollBar : Control
                 else
                 {
                     _arrowAnimTimer = 1.0F;
-
                     if (_tween != null)
                     {
                         _tween.Kill();

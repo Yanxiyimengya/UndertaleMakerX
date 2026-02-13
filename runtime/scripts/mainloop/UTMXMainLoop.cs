@@ -26,7 +26,7 @@ public partial class UtmxMainLoop : SceneTree
 		DisplayServer.VSyncMode vsyncMode = UtmxRuntimeProjectConfig.TryGetDefault("application/vsync",
 			DisplayServer.WindowGetVsyncMode() != DisplayServer.VSyncMode.Disabled)
 			? DisplayServer.VSyncMode.Enabled : DisplayServer.VSyncMode.Disabled;
-		DisplayServer.WindowSetVsyncMode((DisplayServer.VSyncMode)vsyncMode);
+		DisplayServer.WindowSetVsyncMode(vsyncMode);
 
 
         Color clearColor = Color.FromString(

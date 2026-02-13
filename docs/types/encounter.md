@@ -1,6 +1,6 @@
 # Encounter
 
-Encounter 表示一场遭遇战斗，你可以编写一个脚本，通过继承这个类型从而定义一场遭遇战斗，然后通过 [GameRegisterDB](modules/game-register-db.md) 将脚本路径注册到数据库，最后调用 `UTMX.battle.startEncounter` 开始战斗。
+Encounter 表示一场遭遇战斗，你可以编写一个脚本，通过继承这个类型从而定义一场遭遇战斗，然后通过 [GameRegisterDB](modules/game-register-db.md) 将 Encounter 的脚本路径注册到数据库，最后调用 `UTMX.battle.startEncounter` 开始战斗。
 
 通过 `UTMX.Encounter` 访问。
 
@@ -42,7 +42,7 @@ Encounter 表示一场遭遇战斗，你可以编写一个脚本，通过继承�
 onBattleStart() -> void
 ```
 
-战斗正式开始时触发的回调函数。
+战斗正式开始前触发的回调函数。
 
 ---
 
@@ -52,7 +52,7 @@ onBattleStart() -> void
 onBattleEnd() -> void
 ```
 
-战斗正式结束时触发的回调函数。
+战斗正式结束前触发的回调函数。
 
 ---
 
@@ -62,7 +62,7 @@ onBattleEnd() -> void
 onPlayerTurn() -> void
 ```
 
-战斗进入玩家回合时触发的回调函数。
+战斗进入玩家回合前触发的回调函数。
 
 ---
 
@@ -72,7 +72,7 @@ onPlayerTurn() -> void
 onPlayerDialogue() -> void
 ```
 
-战斗进入玩家对话状态时触发的回调函数。
+战斗进入玩家对话状态前触发的回调函数。
 
 ---
 
@@ -82,7 +82,7 @@ onPlayerDialogue() -> void
 onEnemyDialogue() -> void
 ```
 
-战斗进入怪物对话状态时触发的回调函数。
+战斗进入怪物对话状态前触发的回调函数。
 
 ---
 
@@ -92,6 +92,6 @@ onEnemyDialogue() -> void
 onEnemyTurn() -> void
 ```
 
-战斗进入怪物回合时触发的回调函数。
+战斗进入怪物回合前触发的回调函数。
 
 ---

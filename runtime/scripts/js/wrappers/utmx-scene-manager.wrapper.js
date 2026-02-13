@@ -1,5 +1,5 @@
 import { __scene_manager } from "__UTMX";
-import { UtmxGameObject } from "./types/utmx-game-object.weapper.js"
+import { UtmxGameObject } from "./types/utmx-game-object.wrapper.js"
 
 export class UtmxSceneManager
 {

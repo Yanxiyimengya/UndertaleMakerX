@@ -175,10 +175,6 @@ public class JavaScriptBridge
 
 	public static object ConvertToObject(JsValue jsValue)
 	{
-		if (jsValue is Function)
-		{
-			return ((Function)jsValue).ToObject();
-		}
 		if (jsValue is JsObject)
 		{
 			Dictionary<string, object> dict = new();
@@ -192,34 +188,24 @@ public class JavaScriptBridge
 		return jsValue.ToObject();
 	}
 
-	public static Variant ObjectConvertToVariant(object value)
-	{
-		if (value == null) return new Variant();
-		if (value is bool b) return Variant.From(b);
-		if (value is int i) return Variant.From(i);
-		if (value is double d) return Variant.From(d);
-		if (value is float f) return Variant.From(f);
-		if (value is string s) return Variant.From(s);
-		if (value is long l) return Variant.From(l);
-		if (value is object[] arr)
-		{
-			Godot.Collections.Array<Variant> result = new();
-			foreach (object obj in arr)
-			{
-				result.Add(ObjectConvertToVariant(obj));
-			}
-			return result;
-		}
-		if (value is Dictionary<string, object> dict)
-		{
-			Godot.Collections.Dictionary result = new();
-			foreach (KeyValuePair<string, object> pair in dict)
-			{
-				result.Add(pair.Key, ObjectConvertToVariant(pair.Value));
-			}
-			return result;
-		}
-		return value.ToString();
-	}
+    public static Variant ObjectConvertToVariant(object value)
+    {
+        return value switch
+        {
+            null => new Variant(),
+            bool b => Variant.From(b),
+            int i => Variant.From(i),
+            long l => Variant.From(l),
+            float f => Variant.From(f),
+            double d => Variant.From(d),
+            string s => Variant.From(s),
+            Vector2 v2 => Variant.From(v2),
+            Vector3 v3 => Variant.From(v3),
+            Vector4 v4 => Variant.From(v4),
+            Color col => Variant.From(col),
+            GodotObject gObj => Variant.From(gObj),
+            _ =>  Variant.From(value.ToString())
+        };
+    }
 
 }

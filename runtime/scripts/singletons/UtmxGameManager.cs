@@ -1,6 +1,4 @@
 using Godot;
-using Jint.Native.Object;
-using System;
 
 [GlobalClass]
 public partial class UtmxGameManager : Node
@@ -22,6 +20,7 @@ public partial class UtmxGameManager : Node
 		}
 		Instance = this;
 		Boot = new();
+		AddChild( Boot );
 	}
 
     public override void _Ready()
@@ -43,12 +42,7 @@ public partial class UtmxGameManager : Node
 	{
 		EmitSignal(SignalName.GameEnd, []);
 	}
-
-	public static void QuitGame()
-	{
-		Instance.GetTree().Quit();
-	}
-
+	public static void QuitGame() { Instance.GetTree().Quit(); }
 	public static double GetFpsReal() { return Engine.GetFramesPerSecond(); }
 	public static void SetMaxFps(int fps) { Engine.MaxFps = fps; }
 

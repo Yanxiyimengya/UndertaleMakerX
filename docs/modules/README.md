@@ -13,16 +13,17 @@ import { UTMX } from "UTMX"; // 引入 UTMX 包
 
 ### 一些限制
 
-!> 从模块中直接返回的类型大多数不是 UTMX 封装的类型，而是与之对应的 `Godot .Net Clr` 类型，
+!> 从模块中直接返回的类型大多数不是 UTMX 封装的类型，而是与之对应的 `Godot .Net Clr` 类型。
 
-因此，如果需要在执行 UTMX 拓展属性/方法，请在引擎返回的对应类型中使用对应类型的 `copy` 方法，例如：
+因此，如果需要在执行 UTMX 拓展属性/方法，请在引擎返回的对应类型中使用类型的 `copy` 方法，或者使用构造函数创建一个有效的.Net包装器类，例如：
 
 ```javascript
 import { UTMX } from "UTMX";
 
 let mousePosition = new Vector2().copy(UTMX.input.getMousePosition());
 
-UTMX.debug.log(mousePosition.add(Vector2.One)); // 这样就可以调用 UTMX 为 Vector2 包装的方法了。
+UTMX.debug.log(mousePosition.add(Vector2.One));
+// 这样就可以调用 UTMX 为 Vector2 包装的方法了。
 ```
 
 已知的类型有:

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cu2ch1fuu655c"
-path="res://.godot/imported/s.png-d78cdd43d59b3bcf73c05172cfd9fc2c.ctex"
+uid="uid://cf011eb8cko2s"
+path="res://.godot/imported/Z-button.png-4cd301769d5f48eac93aed2b66891881.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://__data__/s.png"
-dest_files=["res://.godot/imported/s.png-d78cdd43d59b3bcf73c05172cfd9fc2c.ctex"]
+source_file="res://__data__/built-in-resources/textures/virtual_keys/Z-button.png"
+dest_files=["res://.godot/imported/Z-button.png-4cd301769d5f48eac93aed2b66891881.ctex"]
 
 [params]
 

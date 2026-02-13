@@ -24,7 +24,6 @@ public class JavaScriptFileAccess
     private static Engine engine => JavaScriptBridge.MainEngine;
 
     private static JsValue jsNull() => JsValue.Null;
-    private static JsValue jsUndefined() => JsValue.Undefined;
 
     private static JsValue jsFrom(object obj)
     {

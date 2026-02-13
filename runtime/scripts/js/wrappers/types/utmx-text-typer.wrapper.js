@@ -1,5 +1,5 @@
 import { __TextTyper } from "__UTMX";
-import { UtmxTransformableObject } from "./utmx-transformable-object.weapper.js";
+import { UtmxTransformableObject } from "./utmx-transformable-object.wrapper.js";
 
 export class UtmxTextTyper extends UtmxTransformableObject {
     

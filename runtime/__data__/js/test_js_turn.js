@@ -13,13 +13,22 @@ export default class MyCustomTurn extends UTMX.BattleTurn {
 		this.moveSpeed = 130.0;
 		this.gravity = 300.0;
 		this.jumpSpeed = 0.0;
-		this.turnTime = 10.0;
+		this.turnTime = 3.0;
 	}
 
 	onTurnInit() {
 		UTMX.battle.soul.sprite.color = Color.Blue;
-		let d = MyDO.new();
-		UTMX.battle.soul.sprite.addChild(d);
+		for (let i = 0;i < 1; i ++)
+		{
+			let d = UTMX.Sprite.new();
+			d.textures = "a.jpg";
+			UTMX.battle.soul.sprite.addChild(d);
+			let tween = UTMX.tween.createTween();
+			tween.setParallel(true);
+			tween.addTweenProperty(d, "position", 
+				new Vector2(-100, -100), 2
+				).trans(UTMX.tween.TransitionType.Spring).ease(UTMX.tween.EaseType.Out).from(new Vector2(100, 100));
+		}
 	}
 
 	onTurnStart() {

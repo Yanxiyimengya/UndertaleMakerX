@@ -20,8 +20,9 @@ public class JavaScriptCoreInterface
 			{ "__scene_manager" , typeof(UtmxSceneManager)},
 			{ "__input" , typeof(UtmxInputManager)},
 			{ "__resource_loader" , typeof(UtmxResourceLoader)},
+            { "__tween_manager", typeof(JavaScriptTweenManager)},
 
-			{ "__UtmxItem" , typeof(JavaScriptItemProxy)},
+            { "__UtmxItem" , typeof(JavaScriptItemProxy)},
 			{ "__UtmxEnemy" , typeof(JavaScriptEnemyProxy)},
 			{ "__UtmxEncounter" , typeof(JavaScriptEncounterProxy)},
 			{ "__BattleTurn" , typeof(JavaScriptBattleTurnProxy)},

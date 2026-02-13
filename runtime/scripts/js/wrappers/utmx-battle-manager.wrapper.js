@@ -1,6 +1,6 @@
 import { __battle_manager, __BattleProjectile, __logger } from "__UTMX";
 import { UtmxGameSprite } from "./types/utmx-game-sprite.wrapper.js";
-import { UtmxGameObject } from "./types/utmx-game-object.weapper.js";
+import { UtmxGameObject } from "./types/utmx-game-object.wrapper.js";
 import {
 	BattleArenaRectangle,
 	BattleArenaCircle,
@@ -9,27 +9,14 @@ import {
 
 class BattleCamera extends UtmxGameObject
 {
-	static get x() {
+	static get position() {
 		let battleCamera = __battle_manager.GetBattleController().Camera;
-		return battleCamera.Position.X;
+		return battleCamera.Position;
 	}
-	static set x(value) {
+	static set position(value) {
 		let battleCamera = __battle_manager.GetBattleController().Camera;
-		let newPosition = battleCamera.Position;
-		newPosition.X = value;
-		battleCamera.Position = newPosition;
+		battleCamera.Position = value;
 	}
-	static get y() {
-		let battleCamera = __battle_manager.GetBattleController().Camera;
-		return battleCamera.Position.Y;
-	}
-	static set y(value) {
-		let battleCamera = __battle_manager.GetBattleController().Camera;
-		let newPosition = battleCamera.Position;
-		newPosition.Y = value;
-		battleCamera.Position = newPosition;
-	}
-
 	static get zoom() {
 		let battleCamera = __battle_manager.GetBattleController().Camera;
 		return battleCamera.Zoom;
@@ -97,13 +84,13 @@ class BattleSoul extends UtmxGameObject
 		__battle_manager.GetBattlePlayerController().PlayerSoul.Skew = value;
 	}
 	
-	static __sprite = new UtmxGameSprite();
+	static #__sprite = new UtmxGameSprite();
 	static get sprite() {
 		if (! __battle_manager.IsInBattle()) return null;
-		this.__sprite.__instance = __battle_manager.GetBattlePlayerController().PlayerSoul.Sprite;
-		return this.__sprite;
+		this.#__sprite.__instance = __battle_manager.GetBattlePlayerController().PlayerSoul.Sprite;
+		return this.#__sprite;
 	}
-	static set sprite(value) { } // 只读
+    set sprite(value) { }
 
 	static tryMoveTo(target)
 	{
@@ -124,11 +111,11 @@ class BattleSoul extends UtmxGameObject
 }
 class BattleArenaAccess
 {
-	static __mainArena = new BattleArenaRectangle();
+	static #__mainArena = new BattleArenaRectangle();
 	static getMainArena()
 	{
-		this.__mainArena.__instance = __battle_manager.GetBattleArenaController().MainArena;
-		return this.__mainArena;
+		this.#__mainArena.__instance = __battle_manager.GetBattleArenaController().MainArena;
+		return this.#__mainArena;
 	}
 	static isPointInArenas(pos)
 	{

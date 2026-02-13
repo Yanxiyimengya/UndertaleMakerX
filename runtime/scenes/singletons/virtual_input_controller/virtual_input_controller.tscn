@@ -1,12 +1,15 @@
 [gd_scene format=3 uid="uid://dcql4pstuwyqm"]
 
+[ext_resource type="Script" uid="uid://us5i3lqr6t2i" path="res://scripts/singletons/virtual_input_controller/UtmxVirtualInputController.cs" id="1_5dsfc"]
 [ext_resource type="Script" uid="uid://r4cc7n6ic3xv" path="res://scripts/scenes/virtual_input_controller/VirtualJoystick.cs" id="1_h7t0g"]
-[ext_resource type="Texture2D" uid="uid://cbkm4w38a5gtd" path="res://__data__/built-in-resources/a.jpg" id="2_ll6bh"]
-[ext_resource type="Texture2D" uid="uid://bnbfk02sg0yys" path="res://__data__/built-in-resources/textures/soul/spr_heartsmall_0.png" id="3_xgf4u"]
-[ext_resource type="Texture2D" uid="uid://dhmijhp1c1kup" path="res://__data__/built-in-resources/textures/ui/spr_scroll_arrow.png" id="4_msror"]
+[ext_resource type="Texture2D" uid="uid://dy05lvgcp8jio" path="res://__data__/built-in-resources/textures/virtual_keys/rocker-bottom.png" id="2_h7t0g"]
+[ext_resource type="Texture2D" uid="uid://d3kc7crh3ij27" path="res://__data__/built-in-resources/textures/virtual_keys/rocker-button.png" id="3_ll6bh"]
+[ext_resource type="Texture2D" uid="uid://cf011eb8cko2s" path="res://__data__/built-in-resources/textures/virtual_keys/Z-button.png" id="4_ll6bh"]
 [ext_resource type="Script" uid="uid://cnnaer4x1affg" path="res://scripts/scenes/virtual_input_controller/VirtualActionButton.cs" id="5_q72la"]
+[ext_resource type="Texture2D" uid="uid://devjl076l5pl8" path="res://__data__/built-in-resources/textures/virtual_keys/X-button.png" id="6_xgf4u"]
 
 [node name="VirtualInputController" type="CanvasLayer" unique_id=1172724387]
+script = ExtResource("1_5dsfc")
 
 [node name="Control" type="Control" parent="." unique_id=464670884]
 layout_mode = 3
@@ -15,6 +18,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="VirtualJoystick" type="Control" parent="Control" unique_id=103505300]
 layout_mode = 1
@@ -23,6 +27,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_h7t0g")
 BasePath = NodePath("TextureRect")
 StickPath = NodePath("TextureRect2")
@@ -30,20 +35,19 @@ StickPath = NodePath("TextureRect2")
 [node name="TextureRect" type="TextureRect" parent="Control/VirtualJoystick" unique_id=1168584668]
 modulate = Color(0.50271857, 0.50271857, 0.5027185, 1)
 layout_mode = 0
-offset_left = 43.0
-offset_top = 294.0
-offset_right = 193.0
-offset_bottom = 444.0
-texture = ExtResource("2_ll6bh")
+offset_left = 56.0
+offset_top = 275.0
+offset_right = 206.0
+offset_bottom = 425.0
+texture = ExtResource("2_h7t0g")
 
 [node name="TextureRect2" type="TextureRect" parent="Control/VirtualJoystick" unique_id=1769442027]
-modulate = Color(1, 0, 0, 1)
 layout_mode = 0
-offset_left = 97.0
-offset_top = 352.0
-offset_right = 137.0
-offset_bottom = 392.0
-texture = ExtResource("3_xgf4u")
+offset_left = 84.0
+offset_top = 307.0
+offset_right = 176.0
+offset_bottom = 399.0
+texture = ExtResource("3_ll6bh")
 
 [node name="ConfirmButton" type="TextureButton" parent="Control" unique_id=575635864]
 layout_mode = 1
@@ -52,13 +56,13 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -100.0
-offset_top = -167.0
-offset_right = -60.0
-offset_bottom = -127.0
+offset_left = -264.0
+offset_top = -137.0
+offset_right = -189.0
+offset_bottom = -62.0
 grow_horizontal = 0
 grow_vertical = 0
-texture_normal = ExtResource("4_msror")
+texture_normal = ExtResource("4_ll6bh")
 stretch_mode = 0
 script = ExtResource("5_q72la")
 ActionName = "confirm"
@@ -70,14 +74,13 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -101.0
-offset_top = -79.0
-offset_right = -61.0
-offset_bottom = -39.0
+offset_left = -152.0
+offset_top = -137.0
+offset_right = -77.0
+offset_bottom = -62.0
 grow_horizontal = 0
 grow_vertical = 0
-texture_normal = ExtResource("4_msror")
+texture_normal = ExtResource("6_xgf4u")
 stretch_mode = 0
-flip_v = true
 script = ExtResource("5_q72la")
 ActionName = "cancel"

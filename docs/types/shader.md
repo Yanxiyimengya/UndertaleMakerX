@@ -119,10 +119,26 @@ getParameter(param: string) -> any
 
 #### 使用示例
 
+##### 静态加载着色器代码
+
+该示例展示了如何在一个 Sprite 中应用着色器。
+
+```javascript
+import { UTMX } from "UTMX";
+
+let sprite = UTMX.Sprite.new();
+sprite.textures = "textures/logo.png";
+sprite.shader = new UTMX.Shader("shaders/my-custom-shader.gdshader");;
+```
+
+---
+
+##### 动态编译着色器代码
+
 该示例展示了如何在一个 DrawableObject 中加载并应用着色器，实现屏幕着色器负片效果。
 
 ```javascript
-import { UTMX , Vector2 } from "UTMX";
+import { UTMX } from "UTMX";
 
 let shader = new UTMX.Shader();
 shader.shaderCode = `

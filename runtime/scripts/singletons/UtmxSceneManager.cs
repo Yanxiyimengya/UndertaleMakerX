@@ -44,7 +44,7 @@ public partial class UtmxSceneManager : CanvasLayer
 	public static void ChangeSceneToFile(string filePath)
 	{
 		_prevScene = _currentScene;
-        _currentScene = filePath;
+		_currentScene = filePath;
 		filePath = UtmxResourceLoader.ResolvePath(filePath);
 		if (! ResourceLoader.Exists(filePath))
 		{
@@ -53,7 +53,7 @@ public partial class UtmxSceneManager : CanvasLayer
 		}
 		if ( !filePath.EndsWith(".tscn") && !filePath.StartsWith("uid://") )
 			filePath += ".tscn";
-        Instance.GetTree()?.ChangeSceneToFile(filePath);
+		Instance.GetTree()?.ChangeSceneToFile(filePath);
 	}
 
 	public static void AddSingleton(string name, Node node)
@@ -81,21 +81,21 @@ public partial class UtmxSceneManager : CanvasLayer
 			UtmxLogger.Error(TranslationServer.Translate("Unable to add singleton, singleton object is invalid"), name);
 			return;
 		}
-    }
-    public static void RemoveSingleton(string name)
-    {
-        if (singletons.ContainsKey(name))
-        {
+	}
+	public static void RemoveSingleton(string name)
+	{
+		if (singletons.ContainsKey(name))
+		{
 			Node node = singletons[name];
-            Instance.RemoveChild(node);
+			Instance.RemoveChild(node);
 			if (IsInstanceValid(Instance?.GetTree()?.CurrentScene) && !node.IsQueuedForDeletion())
 			{
-                Instance.GetTree().CurrentScene.AddChild(node);
-            }
-        }
-    }
+				Instance.GetTree().CurrentScene.AddChild(node);
+			}
+		}
+	}
 
-    public static Node GetSingleton(string name)
+	public static Node GetSingleton(string name)
 	{
 		if (singletons.ContainsKey(name))
 		{
@@ -104,7 +104,7 @@ public partial class UtmxSceneManager : CanvasLayer
 		return null;
 	}
 
-    public static string GetMainScenePath()
+	public static string GetMainScenePath()
 	{
 		return _mainScene;
 	}
@@ -131,7 +131,7 @@ public partial class UtmxSceneManager : CanvasLayer
 		Node parent = node.GetParent();
 		Node targetParent = Instance.GetTree().CurrentScene;
 		if (parent == null) targetParent.AddChild(node);
-		else if (parent != targetParent) targetParent.Reparent(node);
+		else if (parent != targetParent) node.Reparent(targetParent, false);
 
 		return node;
 	}
@@ -156,7 +156,7 @@ public partial class UtmxSceneManager : CanvasLayer
 		Node parent = node.GetParent();
 		Node targetParent = Instance.GetTree().CurrentScene;
 		if (parent == null) targetParent.AddChild(node);
-		else if (parent != targetParent) targetParent.Reparent(node);
+		else if (parent != targetParent) node.Reparent(targetParent, false);
 		return node;
 	}
 	public static void DeleteSprite(GameSprite2D sprite)
@@ -179,7 +179,7 @@ public partial class UtmxSceneManager : CanvasLayer
 		Node parent = node.GetParent();
 		Node targetParent = Instance.GetTree().CurrentScene;
 		if (parent == null) targetParent.AddChild(node);
-		else if (parent != targetParent) targetParent.Reparent(node);
+		else if (parent != targetParent) node.Reparent(targetParent, false);
 		return node;
 	}
 

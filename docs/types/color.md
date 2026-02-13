@@ -1,8 +1,8 @@
 # Color
 
-Color 是包含四个 `number` 分量的 RGBA 颜色类型|可用于表示颜色或任意四元数值组合。
+Color 是包含四个 `number` 分量的 RGBA 颜色类型，可用于表示颜色或任意四元数值组合。
 
-该类型为 Jint 引擎对 Godot `Color` 的包装对象|因此可以直接访问 Godot API 中的大部分属性与方法。
+该类型为 Jint 引擎对 Godot `Color` 的包装对象，因此可以直接访问 Godot API 中的大部分属性与方法。
 本文档仅列出 UTMX 层扩展或与 Godot 存在差异的部分。
 
 
@@ -13,8 +13,8 @@ Color 是包含四个 `number` 分量的 RGBA 颜色类型|可用于表示颜色
 <br>
 
 <br>
-<a href="https://raw.githubusercontent.com/godotengine/godot-docs/master/img/color_constants.png" target="_self">
-<img src="/imgs/color_constants.png" alt="color_constants" title="点击此图片可查看源图片"></img>
+<a href="../imgs/color_constants.png" target="_self">
+<img src="../imgs/color_constants.png" alt="color_constants" title="点击此图片可查看源图片"></img>
 </a>
 <br><br>
 

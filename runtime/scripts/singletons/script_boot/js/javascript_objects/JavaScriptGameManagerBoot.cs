@@ -1,7 +1,8 @@
 using Godot;
 using Jint.Native.Object;
 using System;
-public class JavaScriptGameManagerBoot
+using System.Collections.Generic;
+public partial class JavaScriptGameManagerBoot : Node
 {
     private static ObjectInstance _mainScriptObject;
     public JavaScriptGameManagerBoot()
@@ -15,8 +16,8 @@ public class JavaScriptGameManagerBoot
         }
         UtmxGameManager.Instance.Connect(UtmxGameManager.SignalName.GameStart, Callable.From(OnGameStart));
         UtmxGameManager.Instance.Connect(UtmxGameManager.SignalName.GameEnd, Callable.From(OnGameEnd));
+        UtmxGameManager.Instance.AddChild(new JavaScriptTweenManager());
     }
-
     public static void OnGameStart()
     {
         JavaScriptBridge.InvokeFunction(_mainScriptObject, "onGameStart", []);

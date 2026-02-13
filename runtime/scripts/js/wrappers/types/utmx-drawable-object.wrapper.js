@@ -1,6 +1,6 @@
 import { __Vector2 , __DrawableObject } from "__UTMX";
-import { __Color } from "res://scripts/js/wrappers/types/utmx-color.weapper.js";
-import { UtmxTransformableObject } from "./utmx-transformable-object.weapper.js";
+import { __Color } from "res://scripts/js/wrappers/types/utmx-color.wrapper.js";
+import { UtmxTransformableObject } from "./utmx-transformable-object.wrapper.js";
 
 export class UtmxDrawableObject extends UtmxTransformableObject {
 	static new()

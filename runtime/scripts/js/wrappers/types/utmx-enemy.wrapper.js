@@ -3,13 +3,14 @@ import { UtmxGameSprite } from "./utmx-game-sprite.wrapper";
 
 export class UtmxBaseEnemy extends __UtmxEnemy  
 {
+	#__sprite;
 	constructor()
 	{
 		super();
-		this.__sprite = new UtmxGameSprite();
-		this.__sprite.__instance = this;
+		this.#__sprite = new UtmxGameSprite();
+		this.#__sprite .__instance = this;
 	}
-    get sprite() { return this.__sprite; }
+    get sprite() { return this.#__sprite ; }
     set sprite(value) { }
 
 	set displayName(value) {

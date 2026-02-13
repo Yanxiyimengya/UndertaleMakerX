@@ -1,6 +1,6 @@
 # Enemy
 
-Enemy 表示一个活跃在战斗场景中的怪物对象。
+Enemy 表示一个活跃在战斗场景中的怪物对象。通过 [GameRegisterDB](modules/game-register-db.md) 将 Enemy 的脚本路径注册到数据库，然后在 `Encounter` 的 `enemies` 列表中添加这个注册 ID ，当战斗开始时，此怪物就会被引擎自动创建在战斗场景中。
 
 通过 `UTMX.Enemy` 访问。
 

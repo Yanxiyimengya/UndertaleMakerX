@@ -22,11 +22,20 @@ public partial class ObjectPool<T> : RefCounted where T : Godot.Node, IObjectPoo
 
     public T2 GetObject<T2>() where T2 : T, new()
     {
-        T2 node;
-        if (_pool.Count > 0)
-            node = (T2)_pool.Dequeue();
-        else
+        T2 node = null;
+        while (_pool.Count > 0)
+        {
+            var dequeued = _pool.Dequeue();
+            if (dequeued is T2 target)
+            {
+                node = target;
+                break;
+            }
+        }
+        if (node == null)
+        {
             node = new T2();
+        }
         AppendNode(node);
         return node;
     }
@@ -34,7 +43,8 @@ public partial class ObjectPool<T> : RefCounted where T : Godot.Node, IObjectPoo
     {
         node.ProcessMode = ProcessModeEnum.Inherit;
         node.Awake();
-        if (node is CanvasItem ci) ci.Show();
+        if (node is CanvasItem ci) 
+            ci.Show();
     }
 
     public void DisabledObject(T node)
