@@ -14,6 +14,7 @@
     * [Encounter](types/encounter.md)
     * [Enemy](types/enemy.md)
     * [GameObject](types/game-object/)
+        * [BattleArena](types/game-object/battle-arena.md)
         * [BattleProjectile](types/game-object/battle-projectile.md)
         * [DrawableObject](types/game-object/drawable-object.md)
         * [Sprite](types/game-object/sprite.md)

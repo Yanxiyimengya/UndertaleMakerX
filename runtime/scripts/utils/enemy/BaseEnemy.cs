@@ -30,15 +30,20 @@ public partial class BaseEnemy : GameSprite2D
 	}
 	public virtual void _OnSpare()
 	{
-    }
-    public virtual void _OnDead()
-    {
-    }
-
-    public override void _Process(double delta)
+	}
+	public virtual void _OnDead()
 	{
-		base._Process(delta);
-		Offset = new Vector2(0, -SpriteFrames.GetFrameTexture(DEFAULT_ANIM_NAME, Frame).GetSize().Y * 0.5F);
+	}
+
+	public override void _Ready() => _UpdateOffset();
+	public override void _Process(double delta) => _UpdateOffset();
+
+
+	public void _UpdateOffset()
+	{
+		Texture2D texture = SpriteFrames?.GetFrameTexture(DEFAULT_ANIM_NAME, Frame);
+		if (texture != null)
+			Offset = new Vector2(0, -texture.GetSize().Y * 0.5F);
 	}
 
 	public virtual BaseBattleTurn _GetNextTurn()

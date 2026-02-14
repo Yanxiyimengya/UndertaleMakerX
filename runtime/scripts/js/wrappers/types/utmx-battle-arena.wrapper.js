@@ -1,36 +1,12 @@
-import { UtmxGameObject } from "./utmx-game-object.wrapper.js";
+import { UtmxTransformableObject } from "./utmx-transformable-object.wrapper";
 
-class BattleArena extends UtmxGameObject
+class BattleArena extends UtmxTransformableObject
 {
-    get position() {
-        return this.__instance.Position;
+    get enabled() {
+        return this.__instance.Enabled;
     }
-    set position(value) {
-        this.__instance.Position = value;
-    }
-    get x() {
-        return this.__instance.X;
-    }
-    set x(value) {
-        let newPosition = this.__instance.Position;
-        newPosition.X = value;
-        this.__instance.Position = newPosition;
-    }
-    get y() {
-        return this.__instance.Position.Y;
-    }
-    set y(value) {
-        let newPosition = this.__instance.Position;
-        newPosition.Y = value;
-        this.__instance.Position = newPosition;
-    }
-    get rotation() {
-        if (this.__instance != null) {
-            return this.__instance.RotationDegrees;
-        }
-    }
-    set rotation(value) {
-        this.__instance.RotationDegrees = value;
+    set enabled(value) {
+        this.__instance.Enabled = value;
     }
 
     get borderWidth() {
@@ -68,6 +44,11 @@ class BattleArenaCircle extends BattleArena
     }
     set radius(value) {
         this.__instance.Radius = value;
+    }
+    
+    static resize(value)
+    {
+        this.__instance.Resize(value);
     }
 }
 

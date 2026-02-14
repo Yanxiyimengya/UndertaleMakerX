@@ -1,6 +1,6 @@
 # Battle 模块
 
-Battle 是 **UTMX 框架的战斗管理模块**，用于统一管理 `Encounter` 战斗。
+Battle 是 **UTMX 竞技场架的战斗管理模块**，用于统一管理 `Encounter` 战斗。
 
 访问或调用 Battle 模块的大部分属性/方法之前，请务必确保已经开始战斗，调用 [isInBattle](#isInBattle) 方法可以查询是否在正在战斗中。
 
@@ -88,10 +88,40 @@ gameOver() -> void
 
 # Arena 子模块
 
-Arena 为 Battle 的内置子模块，用于管理玩家在战斗中的 **竞技场**。
+Arena 为 Battle 的内置子模块，用于创建和管理玩家在战斗中的 **竞技场**。
 通过 `UTMX.battle.arena` 访问。
 
-Arena 模块是 `UTMX` 中非常强大的功能，支持创建支持 `3` 种不同形状的竞技场，每种形状的竞技场都有对应的 **Expand** 与 **Culling** 分支。
+---
+
+### getMainArena
+
+```javascript
+getMainArena() -> BattleArenaRectangle
+```
+
+获取战斗的主竞技场对象，类型是一个 `BattleArenaRectangle`，但区别于常规的 `BattleArenaRectangle`，主竞技场的原点在中下方。
+
+**Returns** `BattleArenaRectangle`
+
+---
+
+### isPointInArenas
+
+```javascript
+isPointInArenas(pos: Vector2, ignoreCulling?: boolean = false) -> boolean
+```
+
+
+检查一个世界坐标 `pos` 是否处于任意竞技场的有效范围内。若 `pos` 处于竞技场内，返回 `true`。
+
+| Property   | Type    | Default   | Description     |
+| ---------- | ------- | ----      | --------------- |
+| pos  | Vector2       | - | 指定世界坐标的一个点  |
+| ignoreCulling  | boolean  | false | 是否忽略剔除竞技场，只检查扩展竞技场范围 |
+
+**Returns** `BattleArenaRectangle`
+
+---
 
 ### createRectangleExpand
 
@@ -99,7 +129,9 @@ Arena 模块是 `UTMX` 中非常强大的功能，支持创建支持 `3` 种不�
 createRectangleExpand(position: Vector2, size: Vector2) -> BattleArenaRectangle
 ```
 
-在 `position` 位置创建一个大小为 `size` 的矩形加框。
+在 `position` 位置创建一个大小为 `size` 的矩形扩展竞技场。
+
+矩形竞技场的介绍请见：[BattleArenaRectangle](types/game-object/battle-arena.md#BattleArenaRectangle)
 
 **Returns** `BattleArenaRectangle`
 
@@ -111,7 +143,9 @@ createRectangleExpand(position: Vector2, size: Vector2) -> BattleArenaRectangle
 createRectangleCulling(position: Vector2, size: Vector2) -> BattleArenaRectangle
 ```
 
-在 `position` 位置创建一个大小为 `size` 的矩形剔除框。
+在 `position` 位置创建一个大小为 `size` 的矩形剔除竞技场。
+
+矩形竞技场的介绍请见：[BattleArenaRectangle](types/game-object/battle-arena.md#BattleArenaRectangle)
 
 **Returns** `BattleArenaRectangle`
 
@@ -123,7 +157,9 @@ createRectangleCulling(position: Vector2, size: Vector2) -> BattleArenaRectangle
 createCircleExpand(position: Vector2, radius: float) -> BattleArenaCircle
 ```
 
-在 `position` 位置创建一个半径为 `radius` 的圆形加框。
+在 `position` 位置创建一个半径为 `radius` 的圆形扩展竞技场。
+
+圆形竞技场的介绍请见：[BattleArenaRectangle](types/game-object/battle-arena.md#BattleArenaCircle)
 
 **Returns** `BattleArenaCircle`
 
@@ -135,7 +171,9 @@ createCircleExpand(position: Vector2, radius: float) -> BattleArenaCircle
 createCircleCulling(position: Vector2, radius: float) -> BattleArenaCircle
 ```
 
-在 `position` 位置创建一个半径为 `radius` 的圆形剔除框。
+在 `position` 位置创建一个半径为 `radius` 的圆形剔除竞技场。
+
+圆形竞技场的介绍请见：[BattleArenaRectangle](types/game-object/battle-arena.md#BattleArenaCircle)
 
 **Returns** `BattleArenaCircle`
 
@@ -147,9 +185,9 @@ createCircleCulling(position: Vector2, radius: float) -> BattleArenaCircle
 createPolygonArenaExpand(position: Vector2, vertices: Array(Vector2)) -> BattleArenaPolygon
 ```
 
-在 `position` 位置创建一个顶点列表为 `vertices` 的多边形加框。
+在 `position` 位置创建一个顶点列表为 `vertices` 的多边形扩展竞技场。
 
-!> 多边形的顶点数必须 大于等于 `3`。
+多边形竞技场的介绍请见：[BattleArenaRectangle](types/game-object/battle-arena.md#BattleArenaPolygon)
 
 **Returns** `BattleArenaPolygon`
 
@@ -161,9 +199,9 @@ createPolygonArenaExpand(position: Vector2, vertices: Array(Vector2)) -> BattleA
 createPolygonArenaCulling(position: Vector2, vertices: Array(Vector2)) -> BattleArenaPolygon
 ```
 
-在 `position` 位置创建一个顶点列表为 `vertices` 的多边形加框。
+在 `position` 位置创建一个顶点列表为 `vertices` 的多边形扩展竞技场。
 
-!> 多边形的顶点数必须 大于等于 `3`。
+多边形竞技场的介绍请见：[BattleArenaRectangle](types/game-object/battle-arena.md#BattleArenaPolygon)
 
 **Returns** `BattleArenaPolygon`
 
@@ -178,7 +216,7 @@ Camera 为 Battle 的内置子模块，用于管理玩家在战斗中的 **摄�
 
 | Property          | Type    | Default   | Description                                      |
 | ----------------- | ------- | --------- | ------------------------------------------------ |
-| position  | Vector2 | (0, 0)      | 摄像机的位置（相当于世界原点） |
+| position  | Vector2 | (0, 0)      | 摄像机的位置（相对于世界原点） |
 | zoom  | Vector2 | (1, 1)      | 摄像机的视角缩放 |
 | rotation  | number | 0      | 摄像机的旋转角度（单位为角度） |
 
@@ -219,7 +257,7 @@ tryMoveTo(target: Vector2) -> void
 isOnArenaFloor() -> void
 ```
  
-判断灵魂是否处于战斗框中的“地板”上。
+判断灵魂是否处于战斗竞技场中的“地板”上。
 
 这便于我们实现横板平台跳跃的游戏机制。
 
@@ -233,7 +271,7 @@ isOnArenaFloor() -> void
 IsOnArenaCeiling() -> void
 ```
  
-判断灵魂是否处于战斗框中的“天花板”上。
+判断灵魂是否处于战斗竞技场中的“天花板”上。
 
 **Returns** `void`
 

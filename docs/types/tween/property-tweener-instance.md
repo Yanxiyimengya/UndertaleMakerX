@@ -2,7 +2,7 @@
 
 PropertyTweenerInstance 由 [TweenInstance](/types/tween/tween-instance.md) 创建，会随着时间对指定的 JavaScript 对象的属性进行插值。
 
-!> 只有通过 TweenInstance 创建的 PropertyTweenerInstance 才有效，手动创建的 PropertyTweenerInstance 无法正常运行。
+!> 只有通过 `TweenInstance` 创建的 PropertyTweenerInstance 才有效，手动创建的 PropertyTweenerInstance 无法正常运行。
 
 ---
 

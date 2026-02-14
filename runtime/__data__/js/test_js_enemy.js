@@ -18,7 +18,7 @@ export default class PapyrusEnemy extends UTMX.Enemy {
 
 		UTMX.debug.print("PapyrusEnemy: Constructor Finished"); // 2. 检查构造结束
 
-		this.sprite.textures = "a.jpg";
+		//this.sprite.textures = "a.jpg";
 	}
 
 	onSpare() {

@@ -127,6 +127,7 @@ class BattleArenaAccess
 		let arenaWrapper = new BattleArenaRectangle();
 		arenaWrapper.__instance =  __battle_manager.GetBattleArenaController().CreateRectangleArenaExpand();
 		arenaWrapper.size = size;
+		arenaWrapper.position = pos;
 		return arenaWrapper;
 	}
 	static createRectangleCulling(pos = new Vector2(320, 320), size = new Vector2(130, 130))
@@ -134,6 +135,7 @@ class BattleArenaAccess
 		let arenaWrapper = new BattleArenaRectangle();
 		arenaWrapper.__instance =  __battle_manager.GetBattleArenaController().CreateRectangleArenaCulling();
 		arenaWrapper.size = size;
+		arenaWrapper.position = pos;
 		return arenaWrapper;
 	}
 	static createCircleExpand(pos = new Vector2(320, 320), radius = 120)
@@ -157,6 +159,7 @@ class BattleArenaAccess
 		if (vertices.length < 3) return;
 		let arenaWrapper = new BattleArenaPolygon();
 		arenaWrapper.__instance =  __battle_manager.GetBattleArenaController().CreatePolygonArenaExpand();
+		arenaWrapper.position = pos;
 		arenaWrapper.vertices = vertices;
 		return arenaWrapper;
 	}
@@ -165,6 +168,7 @@ class BattleArenaAccess
 		if (vertices.length < 3) return;
 		let arenaWrapper = new BattleArenaPolygon();
 		arenaWrapper.__instance =  __battle_manager.GetBattleArenaController().CreatePolygonArenaCulling();
+		arenaWrapper.position = pos;
 		arenaWrapper.vertices = vertices;
 		return arenaWrapper;
 	}

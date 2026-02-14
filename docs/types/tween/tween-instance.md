@@ -4,7 +4,7 @@ TweenInstance 是由 `UTMX.Tween` 模块创建的补间动画对象实例，持�
 
 当全部补间动画播放完成后，会调用自身的 [kill](#kill) 完成销毁。
 
-!> 只有通过 UTMX.tween 模块创建的 TweenInstance 才有效，手动创建的 TweenInstance 无法正常运行。
+!> 只有通过 `UTMX.tween` 模块创建的 TweenInstance 才有效，手动创建的 TweenInstance 无法正常运行。
 
 ---
 

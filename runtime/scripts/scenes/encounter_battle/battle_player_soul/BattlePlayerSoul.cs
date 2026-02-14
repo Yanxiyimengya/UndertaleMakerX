@@ -170,9 +170,9 @@ public partial class BattlePlayerSoul : CharacterBody2D
 				TryMoveTo(targetPos);
 			}
 		}
+		else MoveAndSlide();
 		IsMoving = targetPos != _prevPosition;
 		_prevPosition = targetPos;
-		MoveAndSlide();
 	}
 
 	private bool IsInsideArena(Vector2 center)
@@ -212,7 +212,8 @@ public partial class BattlePlayerSoul : CharacterBody2D
 		Velocity = Vector2.Zero;
 		if (! IsInsideArena(Position))
 			Position = ArenaGroup.PushBackInside(Position, _checkPoints.ToArray(), 1.0F);
-	}
+        MoveAndSlide();
+    }
 
 	public void Hurt(double damage, double invtime = -1)
 	{

@@ -1,45 +1,48 @@
 import { UTMX, Vector2, Color } from "UTMX";
 import BlueProjectile from "./test_js_projectile";
-import MyDO from "js/test_js_drawable_object.js"
 
 export default class MyCustomTurn extends UTMX.BattleTurn {
-	spr = null;
+	arena = null;
 
 	constructor() {
 		super();
-		this.arenaInitSize = new Vector2(140, 200);
+		this.arenaInitSize = new Vector2(120, 120);
 		this.soulInitPosition = new Vector2(0, UTMX.battle.arena.getMainArena().size.y / 2 - 9);
 		this.jumping = false;
 		this.moveSpeed = 130.0;
 		this.gravity = 300.0;
 		this.jumpSpeed = 0.0;
-		this.turnTime = 3.0;
+		this.turnTime = 300.0;
 	}
 
-	onTurnInit() {
+	onTurnInit()
+	{
+		let projectile = UTMX.BattleProjectile.new();
+		projectile.canCollideWithSoul = false;
+		projectile.canCollideWithProjectile = true;
+		projectile.textures = "s.png";
+		projectile.color = new Color(1,1,1,0.7);
+		projectile.scale = new Vector2(3, 3);
+		projectile.position = new Vector2(320, 320);
+		projectile.useMask = true;
+
 		UTMX.battle.soul.sprite.color = Color.Blue;
-		for (let i = 0;i < 1; i ++)
-		{
-			let d = UTMX.Sprite.new();
-			d.textures = "a.jpg";
-			UTMX.battle.soul.sprite.addChild(d);
-			let tween = UTMX.tween.createTween();
-			tween.setParallel(true);
-			tween.addTweenProperty(d, "position", 
-				new Vector2(-100, -100), 2
-				).trans(UTMX.tween.TransitionType.Spring).ease(UTMX.tween.EaseType.Out).from(new Vector2(100, 100));
-		}
+		this.arena = UTMX.battle.arena.createRectangleExpand(new Vector2(320, 327+75), new Vector2(50, 50));
 	}
 
 	onTurnStart() {
 		UTMX.battle.soul.movable = false; // 禁用移动，实现自定义控制器
-		this.proj = BlueProjectile.new();
-		this.proj.textures = "a.jpg";
-		this.proj.position = new Vector2(320, 320);
+		this.projectile = UTMX.BattleProjectile.new();
+		//this.projectile.canCollideWithProjectile = true;
+		this.projectile.textures = "a.jpg";
+		this.projectile.onHitProjectile = (proj) => {
+			UTMX.debug.log(proj);
+		};
 	}
 
 	onTurnUpdate(delta) 
 	{
+		this.projectile.position = UTMX.input.getMousePosition();
 		let moveSpeed = new Vector2(0, 0);
 		// 检测是否在地面
 		if (UTMX.battle.soul.isOnArenaFloor()) {

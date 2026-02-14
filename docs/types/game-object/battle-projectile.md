@@ -2,7 +2,7 @@
 
 继承 [Sprite](types/game-object/sprite.md)
 
-BattleProjectile 表示战斗中的射弹对象，在战斗中检测与玩家灵魂之间发生的碰撞，并对玩家造成伤害。
+BattleProjectile 表示战斗中的射弹对象，在战斗中检测与玩家灵魂之间发生的碰撞，并对玩家造成伤害，也可以互相检查碰撞。
 
 通过 `UTMX.BattleProjectile` 访问
 
@@ -33,13 +33,19 @@ BattleProjectile 表示战斗中的射弹对象，在战斗中检测与玩家灵
 | collisionMode | UTMX.BattleProjectile.ProjectileCollisionMode | USED_RECT     | 射弹的碰撞模式 |
 | preciseEpsilon | number | 1.0     | 若碰撞模式为 `PRECISE`，控制方块算法构建碰撞盒多边形的精度，值越小越精细，同时性能损耗越大，值越大精度越粗糙，性能损耗越小 |
 | useMask   | boolean | false       | 决定当前射弹的精灵是否绘制在 Arena 的遮罩中 |
-| enabled   | boolean | true       | 决定当前射弹是否启用，若为 `true` 则允许射弹与灵魂碰撞 |
+| enabled   | boolean | true       | 决定当前射弹是否启用，若为 `true` 则允许射弹检测一切碰撞 |
+| canCollideWithSoul   | boolean | true  | 决定当前射弹是否启用与玩家灵魂之间的碰撞 |
+| canCollideWithProjectile   | boolean | false   | 决定当前射弹是否启用与其他射弹之间的碰撞 |
 
 ### onHit
 
-这是 BattleProjectile 中的一个特殊内置属性，你可以设置一个无参数的匿名函数用于处理当射弹碰撞到玩家时执行的默认行为，这会覆盖引擎的内置 行为。
+这是 BattleProjectile 中的一个特殊内置属性，这个回调函数当检测到与玩家灵魂的碰撞箱碰撞时每帧触发。你可以设置一个无参数的匿名函数用于处理当射弹碰撞到玩家时执行的默认行为，这会覆盖引擎的内置 行为。
 
----
+> 射弹的 `canCollideWithSoul` 属性需为 `true`
+
+```javascript
+onHit() -> void;
+```
 
 #### 使用示例
 
@@ -63,4 +69,16 @@ export default class BlueProjectile extends UTMX.BattleProjectile
         }
     }
 }
+```
+
+---
+
+### onHitProjectile
+
+onHitProjectile 这个回调函数当检测到与其他 Projectile 碰撞时每帧触发，这个回调函数接受一个参数，表示与之碰撞的射弹。
+
+> 互相碰撞的两个射弹的 `canCollideWithProjectile` 属性都需为 `true`
+
+```javascript
+onHitProjectile(projectile: BattleProjectile) -> void;
 ```

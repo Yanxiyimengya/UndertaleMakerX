@@ -2,7 +2,7 @@
 	"application" : {
 		"name" : "UNDERTALE MAKER X - By 烟汐忆梦",
 		"author" : "烟汐忆梦_YM",
-		"max_fps" : 10000,
+		"max_fps" : 60,
 		"vsync" : false,
 		"virtual_input" : false,
 		"main_scene" : "",

@@ -19,6 +19,8 @@ let col = Color.Red;
 - [Enemy](types/enemy.md)
 - [GameObject 及其派生类型](types/game-object/)
 - [Shader](types/shader.md)
+- [TweenInstance](types/tween/tween-instance.md)
+- [PropertyTweenerInstancea](types/tween/property-tweener-instance.md)
 - [Vector2](types/vector2.md)
 - [Vector3](types/vector3.md)
 - [Vector4](types/vector4.md)

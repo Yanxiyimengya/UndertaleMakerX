@@ -39,4 +39,14 @@ public partial class JavaScriptBattleProjectileProxy : BaseBattleProjectile, IOb
 			base.OnHitPlayer(playerSoul);
 		}
 	}
+
+    public override void OnHitProjectile(BaseBattleProjectile projectile)
+    {
+        if (JsInstance.HasProperty("onHitProjectile"))
+        {
+            ((IJavaScriptObject)this).Invoke("onHitProjectile", [projectile]);
+        }
+        //else base.OnHitProjectile(projectile);
+    }
+
 }

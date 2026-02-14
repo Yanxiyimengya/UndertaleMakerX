@@ -53,4 +53,17 @@ export class UtmxBattleProjectile extends UtmxGameSprite {
     set enabled(value) {
         this.__instance.Enabled = value;
     }
+    
+    get canCollideWithSoul() {
+        return this.__instance.CanCollideWithSoul;
+    }
+    set canCollideWithSoul(value) {
+        this.__instance.CanCollideWithSoul = value;
+    }
+    get canCollideWithProjectile() {
+        return this.__instance.CanCollideWithProjectile;
+    }
+    set canCollideWithProjectile(value) {
+        this.__instance.CanCollideWithProjectile = value;
+    }
 }

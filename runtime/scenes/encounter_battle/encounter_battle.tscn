@@ -180,8 +180,6 @@ offset_right = -2.0
 offset_bottom = 412.0
 grow_horizontal = 1
 grow_vertical = 1
-PlayerName = "FRISK"
-PlayerLv = 1
 
 [node name="BattleMenuManager" type="TabContainer" parent="UILayer" unique_id=799359222]
 visible = false

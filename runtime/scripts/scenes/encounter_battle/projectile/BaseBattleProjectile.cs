@@ -70,29 +70,67 @@ public partial class BaseBattleProjectile : GameSprite2D, IObjectPoolObject
 			else { targetParent.AddChild(this); }
 			_useMask = value;
 		}
-	}
+    }
+    public bool CanCollideWithSoul
+    {
+        get => _canCollisionWithSoul;
+        set
+        {
+			_canCollisionWithSoul = value;
+			if (value)
+			{
+				_area.CollisionMask |= (uint)UtmxBattleManager.BattleCollisionLayers.Player;
+                _area.CollisionLayer |= (uint)UtmxBattleManager.BattleCollisionLayers.Player;
+            }
+			else
+			{
+				_area.CollisionMask &= ~(uint)UtmxBattleManager.BattleCollisionLayers.Player;
+                _area.CollisionLayer &= ~(uint)UtmxBattleManager.BattleCollisionLayers.Player;
+            }
+        }
+    }
+    public bool CanCollideWithProjectile
+    {
+        get => _canCollisionWithProjectile;
+		set
+		{
+			_canCollisionWithProjectile = value;
+			if (value)
+			{
+				_area.CollisionMask |= (uint)UtmxBattleManager.BattleCollisionLayers.Projectile;
+				_area.CollisionLayer |= (uint)UtmxBattleManager.BattleCollisionLayers.Projectile;
+			}
+			else
+			{
+				_area.CollisionMask &= ~(uint)UtmxBattleManager.BattleCollisionLayers.Projectile;
+				_area.CollisionLayer &= ~(uint)UtmxBattleManager.BattleCollisionLayers.Projectile;
+			}
+		}
+    }
 
-	private PrecisionCollisionMode collisionMode = PrecisionCollisionMode.UsedRect;
+    private PrecisionCollisionMode collisionMode = PrecisionCollisionMode.UsedRect;
 	private readonly List<List<Node2D>> _collisionShapesList = new();
-	private Area2D _area;
+	private BattleProjectileHitBox _area;
 	private int _prevFrame = -1;
 	private bool _textureChangedConnected = false;
 	private bool _frameChangedConnected = false;
 	private bool _enabled = false;
-	private bool _useMask;
+    private bool _canCollisionWithSoul = false;
+    private bool _canCollisionWithProjectile = false;
+    private bool _useMask;
 	private readonly Dictionary<Image, List<Vector2[]>> _polygonCache = new();
 
 	public BaseBattleProjectile()
 	{
-		_area = new Area2D();
-		if (_area != null)
+		_area = new BattleProjectileHitBox();
+		_area.CollisionMask = 0;
+		_area.CollisionLayer = 0;
+
+        if (_area != null)
 		{
 			AddChild(_area, false, InternalMode.Front);
-			_area.CollisionLayer = (int)UtmxBattleManager.BattleCollisionLayers.Player;
-			_area.CollisionMask = (int)(
-				UtmxBattleManager.BattleCollisionLayers.Projectile |
-				UtmxBattleManager.BattleCollisionLayers.Player);
-		}
+			CanCollideWithSoul = true;
+        }
 
 		if (!_frameChangedConnected)
 		{
@@ -142,9 +180,18 @@ public partial class BaseBattleProjectile : GameSprite2D, IObjectPoolObject
 	}
 	public override void _PhysicsProcess(double delta)
 	{
-		if (!Enabled) return;
-		if (IsCollideWithThePlayer())
-		{
+		if (!Enabled || _area == null) return;
+		bool hitPlayer = false;
+        foreach (Area2D area in _area.GetOverlappingAreas())
+        {
+            if (area is BattlePlayerSoulHitBox) hitPlayer = true;
+            else if (area is BattleProjectileHitBox)
+				if (area.GetParent() is BaseBattleProjectile proj)
+					OnHitProjectile(proj);
+        }
+
+		if (hitPlayer)
+        {
 			var soul = UtmxBattleManager.GetBattlePlayerController()?.PlayerSoul;
 			if (soul != null) OnHitPlayer(soul);
 		}
@@ -176,26 +223,18 @@ public partial class BaseBattleProjectile : GameSprite2D, IObjectPoolObject
 
 	public virtual void OnHitPlayer(BattlePlayerSoul playerSoul)
 	{
-		if (playerSoul != null)
-			UtmxPlayerDataManager.Hurt(Damage);
-	}
+		UtmxPlayerDataManager.Hurt(Damage);
+    }
+    public virtual void OnHitProjectile(BaseBattleProjectile projectile)
+    {
+    }
 
-	private void ClearCollisionShapes()
+    private void ClearCollisionShapes()
 	{
 		foreach (var shapes in _collisionShapesList)
 			foreach (var shape in shapes)
 				if (IsInstanceValid(shape)) shape.QueueFree();
 		_collisionShapesList.Clear();
-	}
-
-	private bool IsCollideWithThePlayer()
-	{
-		if (_area == null) return false;
-		foreach (Area2D area in _area.GetOverlappingAreas())
-		{
-			if (area is BattlePlayerSoulHitBox) return true;
-		}
-		return false;
 	}
 
 	private void UpdateCollisionShapes()

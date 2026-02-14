@@ -7,6 +7,7 @@ using Jint.Native.Object;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using static Godot.Tween;
 
@@ -52,6 +53,8 @@ public partial class JavaScriptTween : RefCounted
     }
     public JavaScriptTweenerProperty addTweenProperty(ObjectInstance ins, string propName, JsValue finalValue, double duration)
     {
+        if (ins.Get("__instance").ToObject() is Node targetNode)
+            tween.BindNode(targetNode);
         object value = finalValue.ToObject();
         JavaScriptTweenerProperty javaScriptTweenerProperty = new JavaScriptTweenerProperty(ins);
         PropertyTweener propertyTweener = value switch 
@@ -140,13 +143,17 @@ public partial class JavaScriptTweenerProperty : JavaScriptTweener
     }
     public override bool _Set(StringName propName, Variant value)
     {
-        if (instance != null)
+        if (instance == null) return false;
+        
         {
-            string prop = propName.ToString();
-            if (instance.HasProperty(prop))
+            if (instance != null)
             {
-                instance.Set(prop, JsValue.FromObject(JavaScriptBridge.MainEngine, value.Obj));
-                return true;
+                string prop = propName.ToString();
+                if (instance.HasProperty(prop))
+                {
+                    instance.Set(prop, JsValue.FromObject(JavaScriptBridge.MainEngine, value.Obj));
+                    return true;
+                }
             }
         }
         return false;

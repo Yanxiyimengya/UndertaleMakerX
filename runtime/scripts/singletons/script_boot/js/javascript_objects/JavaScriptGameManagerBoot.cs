@@ -14,16 +14,18 @@ public partial class JavaScriptGameManagerBoot : Node
             JavaScriptClass jsClass = JavaScriptBridge.FromFile(mainScriptFilePath);
             _mainScriptObject = jsClass?.New();
         }
-        UtmxGameManager.Instance.Connect(UtmxGameManager.SignalName.GameStart, Callable.From(OnGameStart));
-        UtmxGameManager.Instance.Connect(UtmxGameManager.SignalName.GameEnd, Callable.From(OnGameEnd));
+        if (_mainScriptObject?.HasProperty("onGameStart") == true)
+            UtmxGameManager.Instance.Connect(UtmxGameManager.SignalName.GameStart, Callable.From(OnGameStart));
+        if (_mainScriptObject?.HasProperty("onGameEnd") == true)
+            UtmxGameManager.Instance.Connect(UtmxGameManager.SignalName.GameEnd, Callable.From(OnGameEnd));
         UtmxGameManager.Instance.AddChild(new JavaScriptTweenManager());
     }
     public static void OnGameStart()
     {
-        JavaScriptBridge.InvokeFunction(_mainScriptObject, "onGameStart", []);
+         JavaScriptBridge.InvokeFunction(_mainScriptObject, "onGameStart", []);
     }
     public static void OnGameEnd()
     {
-        JavaScriptBridge.InvokeFunction(_mainScriptObject, "onGameEnd", []);
+         JavaScriptBridge.InvokeFunction(_mainScriptObject, "onGameEnd", []);
     }
 }

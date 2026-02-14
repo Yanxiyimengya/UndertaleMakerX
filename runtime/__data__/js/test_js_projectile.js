@@ -4,7 +4,7 @@ export default class BlueProjectile extends UTMX.BattleProjectile
 {
     start()
     {
-        this.damage = 2;
+        this.damage = 10;
     }
 
     onHit()
