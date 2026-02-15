@@ -38,6 +38,7 @@ export default class MyCustomTurn extends UTMX.BattleTurn {
 		this.projectile.onHitProjectile = (proj) => {
 			UTMX.debug.log(proj);
 		};
+		UTMX.battle.ui.visible = false;
 	}
 
 	onTurnUpdate(delta) 

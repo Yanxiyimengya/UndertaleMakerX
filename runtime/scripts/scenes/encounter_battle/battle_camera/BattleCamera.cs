@@ -140,13 +140,4 @@ public partial class BattleCamera : Camera2D
 		_shakeInterval.X = 1f / Mathf.Max(ShakeFrequency.X, 1f);
 		_shakeInterval.Y = 1f / Mathf.Max(ShakeFrequency.Y, 1f);
 	}
-
-	public override void _ValidateProperty(Godot.Collections.Dictionary property)
-	{
-		base._ValidateProperty(property);
-		if (property["name"].ToString() is "ShakeFrequencyX" or "ShakeFrequencyY")
-		{
-			UpdateShakeIntervals();
-		}
-	}
 }

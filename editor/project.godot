@@ -15,9 +15,28 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="UTMX-Editor"
-run/main_scene="uid://7kjp05svklmo"
+run/main_scene="uid://djn5y1cfoknas"
 config/features=PackedStringArray("4.6", "GL Compatibility")
+run/max_fps=60
+run/low_processor_mode=true
 config/icon="uid://jvyyyuii3qbb"
+
+[autoload]
+
+EditorProjectManager="*uid://cstntr050r5v0"
+EditorConfigureManager="*uid://c6l47m2qdueeq"
+
+[display]
+
+window/size/viewport_width=1800
+window/size/viewport_height=1000
+window/energy_saving/keep_screen_on=false
+window/subwindows/embed_subwindows=false
+window/stretch/aspect="expand"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/dockable_container/plugin.cfg")
 
 [rendering]
 

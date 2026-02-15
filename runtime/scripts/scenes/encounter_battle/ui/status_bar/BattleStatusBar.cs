@@ -25,7 +25,10 @@ public partial class BattleStatusBar : Control
 
     public override void _Process(double delta)
     {
-        UpdatePlayerData();
+        if (IsVisibleInTree())
+        {
+            UpdatePlayerData();
+        }
     }
 
     private void UpdatePlayerData()

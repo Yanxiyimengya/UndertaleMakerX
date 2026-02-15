@@ -46,6 +46,16 @@ onBattleStart() -> void
 
 ---
 
+### onGameover
+
+```javascript
+onGameover() -> void
+```
+
+玩家被击败时触发。
+
+---
+
 ### onBattleEnd
 
 ```javascript

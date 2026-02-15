@@ -75,13 +75,14 @@ public partial class UtmxBattleManager
 	public static void GameOver()
 	{
 		if (_isInBattle)
-		{
-			_isInBattle = false;
+        {
+            UtmxSceneManager.Instance.CallDeferred("ChangeSceneToFile", [UtmxSceneManager.Instance.GameoverScenePath]);
+            GetEncounterInstance()?._OnGameover();
+            _isInBattle = false;
 			BattlePlayerSoul soul = GetBattlePlayerController().PlayerSoul;
 			Camera2D camera = soul.GetViewport().GetCamera2D();
 			_playerSoulTransform = soul.Sprite.GlobalTransform;
 			PlayerSoulColor = soul.SoulColor;
-            UtmxSceneManager.Instance.CallDeferred("ChangeSceneToFile", [UtmxSceneManager.Instance.GameoverScenePath]);
 		}
 	}
 
@@ -106,9 +107,13 @@ public partial class UtmxBattleManager
 	public static BattleProjectileController GetBattleProjectileController()
 	{
 		return _battleController?.ProjectileController;
-	}
+    }
+    public static BattleUiController GetBattleUiController()
+    {
+        return _battleController?.UiController;
+    }
 
-	public static void SwitchBattleState(string stateId)
+    public static void SwitchBattleState(string stateId)
 	{
 		_battleController.SwitchToState(stateId);
 	}

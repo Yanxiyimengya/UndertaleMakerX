@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://sekm2lap34uh" path="res://scripts/scenes/encounter_battle/state/BattlePlayerFightMenuState.cs" id="7_0mx1x"]
 [ext_resource type="Script" uid="uid://dc27u6sxv148b" path="res://scripts/scenes/encounter_battle/state/BattlePlayerItemMenuState.cs" id="7_3peba"]
 [ext_resource type="Texture2D" uid="uid://p8a3d1ppm0r" path="res://__data__/built-in-resources/textures/ui/buttons/spr_actbt_center_1.png" id="7_e7ctv"]
+[ext_resource type="Script" uid="uid://crqwghhnphiyd" path="res://scripts/scenes/encounter_battle/controllers/BattleUiController.cs" id="7_kyp32"]
 [ext_resource type="PackedScene" uid="uid://d0q7av0w3c7gt" path="res://scenes/encounter_battle/ui/ui_elements/battle_diamage_text/battle_damage_text.tscn" id="8_du4b0"]
 [ext_resource type="Script" uid="uid://dwcjax4y5ew3q" path="res://scripts/scenes/encounter_battle/state/BattlePlayerActMenuState.cs" id="8_q4xod"]
 [ext_resource type="Texture2D" uid="uid://dtxtjdaxf7g27" path="res://__data__/built-in-resources/textures/ui/buttons/spr_itembt_0.png" id="8_taqgn"]
@@ -49,7 +50,7 @@
 
 [node name="EncounterBattle" type="Node" unique_id=1037590223]
 
-[node name="BattleController" type="Node" parent="." unique_id=1909813863 node_paths=PackedStringArray("BattleStateMachine", "Camera", "EnemyController", "PlayerController", "ArenaController", "TurnController", "ProjectileController")]
+[node name="BattleController" type="Node" parent="." unique_id=1909813863 node_paths=PackedStringArray("BattleStateMachine", "Camera", "EnemyController", "PlayerController", "ArenaController", "TurnController", "UiController", "ProjectileController")]
 script = ExtResource("2_mdx4q")
 BattleStateMachine = NodePath("../BattleStateMachine")
 Camera = NodePath("../BattleCamera")
@@ -57,6 +58,7 @@ EnemyController = NodePath("BattleEnemyController")
 PlayerController = NodePath("BattlePlayerController")
 ArenaController = NodePath("BattleArenaController")
 TurnController = NodePath("BattleTurnController")
+UiController = NodePath("BattleUiController")
 ProjectileController = NodePath("BattleProjectileController")
 
 [node name="BattleProjectileController" type="Node" parent="BattleController" unique_id=1870263886 node_paths=PackedStringArray("ProjectilesNode", "ArenaMask")]
@@ -80,6 +82,12 @@ PlayerSoul = NodePath("../../Players/BattlePlayerSoul")
 script = ExtResource("6_kyp32")
 ArenaGroup = NodePath("../../BattleArenaGroup")
 MainArena = NodePath("../../BattleArenaGroup/MainArena")
+
+[node name="BattleUiController" type="Node" parent="BattleController" unique_id=333836539 node_paths=PackedStringArray("ButtonManager", "UiLayer", "StatusBar")]
+script = ExtResource("7_kyp32")
+ButtonManager = NodePath("../../UILayer/BattleScreenButtonManager")
+UiLayer = NodePath("../../UILayer")
+StatusBar = NodePath("../../UILayer/BattleStatusBar")
 
 [node name="BattleStateMachine" type="Node" parent="." unique_id=261701519]
 script = ExtResource("2_62htl")

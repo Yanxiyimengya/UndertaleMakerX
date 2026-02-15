@@ -1,0 +1,220 @@
+[gd_scene format=3 uid="uid://djn5y1cfoknas"]
+
+[ext_resource type="Theme" uid="uid://b57pk8esqcvqr" path="res://assets/themes/editor_theme.tres" id="1_8h4ts"]
+[ext_resource type="Script" uid="uid://b2l4b61qqmhpg" path="res://scripts/scenes/project_manager/project_manager.gd" id="1_bwr5b"]
+[ext_resource type="Texture2D" uid="uid://c6pq2l1n2dflq" path="res://assets/icons/add/add_hover.svg" id="3_ak5so"]
+[ext_resource type="Texture2D" uid="uid://bs72ojtyaq4x" path="res://assets/icons/search/search_hover.svg" id="3_ptf03"]
+[ext_resource type="FontFile" uid="uid://vyola4is4krx" path="res://assets/fonts/HarmonyOS_Sans_SC_Regular.ttf" id="3_r5ri0"]
+[ext_resource type="PackedScene" uid="uid://ctskko65w5vub" path="res://scenes/project_manager/project_list_item/project_list_item.tscn" id="3_y65gb"]
+[ext_resource type="FontFile" uid="uid://btaw8xmv3biy7" path="res://assets/fonts/HarmonyOS_Sans_SC_Bold.ttf" id="4_ayp4n"]
+[ext_resource type="Texture2D" uid="uid://ctb11j07p2y3n" path="res://assets/icons/search/search_normal.svg" id="4_jx0y5"]
+[ext_resource type="Texture2D" uid="uid://batdmyf735ts8" path="res://assets/icons/folder/folder_hover.svg" id="5_gfu62"]
+[ext_resource type="PackedScene" uid="uid://dek1nawa4c0g4" path="res://scenes/project_manager/windows/create_project_window/create_project_window.tscn" id="10_4uwo8"]
+[ext_resource type="Texture2D" uid="uid://cbwyn0b320xp5" path="res://assets/icons/arrow/top.svg" id="10_kjgf5"]
+[ext_resource type="Script" uid="uid://bjpwgw81arc4s" path="res://scripts/utils/nodes/ArrowToggleButton.gd" id="11_kjgf5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4uwo8"]
+content_margin_left = 9.0
+content_margin_top = 6.0
+content_margin_right = 9.0
+content_margin_bottom = 6.0
+bg_color = Color(0.12156863, 0.12156863, 0.12156863, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 10
+shadow_color = Color(0, 0, 0, 0.3137255)
+shadow_size = 15
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jx0y5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gfu62"]
+bg_color = Color(0.17641911, 0.17641908, 0.17641908, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+expand_margin_top = 53.0
+shadow_color = Color(0, 0, 0, 0.3137255)
+shadow_size = 5
+shadow_offset = Vector2(5, 5)
+
+[node name="ProjectManager" type="Panel" unique_id=1852357129]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_8h4ts")
+script = ExtResource("1_bwr5b")
+project_item_packed_scene = ExtResource("3_y65gb")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=2036896567]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer" unique_id=845400050]
+z_index = 1
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4uwo8")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer" unique_id=1369900953]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/MarginContainer" unique_id=1144627325]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 10
+
+[node name="CreateButton" type="Button" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer" unique_id=1278195380]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.7609991, 0.7609991, 0.7609994, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.388, 0.713, 1.15, 1)
+theme_override_fonts/font = ExtResource("3_r5ri0")
+text = "创建项目"
+icon = ExtResource("3_ak5so")
+flat = true
+
+[node name="ImportButton" type="Button" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer" unique_id=273654330]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.7609991, 0.7609991, 0.7609994, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.388, 0.713, 1.15, 1)
+theme_override_colors/icon_pressed_color = Color(0.388, 0.713, 1.15, 1)
+theme_override_fonts/font = ExtResource("3_r5ri0")
+text = "导入项目"
+icon = ExtResource("5_gfu62")
+flat = true
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=657072821]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer" unique_id=1284098214]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ProjectFilterContainer" type="PanelContainer" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=2125598115]
+z_index = 1
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_jx0y5")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer/VBoxContainer/ProjectFilterContainer" unique_id=1257765777]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer/VBoxContainer/ProjectFilterContainer/HBoxContainer" unique_id=1343746003]
+custom_minimum_size = Vector2(600, 55)
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 20
+
+[node name="ProjectNameLineEdit" type="LineEdit" parent="VBoxContainer/MarginContainer/VBoxContainer/ProjectFilterContainer/HBoxContainer/HBoxContainer" unique_id=998332402]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_icons/clear = ExtResource("3_ptf03")
+placeholder_text = "项目名称"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer/VBoxContainer/ProjectFilterContainer/HBoxContainer/HBoxContainer" unique_id=2141408700]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("4_jx0y5")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="RecentButton" type="Button" parent="VBoxContainer/MarginContainer/VBoxContainer/ProjectFilterContainer/HBoxContainer" unique_id=84291046]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_colors/font_focus_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_colors/font_pressed_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_colors/font_hover_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_colors/icon_normal_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_colors/icon_focus_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_colors/icon_pressed_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_colors/icon_hover_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_fonts/font = ExtResource("4_ayp4n")
+toggle_mode = true
+text = "最近打开"
+icon = ExtResource("10_kjgf5")
+flat = true
+icon_alignment = 2
+script = ExtResource("11_kjgf5")
+metadata/_custom_type_script = "uid://bjpwgw81arc4s"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer/VBoxContainer/ProjectFilterContainer/HBoxContainer" unique_id=259188625]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_right = 20
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer/ProjectFilterContainer/HBoxContainer/MarginContainer" unique_id=1283823353]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "操作"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=125693383]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ProjectItemList" type="VBoxContainer" parent="VBoxContainer/MarginContainer/VBoxContainer/ScrollContainer" unique_id=1361437245]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_constants/separation = 10
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2015705593]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=853064940]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+
+[node name="CreateProjectWindow" type="Window" parent="CanvasLayer" unique_id=1923206520]
+unique_name_in_owner = true
+oversampling_override = 1.0
+title = "创建项目"
+initial_position = 1
+size = Vector2i(1280, 720)
+visible = false
+transient = true
+exclusive = true
+popup_window = true
+theme_override_colors/title_color = Color(0.8891468, 0.8891468, 0.88914675, 1)
+theme_override_constants/title_height = 50
+theme_override_constants/close_h_offset = 27
+theme_override_constants/close_v_offset = 27
+theme_override_font_sizes/title_font_size = 20
+theme_override_styles/embedded_border = SubResource("StyleBoxFlat_gfu62")
+
+[node name="CreateProjectWindow" parent="CanvasLayer/CreateProjectWindow" unique_id=717128231 instance=ExtResource("10_4uwo8")]
+
+[connection signal="pressed" from="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/CreateButton" to="." method="_on_create_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/ImportButton" to="." method="_on_import_button_pressed"]
+[connection signal="text_changed" from="VBoxContainer/MarginContainer/VBoxContainer/ProjectFilterContainer/HBoxContainer/HBoxContainer/ProjectNameLineEdit" to="." method="_on_project_name_line_edit_text_changed"]
+[connection signal="pressed" from="VBoxContainer/MarginContainer/VBoxContainer/ProjectFilterContainer/HBoxContainer/RecentButton" to="." method="_on_recent_button_pressed"]

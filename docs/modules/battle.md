@@ -358,3 +358,18 @@ export default class BlueSoulController
 	}
 }
 ```
+
+---
+
+# UI 子模块
+
+UI 为 Battle 的内置子模块，用于管理玩家在战斗中的 **UI** 等。
+通过 `UTMX.battle.ui` 访问。
+
+战斗中的玩家对话框、按钮等都属于 UI 元素。
+
+## 属性（Properties）
+
+| Property          | Type    | Default   | Description                                      |
+| ----------------- | ------- | --------- | ------------------------------------------------ |
+| visible  | boolean | true      | 控制战斗中的 UI 是否显示 |

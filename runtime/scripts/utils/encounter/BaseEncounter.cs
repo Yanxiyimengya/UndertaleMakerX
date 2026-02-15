@@ -22,6 +22,9 @@ public partial class BaseEncounter : Resource
     public virtual void _OnBattleStart()
     {
     }
+    public virtual void _OnGameover()
+    {
+    }
     public virtual void _OnBattleEnd()
     {
     }

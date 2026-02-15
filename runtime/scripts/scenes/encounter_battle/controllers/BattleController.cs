@@ -16,6 +16,8 @@ public partial class BattleController : Node
 	[Export]
 	public BattleTurnController TurnController;
 	[Export]
+	public BattleUiController UiController;
+	[Export]
 	public BattleProjectileController ProjectileController;
 
 	private UtmxBattleManager.BattleStatus _battleStatus = UtmxBattleManager.BattleStatus.Player;
@@ -71,13 +73,13 @@ public partial class BattleController : Node
 		_battleStatus = UtmxBattleManager.BattleStatus.Enemy;
 		SwitchToState("BattleEnemyState");
 		UtmxBattleManager.GetEncounterInstance()?._OnEnemyTurn();
-    }
-    public void ChangeToEndState()
-    {
-        _battleStatus = UtmxBattleManager.BattleStatus.End;
-        SwitchToState("BattleEndState");
-    }
-    public UtmxBattleManager.BattleStatus GetCurrentStatus()
+	}
+	public void ChangeToEndState()
+	{
+		_battleStatus = UtmxBattleManager.BattleStatus.End;
+		SwitchToState("BattleEndState");
+	}
+	public UtmxBattleManager.BattleStatus GetCurrentStatus()
 	{
 		return _battleStatus;
 	}

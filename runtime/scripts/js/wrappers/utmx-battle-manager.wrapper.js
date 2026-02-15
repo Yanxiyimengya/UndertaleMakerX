@@ -173,6 +173,15 @@ class BattleArenaAccess
 		return arenaWrapper;
 	}
 }
+class BattleUiAccess
+{
+	static get visible() {
+		return __battle_manager.GetBattleUiController().UiVisible
+	}
+	static set visible(value) {
+		__battle_manager.GetBattleUiController().UiVisible = value;
+	}
+}
 
 export class UtmxBattleManager {
 	InitializeBattle = null;
@@ -188,6 +197,7 @@ export class UtmxBattleManager {
 	static soul = BattleSoul;
 	static camera = BattleCamera;
 	static arena = BattleArenaAccess;
+	static ui = BattleUiAccess;
 
 	static startEncounter(encounterId)
 	{
