@@ -7,6 +7,7 @@
 [ext_resource type="StyleBox" uid="uid://c3yh5cg6knebu" path="res://assets/themes/project_manager/list_item_normal.tres" id="2_wwqrd"]
 [ext_resource type="Texture2D" uid="uid://dlay0jr5vdtpk" path="res://assets/icons/star/star.svg" id="5_d4u5i"]
 [ext_resource type="Texture2D" uid="uid://csdirlw811ymp" path="res://assets/icons/star/star_light.svg" id="6_4himm"]
+[ext_resource type="ButtonGroup" uid="uid://d01anuv3t2pa" path="res://scenes/project_manager/template_info_panel/template_button_group.tres" id="6_7a2f2"]
 [ext_resource type="FontFile" uid="uid://btaw8xmv3biy7" path="res://assets/fonts/HarmonyOS_Sans_SC_Bold.ttf" id="6_mqlmi"]
 [ext_resource type="Texture2D" uid="uid://batdmyf735ts8" path="res://assets/icons/folder/folder_hover.svg" id="7_p1loy"]
 [ext_resource type="Texture2D" uid="uid://cpnx3vfinyi0i" path="res://assets/icons/folder/folder_normal.svg" id="9_7a2f2"]
@@ -31,18 +32,19 @@ grow_vertical = 2
 theme_override_styles/panel = ExtResource("1_dxim0")
 script = ExtResource("2_2u0po")
 project_name = "Project Name"
-project_path = "Default Path"
-engine_version = null
 icon_texture = ExtResource("1_5x1f0")
 last_open_time = 1771094401
 
 [node name="Button" type="Button" parent="." unique_id=1450928975]
+unique_name_in_owner = true
 layout_mode = 2
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = ExtResource("2_wwqrd")
 theme_override_styles/pressed = ExtResource("2_i2822")
 theme_override_styles/hover = ExtResource("2_i2822")
 theme_override_styles/focus = ExtResource("1_dxim0")
+toggle_mode = true
+button_group = ExtResource("6_7a2f2")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=475180434]
 layout_mode = 2
@@ -117,7 +119,6 @@ theme_override_constants/margin_left = 15
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer" unique_id=1296805772]
 layout_mode = 2
-size_flags_horizontal = 0
 mouse_filter = 2
 theme_override_constants/separation = 0
 
@@ -136,10 +137,11 @@ stretch_mode = 5
 [node name="ProjectPathLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=316697653]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
-text = "Default Path"
 vertical_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
 
 [node name="EngineVersionLabel" type="Label" parent="MarginContainer/HBoxContainer" unique_id=2019993163]
 unique_name_in_owner = true
@@ -155,17 +157,17 @@ vertical_alignment = 1
 [node name="HBoxContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer" unique_id=628707636]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/margin_right = 100
+theme_override_constants/margin_right = 90
 
 [node name="LastOpenTimeLabel" type="Label" parent="MarginContainer/HBoxContainer/HBoxContainer" unique_id=1376981450]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(300, 0)
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(0.627451, 0.627451, 0.627451, 1)
 theme_override_font_sizes/font_size = 20
-text = "7 小时前"
+text = "1 天前"
 horizontal_alignment = 2
 vertical_alignment = 1
 

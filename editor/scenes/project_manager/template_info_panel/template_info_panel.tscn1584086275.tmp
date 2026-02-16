@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://deiqq1lbob5ji"]
+
+[ext_resource type="Script" uid="uid://u4q07ah5cyrj" path="res://scripts/scenes/project_manager/template_info_panel/template_info_panel.gd" id="1_a5pk7"]
+[ext_resource type="Texture2D" uid="uid://jvyyyuii3qbb" path="res://assets/icons/utmx-icon-256.svg" id="2_ho5an"]
+[ext_resource type="FontFile" uid="uid://btaw8xmv3biy7" path="res://assets/fonts/HarmonyOS_Sans_SC_Bold.ttf" id="3_x86yc"]
+[ext_resource type="FontFile" uid="uid://vyola4is4krx" path="res://assets/fonts/HarmonyOS_Sans_SC_Regular.ttf" id="4_00p5v"]
+
+[node name="TemplateInfoPanel" type="PanelContainer" unique_id=1192849185]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_a5pk7")
+template_name = "空模板"
+template_description = "不包含任何示例代码"
+template_image = ExtResource("2_ho5an")
+
+[node name="Button" type="Button" parent="." unique_id=448354235]
+layout_mode = 2
+flat = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=447261905]
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="TemplateImageRect" type="TextureRect" parent="VBoxContainer" unique_id=478447614]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 240)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("2_ho5an")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer" unique_id=992283543]
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+
+[node name="NameLabel" type="Label" parent="VBoxContainer/VBoxContainer" unique_id=580899433]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_x86yc")
+theme_override_font_sizes/font_size = 32
+text = "空模板"
+
+[node name="DescriptionLabel" type="RichTextLabel" parent="VBoxContainer/VBoxContainer" unique_id=1927778999]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/default_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_fonts/normal_font = ExtResource("4_00p5v")
+theme_override_font_sizes/normal_font_size = 22
+bbcode_enabled = true
+text = "不包含任何示例代码"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0

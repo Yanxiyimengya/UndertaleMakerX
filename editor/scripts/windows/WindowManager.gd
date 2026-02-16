@@ -1,0 +1,51 @@
+class_name WinbdowsManager extends CanvasLayer;
+
+@onready var create_project_window: Window = %CreateProjectWindow;
+@onready var confirmation_window: Window = %ConfirmationWindow;
+
+var gradient_color_rect : ColorRect;
+var tween : Tween;
+var prev_window : Window = null;
+
+func _enter_tree() -> void:
+	gradient_color_rect = ColorRect.new();
+	gradient_color_rect.color = Color.BLACK;
+	gradient_color_rect.visible = false;
+	add_child(gradient_color_rect, false, Node.INTERNAL_MODE_FRONT);
+	gradient_color_rect.set_anchors_preset(Control.PRESET_FULL_RECT);
+	gradient_color_rect.set_offsets_preset(Control.PRESET_FULL_RECT);
+
+func open_confirmation_window(message : String, callback : Callable) -> void : 
+	open_window(confirmation_window);
+	confirmation_window.message = message;
+	for dict : Dictionary in confirmation_window.choiced.get_connections() : 
+		confirmation_window.choiced.disconnect(dict["callable"]);
+	confirmation_window.choiced.connect(callback, Object.CONNECT_ONE_SHOT);
+
+func open_create_project_window(callback : Callable) -> void : 
+	open_window(create_project_window);
+	for dict : Dictionary in create_project_window.create_project_requset.get_connections() : 
+		create_project_window.create_project_requset.disconnect(dict["callable"]);
+	create_project_window.create_project_requset.connect(callback, Object.CONNECT_ONE_SHOT);
+
+func open_window(window : Window) : 
+	if (prev_window != null) : 
+		prev_window.hide();
+	window.show();
+	window._open();
+	gradient_color_rect.show();
+	
+	if (tween != null && tween.is_running()) : 
+		tween.kill();
+	tween = create_tween();
+	tween.tween_property(gradient_color_rect, "color:a", 0.5, 0.2).from(0.0);
+	
+	window.close_requested.connect(func() : 
+		window.hide();
+		if (tween != null && tween.is_running()) : 
+			tween.kill();
+		tween = create_tween();
+		tween.tween_property(gradient_color_rect, "color:a", 0.0, 0.2);
+		await tween.finished;
+		gradient_color_rect.hide();
+	, Object.ConnectFlags.CONNECT_ONE_SHOT);

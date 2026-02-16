@@ -13,6 +13,7 @@ signal deleted();
 @onready var last_open_time_label: Label = %LastOpenTimeLabel;
 @onready var more_button: MenuButton = %MoreButton;
 @onready var engine_version_label: Label = %EngineVersionLabel;
+@onready var button: Button = %Button;
 
 @export
 var renamming : bool = false : 
@@ -109,16 +110,18 @@ func _ready() -> void:
 	var popup : PopupMenu = more_button.get_popup();
 	popup.id_pressed.connect(_on_more_button_popup_menu_id_pressed);
 	renamming = false;
+	button.gui_input.connect(_gui_input);
 
 func _on_more_button_popup_menu_id_pressed(idx : int) -> void : 
-	if (idx == 2) :
+	if (idx == 1) :
+		open_project();
+	elif (idx == 2) :
 		deleted.emit();
-		queue_free();
-		EditorProjectManager.remove_project(target_project.project_path);
 	elif (idx == 3) :
 		renamming = true;
 
 func set_target_project(project: UtmxProject) -> void :
+	if (project == null) : return;
 	project_name = project.project_name;
 	project_path = project.project_path;
 	last_open_time = project.last_open_time;
@@ -142,6 +145,16 @@ func _on_more_button_pressed() -> void:
 func _on_project_name_edit_focus_exited() -> void:
 	target_project.project_name = project_name_edit.text;
 	renamming = false;
+	EditorProjectManager.save_propject(target_project);
 
-func open_project() : 
-	pass;
+func _gui_input(event: InputEvent) -> void:
+	if (event is InputEventMouseButton) :
+		if (event.button_index == MOUSE_BUTTON_LEFT && event.pressed) :
+			if (event.double_click) :
+				open_project();
+		elif (event.button_index == MOUSE_BUTTON_RIGHT && event.pressed && button.button_pressed) : 
+			more_button.show_popup();
+			more_button.get_popup().position = DisplayServer.mouse_get_position();
+
+func open_project() -> void : 
+	EditorProjectManager.open_project(target_project);

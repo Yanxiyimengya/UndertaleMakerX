@@ -2497,9 +2497,9 @@ content_margin_right = -1.5
 content_margin_bottom = -1.5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2g5p3"]
-content_margin_left = 24.0
+content_margin_left = 18.0
 content_margin_top = 12.6
-content_margin_right = 24.0
+content_margin_right = 18.0
 content_margin_bottom = 12.6
 bg_color = Color(0.07888999, 0.07888999, 0.07888999, 1)
 corner_radius_top_left = 6
@@ -2507,9 +2507,9 @@ corner_radius_top_right = 6
 corner_detail = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8dcun"]
-content_margin_left = 24.0
+content_margin_left = 18.0
 content_margin_top = 12.6
-content_margin_right = 24.0
+content_margin_right = 18.0
 content_margin_bottom = 12.6
 bg_color = Color(0.161, 0.161, 0.161, 0.6)
 corner_radius_top_left = 6
@@ -2517,9 +2517,9 @@ corner_radius_top_right = 6
 corner_detail = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ucn18"]
-content_margin_left = 24.0
+content_margin_left = 18.0
 content_margin_top = 12.6
-content_margin_right = 24.0
+content_margin_right = 18.0
 content_margin_bottom = 12.6
 bg_color = Color(0.161, 0.161, 0.161, 1)
 corner_radius_top_left = 6
@@ -2589,7 +2589,7 @@ content_margin_left = 0.0
 content_margin_top = 0.0
 content_margin_right = 1.5
 content_margin_bottom = 0.0
-bg_color = Color(0.07888999, 0.07888999, 0.07888999, 1)
+bg_color = Color(0.105882354, 0.105882354, 0.105882354, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_detail = 5
@@ -2979,7 +2979,7 @@ shadow_size = 6
 
 [resource]
 default_font = ExtResource("1_q0iox")
-default_font_size = 24
+default_font_size = 22
 AcceptDialog/constants/buttons_min_height = 51
 AcceptDialog/constants/buttons_min_width = 157
 AcceptDialog/constants/buttons_separation = 12
@@ -3574,7 +3574,7 @@ LineEdit/colors/font_placeholder_color = Color(1, 1, 1, 0.35)
 LineEdit/colors/font_selected_color = Color(1, 1, 1, 0.85)
 LineEdit/colors/font_uneditable_color = Color(1, 1, 1, 0.65)
 LineEdit/colors/selection_color = Color(0.337, 0.62, 1, 0.4)
-LineEdit/constants/caret_width = 1
+LineEdit/constants/caret_width = 2
 LineEdit/constants/minimum_character_width = 4
 LineEdit/constants/outline_size = 0
 LineEdit/fonts/font = ExtResource("1_q0iox")

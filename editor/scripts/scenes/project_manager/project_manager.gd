@@ -1,11 +1,8 @@
 extends Control;
 
 @export var project_item_packed_scene : PackedScene = null;
-
 @onready var project_item_list: VBoxContainer = %ProjectItemList;
 @onready var project_name_line_edit: LineEdit = %ProjectNameLineEdit;
-@onready var create_project_window: Window = %CreateProjectWindow;
-@onready var color_rect: ColorRect = %ColorRect;
 
 enum SortType {
 	NAME,
@@ -23,7 +20,7 @@ func _enter_tree() -> void:
 	EditorProjectManager.load_editor_all_project();
 
 func _exit_tree() -> void:
-	EditorProjectManager.save_editor_project_config();
+	EditorProjectManager.save_editor_all_project();
 
 func _ready() -> void:
 	for project: UtmxProject in EditorProjectManager.projects.values() : 
@@ -35,6 +32,7 @@ func add_project_list_item(project : UtmxProject) :
 	item.set_target_project(project);
 	project_item_list.add_child(item);
 	item.favorite_button_pressed.connect(sort_project_item_list);
+	item.deleted.connect(func(): delete_project_item(item));
 
 func sort_project_item_list() : 
 	var items : Array[ProjectListItem] = [];
@@ -57,6 +55,13 @@ func sort_project_item_list() :
 	for i in range(items.size()):
 		project_item_list.move_child(items[i], i);
 
+func delete_project_item(item : ProjectListItem) -> void : 
+	WindowManager.open_confirmation_window("""确定移除该项目吗？\n该操作不会删除任何文件""", func(confirm : bool) : 
+		if (confirm) : 
+			item.queue_free();
+			EditorProjectManager.remove_project(item.target_project.project_path);
+	);
+
 func _on_recent_button_pressed() -> void:
 	sort_order = SortOrder.ASCENDING if (sort_order == SortOrder.DESCENDING) else SortOrder.DESCENDING;
 	sort_project_item_list();
@@ -72,38 +77,18 @@ func _on_project_name_line_edit_text_changed(new_text: String) -> void:
 				child.visible = item_name.contains(filter_text);
 	sort_project_item_list();
 
-func _on_import_button_pressed() -> void:
-	DisplayServer.file_dialog_show("选择文件夹", "" , \
-		"", false, DisplayServer.FILE_DIALOG_MODE_OPEN_ANY, 
-		[EditorProjectManager.PROJECT_CONFIG_FILE_NAME + ",*.zip"],
-		func(status: bool, selected_paths: PackedStringArray, _selected_filter_index: int) : 
-			if (!status) : return;
-			var path : String = selected_paths[0];
-			var extension : String = path.get_extension();
-			var project : UtmxProject;
-			if (extension == "cfg") : 
-				project = EditorProjectManager.load_project(path);
-			elif (extension == "zip") : 
-				pass;
-			
-			if (project != null) :
-				add_project_list_item(project);
-	);
-
-var tween : Tween;
 func _on_create_button_pressed() -> void:
-	create_project_window.show();
-	color_rect.show();
-	if (tween != null && tween.is_running()) : 
-		tween.kill();
-	tween = create_tween();
-	tween.tween_property(color_rect, "color:a", 0.75, 0.1).from(0.0);
-	create_project_window.close_requested.connect(func() :
-		if (tween != null && tween.is_running()) : 
-			tween.kill();
-		tween = create_tween();
-		tween.tween_property(color_rect, "color:a", 0.0, 0.1);
-		create_project_window.hide();
-		await tween.finished
-		color_rect.hide();
-	, Object.ConnectFlags.CONNECT_ONE_SHOT);
+	WindowManager.open_create_project_window(_on_create_project_window_content_create_project_requset);
+
+func _on_create_project_window_content_create_project_requset( \
+		project_name: String, project_dir: String, template: UtmxProjectTemplate) -> void:
+	var proj : UtmxProject;
+	var proj_path : String = project_dir.path_join(project_name);
+	if (FileAccess.file_exists(template.zip_path)) : 
+		proj = EditorProjectManager.create_project_from_zip(project_name, template.zip_path, proj_path);
+	else : 
+		proj = EditorProjectManager.create_default_propject(project_name, proj_path);
+	if (proj == null) : return;
+	add_project_list_item(proj);
+	EditorProjectManager.save_propject(proj);
+	EditorProjectManager.open_project(proj);

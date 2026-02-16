@@ -55,7 +55,7 @@ onGetNextTurn() -> string | BattleTurn
 
 当进入怪物对话阶段时，会调用此方法获取一个指定的回合。
 
-- 若返回字符串，该字符串必须是一个文件系统中的绝对路径，且需要指向一个有效的 Trun JavaScript 脚本类。
+- 若返回字符串，该字符串必须是一个文件系统中的绝对路径，且需要指向一个有效的 Turn JavaScript 脚本类。
 
 - 若返回对象，该对象必须是一个有效的 BattleTurn 实例。
 

@@ -76,7 +76,7 @@ onPlayerTurn() -> void
 
 ---
 
-### onPlayerTurn
+### onPlayerDialogue
 
 ```javascript
 onPlayerDialogue() -> void

@@ -1,28 +1,25 @@
-[gd_scene load_steps=16 format=3 uid="uid://drlvhuchtk6if"]
+[gd_scene format=3 uid="uid://drlvhuchtk6if"]
 
-[ext_resource type="Script" path="res://addons/dockable_container/dockable_container.gd" id="1"]
-[ext_resource type="Script" path="res://addons/dockable_container/layout.gd" id="2"]
-[ext_resource type="Script" path="res://addons/dockable_container/samples/TestScene.gd" id="4"]
-[ext_resource type="Script" path="res://addons/dockable_container/layout_split.gd" id="4_yhgfb"]
-[ext_resource type="Script" path="res://addons/dockable_container/layout_panel.gd" id="5"]
+[ext_resource type="Script" uid="uid://k85n7y40rsgp" path="res://addons/dockable_container/dockable_container.gd" id="1"]
+[ext_resource type="Script" uid="uid://big1el3sooljt" path="res://addons/dockable_container/layout.gd" id="2"]
+[ext_resource type="Script" uid="uid://dpkbychkq7rh8" path="res://addons/dockable_container/samples/TestScene.gd" id="4"]
+[ext_resource type="Script" uid="uid://caiqqpasjgne6" path="res://addons/dockable_container/layout_split.gd" id="4_yhgfb"]
+[ext_resource type="Script" uid="uid://bvjwj5iha8yll" path="res://addons/dockable_container/layout_panel.gd" id="5"]
 
 [sub_resource type="Resource" id="Resource_8aoc2"]
 resource_name = "Tabs"
 script = ExtResource("5")
 names = PackedStringArray("Control0")
-current_tab = 0
 
 [sub_resource type="Resource" id="Resource_6kjom"]
 resource_name = "Tabs"
 script = ExtResource("5")
 names = PackedStringArray("Control1", "Control2")
-current_tab = 0
 
 [sub_resource type="Resource" id="Resource_hl8y1"]
 resource_name = "Split"
 script = ExtResource("4_yhgfb")
 direction = 1
-percent = 0.5
 first = SubResource("Resource_8aoc2")
 second = SubResource("Resource_6kjom")
 
@@ -30,19 +27,16 @@ second = SubResource("Resource_6kjom")
 resource_name = "Layout"
 script = ExtResource("2")
 root = SubResource("Resource_hl8y1")
-hidden_tabs = {}
 
 [sub_resource type="Resource" id="Resource_ntwfj"]
 resource_name = "Tabs"
 script = ExtResource("5")
 names = PackedStringArray("Control3")
-current_tab = 0
 
 [sub_resource type="Resource" id="Resource_dmyvf"]
 resource_name = "Tabs"
 script = ExtResource("5")
 names = PackedStringArray("Control4")
-current_tab = 0
 
 [sub_resource type="Resource" id="Resource_vag66"]
 resource_name = "Split"
@@ -56,13 +50,10 @@ second = SubResource("Resource_dmyvf")
 resource_name = "Tabs"
 script = ExtResource("5")
 names = PackedStringArray("Control5")
-current_tab = 0
 
 [sub_resource type="Resource" id="Resource_jhibs"]
 resource_name = "Split"
 script = ExtResource("4_yhgfb")
-direction = 0
-percent = 0.5
 first = SubResource("Resource_vag66")
 second = SubResource("Resource_4q660")
 
@@ -70,42 +61,41 @@ second = SubResource("Resource_4q660")
 resource_name = "Layout"
 script = ExtResource("2")
 root = SubResource("Resource_jhibs")
-hidden_tabs = {}
 
-[node name="SampleScene" type="VBoxContainer"]
+[node name="SampleScene" type="VBoxContainer" unique_id=1097838816]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource("4")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1281922637]
 layout_mode = 2
 alignment = 1
 
-[node name="AddControlButton" type="Button" parent="HBoxContainer"]
+[node name="AddControlButton" type="Button" parent="HBoxContainer" unique_id=945127654]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 text = "(+) ADD CONTROL"
 
-[node name="SaveLayoutButton" type="Button" parent="HBoxContainer"]
+[node name="SaveLayoutButton" type="Button" parent="HBoxContainer" unique_id=1563317374]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 text = "Save Layout"
 
-[node name="LoadLayoutButton" type="Button" parent="HBoxContainer"]
+[node name="LoadLayoutButton" type="Button" parent="HBoxContainer" unique_id=1261874844]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 text = "Load Layout"
 
-[node name="ControlPrefab" type="ColorRect" parent="HBoxContainer"]
+[node name="ControlPrefab" type="ColorRect" parent="HBoxContainer" unique_id=2103301713]
 visible = false
 layout_mode = 2
 color = Color(0.129412, 0.121569, 0.121569, 1)
 
-[node name="Buttons" type="VBoxContainer" parent="HBoxContainer/ControlPrefab"]
+[node name="Buttons" type="VBoxContainer" parent="HBoxContainer/ControlPrefab" unique_id=427863976]
 layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
@@ -116,59 +106,59 @@ offset_top = -22.0
 offset_right = 65.5
 offset_bottom = 22.0
 
-[node name="Rename" type="Button" parent="HBoxContainer/ControlPrefab/Buttons"]
+[node name="Rename" type="Button" parent="HBoxContainer/ControlPrefab/Buttons" unique_id=1210273681]
 layout_mode = 2
 text = "Rename"
 
-[node name="Remove" type="Button" parent="HBoxContainer/ControlPrefab/Buttons"]
+[node name="Remove" type="Button" parent="HBoxContainer/ControlPrefab/Buttons" unique_id=1800335147]
 layout_mode = 2
 text = "REMOVE"
 
-[node name="DockableContainers" type="HBoxContainer" parent="."]
+[node name="DockableContainers" type="HBoxContainer" parent="." unique_id=607774368]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="DockableContainer" type="Container" parent="DockableContainers"]
+[node name="DockableContainer" type="Container" parent="DockableContainers" unique_id=419515863]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1")
 layout = SubResource("Resource_ybwqe")
 
-[node name="Control0" type="ColorRect" parent="DockableContainers/DockableContainer"]
+[node name="Control0" type="ColorRect" parent="DockableContainers/DockableContainer" unique_id=1388847694]
 layout_mode = 2
 
-[node name="Control1" type="ColorRect" parent="DockableContainers/DockableContainer"]
+[node name="Control1" type="ColorRect" parent="DockableContainers/DockableContainer" unique_id=981508500]
 layout_mode = 2
 color = Color(0.141176, 0.0745098, 0.603922, 1)
 
-[node name="Control2" type="ColorRect" parent="DockableContainers/DockableContainer"]
+[node name="Control2" type="ColorRect" parent="DockableContainers/DockableContainer" unique_id=1274567615]
 visible = false
 layout_mode = 2
 color = Color(0.533333, 0.380392, 0.380392, 1)
 
-[node name="Separator" type="ColorRect" parent="DockableContainers"]
+[node name="Separator" type="ColorRect" parent="DockableContainers" unique_id=963718014]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 color = Color(0, 0, 0, 1)
 
-[node name="DockableContainer2" type="Container" parent="DockableContainers"]
+[node name="DockableContainer2" type="Container" parent="DockableContainers" unique_id=1664884030]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1")
 layout = SubResource("Resource_xhxpg")
 
-[node name="Control3" type="ColorRect" parent="DockableContainers/DockableContainer2"]
+[node name="Control3" type="ColorRect" parent="DockableContainers/DockableContainer2" unique_id=1871128168]
 layout_mode = 2
 color = Color(0, 1, 0.905882, 1)
 
-[node name="Control4" type="ColorRect" parent="DockableContainers/DockableContainer2"]
+[node name="Control4" type="ColorRect" parent="DockableContainers/DockableContainer2" unique_id=296921413]
 layout_mode = 2
 color = Color(0, 0.698039, 0.0588235, 1)
 
-[node name="Control5" type="ColorRect" parent="DockableContainers/DockableContainer2"]
+[node name="Control5" type="ColorRect" parent="DockableContainers/DockableContainer2" unique_id=983229362]
 layout_mode = 2
 color = Color(1, 0.937255, 0, 1)
 

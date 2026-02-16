@@ -1,0 +1,107 @@
+[gd_scene format=3 uid="uid://deiqq1lbob5ji"]
+
+[ext_resource type="Script" uid="uid://u4q07ah5cyrj" path="res://scripts/scenes/project_manager/template_info_panel/template_info_panel.gd" id="1_a5pk7"]
+[ext_resource type="Texture2D" uid="uid://jvyyyuii3qbb" path="res://assets/icons/utmx-icon-256.svg" id="2_ho5an"]
+[ext_resource type="StyleBox" uid="uid://c3yh5cg6knebu" path="res://assets/themes/project_manager/list_item_normal.tres" id="3_00p5v"]
+[ext_resource type="FontFile" uid="uid://btaw8xmv3biy7" path="res://assets/fonts/HarmonyOS_Sans_SC_Bold.ttf" id="3_x86yc"]
+[ext_resource type="FontFile" uid="uid://vyola4is4krx" path="res://assets/fonts/HarmonyOS_Sans_SC_Regular.ttf" id="4_00p5v"]
+[ext_resource type="StyleBox" uid="uid://bg2jksjfmxg8e" path="res://assets/themes/project_manager/list_item_hover.tres" id="4_5onk8"]
+[ext_resource type="StyleBox" uid="uid://bjrej1a4d3ppb" path="res://assets/themes/project_manager/list_item_focus.tres" id="4_k70ta"]
+[ext_resource type="ButtonGroup" uid="uid://d01anuv3t2pa" path="res://scenes/project_manager/template_info_panel/template_button_group.tres" id="5_00p5v"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_a5pk7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_00p5v"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 1, 1)
+border_blend = true
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_00p5v"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5onk8"]
+
+[node name="TemplateInfoPanel" type="PanelContainer" unique_id=1192849185]
+custom_minimum_size = Vector2(0, 300)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_a5pk7")
+script = ExtResource("1_a5pk7")
+template_name = "空模板"
+template_description = "不包含任何示例代码"
+template_image = ExtResource("2_ho5an")
+
+[node name="Button" type="Button" parent="." unique_id=448354235]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("3_00p5v")
+theme_override_styles/pressed = ExtResource("4_k70ta")
+theme_override_styles/hover = ExtResource("4_5onk8")
+theme_override_styles/hover_pressed = ExtResource("4_k70ta")
+theme_override_styles/focus = SubResource("StyleBoxFlat_00p5v")
+toggle_mode = true
+button_group = ExtResource("5_00p5v")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=974096000]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=447261905]
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="TemplateImageRect" type="TextureRect" parent="MarginContainer/VBoxContainer" unique_id=478447614]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("2_ho5an")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=992283543]
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+
+[node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=580899433]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_x86yc")
+theme_override_font_sizes/font_size = 32
+text = "空模板"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DescriptionLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1927778999]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/default_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_fonts/normal_font = ExtResource("4_00p5v")
+theme_override_font_sizes/normal_font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxEmpty_00p5v")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5onk8")
+bbcode_enabled = true
+text = "不包含任何示例代码"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+vertical_alignment = 1
+
+[connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

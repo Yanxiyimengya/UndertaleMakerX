@@ -25,6 +25,9 @@ config/icon="uid://jvyyyuii3qbb"
 
 EditorProjectManager="*uid://cstntr050r5v0"
 EditorConfigureManager="*uid://c6l47m2qdueeq"
+EditorTemplateManager="*uid://cdqtlgi0yftg6"
+GlobalEditorUndoRedoManager="*uid://bg4m8y3wj5x7p"
+WindowManager="*uid://c8agvphypscbr"
 
 [display]
 
@@ -37,6 +40,19 @@ window/stretch/aspect="expand"
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/dockable_container/plugin.cfg")
+
+[file_customization]
+
+folder_colors={
+"res://addons/": "red",
+"res://assets/": "orange",
+"res://scenes/": "yellow",
+"res://scripts/": "green"
+}
+
+[gui]
+
+theme/custom="uid://b57pk8esqcvqr"
 
 [rendering]
 

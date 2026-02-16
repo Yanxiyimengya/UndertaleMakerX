@@ -125,7 +125,6 @@ func _input(event: InputEvent) -> void:
 func _child_entered_tree(node: Node) -> void:
 	if node == _panel_container or node == _drag_n_drop_panel:
 		return
-	_drag_n_drop_panel.move_to_front()
 	_track_and_add_node(node)
 
 
@@ -235,17 +234,20 @@ func get_tab_count() -> int:
 			count += 1
 	return count
 
-
 func _can_handle_drag_data(data) -> bool:
-	if data is Dictionary and data.get("type") in ["tab_container_tab", "tabc_element"]:
-		var tabc := get_node_or_null(data.get("from_path"))
-		return (
-			tabc
-			and tabc.has_method("get_tabs_rearrange_group")
-			and tabc.get_tabs_rearrange_group() == rearrange_group
-		)
+	if not data is Dictionary: return false
+	var type = data.get("type", "")
+	var tab_type = data.get("tab_type", "")
+	var is_valid_type = \
+			type in ["tab", "tab_container_tab", "tabc_element"] or \
+			tab_type in ["tab_container_tab", "tabc_element"]
+	if is_valid_type:
+		var from_path = data.get("from_path")
+		if from_path:
+			var source_node = get_node_or_null(from_path)
+			if source_node and source_node.has_method("get_tabs_rearrange_group"):
+				return source_node.get_tabs_rearrange_group() == rearrange_group
 	return false
-
 
 func _is_managed_node(node: Node) -> bool:
 	return (
