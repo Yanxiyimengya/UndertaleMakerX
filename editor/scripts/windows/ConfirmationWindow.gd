@@ -11,12 +11,13 @@ var message : String = "" :
 	set(value) : 
 		message = value;
 		if (!is_node_ready()) : await ready;
+		await get_tree().process_frame;
 		message_label.text = message;
-		min_size.x = max(min_size.x, confirmation_window_content.get_minimum_size().x);
-		min_size.y = max(min_size.y, confirmation_window_content.get_minimum_size().y);
+		size = Vector2.ZERO;
+		min_size = confirmation_window_content.get_minimum_size();
 
 func _open() -> void:
-	pass;
+	min_size = Vector2.ZERO;
 
 func _on_confirm_button_pressed() -> void:
 	choiced.emit(true);

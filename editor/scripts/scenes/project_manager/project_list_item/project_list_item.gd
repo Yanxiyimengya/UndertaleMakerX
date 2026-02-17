@@ -51,7 +51,6 @@ var project_name : String = "" :
 var project_path : String = "" : 
 	set(value) : 
 		if (!is_node_ready()) : await ready;
-		value = value.get_base_dir();
 		project_path_label.text = value;
 		project_path = value;
 
@@ -145,7 +144,7 @@ func _on_more_button_pressed() -> void:
 func _on_project_name_edit_focus_exited() -> void:
 	target_project.project_name = project_name_edit.text;
 	renamming = false;
-	EditorProjectManager.save_propject(target_project);
+	EditorProjectManager.save_project_config(target_project);
 
 func _gui_input(event: InputEvent) -> void:
 	if (event is InputEventMouseButton) :

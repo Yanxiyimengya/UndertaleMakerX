@@ -10,6 +10,8 @@ func _enter_tree() -> void:
 	if (data_path_override.is_empty()) : 
 		data_path = OS.get_executable_path().get_base_dir().path_join("editor_data");
 	else : 
+		if (!data_path_override.is_empty()) : 
+			DirAccess.make_dir_recursive_absolute(data_path_override);
 		data_path = data_path_override;
 	load_config();
 

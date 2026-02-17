@@ -11,8 +11,7 @@
 [ext_resource type="Script" uid="uid://bvjwj5iha8yll" path="res://addons/dockable_container/layout_panel.gd" id="9_syr16"]
 [ext_resource type="Script" uid="uid://big1el3sooljt" path="res://addons/dockable_container/layout.gd" id="10_qnluh"]
 [ext_resource type="Script" uid="uid://caiqqpasjgne6" path="res://addons/dockable_container/layout_split.gd" id="10_syr16"]
-[ext_resource type="Script" uid="uid://ddvy703oefi82" path="res://scripts/scenes/editor/file_system/file_system.gd" id="12_i3ywb"]
-[ext_resource type="PackedScene" uid="uid://bcvtvbgs5fkqq" path="res://scenes/editor/file_system/file_system_tree.tscn" id="12_qnluh"]
+[ext_resource type="PackedScene" uid="uid://dkd2w8x7rljjf" path="res://scenes/editor/file_system/file_system.tscn" id="12_qnluh"]
 
 [sub_resource type="Theme" id="Theme_qbwwq"]
 Button/styles/disabled = ExtResource("4_ro56m")
@@ -28,12 +27,24 @@ resource_name = "Tabs"
 script = ExtResource("9_syr16")
 names = PackedStringArray("工作区")
 
+[sub_resource type="Resource" id="Resource_hg2ka"]
+resource_name = "Tabs"
+script = ExtResource("9_syr16")
+names = PackedStringArray("属性检查器")
+
+[sub_resource type="Resource" id="Resource_oljq2"]
+resource_name = "Split"
+script = ExtResource("10_syr16")
+percent = 0.7786558970601476
+first = SubResource("Resource_i3ywb")
+second = SubResource("Resource_hg2ka")
+
 [sub_resource type="Resource" id="Resource_pq70c"]
 resource_name = "Split"
 script = ExtResource("10_syr16")
-percent = 0.17917304747320062
+percent = 0.25757575757575757
 first = SubResource("Resource_qnluh")
-second = SubResource("Resource_i3ywb")
+second = SubResource("Resource_oljq2")
 
 [sub_resource type="Resource" id="Resource_syr16"]
 resource_name = "Layout"
@@ -132,20 +143,13 @@ tab_alignment = 0
 layout = SubResource("Resource_syr16")
 metadata/_custom_type_script = "uid://k85n7y40rsgp"
 
-[node name="文件系统" type="PanelContainer" parent="VBoxContainer/MarginContainer/DockableContainer" unique_id=347592670]
+[node name="文件系统" parent="VBoxContainer/MarginContainer/DockableContainer" unique_id=1636596075 instance=ExtResource("12_qnluh")]
 layout_mode = 2
-script = ExtResource("12_i3ywb")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer/DockableContainer/文件系统" unique_id=1214916161]
-layout_mode = 2
-
-[node name="SearchLineEdit" type="LineEdit" parent="VBoxContainer/MarginContainer/DockableContainer/文件系统/VBoxContainer" unique_id=89266824]
-layout_mode = 2
-placeholder_text = "筛选文件"
-
-[node name="FileSystemTree" parent="VBoxContainer/MarginContainer/DockableContainer/文件系统/VBoxContainer" unique_id=304501327 instance=ExtResource("12_qnluh")]
-layout_mode = 2
-size_flags_vertical = 3
+size_flags_horizontal = 0
+size_flags_vertical = 0
 
 [node name="工作区" type="PanelContainer" parent="VBoxContainer/MarginContainer/DockableContainer" unique_id=1650806194]
+layout_mode = 2
+
+[node name="属性检查器" type="PanelContainer" parent="VBoxContainer/MarginContainer/DockableContainer" unique_id=1973541467]
 layout_mode = 2

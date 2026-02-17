@@ -15,9 +15,10 @@ func _enter_tree() -> void:
 	gradient_color_rect.set_anchors_preset(Control.PRESET_FULL_RECT);
 	gradient_color_rect.set_offsets_preset(Control.PRESET_FULL_RECT);
 
-func open_confirmation_window(message : String, callback : Callable) -> void : 
+func open_confirmation_window(title : String, message : String, callback : Callable) -> void : 
 	open_window(confirmation_window);
 	confirmation_window.message = message;
+	confirmation_window.title = title;
 	for dict : Dictionary in confirmation_window.choiced.get_connections() : 
 		confirmation_window.choiced.disconnect(dict["callable"]);
 	confirmation_window.choiced.connect(callback, Object.CONNECT_ONE_SHOT);

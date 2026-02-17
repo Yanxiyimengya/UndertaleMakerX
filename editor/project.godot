@@ -28,6 +28,8 @@ EditorConfigureManager="*uid://c6l47m2qdueeq"
 EditorTemplateManager="*uid://cdqtlgi0yftg6"
 GlobalEditorUndoRedoManager="*uid://bg4m8y3wj5x7p"
 WindowManager="*uid://c8agvphypscbr"
+GlobalEditorFileSystem="*uid://6sk7jyht4ksq"
+GlobalEditorResourceLoader="*uid://dc0cpqhjo00e2"
 
 [display]
 

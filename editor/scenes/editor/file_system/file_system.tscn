@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://dkd2w8x7rljjf"]
+
+[ext_resource type="Script" uid="uid://ddvy703oefi82" path="res://scripts/scenes/editor/file_system/file_system.gd" id="1_cn0lc"]
+[ext_resource type="PackedScene" uid="uid://bcvtvbgs5fkqq" path="res://scenes/editor/file_system/file_system_tree.tscn" id="2_7y4tr"]
+
+[node name="FileSystem" type="PanelContainer" unique_id=1636596075]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cn0lc")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=933785269]
+layout_mode = 2
+
+[node name="SearchLineEdit" type="LineEdit" parent="VBoxContainer" unique_id=204881625]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "筛选文件"
+clear_button_enabled = true
+
+[node name="FileSystemTree" parent="VBoxContainer" unique_id=304501327 instance=ExtResource("2_7y4tr")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
