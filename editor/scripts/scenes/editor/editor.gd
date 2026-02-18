@@ -89,6 +89,12 @@ func _ready() -> void:
 	if file_system_panel and file_system_panel.has_signal("selected_file"):
 		if not file_system_panel.selected_file.is_connected(_on_file_system_selected_file):
 			file_system_panel.selected_file.connect(_on_file_system_selected_file)
+	if file_browser_panel and file_browser_panel.has_signal("preview_file_requested"):
+		if not file_browser_panel.preview_file_requested.is_connected(_on_file_browser_preview_file_requested):
+			file_browser_panel.preview_file_requested.connect(_on_file_browser_preview_file_requested)
+	if file_browser_panel and file_browser_panel.has_signal("preview_files_requested"):
+		if not file_browser_panel.preview_files_requested.is_connected(_on_file_browser_preview_files_requested):
+			file_browser_panel.preview_files_requested.connect(_on_file_browser_preview_files_requested)
 	if script_editor_panel and script_editor_panel.has_signal("script_saved"):
 		var script_saved_callable: Callable = Callable(self, "_on_script_editor_script_saved")
 		if not script_editor_panel.is_connected("script_saved", script_saved_callable):
@@ -108,6 +114,18 @@ func _exit_tree() -> void:
 
 
 func _on_file_system_selected_file(path: String) -> void:
+	preview_file(path)
+
+
+func _on_file_browser_preview_file_requested(path: String) -> void:
+	preview_file(path)
+
+
+func _on_file_browser_preview_files_requested(paths: Array[String]) -> void:
+	preview_files(paths)
+
+
+func preview_file(path: String) -> bool:
 	var extension := path.get_extension().to_lower()
 	if SCRIPT_AND_INSPECTOR_SYNC_EXTENSIONS.has(extension):
 		var opened_in_inspector := false
@@ -116,30 +134,45 @@ func _on_file_system_selected_file(path: String) -> void:
 		if script_editor_panel and script_editor_panel.has_method("open_script"):
 			script_editor_panel.call("open_script", path)
 			main_dockable.set_control_as_current_tab(script_editor_panel)
-			return
+			return true
 		if opened_in_inspector:
 			main_dockable.set_control_as_current_tab(inspector_panel)
-			return
+			return true
 
 	if INSPECTOR_FILE_EXTENSIONS.has(extension):
 		if inspector_panel and inspector_panel.has_method("open_resource"):
 			var opened: bool = inspector_panel.call("open_resource", path)
 			if opened:
 				main_dockable.set_control_as_current_tab(inspector_panel)
-				return
+				return true
 	if file_browser_panel and file_browser_panel.has_method("can_open_file"):
 		var can_open_in_browser: bool = file_browser_panel.call("can_open_file", path)
-		if can_open_in_browser and file_browser_panel.has_method("open_file"):
-			var opened_in_browser: bool = file_browser_panel.call("open_file", path)
+		if can_open_in_browser and file_browser_panel.has_method("preview_file"):
+			var opened_in_browser: bool = file_browser_panel.call("preview_file", path)
 			if opened_in_browser:
 				main_dockable.set_control_as_current_tab(file_browser_panel)
-				return
+				return true
 
 	if not _is_text_file(path):
-		return
+		return false
 	if script_editor_panel and script_editor_panel.has_method("open_script"):
 		script_editor_panel.call("open_script", path)
 		main_dockable.set_control_as_current_tab(script_editor_panel)
+		return true
+	return false
+
+
+func preview_files(paths: Array[String]) -> bool:
+	if paths.is_empty():
+		return false
+	if paths.size() == 1:
+		return preview_file(paths[0])
+	if file_browser_panel and file_browser_panel.has_method("preview_files"):
+		var opened_in_browser: bool = bool(file_browser_panel.call("preview_files", paths))
+		if opened_in_browser:
+			main_dockable.set_control_as_current_tab(file_browser_panel)
+			return true
+	return preview_file(paths[0])
 
 
 func _on_script_editor_script_saved(path: String) -> void:
