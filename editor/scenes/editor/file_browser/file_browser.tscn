@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://bjpoyoc2g1svy"]
+
+[ext_resource type="Script" uid="uid://dorrgx8ngkid8" path="res://scripts/scenes/editor/file_browser/file_browser.gd" id="1_qherh"]
+
+[node name="FileBrowser" type="PanelContainer" unique_id=1480664568]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qherh")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=777588497]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="FileNameLabel" type="Label" parent="VBoxContainer" unique_id=761794908]
+unique_name_in_owner = true
+layout_mode = 2
+text = "No file selected"
+clip_text = true
+
+[node name="ModuleContainer" type="MarginContainer" parent="VBoxContainer" unique_id=120135069]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3

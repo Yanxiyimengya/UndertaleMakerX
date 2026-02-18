@@ -17,7 +17,7 @@ public partial class BaseWeapon : BaseItem
     [Export]
     public double AttackAnimationSpeed = 1.0;
     [Export]
-    public string AttackSound = "";
+    public string AttackSound = "built-in-resources/sounds/sfx/laz.wav";
 
     public virtual double onAttack(float value, BaseEnemy targetEnemy)
     {

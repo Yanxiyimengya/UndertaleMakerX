@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://bhx5kb31thmun"]
+
+[ext_resource type="Script" uid="uid://cw02u1sraw6cw" path="res://scripts/scenes/editor/file_browser/modules/font_browser_module.gd" id="1_font_module"]
+
+[node name="FontBrowserModule" type="PanelContainer" unique_id=1320485251]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_font_module")
+
+[node name="PreviewUpdateTimer" type="Timer" parent="." unique_id=896897620]
+unique_name_in_owner = true
+wait_time = 0.25
+one_shot = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1451005759]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="InfoLabel" type="Label" parent="VBoxContainer" unique_id=397011378]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Select a font file"
+
+[node name="ControlsContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1597722550]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="InputLabel" type="Label" parent="VBoxContainer/ControlsContainer" unique_id=164913681]
+layout_mode = 2
+text = "Text:"
+
+[node name="SampleInput" type="TextEdit" parent="VBoxContainer/ControlsContainer" unique_id=71221336]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CaseOptionButton" type="OptionButton" parent="VBoxContainer/ControlsContainer" unique_id=170065577]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer" unique_id=511927402]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PreviewLabel" type="Label" parent="VBoxContainer/ScrollContainer" unique_id=790813472]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Font preview"
+autowrap_mode = 2

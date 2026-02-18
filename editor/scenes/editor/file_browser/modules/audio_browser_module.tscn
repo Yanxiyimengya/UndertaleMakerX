@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://c450rhasx6d6y"]
+
+[ext_resource type="Script" uid="uid://qm7e3qxkbxdv" path="res://scripts/scenes/editor/file_browser/modules/audio_browser_module.gd" id="1_audio_module"]
+[ext_resource type="Texture2D" uid="uid://skfj8ptbxwq6" path="res://assets/icons/play/play.svg" id="2_play_icon"]
+
+[node name="AudioBrowserModule" type="PanelContainer" unique_id=1773894593]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_audio_module")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=434071090]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="HBoxContainer" parent="CenterContainer" unique_id=1053864545]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="PlayPauseButton" type="TextureButton" parent="CenterContainer/VBoxContainer" unique_id=1336334271]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 36)
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("2_play_icon")
+texture_pressed = ExtResource("2_play_icon")
+texture_hover = ExtResource("2_play_icon")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ProgressSlider" type="HSlider" parent="CenterContainer/VBoxContainer" unique_id=224924045]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.001
+
+[node name="TimeLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=2004049735]
+unique_name_in_owner = true
+layout_mode = 2
+text = "00:00 / 00:00"
+horizontal_alignment = 1
+
+[node name="AudioPlayer" type="AudioStreamPlayer" parent="." unique_id=847562181]
+unique_name_in_owner = true

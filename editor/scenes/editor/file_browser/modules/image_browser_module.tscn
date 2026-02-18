@@ -1,0 +1,93 @@
+[gd_scene format=3 uid="uid://bsunlpyv7biqx"]
+
+[ext_resource type="Script" uid="uid://c42fy8gpi4pd0" path="res://scripts/scenes/editor/file_browser/modules/image_browser_module.gd" id="1_image_module"]
+[ext_resource type="Script" uid="uid://bpl01vv2ahs8u" path="res://scripts/scenes/editor/file_browser/modules/shader_path_line_edit.gd" id="2_shader_path_line_edit"]
+
+[node name="ImageBrowserModule" type="PanelContainer" unique_id=947478993]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_image_module")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=358942931]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="PreviewArea" type="Control" parent="VBoxContainer" unique_id=932124971]
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PreviewTextureRect" type="TextureRect" parent="VBoxContainer/PreviewArea" unique_id=1918528231]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PreviewBadge" type="Label" parent="VBoxContainer/PreviewArea" unique_id=1841439845]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -88.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 28.0
+grow_horizontal = 0
+text = "Preview"
+horizontal_alignment = 1
+
+[node name="PreviewOptionsContainer" type="VBoxContainer" parent="VBoxContainer" unique_id=1022076875]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="FilterModeRow" type="HBoxContainer" parent="VBoxContainer/PreviewOptionsContainer" unique_id=537543132]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="FilterModeLabel" type="Label" parent="VBoxContainer/PreviewOptionsContainer/FilterModeRow" unique_id=473536804]
+layout_mode = 2
+text = "Filter"
+
+[node name="FilterModeOptionButton" type="OptionButton" parent="VBoxContainer/PreviewOptionsContainer/FilterModeRow" unique_id=2063977833]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ShaderPathRow" type="HBoxContainer" parent="VBoxContainer/PreviewOptionsContainer" unique_id=1722246060]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ShaderPathLabel" type="Label" parent="VBoxContainer/PreviewOptionsContainer/ShaderPathRow" unique_id=69455725]
+layout_mode = 2
+text = "Shader"
+
+[node name="ShaderPathLineEdit" type="LineEdit" parent="VBoxContainer/PreviewOptionsContainer/ShaderPathRow" unique_id=1781806308]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("2_shader_path_line_edit")
+
+[node name="ClearShaderButton" type="Button" parent="VBoxContainer/PreviewOptionsContainer/ShaderPathRow" unique_id=834289193]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Clear"
+
+[node name="InfoLabel" type="Label" parent="VBoxContainer" unique_id=1665333279]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Select an image file"

@@ -2,6 +2,8 @@ extends PanelContainer;
 
 const TREE_COLUMN := 0
 
+signal script_saved(path: String)
+
 @onready var java_script_code_edit: CodeEdit = %JavaScriptCodeEdit
 @onready var file_list_tree: Tree = %FileListTree
 
@@ -60,9 +62,37 @@ func open_script(path: String) -> void:
 	java_script_code_edit.grab_focus()
 
 
+func sync_file_from_disk(path: String, force: bool = true) -> bool:
+	var target_path: String = _resolve_open_path_key(path)
+	if target_path.is_empty():
+		return false
+	if not _file_cache.has(target_path):
+		return false
+
+	var cached: Dictionary = _file_cache[target_path]
+	var is_dirty: bool = bool(cached.get("dirty", false))
+	if is_dirty and not force:
+		return false
+
+	var latest_text: String = _read_script_file(target_path)
+	cached["text"] = latest_text
+	cached["saved_text"] = latest_text
+	cached["missing_on_disk"] = false
+	cached["dirty"] = false
+	_file_cache[target_path] = cached
+
+	if _current_path == target_path:
+		_is_switching_document = true
+		java_script_code_edit.text = latest_text
+		_is_switching_document = false
+	_update_file_tree_item(target_path)
+	return true
+
+
 func save_all_open_scripts() -> void:
 	_flush_current_document_state()
 	var refresh_targets: Dictionary = {}
+	var saved_paths: Array[String] = []
 	for path in _open_order:
 		if not _file_cache.has(path):
 			continue
@@ -75,9 +105,12 @@ func save_all_open_scripts() -> void:
 				cached["dirty"] = false
 				_file_cache[path] = cached
 				refresh_targets[_get_refresh_target(path)] = true
+				saved_paths.append(path)
 		_update_file_tree_item(path)
 	for target in refresh_targets.keys():
 		_refresh_filesystem_incremental(str(target))
+	for saved_path in saved_paths:
+		script_saved.emit(saved_path)
 
 
 func close_script(path: String) -> void:
@@ -231,6 +264,7 @@ func _save_script(path: String) -> bool:
 	_file_cache[path] = cached
 	_refresh_filesystem_incremental(_get_refresh_target(path))
 	_update_file_tree_item(path)
+	script_saved.emit(path)
 	return true
 
 
@@ -384,3 +418,16 @@ func _select_file_tree_item(path: String) -> void:
 	file_list_tree.deselect_all()
 	item.select(TREE_COLUMN)
 	file_list_tree.scroll_to_item(item)
+
+
+func _resolve_open_path_key(path: String) -> String:
+	if path.is_empty():
+		return ""
+	if _file_cache.has(path):
+		return path
+
+	var normalized_target: String = _normalize_path(path)
+	for open_path in _open_order:
+		if _normalize_path(open_path) == normalized_target:
+			return open_path
+	return ""

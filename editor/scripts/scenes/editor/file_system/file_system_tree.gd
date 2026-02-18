@@ -20,6 +20,8 @@ enum MenuID {
 	CREATE_FOLDER = 0,
 	CREATE_SCRIPT = 101,
 	CREATE_TSCN = 102,
+	CREATE_TEXT = 103,
+	CREATE_SHADER = 104,
 	DELETE = 1, 
 	RENAME = 2, 
 	OPEN_IN_EXPLORER = 3, 
@@ -30,10 +32,30 @@ enum MenuID {
 	NEW_SUBMENU = 99
 };
 
+const JS_SCRIPT_TEMPLATE : String = """import * as UTMX from "utmx";
+
+// TODO: write your game logic with UTMX.
+"""
+
+const GDSHADER_TEMPLATE : String = """shader_type canvas_item;
+
+void vertex() {
+}
+
+void fragment() {
+}
+"""
+
 const FILE_TEMPLATES : Dictionary = {
 	MenuID.CREATE_FOLDER: {"name": "new folder", "is_dir": true},
-	MenuID.CREATE_SCRIPT: {"name": "new_script.js", "is_dir": false},
+	MenuID.CREATE_SCRIPT: {"name": "new_script.js", "is_dir": false, "template": JS_SCRIPT_TEMPLATE},
 	MenuID.CREATE_TSCN: {"name": "new_scene.tscn", "is_dir": false},
+	MenuID.CREATE_TEXT: {"name": "new_text.txt", "is_dir": false},
+	MenuID.CREATE_SHADER: {"name": "new_shader.gdshader", "is_dir": false, "template": GDSHADER_TEMPLATE},
+};
+
+const HIDDEN_ROOT_FILES : Dictionary = {
+	"utmx.cfg": true,
 };
 
 # --- 初始化逻辑 ---
@@ -68,9 +90,11 @@ func _setup_menu(menu: PopupMenu, is_multi: bool) -> void:
 	if (!is_multi):
 		var submenu_new : PopupMenu = PopupMenu.new();
 		submenu_new.name = "SubmenuNew";
-		submenu_new.add_item("新建文件夹", MenuID.CREATE_FOLDER);
-		submenu_new.add_item("新建脚本", MenuID.CREATE_SCRIPT);
-		submenu_new.add_item("新建场景", MenuID.CREATE_TSCN);
+		submenu_new.add_item("Create Text File", MenuID.CREATE_TEXT);
+		submenu_new.add_item("Create Shader", MenuID.CREATE_SHADER);
+		submenu_new.add_item("Create Folder", MenuID.CREATE_FOLDER);
+		submenu_new.add_item("Create Script", MenuID.CREATE_SCRIPT);
+		submenu_new.add_item("Create Scene", MenuID.CREATE_TSCN);
 		submenu_new.id_pressed.connect(_on_menu_id_pressed);
 		menu.add_child(submenu_new);
 		menu.add_submenu_node_item("新建...", submenu_new, MenuID.NEW_SUBMENU);
@@ -225,12 +249,13 @@ func _scan_folder(path: String, parent_item: TreeItem) -> void:
 		var fn : String = dir.get_next();
 		while (fn != ""):
 			if (fn != "." && fn != ".."):
-				if (dir.current_is_dir()): dirs.append(fn);
-				else: files.append(fn);
+				var is_current_dir : bool = dir.current_is_dir();
+				if (!_is_hidden_entry(path, fn, is_current_dir)):
+					if (is_current_dir): dirs.append(fn);
+					else: files.append(fn);
 			fn = dir.get_next();
 		dirs.sort_custom(func(a, b): return a.naturalnocasecmp_to(b) < 0);
 		files.sort_custom(func(a, b): return a.naturalnocasecmp_to(b) < 0);
-		
 		for d : String in dirs:
 			var fp : String = path.path_join(d);
 			var item : TreeItem = create_item(parent_item);
@@ -247,6 +272,14 @@ func _scan_folder(path: String, parent_item: TreeItem) -> void:
 			item.set_metadata(0, {"path": fp, "is_dir": false});
 			_all_items_cache[fp] = item;
 			_decorate_item(item);
+
+func _is_hidden_entry(parent_dir: String, entry_name: String, is_dir: bool) -> bool:
+	if (is_dir): return false;
+	var lower_name : String = entry_name.to_lower();
+	if (!HIDDEN_ROOT_FILES.has(lower_name)): return false;
+	var normalized_parent : String = String(parent_dir).replace("\\", "/").simplify_path();
+	var normalized_root : String = String(GlobalEditorFileSystem.root_path).replace("\\", "/").simplify_path();
+	return normalized_parent == normalized_root;
 
 func _decorate_item(item: TreeItem) -> void:
 	var data : Dictionary = item.get_metadata(0);
@@ -315,7 +348,7 @@ func _execute_command(id: int, prefer_context_target: bool = false) -> void:
 	if (target_item == null): return;
 
 	match (id):
-		MenuID.CREATE_FOLDER, MenuID.CREATE_SCRIPT, MenuID.CREATE_TSCN:
+		MenuID.CREATE_FOLDER, MenuID.CREATE_SCRIPT, MenuID.CREATE_TSCN, MenuID.CREATE_TEXT, MenuID.CREATE_SHADER:
 			var config : Dictionary = FILE_TEMPLATES[id];
 			var data : Dictionary = target_item.get_metadata(0);
 			target_item.collapsed = false;
@@ -323,7 +356,8 @@ func _execute_command(id: int, prefer_context_target: bool = false) -> void:
 			var base_dir : String = data.path if data.is_dir else data.path.get_base_dir();
 			_queue_expand_path_and_parents(base_dir);
 			var final_path : String = GlobalEditorFileSystem.get_safe_move_path(base_dir, config.name);
-			GlobalEditorFileSystem.execute_create_action(config.is_dir, final_path);
+			var template_text : String = str(config.get("template", ""));
+			GlobalEditorFileSystem.execute_create_action(config.is_dir, final_path, template_text);
 			
 			await get_tree().process_frame;
 			_queue_expand_path_and_parents(base_dir);

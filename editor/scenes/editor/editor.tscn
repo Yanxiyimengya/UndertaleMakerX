@@ -12,8 +12,8 @@
 [ext_resource type="Script" uid="uid://bvjwj5iha8yll" path="res://addons/dockable_container/layout_panel.gd" id="9_syr16"]
 [ext_resource type="Script" uid="uid://big1el3sooljt" path="res://addons/dockable_container/layout.gd" id="10_qnluh"]
 [ext_resource type="Script" uid="uid://caiqqpasjgne6" path="res://addons/dockable_container/layout_split.gd" id="10_syr16"]
-[ext_resource type="PackedScene" uid="uid://dkd2w8x7rljjf" path="res://scenes/editor/file_system/file_system.tscn" id="12_qnluh"]
-[ext_resource type="PackedScene" uid="uid://dpu4ine6dlnpw" path="res://scenes/editor/scene_browser/scene_browser.tscn" id="14_pq70c"]
+[ext_resource type="PackedScene" uid="uid://dkd2w8x7rljjf" path="res://scenes/editor/file_system/file_system.tscn" id="13_j530m"]
+[ext_resource type="PackedScene" uid="uid://bjpoyoc2g1svy" path="res://scenes/editor/file_browser/file_browser.tscn" id="14_browser"]
 [ext_resource type="PackedScene" uid="uid://38su4gt80tvp" path="res://scenes/editor/console/console.tscn" id="15_hg2ka"]
 [ext_resource type="PackedScene" uid="uid://dmaq7ch7gtrci" path="res://scenes/editor/script_editor/script_editor.tscn" id="15_oljq2"]
 [ext_resource type="PackedScene" uid="uid://cjasxmg5xho1a" path="res://scenes/editor/inspector/inspector.tscn" id="16_j530m"]
@@ -33,7 +33,7 @@ names = PackedStringArray("FileSystem")
 [sub_resource type="Resource" id="Resource_oljq2"]
 resource_name = "Tabs"
 script = ExtResource("9_syr16")
-names = PackedStringArray("Scene", "Script")
+names = PackedStringArray("FileBrowser", "Script")
 
 [sub_resource type="Resource" id="Resource_j530m"]
 resource_name = "Tabs"
@@ -161,12 +161,10 @@ tab_alignment = 0
 layout = SubResource("Resource_r6jol")
 metadata/_custom_type_script = "uid://k85n7y40rsgp"
 
-[node name="FileSystem" parent="VBoxContainer/MarginContainer/MainDockable" unique_id=1636596075 instance=ExtResource("12_qnluh")]
+[node name="FileSystem" parent="VBoxContainer/MarginContainer/MainDockable" unique_id=1636596075 instance=ExtResource("13_j530m")]
 layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
 
-[node name="Scene" parent="VBoxContainer/MarginContainer/MainDockable" unique_id=374441599 instance=ExtResource("14_pq70c")]
+[node name="FileBrowser" parent="VBoxContainer/MarginContainer/MainDockable" unique_id=641119903 instance=ExtResource("14_browser")]
 layout_mode = 2
 
 [node name="Script" parent="VBoxContainer/MarginContainer/MainDockable" unique_id=1423788704 instance=ExtResource("15_oljq2")]

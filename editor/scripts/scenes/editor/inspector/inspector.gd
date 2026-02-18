@@ -1,5 +1,7 @@
 extends PanelContainer
 
+signal resource_saved(path: String)
+
 const COLUMN_NAME := 0
 const COLUMN_VALUE := 1
 
@@ -43,6 +45,10 @@ func _ready() -> void:
 
 func open_resource(path: String) -> bool:
 	return load_from_disk(path)
+
+
+func get_opened_resource_path() -> String:
+	return _current_path
 
 
 func load_from_disk(path: String) -> bool:
@@ -93,6 +99,7 @@ func save_resource() -> bool:
 	var refresh_path := _current_path.get_base_dir()
 	if not refresh_path.is_empty():
 		GlobalEditorFileSystem.scan_project_incremental(refresh_path)
+	resource_saved.emit(_current_path)
 	return true
 
 

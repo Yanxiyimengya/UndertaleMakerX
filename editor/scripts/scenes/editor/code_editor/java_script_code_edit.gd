@@ -6,6 +6,7 @@ const STRING_PATTERN := "\"[^\"]*\"|'[^']*'"
 const BLOCK_COMMENT_PATTERN := "/\\*[\\s\\S]*?\\*/"
 const LINE_COMMENT_PATTERN := "//.*$"
 const IDENTIFIER_CHAR_PATTERN := "^[\\p{L}\\p{N}_$]$"
+const DROP_DEDUP_WINDOW_MS: int = 40
 
 const JS_KEYWORDS : PackedStringArray = [
 	"arguments", "as", "async", "await", "break", "case", "catch", "class",
@@ -33,6 +34,8 @@ var _static_keywords: Dictionary = {}
 #var _prev_caret_position := Vector2i(-1, -1)
 var _cached_completion_options: Array[Dictionary] = []
 var _cached_tokens: Dictionary = {}
+var _last_drop_signature: String = ""
+var _last_drop_tick_msec: int = -1
 
 var _declared_regex := RegEx.new()
 var _string_regex := RegEx.new()
@@ -107,6 +110,39 @@ func _gui_input(event: InputEvent) -> void:
 		var key_event := event as InputEventKey
 		if key_event.keycode == KEY_ENTER and key_event.shift_pressed:
 			insert_text_at_caret("\n")
+
+
+func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
+	return not _extract_droppable_resource_paths(data).is_empty()
+
+
+func _drop_data(_at_position: Vector2, data: Variant) -> void:
+	var relative_paths: Array[String] = _extract_droppable_resource_paths(data)
+	if relative_paths.is_empty():
+		return
+	var insertion_text: String = _build_resource_drop_text(relative_paths)
+	if insertion_text.is_empty():
+		return
+	var signature_paths: String = "|".join(PackedStringArray(relative_paths))
+	var drop_signature: String = "%s|%s|%d|%d" % [
+		insertion_text,
+		signature_paths,
+		int(_at_position.x),
+		int(_at_position.y)
+	]
+	var now_msec: int = Time.get_ticks_msec()
+	if _last_drop_signature == drop_signature and _last_drop_tick_msec >= 0:
+		if now_msec - _last_drop_tick_msec <= DROP_DEDUP_WINDOW_MS:
+			return
+	_last_drop_signature = drop_signature
+	_last_drop_tick_msec = now_msec
+
+	var drop_position: Vector2i = Vector2i(_at_position)
+	var line_column: Vector2i = get_line_column_at_pos(drop_position, true, true)
+	if line_column.x >= 0 and line_column.y >= 0:
+		set_caret_line(line_column.y)
+		set_caret_column(line_column.x)
+	insert_text_at_caret(insertion_text)
 
 
 func _request_code_completion(force: bool) -> void:
@@ -323,3 +359,81 @@ func _update_editor_visual_metrics() -> void:
 		set_line_length_guidelines(PackedInt32Array([guideline]))
 	else:
 		set_line_length_guidelines(PackedInt32Array())
+
+
+func _extract_droppable_resource_paths(data: Variant) -> Array[String]:
+	var raw_paths: Array[String] = []
+	if data is Dictionary:
+		if data.has("paths"):
+			var dict_paths: Variant = data.get("paths")
+			if dict_paths is PackedStringArray:
+				for p in dict_paths:
+					raw_paths.append(String(p))
+			elif dict_paths is Array:
+				for p in dict_paths:
+					if p is String:
+						raw_paths.append(String(p))
+		elif data.has("files"):
+			var files: Variant = data.get("files")
+			if files is PackedStringArray:
+				for p in files:
+					raw_paths.append(String(p))
+			elif files is Array:
+				for p in files:
+					if p is String:
+						raw_paths.append(String(p))
+	elif data is PackedStringArray:
+		for p in data:
+			raw_paths.append(String(p))
+	elif data is Array:
+		for p in data:
+			if p is String:
+				raw_paths.append(String(p))
+
+	var relative_paths: Array[String] = []
+	var unique_path_map: Dictionary = {}
+	for raw_path in raw_paths:
+		var normalized_path: String = String(raw_path).replace("\\", "/").simplify_path()
+		if normalized_path.is_empty():
+			continue
+		if DirAccess.dir_exists_absolute(normalized_path):
+			continue
+		if not FileAccess.file_exists(normalized_path):
+			continue
+		var relative_path: String = _to_project_relative_path(normalized_path)
+		if relative_path.is_empty():
+			continue
+		if unique_path_map.has(relative_path):
+			continue
+		unique_path_map[relative_path] = true
+		relative_paths.append(relative_path)
+	return relative_paths
+
+
+func _to_project_relative_path(path: String) -> String:
+	var normalized_path: String = String(path).replace("\\", "/").simplify_path()
+	var project_root: String = String(EditorProjectManager.get_opened_project_path()).replace("\\", "/").simplify_path()
+	if project_root.is_empty():
+		return normalized_path
+	if normalized_path == project_root:
+		return "."
+	if not project_root.ends_with("/"):
+		project_root += "/"
+	if normalized_path.begins_with(project_root):
+		return normalized_path.trim_prefix(project_root)
+	return normalized_path
+
+
+func _build_resource_drop_text(relative_paths: Array[String]) -> String:
+	if relative_paths.size() == 1:
+		return _quote_as_script_string(relative_paths[0])
+
+	var quoted_paths: Array[String] = []
+	for path in relative_paths:
+		quoted_paths.append(_quote_as_script_string(path))
+	return "[" + ", ".join(PackedStringArray(quoted_paths)) + "]"
+
+
+func _quote_as_script_string(value: String) -> String:
+	var escaped: String = value.replace("\\", "\\\\").replace("\"", "\\\"")
+	return "\"" + escaped + "\""

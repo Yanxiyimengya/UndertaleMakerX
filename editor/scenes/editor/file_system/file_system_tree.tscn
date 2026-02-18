@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://bcvtvbgs5fkqq"]
 
-[ext_resource type="Script" uid="uid://428u40rxf6gt" path="res://scripts/scenes/editor/file_system/file_system_tree.gd" id="1_rdsrx"]
+[ext_resource type="Script" uid="uid://428u40rxf6gt" path="res://scripts/scenes/editor/file_system/file_system_tree.gd" id="1_jr1kg"]
 
 [node name="FileSystemTree" type="Tree" unique_id=304501327]
 offset_right = 38.0
 offset_bottom = 50.0
-script = ExtResource("1_rdsrx")
+script = ExtResource("1_jr1kg")
 
 [node name="PopupMultiSelectMenu" type="PopupMenu" parent="." unique_id=1455272173]
 unique_name_in_owner = true

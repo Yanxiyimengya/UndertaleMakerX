@@ -203,13 +203,33 @@ func _build_undoable_merge_recursive(src: String, dst: String, ur: UndoRedo) -> 
 
 # --- 公共业务方法 ---
 
-func execute_create_action(is_dir: bool, final_path: String) -> void:
+func execute_create_action(is_dir: bool, final_path: String, template_text: String = "") -> void:
+	if (final_path.is_empty()):
+		push_warning("execute_create_action: final_path is empty.");
+		return;
+
 	if (is_dir):
-		DirAccess.make_dir_absolute(final_path);
+		var make_dir_err: int = DirAccess.make_dir_recursive_absolute(final_path);
+		if (make_dir_err != OK && make_dir_err != ERR_ALREADY_EXISTS):
+			push_warning("Failed to create directory: %s (error=%d)" % [final_path, make_dir_err]);
+			return;
 	else:
-		var file := FileAccess.open(final_path, FileAccess.WRITE);
-		if (file != null && final_path.get_extension().to_lower() == "tscn"):
-			file.store_string("[gd_scene format=3]\n\n[node name=\"Node\" type=\"Node\"]\n");
+		var file: FileAccess = FileAccess.open(final_path, FileAccess.WRITE);
+		if (file == null):
+			var open_err: int = FileAccess.get_open_error();
+			push_warning("Failed to create file: %s (error=%d)" % [final_path, open_err]);
+			return;
+
+		var content: String = template_text;
+		if (content.is_empty() && final_path.get_extension().to_lower() == "tscn"):
+			content = "[gd_scene format=3]\n\n[node name=\"Node\" type=\"Node\"]\n";
+		if (!content.is_empty()):
+			file.store_string(content);
+			var write_err: int = file.get_error();
+			if (write_err != OK):
+				push_warning("Failed to write file: %s (error=%d)" % [final_path, write_err]);
+				return;
+
 	scan_project_incremental(final_path.get_base_dir());
 
 func execute_delete_batch(paths: Array[String]) -> void:

@@ -68,10 +68,18 @@ const INSPECTOR_FILE_EXTENSIONS := {
 	"json": true,
 }
 
+const SCRIPT_AND_INSPECTOR_SYNC_EXTENSIONS := {
+	"ini": true,
+	"cfg": true,
+	"conf": true,
+	"properties": true,
+	"json": true,
+}
+
 @export_dir var root_path: String = EditorProjectManager.get_opened_project_path()
 @onready var main_dockable: DockableContainer = %MainDockable
 @onready var file_system_panel = $VBoxContainer/MarginContainer/MainDockable/FileSystem
-@onready var scene_browser_panel = $VBoxContainer/MarginContainer/MainDockable/Scene
+@onready var file_browser_panel = $VBoxContainer/MarginContainer/MainDockable/FileBrowser
 @onready var script_editor_panel = $VBoxContainer/MarginContainer/MainDockable/Script
 @onready var inspector_panel = $VBoxContainer/MarginContainer/MainDockable/Inspector
 @export var script_panel: Control
@@ -81,6 +89,14 @@ func _ready() -> void:
 	if file_system_panel and file_system_panel.has_signal("selected_file"):
 		if not file_system_panel.selected_file.is_connected(_on_file_system_selected_file):
 			file_system_panel.selected_file.connect(_on_file_system_selected_file)
+	if script_editor_panel and script_editor_panel.has_signal("script_saved"):
+		var script_saved_callable: Callable = Callable(self, "_on_script_editor_script_saved")
+		if not script_editor_panel.is_connected("script_saved", script_saved_callable):
+			script_editor_panel.connect("script_saved", script_saved_callable)
+	if inspector_panel and inspector_panel.has_signal("resource_saved"):
+		var resource_saved_callable: Callable = Callable(self, "_on_inspector_resource_saved")
+		if not inspector_panel.is_connected("resource_saved", resource_saved_callable):
+			inspector_panel.connect("resource_saved", resource_saved_callable)
 
 
 func _enter_tree() -> void:
@@ -93,16 +109,30 @@ func _exit_tree() -> void:
 
 func _on_file_system_selected_file(path: String) -> void:
 	var extension := path.get_extension().to_lower()
-	if extension == "tscn":
-		if scene_browser_panel and scene_browser_panel.has_method("load_scene"):
-			scene_browser_panel.call("load_scene", path)
-			main_dockable.set_control_as_current_tab(scene_browser_panel)
-		return
+	if SCRIPT_AND_INSPECTOR_SYNC_EXTENSIONS.has(extension):
+		var opened_in_inspector := false
+		if inspector_panel and inspector_panel.has_method("open_resource"):
+			opened_in_inspector = bool(inspector_panel.call("open_resource", path))
+		if script_editor_panel and script_editor_panel.has_method("open_script"):
+			script_editor_panel.call("open_script", path)
+			main_dockable.set_control_as_current_tab(script_editor_panel)
+			return
+		if opened_in_inspector:
+			main_dockable.set_control_as_current_tab(inspector_panel)
+			return
+
 	if INSPECTOR_FILE_EXTENSIONS.has(extension):
 		if inspector_panel and inspector_panel.has_method("open_resource"):
 			var opened: bool = inspector_panel.call("open_resource", path)
 			if opened:
 				main_dockable.set_control_as_current_tab(inspector_panel)
+				return
+	if file_browser_panel and file_browser_panel.has_method("can_open_file"):
+		var can_open_in_browser: bool = file_browser_panel.call("can_open_file", path)
+		if can_open_in_browser and file_browser_panel.has_method("open_file"):
+			var opened_in_browser: bool = file_browser_panel.call("open_file", path)
+			if opened_in_browser:
+				main_dockable.set_control_as_current_tab(file_browser_panel)
 				return
 
 	if not _is_text_file(path):
@@ -110,6 +140,35 @@ func _on_file_system_selected_file(path: String) -> void:
 	if script_editor_panel and script_editor_panel.has_method("open_script"):
 		script_editor_panel.call("open_script", path)
 		main_dockable.set_control_as_current_tab(script_editor_panel)
+
+
+func _on_script_editor_script_saved(path: String) -> void:
+	var normalized_saved_path: String = _normalize_path(path)
+	var extension: String = normalized_saved_path.get_extension().to_lower()
+	if not SCRIPT_AND_INSPECTOR_SYNC_EXTENSIONS.has(extension):
+		return
+	if inspector_panel == null or not inspector_panel.has_method("get_opened_resource_path"):
+		return
+	if not inspector_panel.has_method("load_from_disk"):
+		return
+
+	var opened_path: String = _normalize_path(str(inspector_panel.call("get_opened_resource_path")))
+	if opened_path != normalized_saved_path:
+		return
+
+	# load_from_disk() returns false on parse errors (e.g. invalid JSON),
+	# and in that case we keep the existing inspector data unchanged.
+	inspector_panel.call("load_from_disk", normalized_saved_path)
+
+
+func _on_inspector_resource_saved(path: String) -> void:
+	var normalized_saved_path: String = _normalize_path(path)
+	var extension: String = normalized_saved_path.get_extension().to_lower()
+	if not SCRIPT_AND_INSPECTOR_SYNC_EXTENSIONS.has(extension):
+		return
+	if script_editor_panel == null or not script_editor_panel.has_method("sync_file_from_disk"):
+		return
+	script_editor_panel.call("sync_file_from_disk", normalized_saved_path, true)
 
 
 func _is_text_file(path: String) -> bool:
@@ -148,3 +207,7 @@ func _is_probably_text_content(path: String) -> bool:
 			non_text_bytes += 1
 
 	return float(non_text_bytes) / float(sample.size()) < 0.05
+
+
+func _normalize_path(path: String) -> String:
+	return String(path).replace("\\", "/").simplify_path()
