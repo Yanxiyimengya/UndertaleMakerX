@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://cf011eb8cko2s" path="res://__data__/built-in-resources/textures/virtual_keys/Z-button.png" id="4_ll6bh"]
 [ext_resource type="Script" uid="uid://cnnaer4x1affg" path="res://scripts/scenes/virtual_input_controller/VirtualActionButton.cs" id="5_q72la"]
 [ext_resource type="Texture2D" uid="uid://devjl076l5pl8" path="res://__data__/built-in-resources/textures/virtual_keys/X-button.png" id="6_xgf4u"]
+[ext_resource type="Texture2D" uid="uid://bh3rdvlwfo7h4" path="res://__data__/built-in-resources/textures/virtual_keys/C-button.png" id="8_8ts1n"]
 
 [node name="VirtualInputController" type="CanvasLayer" unique_id=1172724387]
 script = ExtResource("1_5dsfc")
@@ -20,33 +21,30 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="VirtualJoystick" type="Control" parent="Control" unique_id=103505300]
+[node name="VirtualJoystick" type="TextureRect" parent="Control" unique_id=1378161672]
+self_modulate = Color(0.5019608, 0.5019608, 0.5019608, 1)
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = -1
+anchor_left = 0.045
+anchor_top = 0.62700003
+anchor_right = 0.045
+anchor_bottom = 0.62700003
+offset_left = 0.19999886
+offset_top = 0.039978027
+offset_right = 162.2
+offset_bottom = 155.03998
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
-script = ExtResource("1_h7t0g")
-BasePath = NodePath("TextureRect")
-StickPath = NodePath("TextureRect2")
-
-[node name="TextureRect" type="TextureRect" parent="Control/VirtualJoystick" unique_id=1168584668]
-modulate = Color(0.50271857, 0.50271857, 0.5027185, 1)
-layout_mode = 0
-offset_left = 56.0
-offset_top = 275.0
-offset_right = 206.0
-offset_bottom = 425.0
 texture = ExtResource("2_h7t0g")
+script = ExtResource("1_h7t0g")
+StickPath = NodePath("Stick")
 
-[node name="TextureRect2" type="TextureRect" parent="Control/VirtualJoystick" unique_id=1769442027]
+[node name="Stick" type="TextureRect" parent="Control/VirtualJoystick" unique_id=1769442027]
 layout_mode = 0
-offset_left = 84.0
-offset_top = 307.0
-offset_right = 176.0
-offset_bottom = 399.0
+offset_left = 35.0
+offset_top = 30.0
+offset_right = 127.0
+offset_bottom = 122.0
 texture = ExtResource("3_ll6bh")
 
 [node name="ConfirmButton" type="TextureButton" parent="Control" unique_id=575635864]
@@ -57,9 +55,9 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -264.0
-offset_top = -137.0
+offset_top = -104.0
 offset_right = -189.0
-offset_bottom = -62.0
+offset_bottom = -29.0
 grow_horizontal = 0
 grow_vertical = 0
 texture_normal = ExtResource("4_ll6bh")
@@ -74,13 +72,31 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -152.0
-offset_top = -137.0
-offset_right = -77.0
-offset_bottom = -62.0
+offset_left = -160.0
+offset_top = -104.0
+offset_right = -85.0
+offset_bottom = -29.0
 grow_horizontal = 0
 grow_vertical = 0
 texture_normal = ExtResource("6_xgf4u")
 stretch_mode = 0
 script = ExtResource("5_q72la")
 ActionName = "cancel"
+
+[node name="MenuButton" type="TextureButton" parent="Control" unique_id=9158227]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -96.0
+offset_top = -176.0
+offset_right = -37.0
+offset_bottom = -117.0
+grow_horizontal = 0
+grow_vertical = 0
+texture_normal = ExtResource("8_8ts1n")
+stretch_mode = 0
+script = ExtResource("5_q72la")
+ActionName = "menu"

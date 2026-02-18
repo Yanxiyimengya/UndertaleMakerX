@@ -49,7 +49,6 @@ public static class UtmxPlayerDataManager
 		}
 		return null;
 	}
-
 	private static bool TryGetItem(int slot, out BaseItem item)
 	{
 		item = null;
@@ -75,9 +74,25 @@ public static class UtmxPlayerDataManager
 		{
 			UtmxDialogueQueueManager.AppendDialogue(item.UsedText);
 		}
-	}
+    }
+    public static void SetWeapon(string itemId)
+    {
+        if (UtmxGameRegisterDB.TryGetItem(itemId, out BaseItem item))
+        {
+			if (item is BaseWeapon weapon)
+				Weapon = weapon;
+        }
+    }
+    public static void SetArmor(string itemId)
+    {
+        if (UtmxGameRegisterDB.TryGetItem(itemId, out BaseItem item))
+        {
+            if (item is BaseArmor armor)
+                Armor = armor;
+        }
+    }
 
-	public static void RemoveItem(int slot)
+    public static void RemoveItem(int slot)
 	{
 		if (slot < 0 || slot >= Items.Count) return;
 		if (slot > -1 && slot < Items.Count)
@@ -88,6 +103,7 @@ public static class UtmxPlayerDataManager
 
 	public static void Hurt(double value, double invtime = -1)
 	{
+        value = Armor == null ? value : Armor.onDefend(value);
 		if (UtmxBattleManager.IsInBattle())
 		{
 			UtmxBattleManager.GetBattlePlayerController()?.PlayerSoul?.Hurt(value, invtime);

@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://eglakv0qdgnq" path="res://scripts/windows/WindowManager.gd" id="1_t6e0d"]
 [ext_resource type="PackedScene" uid="uid://w6vdxxem78gx" path="res://scenes/singletons/windows/create_project_window/create_project_window.tscn" id="2_j68gc"]
 [ext_resource type="PackedScene" uid="uid://c5jcja53wdsa6" path="res://scenes/singletons/windows/confirmation_window.tscn" id="3_b8l5p"]
+[ext_resource type="PackedScene" uid="uid://biuvac2n848kk" path="res://scenes/singletons/windows/question_window.tscn" id="4_j68gc"]
 
 [sub_resource type="GDScript" id="GDScript_n5y4w"]
 script/source = "extends UtmxEditorWindow
@@ -123,4 +124,7 @@ script = SubResource("GDScript_n5y4w")
 [node name="ConfirmationWindow" parent="." unique_id=69873713 instance=ExtResource("3_b8l5p")]
 unique_name_in_owner = true
 title = "移除项目"
+visible = false
+
+[node name="QuestionWindow" parent="." unique_id=1118986057 instance=ExtResource("4_j68gc")]
 visible = false

@@ -1,4 +1,4 @@
-import { __UtmxItem , __logger } from "__UTMX";
+import { __UtmxItem } from "__UTMX";
 
 export class UtmxBaseItem extends __UtmxItem {
 	set displayName(value) {
@@ -7,14 +7,7 @@ export class UtmxBaseItem extends __UtmxItem {
 	get displayName() {
 		return this.DisplayName;
 	}
-	get slot() {
-		return this.ItemSlot;
-	}
-	set slot(value) {
-		this.ItemSlot = value;
-	}
 
-	
 	get usedText() {
 		return this.UsedText;
 	}
@@ -58,6 +51,10 @@ export class UtmxBaseItem extends __UtmxItem {
 
 	removeSelf() {
 		this.RemoveSelf();
+	}
+
+	getSlot() {
+		return this.ItemSlot;
 	}
 
 	onUse() {

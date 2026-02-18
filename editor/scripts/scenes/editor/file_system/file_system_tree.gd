@@ -4,7 +4,6 @@ extends Tree
 ## 双击一个文件时触发
 signal selected_file(path: String);
 
-@export_dir var root_path : String = EditorProjectManager.get_default_project_path();
 @onready var context_menu : PopupMenu = %PopupFileSelectMenu as PopupMenu;
 @onready var popup_multi_select_menu : PopupMenu = %PopupMultiSelectMenu as PopupMenu;
 
@@ -14,7 +13,9 @@ var _all_items_cache : Dictionary = {};
 var _clipboard_paths : Array[String] = [];
 var _is_cut_mode : bool = false;
 var _last_search_text : String = "";
-
+var _is_refreshing_tree : bool = false;
+var _pending_expand_paths : Array[String] = [];
+ 
 enum MenuID {
 	CREATE_FOLDER = 0,
 	CREATE_SCRIPT = 101,
@@ -32,12 +33,12 @@ enum MenuID {
 const FILE_TEMPLATES : Dictionary = {
 	MenuID.CREATE_FOLDER: {"name": "new folder", "is_dir": true},
 	MenuID.CREATE_SCRIPT: {"name": "new_script.js", "is_dir": false},
+	MenuID.CREATE_TSCN: {"name": "new_scene.tscn", "is_dir": false},
 };
 
 # --- 初始化逻辑 ---
 
 func _ready() -> void:
-	GlobalEditorFileSystem.root_path = root_path;
 	GlobalEditorFileSystem.filesystem_changed.connect(refresh_tree);
 	GlobalEditorFileSystem.entry_removed.connect(_on_entry_removed_remotely);
 	
@@ -56,6 +57,9 @@ func _ready() -> void:
 	item_collapsed.connect(_on_item_collapsed);
 	
 	refresh_tree();
+
+func _exit_tree() -> void:
+	GlobalEditorFileSystem.root_path = "";
 
 func _setup_menu(menu: PopupMenu, is_multi: bool) -> void:
 	if (menu == null): return;
@@ -93,7 +97,11 @@ func _on_entry_removed_remotely(path: String) -> void:
 		_all_items_cache.erase(path);
 
 func _on_item_collapsed(item: TreeItem) -> void:
+	if (_is_refreshing_tree): return;
 	if (!_last_search_text.is_empty()): return;
+	_sync_expanded_state_for_item(item);
+
+func _sync_expanded_state_for_item(item: TreeItem) -> void:
 	var data : Dictionary = item.get_metadata(0);
 	if (data == null || !data.is_dir): return;
 	var path : String = data.path;
@@ -102,19 +110,61 @@ func _on_item_collapsed(item: TreeItem) -> void:
 	else:
 		if (!_expanded_paths.has(path)): _expanded_paths.append(path);
 
+func _snapshot_expanded_paths_from_tree() -> void:
+	var root : TreeItem = get_root();
+	if (root == null): return;
+	_expanded_paths.clear();
+	_save_expanded_state(root);
+
+func _queue_expand_path_and_parents(path: String) -> void:
+	if (path.is_empty()): return;
+	var curr : String = path;
+	while (!curr.is_empty()):
+		if (!_expanded_paths.has(curr)): _expanded_paths.append(curr);
+		if (!_pending_expand_paths.has(curr)): _pending_expand_paths.append(curr);
+		if (curr == GlobalEditorFileSystem.root_path): break;
+		var parent : String = curr.get_base_dir();
+		if (parent == curr): break;
+		curr = parent;
+
+func ensure_directory_expanded(path: String) -> void:
+	if (path.is_empty()): return;
+	var normalized_path : String = String(path).replace("\\", "/").simplify_path();
+	_queue_expand_path_and_parents(normalized_path);
+	_apply_pending_expand_paths();
+
+func _apply_pending_expand_paths() -> void:
+	if (_pending_expand_paths.is_empty()): return;
+	var remaining : Array[String] = [];
+	for p : String in _pending_expand_paths:
+		if (!_all_items_cache.has(p)):
+			remaining.append(p);
+			continue;
+		var item : TreeItem = _all_items_cache[p];
+		if (item == null || !is_instance_valid(item)):
+			remaining.append(p);
+			continue;
+		item.collapsed = false;
+		_sync_expanded_state_for_item(item);
+	_pending_expand_paths = remaining;
+
 func refresh_tree(target_path: String = "") -> void:
+	_snapshot_expanded_paths_from_tree();
+	_is_refreshing_tree = true;
 	if (!target_path.is_empty() && _all_items_cache.has(target_path)):
 		var item : TreeItem = _all_items_cache[target_path];
 		var data : Dictionary = item.get_metadata(0);
 		if (data != null && data.is_dir):
 			_update_local_directory(target_path, item);
+			_apply_pending_expand_paths();
+			_is_refreshing_tree = false;
 			return;
 	_rebuild_full_tree();
+	_apply_pending_expand_paths();
+	_is_refreshing_tree = false;
 
 func _rebuild_full_tree() -> void:
-	if (get_root() != null):
-		_expanded_paths.clear();
-		_save_expanded_state(get_root());
+	_snapshot_expanded_paths_from_tree();
 	
 	var saved_selected : Array[String] = [];
 	var it : TreeItem = get_next_selected(null);
@@ -125,6 +175,7 @@ func _rebuild_full_tree() -> void:
 	_all_items_cache.clear();
 	clear();
 	
+	var root_path : String = GlobalEditorFileSystem.root_path;
 	if (!DirAccess.dir_exists_absolute(root_path)): 
 		DirAccess.make_dir_recursive_absolute(root_path);
 		
@@ -143,6 +194,7 @@ func _rebuild_full_tree() -> void:
 	if (!_last_search_text.is_empty()): search(_last_search_text);
 
 func _update_local_directory(path: String, parent_item: TreeItem) -> void:
+	var should_expand_parent : bool = _expanded_paths.has(path) || !parent_item.collapsed;
 	var child : TreeItem = parent_item.get_first_child();
 	while (child != null):
 		var c_path : String = child.get_metadata(0).path;
@@ -150,6 +202,8 @@ func _update_local_directory(path: String, parent_item: TreeItem) -> void:
 		child.free();
 		child = parent_item.get_first_child();
 	_scan_folder(path, parent_item);
+	parent_item.collapsed = !should_expand_parent;
+	_sync_expanded_state_for_item(parent_item);
 	if (!_last_search_text.is_empty()): search(_last_search_text);
 
 func _save_expanded_state(item: TreeItem) -> void:
@@ -200,8 +254,9 @@ func _decorate_item(item: TreeItem) -> void:
 		return; 
 	var ext : String = data.path.get_extension().to_lower();
 	if (ext in ["png", "jpg", "jpeg", "svg", "webp"]):
-		var img : Image = GlobalEditorResourceLoader.load_resource(data.path).get_image();
-		if (img != null): 
+		var res : Resource = GlobalEditorResourceLoader.load_resource(data.path);
+		if (res != null && res is Texture): 
+			var img : Image = res.get_image();
 			img.resize(16, 16, Image.INTERPOLATE_LANCZOS);
 			item.set_icon(0, ImageTexture.create_from_image(img));
 	elif (ext == "gd"): 
@@ -211,11 +266,39 @@ func _decorate_item(item: TreeItem) -> void:
 	else: 
 		item.set_icon(0, get_theme_icon("file", "FileDialog")); 
 
+func _extract_external_drop_paths(data: Variant) -> Array[String]:
+	var paths : Array[String] = [];
+	if (data is PackedStringArray):
+		for p in data: paths.append(String(p));
+		return paths;
+	if (data is Array):
+		for p in data:
+			if (p is String): paths.append(p);
+		return paths;
+	if (data is Dictionary && data.has("files")):
+		var files = data.files;
+		if (files is PackedStringArray):
+			for p in files: paths.append(String(p));
+		elif (files is Array):
+			for p in files:
+				if (p is String): paths.append(p);
+	return paths;
+
+func _resolve_drop_target_dir(pos: Vector2) -> String:
+	var target : TreeItem = get_item_at_position(pos);
+	if (target != null):
+		var data : Dictionary = target.get_metadata(0);
+		if (data != null):
+			if (data.is_dir):
+				return data.path;
+			return String(data.path).get_base_dir();
+	return get_import_target_dir();
+
 #endregion
 
 #region --- 命令执行 ---
 
-func _execute_command(id: int) -> void:
+func _execute_command(id: int, prefer_context_target: bool = false) -> void:
 	var selected_items : Array[TreeItem] = [];
 	var it : TreeItem = get_next_selected(null);
 	while (it != null):
@@ -223,7 +306,11 @@ func _execute_command(id: int) -> void:
 		it = get_next_selected(it);
 	if (selected_items.is_empty() && _selected_item != null): selected_items.append(_selected_item);
 	
-	var target_item : TreeItem = selected_items[0] if !selected_items.is_empty() else get_root();
+	var target_item : TreeItem = null;
+	if (prefer_context_target && _selected_item != null && is_instance_valid(_selected_item)):
+		target_item = _selected_item;
+	else:
+		target_item = selected_items[0] if !selected_items.is_empty() else get_root();
 	if (target_item == null): return;
 
 	match (id):
@@ -231,12 +318,15 @@ func _execute_command(id: int) -> void:
 			var config : Dictionary = FILE_TEMPLATES[id];
 			var data : Dictionary = target_item.get_metadata(0);
 			target_item.collapsed = false;
+			_sync_expanded_state_for_item(target_item);
 			var base_dir : String = data.path if data.is_dir else data.path.get_base_dir();
-			# 修复：调用 GlobalEditorFileSystem 中正确的公共方法名
+			_queue_expand_path_and_parents(base_dir);
 			var final_path : String = GlobalEditorFileSystem.get_safe_move_path(base_dir, config.name);
 			GlobalEditorFileSystem.execute_create_action(config.is_dir, final_path);
 			
 			await get_tree().process_frame;
+			_queue_expand_path_and_parents(base_dir);
+			_apply_pending_expand_paths();
 			if (_all_items_cache.has(final_path)):
 				var ni : TreeItem = _all_items_cache[final_path];
 				deselect_all(); ni.select(0); scroll_to_item(ni); edit_item(ni);
@@ -245,7 +335,7 @@ func _execute_command(id: int) -> void:
 			var paths_to_delete : Array[String] = [];
 			for item : TreeItem in selected_items:
 				var p : String = item.get_metadata(0).path;
-				if (p != root_path): paths_to_delete.append(p);
+				if (p != GlobalEditorFileSystem.root_path): paths_to_delete.append(p);
 			if (paths_to_delete.is_empty()): return;
 			
 			WindowManager.open_confirmation_window("移除文件", "确定删除 %d 项吗？" % paths_to_delete.size(), 
@@ -352,21 +442,32 @@ func _get_drag_data(_pos: Vector2) -> Variant:
 	return {"paths": paths};
 
 func _can_drop_data(_pos: Vector2, data: Variant) -> bool:
-	if (!data is Dictionary || !data.has("paths")): return false;
-	var target : TreeItem = get_item_at_position(_pos);
-	if (target == null || !target.get_metadata(0).is_dir): return false;
-	var tp : String = target.get_metadata(0).path;
-	
-	var can_move = false;
-	for sp : String in data.paths:
-		if (sp.get_base_dir() != tp && sp != tp && !tp.begins_with(sp + "/")):
-			can_move = true;
-			break;
-	return can_move;
+	var dest_dir := _resolve_drop_target_dir(_pos);
+	if (dest_dir.is_empty()): return false;
+	if (data is Dictionary && data.has("paths")):
+		var can_move = false;
+		for sp : String in data.paths:
+			if (sp.get_base_dir() != dest_dir && sp != dest_dir && !dest_dir.begins_with(sp + "/")):
+				can_move = true;
+				break;
+		return can_move;
+	var external_paths := _extract_external_drop_paths(data);
+	return !external_paths.is_empty();
 
 func _drop_data(_pos: Vector2, data: Variant) -> void:
-	var target : TreeItem = get_item_at_position(_pos);
-	var dest_dir : String = target.get_metadata(0).path;
+	var dest_dir := _resolve_drop_target_dir(_pos);
+	if (dest_dir.is_empty()): return;
+	var external_paths := _extract_external_drop_paths(data);
+	if (!external_paths.is_empty()):
+		var import_paths : Array[String] = [];
+		for p in external_paths:
+			var source_path : String = String(p).replace("\\", "/").simplify_path();
+			if (source_path.is_empty()): continue;
+			if (!DirAccess.dir_exists_absolute(source_path) && !FileAccess.file_exists(source_path)): continue;
+			import_paths.append(source_path);
+		if (import_paths.is_empty()): return;
+		GlobalEditorFileSystem.execute_paste_batch_copy(import_paths, dest_dir);
+		return;
 	var conflicts = [];
 	var move_paths : Array[String] = [];
 	
@@ -387,13 +488,15 @@ func _drop_data(_pos: Vector2, data: Variant) -> void:
 
 #endregion
 
-func _on_menu_id_pressed(id: int) -> void: _execute_command(id);
+func _on_menu_id_pressed(id: int) -> void: _execute_command(id, true);
 
 func _on_item_activated() -> void:
 	var it : TreeItem = get_selected();
 	if (it == null): return;
 	var data : Dictionary = it.get_metadata(0);
-	if (data.is_dir): it.collapsed = !it.collapsed;
+	if (data.is_dir):
+		it.collapsed = !it.collapsed;
+		_sync_expanded_state_for_item(it);
 	else:
 		selected_file.emit(data.path);
 		scroll_to_item(it);
@@ -425,6 +528,20 @@ func _show_item_and_parents(item: TreeItem) -> void:
 		curr.visible = true;
 		if (curr != item && curr.get_metadata(0).is_dir): curr.collapsed = false;
 		curr = curr.get_parent();
+
+func get_import_target_dir() -> String:
+	var item : TreeItem = get_selected();
+	if (item == null):
+		item = _selected_item;
+	if (item == null):
+		return GlobalEditorFileSystem.root_path;
+
+	var data : Dictionary = item.get_metadata(0);
+	if (data == null):
+		return GlobalEditorFileSystem.root_path;
+	if (data.is_dir):
+		return data.path;
+	return String(data.path).get_base_dir();
 
 func _gui_input(event: InputEvent) -> void:
 	if (event is InputEventKey && event.is_pressed()):

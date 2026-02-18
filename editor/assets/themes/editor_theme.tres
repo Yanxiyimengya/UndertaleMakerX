@@ -2580,10 +2580,10 @@ corner_radius_bottom_left = 6
 corner_detail = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x2c2l"]
-content_margin_left = 9.0
-content_margin_top = 9.0
-content_margin_right = 9.0
-content_margin_bottom = 9.0
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
 bg_color = Color(0.161, 0.161, 0.161, 1)
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
@@ -3769,7 +3769,7 @@ SpinBox/styles/up_background_pressed = SubResource("StyleBoxFlat_bkv1g")
 SpinBox/styles/up_down_buttons_separator = SubResource("StyleBoxEmpty_nav3k")
 SplitContainer/constants/autohide = 1
 SplitContainer/constants/minimum_grab_thickness = 12
-SplitContainer/constants/separation = 4
+SplitContainer/constants/separation = 7
 TabBar/colors/drop_mark_color = Color(0.25275, 0.465, 0.75, 0.825)
 TabBar/colors/font_disabled_color = Color(1, 1, 1, 0.1925)
 TabBar/colors/font_hovered_color = Color(1, 1, 1, 0.85)

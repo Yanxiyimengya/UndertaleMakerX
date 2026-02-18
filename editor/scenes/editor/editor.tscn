@@ -6,50 +6,70 @@
 [ext_resource type="StyleBox" uid="uid://ckfacj4o8yem" path="res://assets/themes/style_box_background_light.tres" id="3_5cfe8"]
 [ext_resource type="Texture2D" uid="uid://cqhav0q8o5opx" path="res://assets/icons/editor/run/play_normal.svg" id="4_jwsr6"]
 [ext_resource type="StyleBox" uid="uid://svw7sc0ohwct" path="res://assets/themes/style_box_empty.tres" id="4_ro56m"]
+[ext_resource type="Script" uid="uid://dpdovlldo3wai" path="res://scripts/scenes/editor/menu_bar/menu_bar.gd" id="5_i3ywb"]
 [ext_resource type="Texture2D" uid="uid://b0ayr7v3qn1u6" path="res://assets/icons/editor/stop/stop.svg" id="5_jwsr6"]
 [ext_resource type="Script" uid="uid://k85n7y40rsgp" path="res://addons/dockable_container/dockable_container.gd" id="8_p4u40"]
 [ext_resource type="Script" uid="uid://bvjwj5iha8yll" path="res://addons/dockable_container/layout_panel.gd" id="9_syr16"]
 [ext_resource type="Script" uid="uid://big1el3sooljt" path="res://addons/dockable_container/layout.gd" id="10_qnluh"]
 [ext_resource type="Script" uid="uid://caiqqpasjgne6" path="res://addons/dockable_container/layout_split.gd" id="10_syr16"]
 [ext_resource type="PackedScene" uid="uid://dkd2w8x7rljjf" path="res://scenes/editor/file_system/file_system.tscn" id="12_qnluh"]
+[ext_resource type="PackedScene" uid="uid://dpu4ine6dlnpw" path="res://scenes/editor/scene_browser/scene_browser.tscn" id="14_pq70c"]
+[ext_resource type="PackedScene" uid="uid://38su4gt80tvp" path="res://scenes/editor/console/console.tscn" id="15_hg2ka"]
+[ext_resource type="PackedScene" uid="uid://dmaq7ch7gtrci" path="res://scenes/editor/script_editor/script_editor.tscn" id="15_oljq2"]
 
 [sub_resource type="Theme" id="Theme_qbwwq"]
 Button/styles/disabled = ExtResource("4_ro56m")
 Button/styles/normal = ExtResource("4_ro56m")
 
-[sub_resource type="Resource" id="Resource_qnluh"]
-resource_name = "Tabs"
-script = ExtResource("9_syr16")
-names = PackedStringArray("文件系统")
-
-[sub_resource type="Resource" id="Resource_i3ywb"]
-resource_name = "Tabs"
-script = ExtResource("9_syr16")
-names = PackedStringArray("工作区")
+[sub_resource type="Theme" id="Theme_hg2ka"]
+SplitContainer/constants/separation = 6
 
 [sub_resource type="Resource" id="Resource_hg2ka"]
 resource_name = "Tabs"
 script = ExtResource("9_syr16")
-names = PackedStringArray("属性检查器")
+names = PackedStringArray("FileSystem")
 
 [sub_resource type="Resource" id="Resource_oljq2"]
+resource_name = "Tabs"
+script = ExtResource("9_syr16")
+names = PackedStringArray("Scene", "Script")
+
+[sub_resource type="Resource" id="Resource_j530m"]
+resource_name = "Tabs"
+script = ExtResource("9_syr16")
+names = PackedStringArray("Console")
+
+[sub_resource type="Resource" id="Resource_ja8tm"]
 resource_name = "Split"
 script = ExtResource("10_syr16")
-percent = 0.7786558970601476
-first = SubResource("Resource_i3ywb")
-second = SubResource("Resource_hg2ka")
+direction = 1
+percent = 0.72265625
+first = SubResource("Resource_oljq2")
+second = SubResource("Resource_j530m")
 
-[sub_resource type="Resource" id="Resource_pq70c"]
+[sub_resource type="Resource" id="Resource_tg17e"]
+resource_name = "Tabs"
+script = ExtResource("9_syr16")
+names = PackedStringArray("Inspector")
+
+[sub_resource type="Resource" id="Resource_svbvx"]
 resource_name = "Split"
 script = ExtResource("10_syr16")
-percent = 0.25757575757575757
-first = SubResource("Resource_qnluh")
-second = SubResource("Resource_oljq2")
+percent = 0.73559670781893
+first = SubResource("Resource_ja8tm")
+second = SubResource("Resource_tg17e")
 
-[sub_resource type="Resource" id="Resource_syr16"]
+[sub_resource type="Resource" id="Resource_b8rj3"]
+resource_name = "Split"
+script = ExtResource("10_syr16")
+percent = 0.18864097363083163
+first = SubResource("Resource_hg2ka")
+second = SubResource("Resource_svbvx")
+
+[sub_resource type="Resource" id="Resource_r6jol"]
 resource_name = "Layout"
 script = ExtResource("10_qnluh")
-root = SubResource("Resource_pq70c")
+root = SubResource("Resource_b8rj3")
 
 [node name="Editor" type="Panel" unique_id=1755465718]
 anchors_preset = 15
@@ -59,8 +79,9 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_bc6i7")
 
-[node name="RuntimeManager" type="Node" parent="." unique_id=640793937]
+[node name="RuntimeManager" type="Node" parent="." unique_id=640793937 node_paths=PackedStringArray("console")]
 script = ExtResource("2_qbwwq")
+console = NodePath("../VBoxContainer/MarginContainer/MainDockable/Console")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=620970460]
 layout_mode = 1
@@ -74,8 +95,29 @@ theme_override_constants/separation = 0
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer" unique_id=725349113]
 layout_mode = 2
 
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/PanelContainer" unique_id=1416836]
+layout_mode = 2
+size_flags_horizontal = 6
+theme = SubResource("Theme_qbwwq")
+theme_override_constants/separation = 0
+
+[node name="PlayProjectButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer2" unique_id=802030093]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+icon = ExtResource("4_jwsr6")
+icon_alignment = 1
+
+[node name="StopProjectButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer2" unique_id=2073865058]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+icon = ExtResource("5_jwsr6")
+icon_alignment = 1
+
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer" unique_id=1989766537]
 layout_mode = 2
+size_flags_horizontal = 0
 
 [node name="MenuBar" type="MenuBar" parent="VBoxContainer/PanelContainer/HBoxContainer" unique_id=1206271234]
 layout_mode = 2
@@ -83,16 +125,13 @@ theme_override_styles/normal = ExtResource("2_m0is4")
 theme_override_styles/disabled = ExtResource("2_m0is4")
 theme_override_styles/pressed = ExtResource("3_5cfe8")
 theme_override_styles/hover = ExtResource("3_5cfe8")
+script = ExtResource("5_i3ywb")
 
 [node name="文件" type="PopupMenu" parent="VBoxContainer/PanelContainer/HBoxContainer/MenuBar" unique_id=1833901791]
 oversampling_override = 1.0
 size = Vector2i(102, 100)
 
-[node name="编辑" type="PopupMenu" parent="VBoxContainer/PanelContainer/HBoxContainer/MenuBar" unique_id=2108885462]
-oversampling_override = 1.0
-size = Vector2i(102, 100)
-
-[node name="运行" type="PopupMenu" parent="VBoxContainer/PanelContainer/HBoxContainer/MenuBar" unique_id=775147643]
+[node name="项目" type="PopupMenu" parent="VBoxContainer/PanelContainer/HBoxContainer/MenuBar" unique_id=775147643]
 oversampling_override = 1.0
 size = Vector2i(102, 100)
 
@@ -104,30 +143,6 @@ size = Vector2i(102, 100)
 oversampling_override = 1.0
 size = Vector2i(102, 100)
 
-[node name="调试" type="PopupMenu" parent="VBoxContainer/PanelContainer/HBoxContainer/MenuBar" unique_id=1289160296]
-oversampling_override = 1.0
-size = Vector2i(102, 100)
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/HBoxContainer" unique_id=1416836]
-layout_mode = 2
-size_flags_horizontal = 10
-theme = SubResource("Theme_qbwwq")
-theme_override_constants/separation = 0
-
-[node name="PlayProjectButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer/HBoxContainer" unique_id=802030093]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(20, 20)
-layout_mode = 2
-icon = ExtResource("4_jwsr6")
-icon_alignment = 1
-
-[node name="StopProjectButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer/HBoxContainer" unique_id=2073865058]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(20, 20)
-layout_mode = 2
-icon = ExtResource("5_jwsr6")
-icon_alignment = 1
-
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1566964121]
 layout_mode = 2
 size_flags_vertical = 3
@@ -135,21 +150,30 @@ theme_override_constants/margin_left = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="DockableContainer" type="Container" parent="VBoxContainer/MarginContainer" unique_id=465466728]
+[node name="MainDockable" type="Container" parent="VBoxContainer/MarginContainer" unique_id=465466728]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
+theme = SubResource("Theme_hg2ka")
 script = ExtResource("8_p4u40")
 tab_alignment = 0
-layout = SubResource("Resource_syr16")
+layout = SubResource("Resource_r6jol")
 metadata/_custom_type_script = "uid://k85n7y40rsgp"
 
-[node name="文件系统" parent="VBoxContainer/MarginContainer/DockableContainer" unique_id=1636596075 instance=ExtResource("12_qnluh")]
+[node name="FileSystem" parent="VBoxContainer/MarginContainer/MainDockable" unique_id=1636596075 instance=ExtResource("12_qnluh")]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
-[node name="工作区" type="PanelContainer" parent="VBoxContainer/MarginContainer/DockableContainer" unique_id=1650806194]
+[node name="Scene" parent="VBoxContainer/MarginContainer/MainDockable" unique_id=374441599 instance=ExtResource("14_pq70c")]
 layout_mode = 2
 
-[node name="属性检查器" type="PanelContainer" parent="VBoxContainer/MarginContainer/DockableContainer" unique_id=1973541467]
+[node name="Script" parent="VBoxContainer/MarginContainer/MainDockable" unique_id=1423788704 instance=ExtResource("15_oljq2")]
+visible = false
+layout_mode = 2
+
+[node name="Inspector" type="PanelContainer" parent="VBoxContainer/MarginContainer/MainDockable" unique_id=1973541467]
+layout_mode = 2
+
+[node name="Console" parent="VBoxContainer/MarginContainer/MainDockable" unique_id=43842675 instance=ExtResource("15_hg2ka")]
 layout_mode = 2

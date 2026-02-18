@@ -12,8 +12,8 @@ public partial class BattleEnemyDialogueState : StateNode
 
 	private List<SpeechBubble> _speechBubbleList = new();
 	public override void _Process(double delta)
-	{
-		if (Input.IsActionJustPressed("confirm"))
+    {
+        if (Input.IsActionJustPressed("confirm"))
 		{
 			bool allFinished = true;
 			foreach (SpeechBubble bubble in _speechBubbleList)

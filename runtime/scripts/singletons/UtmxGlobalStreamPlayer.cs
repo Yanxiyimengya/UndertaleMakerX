@@ -38,7 +38,8 @@ public partial class UtmxGlobalStreamPlayer : Node
 	static UtmxGlobalStreamPlayer()
 	{
 		soundPlayer = new AudioStreamPlayer();
-		soundPlayer.Stream = new AudioStreamPolyphonic();
+		soundPlayer.Bus = "Sound";
+        soundPlayer.Stream = new AudioStreamPolyphonic();
 	}
 	public override void _EnterTree()
 	{
@@ -78,6 +79,7 @@ public partial class UtmxGlobalStreamPlayer : Node
 
 	public static long PlaySoundFromStream(AudioStream stream)
 	{
+		if (stream == null) return -1;
 		if (!soundPlayer.Playing) soundPlayer.Play();
 		if (soundPlayer.GetStreamPlayback() is AudioStreamPlaybackPolyphonic playback)
 		{
@@ -159,7 +161,8 @@ public partial class UtmxGlobalStreamPlayer : Node
 			Instance.AddChild(player);
 		}
 		player.Stream = stream;
-		player.Play(0);
+        player.Bus = "Bgm";
+        player.Play(0);
 		player.SetMeta("loop", loop);
 	}
 

@@ -168,6 +168,66 @@ getItem(slot: number) -> object | null
 
 ---
 
+### setWeapon
+
+```javascript
+setWeapon(weaponId: string) -> void
+```
+
+设置玩家使用的武器，使用注册id。
+
+* 武器ID必须已注册到物品数据库
+
+**Returns** `void`
+
+| Parameter | Type   | Description  |
+| --------- | ------ | ------------ |
+| weaponId  | string | 武器物品唯一 ID   |
+
+---
+
+### getWeapon
+
+```javascript
+getWeapon() -> UTMX.Weapon
+```
+
+获取玩家持有的武器对象。
+
+**Returns** `UTMX.Weapon`
+
+---
+
+### setArmor
+
+```javascript
+setArmor(id: string) -> void
+```
+
+设置玩家使用的装备，使用注册id。
+
+* 装备ID必须已注册到物品数据库
+
+**Returns** `void`
+
+| Parameter | Type   | Description  |
+| --------- | ------ | ------------ |
+| id        | string | 装备物品唯一 ID   |
+
+---
+
+### getArmor
+
+```javascript
+getArmor() -> UTMX.Armor
+```
+
+获取玩家持有的装备对象。
+
+**Returns** `UTMX.Armor`
+
+---
+
 ### getItemCount
 
 ```javascript

@@ -5,7 +5,7 @@ extends Node
 signal filesystem_changed(path: String);
 signal entry_removed(path: String);
 
-## 缓存结构: { "path": { "is_dir": bool, "verified": bool, "resource": Resource } }
+## 缓存结构: { "path": { "is_dir": bool, "verified": bool } }
 var _resource_cache: Dictionary = {};
 
 var root_path: String;
@@ -19,7 +19,7 @@ func _init() -> void:
 	if (!DirAccess.dir_exists_absolute(trash_path)):
 		DirAccess.make_dir_recursive_absolute(trash_path);
 
-# --- 外部变更监测 ---
+#region 外部变更监控
 
 func _notification(what: int) -> void:
 	if (what == NOTIFICATION_APPLICATION_FOCUS_IN):
@@ -30,17 +30,16 @@ func _check_external_changes_manual() -> void:
 	
 	var current_fp: int = _generate_fingerprint(root_path);
 	if (_last_disk_fingerprint != 0 && current_fp != _last_disk_fingerprint):
-		scan_project_incremental();
+		scan_project_incremental(); # 确保此处调用的名称正确
 	_last_disk_fingerprint = current_fp;
 
-## 快速指纹生成：仅扫描一层深度或关键目录即可，减少递归开销
+## 快速指纹生成
 func _generate_fingerprint(path: String) -> int:
 	var dir = DirAccess.open(path);
 	if (!dir): return 0;
-	# 简单指纹方案：路径 hash + 修改时间和
 	return path.hash() + FileAccess.get_modified_time(path);
 
-# --- 核心：增量扫描 (Mark-and-Sweep) ---
+# --- 增量扫描核心逻辑 ---
 
 ## 扫描项目：如果提供 target_path，则仅更新该目录及其子项
 func scan_project_incremental(target_path: String = "") -> void:
@@ -48,16 +47,12 @@ func scan_project_incremental(target_path: String = "") -> void:
 	var scan_root = target_path if !target_path.is_empty() else root_path;
 	
 	_is_logic_processing = true;
-	
-	# 1. Mark: 将目标路径下的缓存标记为未验证
 	for path in _resource_cache:
 		if (path.begins_with(scan_root)):
 			_resource_cache[path]["verified"] = false;
 	
-	# 2. Sweep (Phase 1): 物理扫描并标记/新增
 	_scan_recursive_internal(scan_root);
 	
-	# 3. Sweep (Phase 2): 清理标记失败的失效项
 	var dead_paths: Array = [];
 	for path in _resource_cache:
 		if (path.begins_with(scan_root) && !_resource_cache[path]["verified"]):
@@ -71,42 +66,34 @@ func scan_project_incremental(target_path: String = "") -> void:
 	filesystem_changed.emit(target_path); 
 	_is_logic_processing = false;
 
-# GlobalEditorFileSystem.gd 内部
-
 func _scan_recursive_internal(path: String) -> void:
 	var dir = DirAccess.open(path)
-	if dir == null:
-		return
+	if dir == null: return
+	
 	dir.list_dir_begin()
 	var file_name = dir.get_next()
 	var sub_dirs: Array[String] = []
+	
 	while file_name != "":
 		if file_name != "." and file_name != "..":
 			var full_path = path.path_join(file_name)
 			var is_dir = dir.current_is_dir()
+			
 			if _resource_cache.has(full_path):
 				_resource_cache[full_path]["verified"] = true
 				_resource_cache[full_path]["is_dir"] = is_dir
 			else:
 				_resource_cache[full_path] = {
 					"is_dir": is_dir,
-					"verified": true,
-					"resource": null
+					"verified": true
 				}
 			if is_dir:
 				sub_dirs.append(full_path)
 		file_name = dir.get_next()
 	dir.list_dir_end()
+	
 	for sub_path in sub_dirs:
 		_scan_recursive_internal(sub_path)
-
-func get_cached_resource(path: String) -> Resource:
-	if (!_resource_cache.has(path) || _resource_cache[path]["is_dir"]): return null;
-	var entry = _resource_cache[path];
-	if (entry["resource"] == null):
-		if (ResourceLoader.exists(path)):
-			entry["resource"] = ResourceLoader.load(path);
-	return entry["resource"];
 
 # --- 命令执行 (集成 UndoRedo) ---
 
@@ -256,4 +243,8 @@ func get_safe_move_path(dest: String, n: String) -> String:
 	return path;
 
 func entry_exists(path: String) -> bool:
-	return FileAccess.file_exists(path) || DirAccess.dir_exists_absolute(path);
+	return _resource_cache.has(path)
+
+func set_root_path(p: String) -> void:
+	root_path = p
+	GlobalEditorFileSystem.scan_project_incremental()

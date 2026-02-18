@@ -30,6 +30,7 @@ GlobalEditorUndoRedoManager="*uid://bg4m8y3wj5x7p"
 WindowManager="*uid://c8agvphypscbr"
 GlobalEditorFileSystem="*uid://6sk7jyht4ksq"
 GlobalEditorResourceLoader="*uid://dc0cpqhjo00e2"
+GlobalEditorRunnerManager="*uid://cdhqco8l15t1l"
 
 [display]
 
@@ -55,6 +56,10 @@ folder_colors={
 [gui]
 
 theme/custom="uid://b57pk8esqcvqr"
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://assets/translations/translation.zh.translation")
 
 [rendering]
 

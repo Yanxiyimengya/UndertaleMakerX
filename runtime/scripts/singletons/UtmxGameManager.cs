@@ -21,7 +21,7 @@ public partial class UtmxGameManager : Node
 		Instance = this;
 		Boot = new();
 		AddChild( Boot );
-	}
+    }
 
     public override void _Ready()
     {

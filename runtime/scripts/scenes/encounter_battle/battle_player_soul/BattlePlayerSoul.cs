@@ -212,8 +212,8 @@ public partial class BattlePlayerSoul : CharacterBody2D
 		Velocity = Vector2.Zero;
 		if (! IsInsideArena(Position))
 			Position = ArenaGroup.PushBackInside(Position, _checkPoints.ToArray(), 1.0F);
-        MoveAndSlide();
-    }
+		MoveAndSlide();
+	}
 
 	public void Hurt(double damage, double invtime = -1)
 	{

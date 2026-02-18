@@ -58,15 +58,6 @@ size_flags_horizontal = 0
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="CancelButton" type="Button" parent="ConfirmationWindowContent/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1641472250]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/normal = ExtResource("4_2qtoo")
-theme_override_styles/pressed = ExtResource("5_mgl06")
-theme_override_styles/hover = ExtResource("6_6qiss")
-text = "取消"
-
 [node name="ConfirmButton" type="Button" parent="ConfirmationWindowContent/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1536466789]
 unique_name_in_owner = true
 layout_mode = 2
@@ -77,6 +68,15 @@ theme_override_styles/pressed = ExtResource("8_t78jm")
 theme_override_styles/hover = ExtResource("9_56jib")
 text = "确定"
 
+[node name="CancelButton" type="Button" parent="ConfirmationWindowContent/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1641472250]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = ExtResource("4_2qtoo")
+theme_override_styles/pressed = ExtResource("5_mgl06")
+theme_override_styles/hover = ExtResource("6_6qiss")
+text = "取消"
+
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
-[connection signal="pressed" from="ConfirmationWindowContent/MarginContainer/VBoxContainer/HBoxContainer2/CancelButton" to="." method="_on_cancel_button_pressed"]
 [connection signal="pressed" from="ConfirmationWindowContent/MarginContainer/VBoxContainer/HBoxContainer2/ConfirmButton" to="." method="_on_confirm_button_pressed"]
+[connection signal="pressed" from="ConfirmationWindowContent/MarginContainer/VBoxContainer/HBoxContainer2/CancelButton" to="." method="_on_cancel_button_pressed"]

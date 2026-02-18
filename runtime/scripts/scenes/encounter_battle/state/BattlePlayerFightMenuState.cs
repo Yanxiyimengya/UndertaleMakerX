@@ -51,12 +51,17 @@ public partial class BattlePlayerFightMenuState : StateNode
 		{
 			_damage = (float)UtmxPlayerDataManager.Weapon.onAttack(hitValue, targetEnemy);
 			SpawnAttackAnimation(targetEnemy);
+			if (_damage <= 0)
+			{
+				_isTargetMiss = true;
+                _damage = 0;
+            }
 		}
 		if (_attackAnimation == null)
 		{
 			ShowDamageText(targetEnemy);
 		}
-		targetEnemy._HandleAttack(missed ? UtmxBattleManager.AttackStatus.Missed : UtmxBattleManager.AttackStatus.Hit);
+		targetEnemy._HandleAttack(_isTargetMiss ? UtmxBattleManager.AttackStatus.Missed : UtmxBattleManager.AttackStatus.Hit);
 	}
 
 	private void ShowDamageText(BaseEnemy targetEnemy)
@@ -64,7 +69,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 		_attackDamageText = (BattleDamageText)DamageTextPackedScene?.Instantiate();
 		UtmxBattleManager.GetBattleEnemyController().EnemiesNode.AddChild(_attackDamageText);
 		_attackDamageText.Start(targetEnemy.Position + targetEnemy.CenterPosition);
-		targetEnemy.hurt(_damage);
+		if (_damage > 0) targetEnemy.hurt(_damage);
 
 		_state = STATE_SHOW_DAMAGE;
 

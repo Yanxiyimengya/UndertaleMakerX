@@ -14,6 +14,8 @@ import { UtmxBattleProjectile } from "res://scripts/js/wrappers/types/utmx-battl
 import { UtmxGameSprite } from "res://scripts/js/wrappers/types/utmx-game-sprite.wrapper.js";
 import { UtmxDrawableObject } from "res://scripts/js/wrappers/types/utmx-drawable-object.wrapper.js";
 import { UtmxBaseItem } from "res://scripts/js/wrappers/types/utmx-item.wrapper.js";
+import { UtmxBaseWeapon } from "res://scripts/js/wrappers/types/utmx-weapon.wrapper.js";
+import { UtmxBaseArmor } from "res://scripts/js/wrappers/types/utmx-armor.wrapper.js";
 import { UtmxBaseEnemy } from "res://scripts/js/wrappers/types/utmx-enemy.wrapper.js";
 import { UtmxBaseEncounter } from "res://scripts/js/wrappers/types/utmx-encounter.wrapper.js";
 import { UtmxBattleTurn } from "res://scripts/js/wrappers/types/utmx-battle-turn.wrapper.js";
@@ -34,6 +36,8 @@ class UTMX {
 	static tween = UtmxTweenManager;
 
 	static Item = UtmxBaseItem;
+	static Weapon = UtmxBaseWeapon;
+	static Armor = UtmxBaseArmor;
 	static Enemy = UtmxBaseEnemy;
 	static Encounter = UtmxBaseEncounter;
 	static BattleTurn = UtmxBattleTurn;

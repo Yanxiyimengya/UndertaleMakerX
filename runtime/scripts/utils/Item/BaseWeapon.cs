@@ -14,9 +14,13 @@ public partial class BaseWeapon : BaseItem
         "built-in-resources/textures/attack_animation/spr_slice_o_4.png",
         "built-in-resources/textures/attack_animation/spr_slice_o_5.png",
         ];
-	public virtual double onAttack(float value, BaseEnemy targetEnemy)
-    {
+    [Export]
+    public double AttackAnimationSpeed = 1.0;
+    [Export]
+    public string AttackSound = "";
 
+    public virtual double onAttack(float value, BaseEnemy targetEnemy)
+    {
         double atk = UtmxPlayerDataManager.PlayerAttack + Attack;
         double def = targetEnemy.Defence;
         double damage = atk - def + (GD.Randf() * 2);

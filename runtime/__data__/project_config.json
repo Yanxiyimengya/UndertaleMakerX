@@ -4,7 +4,6 @@
 		"author" : "烟汐忆梦_YM",
 		"max_fps" : 60,
 		"vsync" : false,
-		"virtual_input" : false,
 		"main_scene" : "",
 		"main_script" : "main.js",
 	},
@@ -21,5 +20,9 @@
 		"display_text" : "UNDERTALE MAKER\nX",
 		"speed_scale" : 1.0,
 		"background_color" : "#101020",
+	},
+	"virtual_input" : {
+		"enabled" : false,
+		"dead_zone" : 0.1,
 	}
 }

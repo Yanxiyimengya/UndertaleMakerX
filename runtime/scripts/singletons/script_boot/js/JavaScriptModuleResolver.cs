@@ -13,23 +13,21 @@ public sealed class JavaScriptModuleResolver : IModuleLoader
     public ResolvedSpecifier Resolve(string referencingModuleLocation, ModuleRequest moduleRequest)
     {
         var specifier = moduleRequest.Specifier;
-
         if (IsBareModule(specifier))
         {
             return new ResolvedSpecifier(moduleRequest, specifier, null, SpecifierType.Bare);
         }
-
+        
         var resolvedPath = ResolvePathInternal(referencingModuleLocation, specifier);
 
         var uri = new Uri(resolvedPath, UriKind.RelativeOrAbsolute);
-        return new ResolvedSpecifier(moduleRequest, uri.ToString(), uri, SpecifierType.Bare);
+        return new ResolvedSpecifier(moduleRequest, uri.ToString(), uri, SpecifierType.RelativeOrAbsolute);
     }
 
     public Module LoadModule(Jint.Engine engine, ResolvedSpecifier resolved)
     {
         if (resolved.Uri == null)
         {
-            return null;
             throw new InvalidOperationException(
                 $"Bare module '{resolved.Key}' must be provided by host, resolved.Uri is null.");
         }

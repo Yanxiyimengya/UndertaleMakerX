@@ -3,14 +3,21 @@ using System;
 
 public partial class BattleAttackAnimationFrame : BattleAttackAnimation
 {
-	static AudioStream attackSound = UtmxGlobalStreamPlayer.GetStreamFormLibrary("LAZ");
+	static AudioStream attackSound = null;
+
+    public BattleAttackAnimationFrame()
+    {
+        Loop = false;
+        SpeedScale = (float)UtmxPlayerDataManager.Weapon.AttackAnimationSpeed * 2.0F;
+		Resource res = UtmxResourceLoader.Load(UtmxPlayerDataManager.Weapon.AttackSound);
+        if (res is AudioStream)
+            attackSound = res as AudioStream;
+    }
 
 	public override void _Ready()
 	{
-		Loop = false;
-		UtmxGlobalStreamPlayer.PlaySoundFromStream(attackSound);
+        UtmxGlobalStreamPlayer.PlaySoundFromStream(attackSound);
 		Play();
-		SpeedScale = 2.0F;
 		Connect(AnimatedSprite2D.SignalName.AnimationFinished,
 			Callable.From(() =>
 			{

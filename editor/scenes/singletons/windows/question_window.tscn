@@ -1,0 +1,93 @@
+[gd_scene format=3 uid="uid://biuvac2n848kk"]
+
+[ext_resource type="Script" uid="uid://cuf348684n61a" path="res://scripts/windows/QuestionWindow.gd" id="1_dngb0"]
+[ext_resource type="StyleBox" uid="uid://dy6xysdb2nfaf" path="res://assets/themes/style_box_background.tres" id="2_ckoge"]
+[ext_resource type="StyleBox" uid="uid://ly6v5w6s4o2y" path="res://assets/themes/buttons/button/button_normal.tres" id="3_aa2a5"]
+[ext_resource type="StyleBox" uid="uid://b71eph0xk3o6" path="res://assets/themes/buttons/button/button_pressed.tres" id="4_4epog"]
+[ext_resource type="StyleBox" uid="uid://bevcb7gt65cgf" path="res://assets/themes/buttons/button/button_hover.tres" id="5_emlgi"]
+[ext_resource type="StyleBox" uid="uid://cggclb0lav4x7" path="res://assets/themes/buttons/main_button/main_button_normal.tres" id="6_ttlc5"]
+[ext_resource type="StyleBox" uid="uid://c4jc6bmwoy68s" path="res://assets/themes/buttons/main_button/main_button_pressed.tres" id="7_oknah"]
+[ext_resource type="StyleBox" uid="uid://cfdcd087aiuc3" path="res://assets/themes/buttons/main_button/main_button_hoverl.tres" id="8_4jt6x"]
+
+[node name="QuestionWindow" type="Window" unique_id=69873713]
+oversampling_override = 1.0
+initial_position = 1
+size = Vector2i(380, 180)
+transient = true
+exclusive = true
+unresizable = true
+popup_window = true
+minimize_disabled = true
+maximize_disabled = true
+script = ExtResource("1_dngb0")
+
+[node name="QuestionWindowContent" type="PanelContainer" parent="." unique_id=1761377107]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -179.0
+offset_top = -55.5
+offset_right = 179.0
+offset_bottom = 55.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = ExtResource("2_ckoge")
+
+[node name="MarginContainer" type="MarginContainer" parent="QuestionWindowContent" unique_id=662441323]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="QuestionWindowContent/MarginContainer" unique_id=327062324]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 15
+
+[node name="MessageLabel" type="Label" parent="QuestionWindowContent/MarginContainer/VBoxContainer" unique_id=1455053944]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="QuestionWindowContent/MarginContainer/VBoxContainer" unique_id=717842333]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="YesButton" type="Button" parent="QuestionWindowContent/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1182222606]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95304054, 0.9530404, 0.95304054, 1)
+theme_override_styles/normal = ExtResource("6_ttlc5")
+theme_override_styles/pressed = ExtResource("7_oknah")
+theme_override_styles/hover = ExtResource("8_4jt6x")
+text = "是"
+
+[node name="NoButton" type="Button" parent="QuestionWindowContent/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1536466789]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95304054, 0.9530404, 0.95304054, 1)
+theme_override_styles/normal = ExtResource("3_aa2a5")
+theme_override_styles/pressed = ExtResource("4_4epog")
+theme_override_styles/hover = ExtResource("4_4epog")
+text = "否"
+
+[node name="CancelButton" type="Button" parent="QuestionWindowContent/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1641472250]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = ExtResource("3_aa2a5")
+theme_override_styles/pressed = ExtResource("4_4epog")
+theme_override_styles/hover = ExtResource("5_emlgi")
+text = "取消"
+
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]
+[connection signal="pressed" from="QuestionWindowContent/MarginContainer/VBoxContainer/HBoxContainer2/YesButton" to="." method="_on_yes_button_pressed"]
+[connection signal="pressed" from="QuestionWindowContent/MarginContainer/VBoxContainer/HBoxContainer2/NoButton" to="." method="_on_no_button_pressed"]
+[connection signal="pressed" from="QuestionWindowContent/MarginContainer/VBoxContainer/HBoxContainer2/CancelButton" to="." method="_on_cancel_button_pressed"]

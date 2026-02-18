@@ -41,7 +41,6 @@ func _exit_tree() -> void:
 	tab_selected.disconnect(_on_tab_selected)
 	tab_changed.disconnect(_on_tab_changed)
 
-
 func track_nodes(nodes: Array[Control], new_leaf: DockableLayoutPanel) -> void:
 	_leaf = null  # avoid using previous leaf in tab_changed signals
 	var min_size := mini(nodes.size(), get_child_count())
@@ -60,7 +59,7 @@ func track_nodes(nodes: Array[Control], new_leaf: DockableLayoutPanel) -> void:
 	for i in nodes.size():
 		var ref_control := get_child(i) as DockableReferenceControl
 		ref_control.reference_to = nodes[i]
-		set_tab_title(i, nodes[i].name)
+		set_tab_title(i, tr(nodes[i].name))
 	set_leaf(new_leaf)
 	_handle_tab_visibility()
 

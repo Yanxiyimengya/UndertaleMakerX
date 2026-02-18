@@ -1,0 +1,119 @@
+[gd_scene format=3 uid="uid://dmaq7ch7gtrci"]
+
+[ext_resource type="Script" uid="uid://wq5a5fxpnb36" path="res://scripts/scenes/editor/code_editor/script_editor.gd" id="1_3vppe"]
+[ext_resource type="StyleBox" uid="uid://dy6xysdb2nfaf" path="res://assets/themes/style_box_background.tres" id="2_bjdq2"]
+[ext_resource type="Script" uid="uid://csxnnobd5f556" path="res://scripts/utils/code_highlighter/JavaScriptSyntaxHighlighter.gd" id="2_ls7ng"]
+[ext_resource type="Script" uid="uid://dmwhke3agnplr" path="res://scripts/scenes/editor/code_editor/java_script_code_edit.gd" id="3_jcext"]
+
+[sub_resource type="CodeHighlighter" id="CodeHighlighter_cjb24"]
+number_color = Color(0.70980394, 0.80784315, 0.65882355, 1)
+symbol_color = Color(0.79607844, 0.79607844, 0.8, 1)
+function_color = Color(0.8627451, 0.8627451, 0.6666667, 1)
+member_variable_color = Color(0.60784316, 0.84313726, 1, 1)
+keyword_colors = {
+"async": Color(0.3372549, 0.6117647, 0.8392157, 1),
+"await": Color(0.80784315, 0.57254905, 0.6431373, 1),
+"break": Color(0.80784315, 0.57254905, 0.6431373, 1),
+"case": Color(0.80784315, 0.57254905, 0.6431373, 1),
+"catch": Color(0.3372549, 0.6117647, 0.8392157, 1),
+"class": Color(0.3372549, 0.6117647, 0.8392157, 1),
+"const": Color(0.3372549, 0.6117647, 0.8392157, 1),
+"constructor": Color(0.3372549, 0.6117647, 0.8392157, 1),
+"continue": Color(0.80784315, 0.57254905, 0.6431373, 1),
+"debugger": Color(0.3372549, 0.6117647, 0.8392157, 1),
+"default": Color(0.80784315, 0.57254905, 0.6431373, 1),
+"delete": Color(0.3372549, 0.6117647, 0.8392157, 1),
+"do": Color(0.80784315, 0.57254905, 0.6431373, 1),
+"else": Color(0.80784315, 0.57254905, 0.6431373, 1),
+"enum": Color(0.3372549, 0.6117647, 0.8392157, 1),
+"export": Color(0.80784315, 0.57254905, 0.6431373, 1),
+"extends": Color(0.3372549, 0.6117647, 0.8392157, 1),
+"finally": Color(0.3372549, 0.6117647, 0.8392157, 1),
+"for": Color(0.80784315, 0.57254905, 0.6431373, 1),
+"function": Color(0.3372549, 0.6117647, 0.8392157, 1),
+"if": Color(0.80784315, 0.57254905, 0.6431373, 1),
+"import": Color(0.80784315, 0.57254905, 0.6431373, 1),
+"in": Color(0.3372549, 0.6117647, 0.8392157, 1),
+"instanceof": Color(0.3372549, 0.6117647, 0.8392157, 1),
+"let": Color(0.3372549, 0.6117647, 0.8392157, 1),
+"new": Color(0.3372549, 0.6117647, 0.8392157, 1),
+"return": Color(0.80784315, 0.57254905, 0.6431373, 1),
+"super": Color(0.3372549, 0.6117647, 0.8392157, 1),
+"switch": Color(0.80784315, 0.57254905, 0.6431373, 1),
+"this": Color(0.3372549, 0.6117647, 0.8392157, 1),
+"throw": Color(0.3372549, 0.6117647, 0.8392157, 1),
+"try": Color(0.3372549, 0.6117647, 0.8392157, 1),
+"typeof": Color(0.3372549, 0.6117647, 0.8392157, 1),
+"var": Color(0.3372549, 0.6117647, 0.8392157, 1),
+"void": Color(0.3372549, 0.6117647, 0.8392157, 1),
+"while": Color(0.80784315, 0.57254905, 0.6431373, 1),
+"with": Color(0.3372549, 0.6117647, 0.8392157, 1),
+"yield": Color(0.3372549, 0.6117647, 0.8392157, 1)
+}
+color_regions = {
+"\" \"": Color(0.80784315, 0.5686275, 0.47058824, 1),
+"' '": Color(0.80784315, 0.5686275, 0.47058824, 1),
+"/* */": Color(0.41568628, 0.6, 0.33333334, 1),
+"//": Color(0.41568628, 0.6, 0.33333334, 1)
+}
+script = ExtResource("2_ls7ng")
+metadata/_custom_type_script = "uid://csxnnobd5f556"
+
+[node name="ScriptEditor" type="PanelContainer" unique_id=1423788704]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_3vppe")
+
+[node name="HBoxContainer" type="HSplitContainer" parent="." unique_id=1548998431]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1993441310]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/VBoxContainer" unique_id=1454844999]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="FileListTree" type="Tree" parent="HBoxContainer/VBoxContainer/ScrollContainer" unique_id=1397807928]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = ExtResource("2_bjdq2")
+
+[node name="JavaScriptCodeEdit" type="CodeEdit" parent="HBoxContainer" unique_id=1741748355 node_paths=PackedStringArray("code_complete_timer")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "if () 
+{}"
+context_menu_enabled = false
+emoji_menu_enabled = false
+minimap_draw = true
+minimap_width = 120
+caret_blink = true
+caret_blink_interval = 0.45
+syntax_highlighter = SubResource("CodeHighlighter_cjb24")
+highlight_all_occurrences = true
+highlight_current_line = true
+draw_tabs = true
+line_folding = true
+line_length_guidelines = Array[int]([89])
+gutters_draw_line_numbers = true
+gutters_draw_fold_gutter = true
+code_completion_enabled = true
+indent_use_spaces = true
+indent_automatic = true
+auto_brace_completion_enabled = true
+auto_brace_completion_highlight_matching = true
+script = ExtResource("3_jcext")
+code_complete_timer = NodePath("Timer")
+
+[node name="Timer" type="Timer" parent="HBoxContainer/JavaScriptCodeEdit" unique_id=1415116600]
+wait_time = 0.3

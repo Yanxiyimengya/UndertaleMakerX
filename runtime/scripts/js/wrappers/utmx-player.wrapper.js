@@ -20,6 +20,20 @@ class PlayerInventory
         }
         return item;
     }
+    
+    static setWeapon(weaponId) {
+        __player_data_manager.SetWeapon(weaponId);
+    }
+    static getWeapon() {
+        return __player_data_manager.Weapon;
+    }
+
+    static setArmor(armorId) {
+        __player_data_manager.SetArmor(armorId);
+    }
+    static getArmor() {
+        return __player_data_manager.Armor;
+    }
 
     static getItemCount() {
         return __player_data_manager.GetItemCount();

@@ -6,8 +6,12 @@ public partial class UtmxMainLoop : SceneTree
 	private Godot.Collections.Dictionary<string, string> _cmdArgs = new Godot.Collections.Dictionary<string, string>();
 
 	public UtmxMainLoop()
-	{
-		UtmxLogger.Log($"UndertaleMakerX {EngineProperties.ENGINE_VERSION} - Yanxiyimeng");
+    {
+        _cmdArgs = ParseCmdlineArgs();
+		if (_cmdArgs.TryGetValue("pack", out string value))
+            ProjectSettings.LoadResourcePack(value, true, 0); // 命令行指定资源包
+
+        UtmxLogger.Log($"UndertaleMakerX {EngineProperties.ENGINE_VERSION} - Yanxiyimeng");
 		// 加载资源包
 		var datapackLoader = DatapackLoader.GetDatapackLoader(OS.GetName());
 		datapackLoader.LoadPack();
@@ -17,7 +21,6 @@ public partial class UtmxMainLoop : SceneTree
 		// 加载资源包配置项
 		UtmxRuntimeProjectConfig.Loadencounter($"res://{EngineProperties.DATAPACK_RESOURCE_PATH}/project_config.json");
 
-		_cmdArgs = ParseCmdlineArgs();
 		InitializeWindow();
 
 		Engine.MaxFps = UtmxRuntimeProjectConfig.TryGetDefault("application/max_fps",

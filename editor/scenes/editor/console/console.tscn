@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://38su4gt80tvp"]
+
+[ext_resource type="Script" uid="uid://inloyb3g8mjy" path="res://scripts/scenes/editor/console/console.gd" id="1_k0x8w"]
+[ext_resource type="StyleBox" uid="uid://svw7sc0ohwct" path="res://assets/themes/style_box_empty.tres" id="1_qa64f"]
+[ext_resource type="Texture2D" uid="uid://bp5l74chkxei3" path="res://assets/icons/clear/clear.svg" id="2_f4c5b"]
+[ext_resource type="Texture2D" uid="uid://ds6gwgerjvws6" path="res://assets/icons/copy/copy.svg" id="3_w5kke"]
+
+[node name="控制台" type="PanelContainer" unique_id=43842675]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = ExtResource("1_qa64f")
+script = ExtResource("1_k0x8w")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=856177539]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer" unique_id=1570082979]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 2
+bbcode_enabled = true
+scroll_following = true
+autowrap_mode = 0
+selection_enabled = true
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer" unique_id=2114638929]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer" unique_id=1145039465]
+layout_mode = 2
+
+[node name="ClearConsoleButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer" unique_id=1773631258]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "清空输出"
+mouse_default_cursor_shape = 2
+text = "清理"
+icon = ExtResource("2_f4c5b")
+flat = true
+
+[node name="CopyConsoleButton" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer" unique_id=135827949]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "清空输出"
+mouse_default_cursor_shape = 2
+text = "复制所有"
+icon = ExtResource("3_w5kke")
+flat = true

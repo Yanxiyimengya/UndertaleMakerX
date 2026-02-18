@@ -61,8 +61,7 @@ folder_colors={
 "res://assets/": "orange",
 "res://scenes/": "yellow",
 "res://scripts/": "green",
-"res://shaders/": "blue",
-"res://tests/": "purple"
+"res://shaders/": "blue"
 }
 
 [importer_defaults]
