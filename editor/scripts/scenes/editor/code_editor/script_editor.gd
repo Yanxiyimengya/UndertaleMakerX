@@ -85,6 +85,8 @@ func close_script(path: String) -> void:
 
 
 func _unhandled_key_input(event: InputEvent) -> void:
+	if not visible:
+		return
 	if event is InputEventKey and event.is_pressed() and not event.is_echo():
 		if event.is_command_or_control_pressed() and event.keycode == KEY_S:
 			save_all_open_scripts()

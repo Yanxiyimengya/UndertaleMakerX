@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://cjasxmg5xho1a"]
+
+[ext_resource type="StyleBox" uid="uid://svw7sc0ohwct" path="res://assets/themes/style_box_empty.tres" id="1_oevbk"]
+[ext_resource type="Script" uid="uid://c5s1athvdcbjf" path="res://scripts/scenes/editor/inspector/inspector.gd" id="2_1qmct"]
+[ext_resource type="Script" uid="uid://ha6esimw1n3b" path="res://scripts/scenes/editor/inspector/inspector_property_tree.gd" id="3_property_tree"]
+
+[node name="Inspector" type="PanelContainer" unique_id=636719836]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = ExtResource("1_oevbk")
+script = ExtResource("2_1qmct")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=69392268]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="FileNameLabel" type="Label" parent="VBoxContainer" unique_id=118420754]
+unique_name_in_owner = true
+layout_mode = 2
+text = "No resource loaded"
+clip_text = true
+
+[node name="FilterLineEdit" type="LineEdit" parent="VBoxContainer" unique_id=667882187]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Filter properties..."
+
+[node name="PropertyTree" type="Tree" parent="VBoxContainer" unique_id=1925497367]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+columns = 2
+script = ExtResource("3_property_tree")

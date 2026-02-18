@@ -60,10 +60,20 @@ const TEXT_FILE_EXTENSIONS := {
 	"gitignore": true,
 }
 
+const INSPECTOR_FILE_EXTENSIONS := {
+	"ini": true,
+	"cfg": true,
+	"conf": true,
+	"properties": true,
+	"json": true,
+}
+
 @export_dir var root_path: String = EditorProjectManager.get_opened_project_path()
 @onready var main_dockable: DockableContainer = %MainDockable
 @onready var file_system_panel = $VBoxContainer/MarginContainer/MainDockable/FileSystem
+@onready var scene_browser_panel = $VBoxContainer/MarginContainer/MainDockable/Scene
 @onready var script_editor_panel = $VBoxContainer/MarginContainer/MainDockable/Script
+@onready var inspector_panel = $VBoxContainer/MarginContainer/MainDockable/Inspector
 @export var script_panel: Control
 
 
@@ -82,6 +92,19 @@ func _exit_tree() -> void:
 
 
 func _on_file_system_selected_file(path: String) -> void:
+	var extension := path.get_extension().to_lower()
+	if extension == "tscn":
+		if scene_browser_panel and scene_browser_panel.has_method("load_scene"):
+			scene_browser_panel.call("load_scene", path)
+			main_dockable.set_control_as_current_tab(scene_browser_panel)
+		return
+	if INSPECTOR_FILE_EXTENSIONS.has(extension):
+		if inspector_panel and inspector_panel.has_method("open_resource"):
+			var opened: bool = inspector_panel.call("open_resource", path)
+			if opened:
+				main_dockable.set_control_as_current_tab(inspector_panel)
+				return
+
 	if not _is_text_file(path):
 		return
 	if script_editor_panel and script_editor_panel.has_method("open_script"):

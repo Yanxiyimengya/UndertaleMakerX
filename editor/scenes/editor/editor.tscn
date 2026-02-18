@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://dpu4ine6dlnpw" path="res://scenes/editor/scene_browser/scene_browser.tscn" id="14_pq70c"]
 [ext_resource type="PackedScene" uid="uid://38su4gt80tvp" path="res://scenes/editor/console/console.tscn" id="15_hg2ka"]
 [ext_resource type="PackedScene" uid="uid://dmaq7ch7gtrci" path="res://scenes/editor/script_editor/script_editor.tscn" id="15_oljq2"]
+[ext_resource type="PackedScene" uid="uid://cjasxmg5xho1a" path="res://scenes/editor/inspector/inspector.tscn" id="16_j530m"]
 
 [sub_resource type="Theme" id="Theme_qbwwq"]
 Button/styles/disabled = ExtResource("4_ro56m")
@@ -172,7 +173,7 @@ layout_mode = 2
 visible = false
 layout_mode = 2
 
-[node name="Inspector" type="PanelContainer" parent="VBoxContainer/MarginContainer/MainDockable" unique_id=1973541467]
+[node name="Inspector" parent="VBoxContainer/MarginContainer/MainDockable" unique_id=636719836 instance=ExtResource("16_j530m")]
 layout_mode = 2
 
 [node name="Console" parent="VBoxContainer/MarginContainer/MainDockable" unique_id=43842675 instance=ExtResource("15_hg2ka")]

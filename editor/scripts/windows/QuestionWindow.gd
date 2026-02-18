@@ -51,5 +51,5 @@ func _on_no_button_pressed() -> void:
 	self.close();
 
 func _on_cancel_button_pressed() -> void:
-	close_requested.emit(2);
+	choiced.emit(2);
 	self.close();

@@ -70,6 +70,7 @@ func _setup_menu(menu: PopupMenu, is_multi: bool) -> void:
 		submenu_new.name = "SubmenuNew";
 		submenu_new.add_item("新建文件夹", MenuID.CREATE_FOLDER);
 		submenu_new.add_item("新建脚本", MenuID.CREATE_SCRIPT);
+		submenu_new.add_item("新建场景", MenuID.CREATE_TSCN);
 		submenu_new.id_pressed.connect(_on_menu_id_pressed);
 		menu.add_child(submenu_new);
 		menu.add_submenu_node_item("新建...", submenu_new, MenuID.NEW_SUBMENU);
@@ -314,7 +315,7 @@ func _execute_command(id: int, prefer_context_target: bool = false) -> void:
 	if (target_item == null): return;
 
 	match (id):
-		MenuID.CREATE_FOLDER, MenuID.CREATE_SCRIPT:
+		MenuID.CREATE_FOLDER, MenuID.CREATE_SCRIPT, MenuID.CREATE_TSCN:
 			var config : Dictionary = FILE_TEMPLATES[id];
 			var data : Dictionary = target_item.get_metadata(0);
 			target_item.collapsed = false;

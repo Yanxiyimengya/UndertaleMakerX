@@ -204,8 +204,12 @@ func _build_undoable_merge_recursive(src: String, dst: String, ur: UndoRedo) -> 
 # --- 公共业务方法 ---
 
 func execute_create_action(is_dir: bool, final_path: String) -> void:
-	if (is_dir): DirAccess.make_dir_absolute(final_path);
-	else: FileAccess.open(final_path, FileAccess.WRITE);
+	if (is_dir):
+		DirAccess.make_dir_absolute(final_path);
+	else:
+		var file := FileAccess.open(final_path, FileAccess.WRITE);
+		if (file != null && final_path.get_extension().to_lower() == "tscn"):
+			file.store_string("[gd_scene format=3]\n\n[node name=\"Node\" type=\"Node\"]\n");
 	scan_project_incremental(final_path.get_base_dir());
 
 func execute_delete_batch(paths: Array[String]) -> void:

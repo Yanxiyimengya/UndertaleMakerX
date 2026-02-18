@@ -9,7 +9,10 @@ public partial class UtmxMainLoop : SceneTree
     {
         _cmdArgs = ParseCmdlineArgs();
 		if (_cmdArgs.TryGetValue("pack", out string value))
-            ProjectSettings.LoadResourcePack(value, true, 0); // 命令行指定资源包
+		{
+			ProjectSettings.LoadResourcePack(value, true, 0); // 命令行指定资源包
+			GD.Print("成功加载PCK");
+		}
 
         UtmxLogger.Log($"UndertaleMakerX {EngineProperties.ENGINE_VERSION} - Yanxiyimeng");
 		// 加载资源包
@@ -21,7 +24,7 @@ public partial class UtmxMainLoop : SceneTree
 		// 加载资源包配置项
 		UtmxRuntimeProjectConfig.Loadencounter($"res://{EngineProperties.DATAPACK_RESOURCE_PATH}/project_config.json");
 
-		InitializeWindow();
+        InitializeWindow();
 
 		Engine.MaxFps = UtmxRuntimeProjectConfig.TryGetDefault("application/max_fps",
 			ProjectSettings.GetSetting("application/run/max_fps")).AsInt32();
