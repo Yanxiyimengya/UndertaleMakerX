@@ -66,7 +66,7 @@ theme_override_colors/font_color = Color(0.95304054, 0.9530404, 0.95304054, 1)
 theme_override_styles/normal = ExtResource("7_jx3on")
 theme_override_styles/pressed = ExtResource("8_t78jm")
 theme_override_styles/hover = ExtResource("9_56jib")
-text = "确定"
+text = "Confirm"
 
 [node name="CancelButton" type="Button" parent="ConfirmationWindowContent/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1641472250]
 unique_name_in_owner = true
@@ -75,7 +75,7 @@ size_flags_horizontal = 3
 theme_override_styles/normal = ExtResource("4_2qtoo")
 theme_override_styles/pressed = ExtResource("5_mgl06")
 theme_override_styles/hover = ExtResource("6_6qiss")
-text = "取消"
+text = "Cancel"
 
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
 [connection signal="pressed" from="ConfirmationWindowContent/MarginContainer/VBoxContainer/HBoxContainer2/ConfirmButton" to="." method="_on_confirm_button_pressed"]

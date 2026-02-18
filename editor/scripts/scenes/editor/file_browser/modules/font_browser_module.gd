@@ -33,11 +33,18 @@ func _ready() -> void:
 	_update_preview_text()
 
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED:
+		if not is_node_ready():
+			return
+		_setup_case_option_button()
+
+
 func open_file(path: String) -> bool:
 	var loaded: Resource = GlobalEditorResourceLoader.load_resource(path)
 	var font: Font = loaded as Font
 	if font == null:
-		preview_label.text = "Failed to load font"
+		preview_label.text = tr("Failed to load font")
 		info_label.text = path.get_file()
 		return false
 
@@ -49,10 +56,12 @@ func open_file(path: String) -> bool:
 
 
 func _setup_case_option_button() -> void:
+	if case_option_button == null or not is_instance_valid(case_option_button):
+		return
 	case_option_button.clear()
-	case_option_button.add_item("Original")
-	case_option_button.add_item("UPPER")
-	case_option_button.add_item("lower")
+	case_option_button.add_item(tr("Original"))
+	case_option_button.add_item(tr("UPPER"))
+	case_option_button.add_item(tr("Lower"))
 	case_option_button.select(_case_mode)
 
 

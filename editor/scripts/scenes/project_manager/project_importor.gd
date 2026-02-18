@@ -3,7 +3,7 @@ extends Node
 @onready var project_manager: PanelContainer = $"..";
 
 func _on_import_button_pressed() -> void:
-	DisplayServer.file_dialog_show("选择文件夹",
+	DisplayServer.file_dialog_show(tr("Select Folder"),
 		EditorProjectManager.get_default_project_path(),
 		"",
 		false,

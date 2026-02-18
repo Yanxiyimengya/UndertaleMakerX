@@ -60,8 +60,9 @@ func sort_project_item_list() -> void:
 		project_item_list.move_child(items[i], i)
 
 func delete_project_item(item : ProjectListItem) -> void: 
-	WindowManager.open_confirmation_window("移除项目",
-		"确定移除该项目吗？\n该操作不会删除任何物理文件。", func(confirm : bool): 
+	var message := tr("Are you sure you want to remove this project?") + "\n" + tr("This action will not delete any physical files.")
+	WindowManager.open_confirmation_window(tr("Remove Project"),
+		message, func(confirm : bool): 
 		if (confirm): 
 			EditorProjectManager.remove_project(item.target_project.project_path)
 			item.queue_free()

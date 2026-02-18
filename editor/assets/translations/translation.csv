@@ -2,5 +2,103 @@ keys,zh
 FileSystem,文件系统
 FileBrowser,文件浏览器
 Script,脚本
+Shader Preview,着色器预览
 Inspector,检查器
 Console,控制台
+File,文件
+Project,项目
+Editor,编辑器
+Tools,工具
+Clear output,清空输出
+Clear,清理
+Copy all output,复制全部输出
+Copy All,复制全部
+No file selected,未选择文件
+Failed to load font,字体加载失败
+Original,原始
+UPPER,大写
+Lower,小写
+Nearest,临近
+Linear,线性
+Select a font file,请选择字体文件
+Select an image file,请选择图片文件
+Failed to load image,图片加载失败
+"%s (%d x %d)","%s（%d x %d）"
+Shader path is empty,Shader 路径为空
+Shader file not found: %s,未找到 Shader 文件：%s
+Unsupported shader file: %s,不支持的 Shader 文件：%s
+Shader load failed: %s,Shader 加载失败：%s
+Shader: %s,Shader：%s
+Drop shader file path here,将 Shader 文件路径拖拽到这里
+No preview is available for %s,%s 暂无可用预览
+No preview available,暂无可用预览
+Create Text File,创建文本文档
+Create Shader,创建 Shader
+Create Folder,创建文件夹
+Create Script,创建脚本
+Create Scene,创建场景
+Create...,新建...
+Rename (F2),重命名 (F2)
+Copy (Ctrl+C),复制 (Ctrl+C)
+Cut (Ctrl+X),剪切 (Ctrl+X)
+Paste (Ctrl+V),粘贴 (Ctrl+V)
+Delete (Delete),删除 (Delete)
+Show in File Manager,在资源管理器中显示
+Open Externally,用外部程序打开
+Delete Files,删除文件
+Delete %d selected item(s)?,确定删除 %d 项吗？
+Overwrite Confirmation,覆盖确认
+The pasted file already exists. Overwrite?,粘贴的文件已存在，是否覆盖？
+Cut and Paste,剪切粘贴
+Target item already exists. Overwrite?,目标已存在同名项目，是否覆盖？
+Move %d item(s),移动 %d 项
+Target directory has conflicts. Overwrite?,目标目录存在冲突，是否覆盖？
+Drag and Drop Move,拖拽移动
+Script %s has unsaved changes. Save before closing?,脚本 %s 有未保存修改，关闭前是否保存？
+Script %s was deleted from disk. Save before closing to restore it?,脚本 %s 已从磁盘删除，关闭前是否保存以恢复？
+Close Script,关闭脚本
+No resource loaded,未加载资源
+Remove Project,移除项目
+Are you sure you want to remove this project?,确定移除该项目吗？
+This action will not delete any physical files.,该操作不会删除任何物理文件。
+Select Folder,选择文件夹
+Project name cannot be empty,项目名称不能为空
+Folder name contains invalid characters,文件夹名称包含非法字符
+Folder already exists,文件夹已存在
+Project path cannot be empty,项目路径不能为空
+Project path does not exist or is inaccessible,项目路径不存在或无法访问
+Please select a valid project template,请选择一个有效的项目模板
+Just now,刚刚
+%d minutes ago,%d 分钟前
+%d hours ago,%d 小时前
+%d days ago,%d 天前
+%d months ago,%d 个月前
+%d years %d months ago,%d 年 %d 个月前
+%d years ago,%d 年前
+Empty Template,空模板
+Project template without sample code,不包含任何示例代码的项目模板
+New Project,新建项目
+Create Project,创建项目
+Import Project,导入项目
+Project name,项目名称
+Recent,最近打开
+Actions,操作
+Project Name,项目名称
+1 day ago,1 天前
+Open,打开
+Remove from List,从列表中移除
+Rename Project,重命名项目
+Confirm,确定
+Cancel,取消
+Yes,是
+No,否
+Create,创建
+Location,位置
+Template,模板
+Filter files,筛选文件
+Filter properties...,筛选属性...
+Text:,文本：
+Font preview,字体预览
+Preview,预览
+Filter,过滤
+Shader,Shader

@@ -46,7 +46,14 @@ var _current_path: String = ""
 
 
 func _ready() -> void:
-	file_name_label.text = "No file selected"
+	_update_file_name_label()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED:
+		if not is_node_ready():
+			return
+		_update_file_name_label()
 
 
 func can_open_file(path: String) -> bool:
@@ -80,7 +87,7 @@ func open_file(path: String) -> bool:
 		_open_with_module(MODULE_UNSUPPORTED, normalized_path)
 
 	_current_path = normalized_path
-	file_name_label.text = normalized_path.get_file()
+	_update_file_name_label()
 	return true
 
 
@@ -138,3 +145,12 @@ func _resolve_module_key(extension: String) -> String:
 
 func _normalize_path(path: String) -> String:
 	return String(path).replace("\\", "/").simplify_path()
+
+
+func _update_file_name_label() -> void:
+	if file_name_label == null or not is_instance_valid(file_name_label):
+		return
+	if _current_path.is_empty():
+		file_name_label.text = tr("No file selected")
+		return
+	file_name_label.text = _current_path.get_file()

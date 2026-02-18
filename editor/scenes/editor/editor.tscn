@@ -128,19 +128,19 @@ theme_override_styles/pressed = ExtResource("3_5cfe8")
 theme_override_styles/hover = ExtResource("3_5cfe8")
 script = ExtResource("5_i3ywb")
 
-[node name="文件" type="PopupMenu" parent="VBoxContainer/PanelContainer/HBoxContainer/MenuBar" unique_id=1833901791]
+[node name="FileMenu" type="PopupMenu" parent="VBoxContainer/PanelContainer/HBoxContainer/MenuBar" unique_id=1833901791]
 oversampling_override = 1.0
 size = Vector2i(102, 100)
 
-[node name="项目" type="PopupMenu" parent="VBoxContainer/PanelContainer/HBoxContainer/MenuBar" unique_id=775147643]
+[node name="ProjectMenu" type="PopupMenu" parent="VBoxContainer/PanelContainer/HBoxContainer/MenuBar" unique_id=775147643]
 oversampling_override = 1.0
 size = Vector2i(102, 100)
 
-[node name="编辑器" type="PopupMenu" parent="VBoxContainer/PanelContainer/HBoxContainer/MenuBar" unique_id=847452769]
+[node name="EditorMenu" type="PopupMenu" parent="VBoxContainer/PanelContainer/HBoxContainer/MenuBar" unique_id=847452769]
 oversampling_override = 1.0
 size = Vector2i(102, 100)
 
-[node name="工具" type="PopupMenu" parent="VBoxContainer/PanelContainer/HBoxContainer/MenuBar" unique_id=1863949157]
+[node name="ToolsMenu" type="PopupMenu" parent="VBoxContainer/PanelContainer/HBoxContainer/MenuBar" unique_id=1863949157]
 oversampling_override = 1.0
 size = Vector2i(102, 100)
 

@@ -80,6 +80,11 @@ func _ready() -> void:
 	
 	refresh_tree();
 
+func _notification(what: int) -> void:
+	if (what == NOTIFICATION_TRANSLATION_CHANGED):
+		_setup_menu(context_menu, false);
+		_setup_menu(popup_multi_select_menu, true);
+
 func _exit_tree() -> void:
 	GlobalEditorFileSystem.root_path = "";
 
@@ -90,27 +95,28 @@ func _setup_menu(menu: PopupMenu, is_multi: bool) -> void:
 	if (!is_multi):
 		var submenu_new : PopupMenu = PopupMenu.new();
 		submenu_new.name = "SubmenuNew";
-		submenu_new.add_item("Create Text File", MenuID.CREATE_TEXT);
-		submenu_new.add_item("Create Shader", MenuID.CREATE_SHADER);
-		submenu_new.add_item("Create Folder", MenuID.CREATE_FOLDER);
-		submenu_new.add_item("Create Script", MenuID.CREATE_SCRIPT);
-		submenu_new.add_item("Create Scene", MenuID.CREATE_TSCN);
+		submenu_new.add_item(tr("Create Folder"), MenuID.CREATE_FOLDER);
+		submenu_new.add_separator("");
+		submenu_new.add_item(tr("Create Text File"), MenuID.CREATE_TEXT);
+		submenu_new.add_item(tr("Create Shader"), MenuID.CREATE_SHADER);
+		submenu_new.add_item(tr("Create Script"), MenuID.CREATE_SCRIPT);
+		submenu_new.add_item(tr("Create Scene"), MenuID.CREATE_TSCN);
 		submenu_new.id_pressed.connect(_on_menu_id_pressed);
 		menu.add_child(submenu_new);
-		menu.add_submenu_node_item("新建...", submenu_new, MenuID.NEW_SUBMENU);
-		menu.add_item("重命名 (F2)", MenuID.RENAME);
+		menu.add_submenu_node_item(tr("Create..."), submenu_new, MenuID.NEW_SUBMENU);
+		menu.add_item(tr("Rename (F2)"), MenuID.RENAME);
 		menu.add_separator();
 	
-	menu.add_item("复制 (Ctrl+C)", MenuID.COPY);
-	menu.add_item("剪切 (Ctrl+X)", MenuID.CUT);
-	menu.add_item("粘贴 (Ctrl+V)", MenuID.PASTE);
+	menu.add_item(tr("Copy (Ctrl+C)"), MenuID.COPY);
+	menu.add_item(tr("Cut (Ctrl+X)"), MenuID.CUT);
+	menu.add_item(tr("Paste (Ctrl+V)"), MenuID.PASTE);
 	menu.add_separator();
-	menu.add_item("删除 (Delete)", MenuID.DELETE);
+	menu.add_item(tr("Delete (Delete)"), MenuID.DELETE);
 	
 	if (!is_multi):
 		menu.add_separator();
-		menu.add_item("在资源管理器中显示", MenuID.OPEN_IN_EXPLORER);
-		menu.add_item("用外部程序打开", MenuID.OPEN_EXTERNAL);
+		menu.add_item(tr("Show in File Manager"), MenuID.OPEN_IN_EXPLORER);
+		menu.add_item(tr("Open Externally"), MenuID.OPEN_EXTERNAL);
 
 #region --- 状态维护与扫描 ---
 
@@ -373,7 +379,7 @@ func _execute_command(id: int, prefer_context_target: bool = false) -> void:
 				if (p != GlobalEditorFileSystem.root_path): paths_to_delete.append(p);
 			if (paths_to_delete.is_empty()): return;
 			
-			WindowManager.open_confirmation_window("移除文件", "确定删除 %d 项吗？" % paths_to_delete.size(), 
+			WindowManager.open_confirmation_window(tr("Delete Files"), tr("Delete %d selected item(s)?") % paths_to_delete.size(), 
 				func(confirmed): if (confirmed): GlobalEditorFileSystem.execute_delete_batch(paths_to_delete)
 			);
 
@@ -402,13 +408,13 @@ func _execute_command(id: int, prefer_context_target: bool = false) -> void:
 				
 				if (actual_move_paths.is_empty()): return;
 				if (conflicts.size() > 0):
-					WindowManager.open_confirmation_window("覆盖确认", "粘贴的文件已存在，是否覆盖？", func(confirmed):
+					WindowManager.open_confirmation_window(tr("Overwrite Confirmation"), tr("The pasted file already exists. Overwrite?"), func(confirmed):
 						if (confirmed):
-							GlobalEditorFileSystem.execute_move_batch_undoable(actual_move_paths, dest_dir, "剪切粘贴");
+							GlobalEditorFileSystem.execute_move_batch_undoable(actual_move_paths, dest_dir, tr("Cut and Paste"));
 							_clipboard_paths.clear();
 					);
 				else:
-					GlobalEditorFileSystem.execute_move_batch_undoable(actual_move_paths, dest_dir, "剪切粘贴");
+					GlobalEditorFileSystem.execute_move_batch_undoable(actual_move_paths, dest_dir, tr("Cut and Paste"));
 					_clipboard_paths.clear();
 			else:
 				GlobalEditorFileSystem.execute_paste_batch_copy(_clipboard_paths, dest_dir);
@@ -457,7 +463,7 @@ func _on_item_edited() -> void:
 		return; 
 
 	if (GlobalEditorFileSystem.entry_exists(new_p)):
-		WindowManager.open_confirmation_window("覆盖确认", "目标已存在同名项目，是否覆盖？", func(confirmed):
+		WindowManager.open_confirmation_window(tr("Overwrite Confirmation"), tr("Target item already exists. Overwrite?"), func(confirmed):
 			if (confirmed): GlobalEditorFileSystem.execute_rename_undoable(old_p, new_p);
 			else: item.set_text(0, old_p.get_file());
 		);
@@ -472,7 +478,7 @@ func _get_drag_data(_pos: Vector2) -> Variant:
 		it = get_next_selected(it); 
 	if (paths.is_empty()): return null;
 	var preview : Label = Label.new(); 
-	preview.text = "移动 %d 项" % paths.size(); 
+	preview.text = tr("Move %d item(s)") % paths.size(); 
 	set_drag_preview(preview);
 	return {"paths": paths};
 
@@ -515,11 +521,11 @@ func _drop_data(_pos: Vector2, data: Variant) -> void:
 	
 	if (move_paths.is_empty()): return;
 	if (conflicts.size() > 0):
-		WindowManager.open_confirmation_window("覆盖确认", "目标目录存在冲突，是否覆盖？", func(confirmed):
-			if (confirmed): GlobalEditorFileSystem.execute_move_batch_undoable(move_paths, dest_dir, "拖拽移动");
+		WindowManager.open_confirmation_window(tr("Overwrite Confirmation"), tr("Target directory has conflicts. Overwrite?"), func(confirmed):
+			if (confirmed): GlobalEditorFileSystem.execute_move_batch_undoable(move_paths, dest_dir, tr("Drag and Drop Move"));
 		);
 	else:
-		GlobalEditorFileSystem.execute_move_batch_undoable(move_paths, dest_dir, "拖拽移动");
+		GlobalEditorFileSystem.execute_move_batch_undoable(move_paths, dest_dir, tr("Drag and Drop Move"));
 
 #endregion
 

@@ -14,13 +14,13 @@ var target_template : UtmxProjectTemplate;
 	set(value) : 
 		template_name = value;
 		if (!is_node_ready()) : await ready;
-		name_label.text = value;
+		name_label.text = tr(value);
 
 @export_multiline() var template_description : String = "" : 
 	set(value) : 
 		template_description = value;
 		if (!is_node_ready()) : await ready;
-		description_label.text = value;
+		description_label.text = tr(value);
 
 @export var template_image : Texture2D = null: 
 	set(value) : 

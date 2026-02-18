@@ -35,8 +35,8 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_a5pk7")
 script = ExtResource("1_a5pk7")
-template_name = "空模板"
-template_description = "不包含任何示例代码"
+template_name = "Empty Template"
+template_description = "Project template without sample code"
 template_image = ExtResource("2_ho5an")
 
 [node name="Button" type="Button" parent="." unique_id=448354235]
@@ -83,7 +83,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_x86yc")
 theme_override_font_sizes/font_size = 32
-text = "空模板"
+text = "Empty Template"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -97,7 +97,7 @@ theme_override_font_sizes/normal_font_size = 22
 theme_override_styles/normal = SubResource("StyleBoxEmpty_00p5v")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_5onk8")
 bbcode_enabled = true
-text = "不包含任何示例代码"
+text = "Project template without sample code"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0

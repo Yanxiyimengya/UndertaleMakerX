@@ -84,23 +84,23 @@ var last_open_time : int = 0 :
 		const MONTH = 2592000;
 		const YEAR = 31536000;
 		if (time_change < MINUTE):
-			time_str = "刚刚";
+			time_str = tr("Just now");
 		elif (time_change < HOUR):
-			time_str = "%d 分钟前" % [time_change / MINUTE];
+			time_str = tr("%d minutes ago") % [time_change / MINUTE];
 		elif (time_change < DAY):
-			time_str = "%d 小时前" % [time_change / HOUR];
+			time_str = tr("%d hours ago") % [time_change / HOUR];
 		elif (time_change < MONTH):
-			time_str = "%d 天前" % [time_change / DAY];
+			time_str = tr("%d days ago") % [time_change / DAY];
 		elif (time_change < YEAR):
-			time_str = "%d 个月前" % [time_change / MONTH];
+			time_str = tr("%d months ago") % [time_change / MONTH];
 		else:
 			var years : float = time_change / YEAR;
 			var remaining_seconds : float = int(time_change) % YEAR;
 			var months : float = remaining_seconds / MONTH;
 			if (months > 0):
-				time_str = "%d 年 %d 个月前" % [years, months];
+				time_str = tr("%d years %d months ago") % [years, months];
 			else:
-				time_str = "%d 年前" % [years];
+				time_str = tr("%d years ago") % [years];
 		last_open_time_label.text = time_str;
 
 var target_project : UtmxProject = null;

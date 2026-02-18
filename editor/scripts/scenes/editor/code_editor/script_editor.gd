@@ -207,11 +207,11 @@ func _request_close_script(path: String) -> void:
 	var cached: Dictionary = _file_cache[path]
 	if bool(cached.get("dirty", false)):
 		var file_name := path.get_file()
-		var close_message := "Script %s has unsaved changes. Save before closing?" % file_name
+		var close_message := tr("Script %s has unsaved changes. Save before closing?") % file_name
 		if bool(cached.get("missing_on_disk", false)):
-			close_message = "Script %s was deleted from disk. Save before closing to restore it?" % file_name
+			close_message = tr("Script %s was deleted from disk. Save before closing to restore it?") % file_name
 		WindowManager.open_question_window(
-			"Close Script",
+			tr("Close Script"),
 			close_message,
 			func(result: int) -> void:
 				match result:

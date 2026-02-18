@@ -547,7 +547,7 @@ func _filter_item_recursive(item: TreeItem, query: String) -> bool:
 
 func _update_status_ui() -> void:
 	if _current_path.is_empty():
-		file_name_label.text = "No resource loaded"
+		file_name_label.text = tr("No resource loaded")
 		return
 
 	var file_name := _current_path.get_file()

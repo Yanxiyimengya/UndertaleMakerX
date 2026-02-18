@@ -18,11 +18,12 @@ var _current_filter_mode: int = FILTER_MODE_NEAREST
 var _shader_source_path: String = ""
 var _shader_material: ShaderMaterial = null
 var _is_syncing_shader_line_edit_text: bool = false
-var _image_info_text: String = "Select an image file"
+var _image_info_text: String = ""
 var _shader_status_text: String = ""
 
 
 func _ready() -> void:
+	_image_info_text = tr("Select an image file")
 	_setup_filter_options()
 	_setup_shader_path_line_edit()
 	if not filter_mode_option_button.item_selected.is_connected(_on_filter_mode_selected):
@@ -34,11 +35,20 @@ func _ready() -> void:
 	_refresh_info_label()
 
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED:
+		if not is_node_ready():
+			return
+		_setup_filter_options()
+		_refresh_info_label()
+
+
 func open_file(path: String) -> bool:
+	_clear_shader_preview()
 	var image: Image = Image.load_from_file(path)
 	if image == null or image.is_empty():
 		preview_texture_rect.texture = null
-		_image_info_text = "Failed to load image"
+		_image_info_text = tr("Failed to load image")
 		_shader_status_text = ""
 		_refresh_info_label()
 		return false
@@ -47,19 +57,24 @@ func open_file(path: String) -> bool:
 	preview_texture_rect.texture = texture
 	_apply_filter_mode()
 	_apply_shader_material()
-	_image_info_text = "%s (%d x %d)" % [path.get_file(), image.get_width(), image.get_height()]
+	_image_info_text = tr("%s (%d x %d)") % [path.get_file(), image.get_width(), image.get_height()]
 	_refresh_info_label()
 	return true
 
 
 func _setup_filter_options() -> void:
+	if filter_mode_option_button == null or not is_instance_valid(filter_mode_option_button):
+		return
+	var selected_index: int = _current_filter_mode
 	filter_mode_option_button.clear()
-	filter_mode_option_button.add_item("Nearest")
-	filter_mode_option_button.add_item("Linear")
-	filter_mode_option_button.select(_current_filter_mode)
+	filter_mode_option_button.add_item(tr("Nearest"))
+	filter_mode_option_button.add_item(tr("Linear"))
+	filter_mode_option_button.select(clampi(selected_index, 0, filter_mode_option_button.item_count - 1))
 
 
 func _setup_shader_path_line_edit() -> void:
+	if shader_path_line_edit == null or not is_instance_valid(shader_path_line_edit):
+		return
 	if not shader_path_line_edit.text_changed.is_connected(_on_shader_path_line_edit_text_changed):
 		shader_path_line_edit.text_changed.connect(_on_shader_path_line_edit_text_changed)
 	if shader_path_line_edit.has_signal("shader_file_dropped"):
@@ -73,6 +88,8 @@ func _on_filter_mode_selected(index: int) -> void:
 	_apply_filter_mode()
 
 func _on_clear_button_pressed() -> void: 
+	if shader_path_line_edit == null or not is_instance_valid(shader_path_line_edit):
+		return
 	shader_path_line_edit.clear();
 
 func _apply_filter_mode() -> void:
@@ -98,13 +115,13 @@ func _on_shader_path_line_edit_text_changed(new_text: String) -> void:
 func _apply_shader_from_path(path: String) -> void:
 	var normalized_path: String = _normalize_path(path)
 	if normalized_path.is_empty():
-		_set_shader_status_text("Shader path is empty")
+		_set_shader_status_text(tr("Shader path is empty"))
 		return
 	if not FileAccess.file_exists(normalized_path):
-		_set_shader_status_text("Shader file not found: %s" % path.get_file())
+		_set_shader_status_text(tr("Shader file not found: %s") % path.get_file())
 		return
 	if not _is_supported_shader_file(normalized_path):
-		_set_shader_status_text("Unsupported shader file: %s" % normalized_path.get_extension())
+		_set_shader_status_text(tr("Unsupported shader file: %s") % normalized_path.get_extension())
 		return
 
 	_shader_source_path = normalized_path
@@ -130,14 +147,14 @@ func _apply_shader_material() -> void:
 	if shader == null:
 		preview_texture_rect.material = null
 		_shader_material = null
-		_set_shader_status_text("Shader load failed: %s" % _shader_source_path.get_file())
+		_set_shader_status_text(tr("Shader load failed: %s") % _shader_source_path.get_file())
 		return
 
 	if _shader_material == null:
 		_shader_material = ShaderMaterial.new()
 	_shader_material.shader = shader
 	preview_texture_rect.material = _shader_material
-	_set_shader_status_text("Shader: %s" % _shader_source_path.get_file())
+	_set_shader_status_text(tr("Shader: %s") % _shader_source_path.get_file())
 
 
 func _load_shader_resource(path: String) -> Shader:
@@ -178,6 +195,8 @@ func _set_shader_status_text(text: String) -> void:
 
 
 func _refresh_info_label() -> void:
+	if info_label == null or not is_instance_valid(info_label):
+		return
 	if _shader_status_text.is_empty():
 		info_label.text = _image_info_text
 	else:

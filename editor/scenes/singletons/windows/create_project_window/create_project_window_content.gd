@@ -10,6 +10,7 @@ signal create_project_requset(project_name: String, project_dir: String, templat
 @onready var project_name_edit: LineEdit = %ProjectNameEdit;
 @onready var dir_texture_button: TextureButton = %DirTextureButton;
 @onready var cancel_button: Button = %CancelButton;
+@onready var tab_container: TabContainer = %TabContainer;
 
 @onready var project_info_label: RichTextLabel = %ProjectInfoLabel;
 
@@ -24,6 +25,7 @@ var can_create: bool = true:
 		create_button.disabled = !value;
 
 func _ready() -> void:
+	_apply_translations();
 	project_dir_edit.text_changed.connect(_on_inputs_changed);
 	project_name_edit.text_changed.connect(_on_inputs_changed);
 	create_button.pressed.connect(_on_create_button_pressed);
@@ -31,10 +33,14 @@ func _ready() -> void:
 	dir_texture_button.pressed.connect(_on_dir_select_pressed);
 	add_template_item(UtmxProjectTemplate.new(), true);
 
+func _notification(what: int) -> void:
+	if (what == NOTIFICATION_TRANSLATION_CHANGED):
+		_apply_translations();
+
 func _open() -> void:
 	used_tamplate = default_tamplate_item.target_template;
 	default_tamplate_item.pressed_button(true);
-	project_name_edit.text = "新建项目";
+	project_name_edit.text = tr("New Project");
 	project_dir_edit.text = project_path;
 	self.min_size = create_project_window_content.get_combined_minimum_size();
 	check_is_can_create();
@@ -54,7 +60,7 @@ func add_template_item(template: UtmxProjectTemplate, default : bool = false) ->
 # 文件夹选择对话框
 func _on_dir_select_pressed() -> void:
 	DisplayServer.file_dialog_show(
-		"选择文件夹", 
+		tr("Select Folder"), 
 		project_dir_edit.text, 
 		"", 
 		false, 
@@ -82,22 +88,26 @@ func check_is_can_create() -> void:
 	var project_dir: String = project_dir_edit.text;
 	project_info_label.text = "";
 	if (project_name.is_empty()):
-		project_info_label.text = "[color=red]%s[/color]" % ["项目名称不能为空"];
+		project_info_label.text = "[color=red]%s[/color]" % [tr("Project name cannot be empty")];
 		return;
 	if (project_name.contains("/") or project_name.contains("\\") or project_name.contains(":")):
-		project_info_label.text = "[color=red]%s[/color]" % ["文件夹名称包含非法字符"];
+		project_info_label.text = "[color=red]%s[/color]" % [tr("Folder name contains invalid characters")];
 		return;
 	if (project_dir.is_empty()):
-		project_info_label.text = "[color=red]%s[/color]" % ["项目路径不能为空"];
+		project_info_label.text = "[color=red]%s[/color]" % [tr("Project path cannot be empty")];
 		return;
 	if (!DirAccess.dir_exists_absolute(project_dir)):
-		project_info_label.text = "[color=red]%s[/color]" % ["项目路径不存在或无法访问"];
+		project_info_label.text = "[color=red]%s[/color]" % [tr("Project path does not exist or is inaccessible")];
 		return;
 	var target_path = project_dir.path_join(project_name);
 	if (DirAccess.dir_exists_absolute(target_path)):
-		project_info_label.text = "[color=red]%s[/color]" % ["文件夹已存在"];
+		project_info_label.text = "[color=red]%s[/color]" % [tr("Folder already exists")];
 		return;
 	if (used_tamplate == null):
-		project_info_label.text = "[color=red]请选择一个有效的项目模板[/color]";
+		project_info_label.text = "[color=red]%s[/color]" % [tr("Please select a valid project template")];
 		return;
 	can_create = true;
+
+func _apply_translations() -> void:
+	if (tab_container != null && tab_container.get_tab_count() > 0):
+		tab_container.set_tab_title(0, tr("Template"));

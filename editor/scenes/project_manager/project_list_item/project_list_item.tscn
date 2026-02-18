@@ -167,7 +167,7 @@ size_flags_horizontal = 0
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(0.627451, 0.627451, 0.627451, 1)
 theme_override_font_sizes/font_size = 20
-text = "1 天前"
+text = "1 day ago"
 horizontal_alignment = 2
 vertical_alignment = 1
 
@@ -186,13 +186,13 @@ mouse_default_cursor_shape = 2
 icon = ExtResource("11_4himm")
 alignment = 0
 item_count = 4
-popup/item_0/text = "打开"
+popup/item_0/text = "Open"
 popup/item_0/id = 1
 popup/item_1/id = 0
 popup/item_1/separator = true
-popup/item_2/text = "从列表中移除"
+popup/item_2/text = "Remove from List"
 popup/item_2/id = 2
-popup/item_3/text = "重命名项目"
+popup/item_3/text = "Rename Project"
 popup/item_3/id = 3
 
 [connection signal="pressed" from="MarginContainer/HBoxContainer/StarButton" to="." method="_on_star_button_pressed"]

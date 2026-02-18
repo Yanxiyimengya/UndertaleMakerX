@@ -52,19 +52,20 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="TabContainer" type="TabContainer" parent="MarginContainer/VBoxContainer/PanelContainer" unique_id=1445391680]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/panel = ExtResource("3_idmcu")
 theme_override_styles/tabbar_background = ExtResource("3_idmcu")
 current_tab = 0
 
-[node name="模板" type="PanelContainer" parent="MarginContainer/VBoxContainer/PanelContainer/TabContainer" unique_id=1918952100]
+[node name="Template" type="PanelContainer" parent="MarginContainer/VBoxContainer/PanelContainer/TabContainer" unique_id=1918952100]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/PanelContainer/TabContainer/模板" unique_id=1903989110]
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/PanelContainer/TabContainer/Template" unique_id=1903989110]
 layout_mode = 2
 
-[node name="TemplateGridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer/PanelContainer/TabContainer/模板/ScrollContainer" unique_id=157959981]
+[node name="TemplateGridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer/PanelContainer/TabContainer/Template/ScrollContainer" unique_id=157959981]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -90,7 +91,7 @@ layout_mode = 2
 [node name="ProjectNameLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/ProjectNameBar/HBoxContainer2" unique_id=534090884]
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
-text = "项目名称"
+text = "Project Name"
 
 [node name="ProjectNameInfoLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer/ProjectNameBar/HBoxContainer2" unique_id=66439805]
 unique_name_in_owner = true
@@ -125,7 +126,7 @@ layout_mode = 2
 [node name="ProjectDirLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/ProjectdirBar/HBoxContainer2" unique_id=565593081]
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
-text = "位置"
+text = "Location"
 
 [node name="ProjectDirInfoLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer/ProjectdirBar/HBoxContainer2" unique_id=562275239]
 layout_mode = 2
@@ -167,7 +168,7 @@ size_flags_horizontal = 3
 theme_override_styles/normal = ExtResource("5_5gcf1")
 theme_override_styles/pressed = ExtResource("6_fpxqd")
 theme_override_styles/hover = ExtResource("6_66cuk")
-text = "取消"
+text = "Cancel"
 
 [node name="CreateButton" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=149254487]
 unique_name_in_owner = true
@@ -177,7 +178,7 @@ theme_override_colors/font_color = Color(0.95304054, 0.9530404, 0.95304054, 1)
 theme_override_styles/normal = ExtResource("5_hk2n1")
 theme_override_styles/pressed = ExtResource("6_hk2n1")
 theme_override_styles/hover = ExtResource("6_j8mii")
-text = "创建"
+text = "Create"
 
 [connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer/ProjectNameBar/HBoxContainer/ProjectNameEdit" to="." method="_on_project_name_edit_text_changed"]
 [connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer/ProjectdirBar/HBoxContainer/ProjectDirEdit" to="." method="_on_project_dir_edit_text_changed"]

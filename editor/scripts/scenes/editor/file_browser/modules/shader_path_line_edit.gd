@@ -13,7 +13,12 @@ func _ready() -> void:
 	clear_button_enabled = true
 	context_menu_enabled = false
 	editable = false
-	placeholder_text = "Drop shader file path here"
+	placeholder_text = tr("Drop shader file path here")
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED:
+		placeholder_text = tr("Drop shader file path here")
 
 
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:

@@ -2,6 +2,7 @@ extends Node
 # 单例名称: ProjectManager
 
 const PROJECT_CONFIG_FILE_NAME : String = "utmx.cfg";
+const RUNTIME_PROJECT_CONFIG_FILE_NAME : String = "project_config.json";
 const PROJECTS_LIST_FILE_NAME : String = "projects.cfg";
 const ENGINE_VERSION : String = "1.0.0-alpha";
 const DEFAULT_PROJECT_DIR_NAME : String = "UndertaleMakerProject";
@@ -126,8 +127,47 @@ func create_default_project(project_name : String, dir_path : String) -> UtmxPro
 	if (FileAccess.file_exists(icon_src)):
 		var dir = DirAccess.open(dir_path);
 		dir.copy(icon_src, dir_path.path_join(proj.icon));
+
+	_create_default_runtime_project_config(dir_path);
 	
 	return proj;
+
+func _create_default_runtime_project_config(project_dir_path: String) -> void:
+	var file_path: String = project_dir_path.path_join(RUNTIME_PROJECT_CONFIG_FILE_NAME);
+	var config: Dictionary = {
+		"application": {
+			"author": "",
+			"main_scene": "",
+			"main_script": "main.js",
+			"max_fps": 60.0,
+			"name": "UNDERTALE MAKER X",
+			"vsync": false
+		},
+		"boot_splash": {
+			"background_color": "#101020",
+			"display_text": "UNDERTALE MAKER\nX",
+			"enabled": false,
+			"speed_scale": 1.0
+		},
+		"virtual_input": {
+			"dead_zone": 0.1,
+			"enabled": false
+		},
+		"window": {
+			"boderless": false,
+			"clear_color": "#000000",
+			"fullscreen": false,
+			"height": 480.0,
+			"resizable": false,
+			"width": 640.0
+		}
+	};
+	var file: FileAccess = FileAccess.open(file_path, FileAccess.WRITE);
+	if (file == null):
+		push_warning("Failed to create default project config: %s" % file_path);
+		return;
+	file.store_string(JSON.stringify(config, "\t"));
+	file.close();
 
 ## 从 ZIP 加载项目
 func create_project_from_zip(project_name : String, zip_path : String, target_dir : String) -> UtmxProject:

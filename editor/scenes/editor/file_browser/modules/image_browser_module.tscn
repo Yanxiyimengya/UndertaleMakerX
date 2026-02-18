@@ -74,7 +74,7 @@ theme_override_constants/separation = 8
 
 [node name="ShaderPathLabel" type="Label" parent="VBoxContainer/PreviewOptionsContainer/ShaderPathRow" unique_id=69455725]
 layout_mode = 2
-text = "Shader"
+text = "Shader Preview"
 
 [node name="ShaderPathLineEdit" type="LineEdit" parent="VBoxContainer/PreviewOptionsContainer/ShaderPathRow" unique_id=1781806308]
 unique_name_in_owner = true

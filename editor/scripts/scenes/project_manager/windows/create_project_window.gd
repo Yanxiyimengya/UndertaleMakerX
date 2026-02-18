@@ -42,7 +42,7 @@ func add_template_item(template : UtmxProjectTemplate) -> void :
 	);
 
 func _on_dir_texture_button_pressed() -> void:
-	DisplayServer.file_dialog_show("选择文件夹", "" , \
+	DisplayServer.file_dialog_show(tr("Select Folder"), "" , \
 		"", false, DisplayServer.FILE_DIALOG_MODE_OPEN_DIR, [],
 		func(status: bool, selected_paths: PackedStringArray, _selected_filter_index: int) : 
 			if (!status) : return;
@@ -73,14 +73,14 @@ func check_is_can_create() -> void :
 	var project_dir : String = project_dir_edit.text;
 	project_name_info_label.text = "";
 	if (project_name.is_empty()):
-		project_name_info_label.text = "[color=red]%s[/color]" % ["项目名称不能为空"];
+		project_name_info_label.text = "[color=red]%s[/color]" % [tr("Project name cannot be empty")];
 		return;
 	if (project_name.contains("/") || project_name.contains("\\") || project_name.contains(":")):
-		project_name_info_label.text = "[color=red]%s[/color]" % ["文件夹名称包含非法字符"];
+		project_name_info_label.text = "[color=red]%s[/color]" % [tr("Folder name contains invalid characters")];
 		return;
 	var target_path = project_dir.path_join(project_name);
 	if (DirAccess.dir_exists_absolute(target_path)):
-		project_name_info_label.text = "[color=red]%s[/color]" % ["文件夹已存在"];
+		project_name_info_label.text = "[color=red]%s[/color]" % [tr("Folder already exists")];
 		return;
 	if (used_tamplate == null): return;
 	can_create = true;
