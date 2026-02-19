@@ -25,31 +25,40 @@ public partial class BattleController : Node
 	public override void _Ready()
 	{
 		UtmxBattleManager.InitializeBattle(this);
-		switch (UtmxBattleManager.GetEncounterInstance()?.EncounterBattleFirstState)
-		{
-			case UtmxBattleManager.BattleStatus.Player:
-			{
-				ChangeToPlayerTurnState();
-				break;
-			}
-			case UtmxBattleManager.BattleStatus.PlayerDialogue:
-			{
-				ChangeToPlayerDialogueState();
-				break;
-			}
-			case UtmxBattleManager.BattleStatus.EnemyDialogue:
-			{
-				ChangeToEnemyDialogueState();
-				break;
-			}
-			case UtmxBattleManager.BattleStatus.Enemy:
-			{
-				ChangeToEnemyTurnState();
-				break;
-			}
-		}
+		SwitchStatus((UtmxBattleManager.BattleStatus)UtmxBattleManager.GetEncounterInstance()?.EncounterBattleFirstState);
 	}
 
+	public void SwitchStatus(UtmxBattleManager.BattleStatus status)
+	{
+		switch (status)
+		{
+			case UtmxBattleManager.BattleStatus.Player:
+				{
+					ChangeToPlayerTurnState();
+					break;
+				}
+			case UtmxBattleManager.BattleStatus.PlayerDialogue:
+				{
+					ChangeToPlayerDialogueState();
+					break;
+				}
+			case UtmxBattleManager.BattleStatus.EnemyDialogue:
+				{
+					ChangeToEnemyDialogueState();
+					break;
+				}
+			case UtmxBattleManager.BattleStatus.Enemy:
+				{
+					ChangeToEnemyTurnState();
+					break;
+				}
+			case UtmxBattleManager.BattleStatus.End:
+				{
+					ChangeToEndState();
+					break;
+				}
+		}
+	}
 	public void ChangeToPlayerTurnState()
 	{
 		_battleStatus = UtmxBattleManager.BattleStatus.Player;
@@ -83,7 +92,6 @@ public partial class BattleController : Node
 	{
 		return _battleStatus;
 	}
-
 	public void SwitchToState(string targetState)
 	{
 		BattleStateMachine.SwitchToState(targetState);

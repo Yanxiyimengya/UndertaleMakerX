@@ -538,11 +538,11 @@ func _filter_item_recursive(item: TreeItem, query: String) -> bool:
 		var value_text := item.get_text(COLUMN_VALUE).to_lower()
 		self_match = key_text.contains(query) or value_text.contains(query)
 
-	var visible := item == root or self_match or has_visible_child
-	item.visible = visible
+	var _visible := item == root or self_match or has_visible_child
+	item.visible = _visible
 	if has_visible_child:
 		item.collapsed = false
-	return visible
+	return _visible
 
 
 func _update_status_ui() -> void:

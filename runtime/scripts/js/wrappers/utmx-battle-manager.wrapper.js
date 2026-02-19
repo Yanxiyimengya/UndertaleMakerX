@@ -217,4 +217,8 @@ export class UtmxBattleManager {
 	static isInBattle() {
 		return __battle_manager.IsInBattle();
 	}
+
+	static switchStatus(status) {
+		return __battle_manager.SwitchStatus(status);
+	}
 }

@@ -11,9 +11,7 @@ public partial class UtmxMainLoop : SceneTree
 		if (_cmdArgs.TryGetValue("pack", out string value))
 		{
 			ProjectSettings.LoadResourcePack(value, true, 0); // 命令行指定资源包
-			GD.Print("成功加载PCK");
 		}
-
         UtmxLogger.Log($"UndertaleMakerX {EngineProperties.ENGINE_VERSION} - Yanxiyimeng");
 		// 加载资源包
 		var datapackLoader = DatapackLoader.GetDatapackLoader(OS.GetName());

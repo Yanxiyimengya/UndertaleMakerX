@@ -115,10 +115,14 @@ public partial class UtmxBattleManager
 
     public static void SwitchBattleState(string stateId)
 	{
-		_battleController.SwitchToState(stateId);
-	}
+		_battleController?.SwitchToState(stateId);
+    }
+    public static void SwitchStatus(BattleStatus status)
+    {
+        _battleController?.SwitchStatus(status);
+    }
 
-	public static void ShowDialogueText(object texts)
+    public static void ShowDialogueText(object texts)
 	{
 		if (texts != null)
 		{

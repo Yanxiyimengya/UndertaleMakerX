@@ -66,7 +66,7 @@ func delete_project_item(item : ProjectListItem) -> void:
 		if (confirm): 
 			EditorProjectManager.remove_project(item.target_project.project_path)
 			item.queue_free()
-			EditorProjectManager.save_editor_all_project()
+			EditorProjectManager.save_editor_all_projects()
 	)
 
 func _on_recent_button_pressed() -> void:

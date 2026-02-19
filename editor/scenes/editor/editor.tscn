@@ -25,10 +25,22 @@ Button/styles/normal = ExtResource("4_ro56m")
 [sub_resource type="Theme" id="Theme_hg2ka"]
 SplitContainer/constants/separation = 6
 
+[sub_resource type="Resource" id="Resource_tg17e"]
+resource_name = "Tabs"
+script = ExtResource("9_syr16")
+names = PackedStringArray("Inspector")
+
 [sub_resource type="Resource" id="Resource_hg2ka"]
 resource_name = "Tabs"
 script = ExtResource("9_syr16")
 names = PackedStringArray("FileSystem")
+
+[sub_resource type="Resource" id="Resource_svbvx"]
+resource_name = "Split"
+script = ExtResource("10_syr16")
+direction = 1
+first = SubResource("Resource_tg17e")
+second = SubResource("Resource_hg2ka")
 
 [sub_resource type="Resource" id="Resource_oljq2"]
 resource_name = "Tabs"
@@ -48,24 +60,12 @@ percent = 0.72265625
 first = SubResource("Resource_oljq2")
 second = SubResource("Resource_j530m")
 
-[sub_resource type="Resource" id="Resource_tg17e"]
-resource_name = "Tabs"
-script = ExtResource("9_syr16")
-names = PackedStringArray("Inspector")
-
-[sub_resource type="Resource" id="Resource_svbvx"]
-resource_name = "Split"
-script = ExtResource("10_syr16")
-percent = 0.73559670781893
-first = SubResource("Resource_ja8tm")
-second = SubResource("Resource_tg17e")
-
 [sub_resource type="Resource" id="Resource_b8rj3"]
 resource_name = "Split"
 script = ExtResource("10_syr16")
 percent = 0.18864097363083163
-first = SubResource("Resource_hg2ka")
-second = SubResource("Resource_svbvx")
+first = SubResource("Resource_svbvx")
+second = SubResource("Resource_ja8tm")
 
 [sub_resource type="Resource" id="Resource_r6jol"]
 resource_name = "Layout"
@@ -127,10 +127,6 @@ theme_override_styles/disabled = ExtResource("2_m0is4")
 theme_override_styles/pressed = ExtResource("3_5cfe8")
 theme_override_styles/hover = ExtResource("3_5cfe8")
 script = ExtResource("5_i3ywb")
-
-[node name="FileMenu" type="PopupMenu" parent="VBoxContainer/PanelContainer/HBoxContainer/MenuBar" unique_id=1833901791]
-oversampling_override = 1.0
-size = Vector2i(102, 100)
 
 [node name="ProjectMenu" type="PopupMenu" parent="VBoxContainer/PanelContainer/HBoxContainer/MenuBar" unique_id=775147643]
 oversampling_override = 1.0

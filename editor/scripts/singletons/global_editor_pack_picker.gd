@@ -98,16 +98,16 @@ static func _recursive_pack(root_path: String, current_path: String, packer: PCK
 		return
 
 	dir.list_dir_begin()
-	var name := dir.get_next()
-	while !name.is_empty():
-		if name != "." and name != "..":
-			var full_path := _normalize_path(current_path.path_join(name))
+	var f_name := dir.get_next()
+	while !f_name.is_empty():
+		if f_name != "." and f_name != "..":
+			var full_path := _normalize_path(current_path.path_join(f_name))
 			if dir.current_is_dir():
-				if !(name in IGNORE_DIRS):
+				if !(f_name in IGNORE_DIRS):
 					_recursive_pack(root_path, full_path, packer, packed_targets)
 			else:
 				_process_file(root_path, full_path, packer, packed_targets)
-		name = dir.get_next()
+		f_name = dir.get_next()
 	dir.list_dir_end()
 
 

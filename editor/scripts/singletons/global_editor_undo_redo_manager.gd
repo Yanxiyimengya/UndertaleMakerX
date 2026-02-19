@@ -22,3 +22,6 @@ func create_action(action_name: String) -> void:
 
 func commit() -> void:
 	history.commit_action()
+
+func clear_history() -> void:
+	history = UndoRedo.new()

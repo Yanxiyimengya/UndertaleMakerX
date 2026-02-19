@@ -78,6 +78,7 @@ func _ready() -> void:
 	item_edited.connect(_on_item_edited);
 	item_collapsed.connect(_on_item_collapsed);
 	
+	_load_project_file_tree_state();
 	refresh_tree();
 
 func _notification(what: int) -> void:
@@ -86,7 +87,28 @@ func _notification(what: int) -> void:
 		_setup_menu(popup_multi_select_menu, true);
 
 func _exit_tree() -> void:
+	_save_project_file_tree_state();
+	if (GlobalEditorFileSystem.filesystem_changed.is_connected(refresh_tree)):
+		GlobalEditorFileSystem.filesystem_changed.disconnect(refresh_tree);
+	if (GlobalEditorFileSystem.entry_removed.is_connected(_on_entry_removed_remotely)):
+		GlobalEditorFileSystem.entry_removed.disconnect(_on_entry_removed_remotely);
 	GlobalEditorFileSystem.root_path = "";
+
+func _load_project_file_tree_state() -> void:
+	var project : UtmxProject = EditorProjectManager.opened_project;
+	if (!is_instance_valid(project)): return;
+	_expanded_paths = project.get_file_tree_expanded_dirs_as_absolute();
+
+func _save_project_file_tree_state() -> void:
+	var project : UtmxProject = EditorProjectManager.opened_project;
+	if (!is_instance_valid(project)): return;
+	project.set_file_tree_expanded_dirs_from_absolute(get_current_expanded_paths());
+	EditorProjectManager.save_project_config(project);
+
+func get_current_expanded_paths() -> Array[String]:
+	if (_last_search_text.is_empty()):
+		_snapshot_expanded_paths_from_tree();
+	return _expanded_paths.duplicate();
 
 func _setup_menu(menu: PopupMenu, is_multi: bool) -> void:
 	if (menu == null): return;

@@ -86,6 +86,22 @@ gameOver() -> void
 
 ---
 
+### switchStatus
+
+```javascript
+switchStatus(status: BattleStatus) -> void
+```
+
+处于战斗中时，切换当前战斗的战斗状态。
+
+| Property   | Type    | Default   | Description     |
+| ---------- | ------- | ----      | --------------- |
+| status  | BattleStatus       | - | 当前战斗的战斗状态  |
+
+**Returns** `void`
+
+---
+
 # Arena 子模块
 
 Arena 为 Battle 的内置子模块，用于创建和管理玩家在战斗中的 **竞技场**。

@@ -272,3 +272,9 @@ func entry_exists(path: String) -> bool:
 func set_root_path(p: String) -> void:
 	root_path = p
 	GlobalEditorFileSystem.scan_project_incremental()
+
+func clear_project_state() -> void:
+	_resource_cache.clear()
+	root_path = ""
+	_last_disk_fingerprint = 0
+	_is_logic_processing = false

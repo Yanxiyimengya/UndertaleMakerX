@@ -45,11 +45,9 @@ internal static class UtmxResourceLoader
 	{
 		string resNewPath = ResolvePath(resPath);
 		if (string.IsNullOrEmpty(resNewPath)) return null;
-
 		if (resourceCache.TryGetValue(resNewPath, out Resource res) && res != null)
 			return res;
-		Resource utmxRes = ResourceLoader.Load(resNewPath, "", ResourceLoader.CacheMode.Ignore);
-		utmxRes ??= LoadByExtensionFallback(resNewPath);
+		Resource utmxRes = LoadByExtensionFallback(resNewPath);
 		if (utmxRes != null) 
 			resourceCache.Add(resNewPath, utmxRes);
 		return utmxRes;
@@ -63,7 +61,6 @@ internal static class UtmxResourceLoader
 		string ext = Path.GetExtension(path);
 		if (string.IsNullOrEmpty(ext))
 			return null;
-
 		if (TextureExts.Contains(ext))
 			return LoadTexture(path);
 		if (AudioExts.Contains(ext))

@@ -21,7 +21,17 @@ func _ready() -> void:
 	play_project_button.pressed.connect(_on_play_project_button_pressed);
 	stop_project_button.pressed.connect(GlobalEditorRunnerManager.kill_runner);
 	GlobalEditorRunnerManager.output_content.connect(_on_runner_output);
+	GlobalEditorRunnerManager.stderr_content.connect(_on_runner_stderr);
 	GlobalEditorRunnerManager.program_endded.connect(_on_runner_ended);
+
+func _exit_tree() -> void:
+	if (GlobalEditorRunnerManager.output_content.is_connected(_on_runner_output)):
+		GlobalEditorRunnerManager.output_content.disconnect(_on_runner_output);
+	if (GlobalEditorRunnerManager.stderr_content.is_connected(_on_runner_stderr)):
+		GlobalEditorRunnerManager.stderr_content.disconnect(_on_runner_stderr);
+	if (GlobalEditorRunnerManager.program_endded.is_connected(_on_runner_ended)):
+		GlobalEditorRunnerManager.program_endded.disconnect(_on_runner_ended);
+	is_running = false;
 
 func _on_play_project_button_pressed() -> void : 
 	if (!is_running) :
@@ -37,6 +47,9 @@ func _on_play_project_button_pressed() -> void :
 
 func _on_runner_output(msg : String) : 
 	console.push_message(msg);
+
+func _on_runner_stderr(msg : String) :
+	console.push_message("[color=red]" + msg + "[/color]");
 
 func _on_runner_ended() : 
 	is_running = false;

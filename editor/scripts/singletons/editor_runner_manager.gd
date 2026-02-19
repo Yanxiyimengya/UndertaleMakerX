@@ -1,6 +1,7 @@
 extends Node
 
 signal output_content(content: String);
+signal stderr_content(content: String);
 signal program_endded();
 
 const RUNNER_PATH : String = "runner/";
@@ -8,6 +9,7 @@ const RUNNER_PATH : String = "runner/";
 var runner_path : String;
 var program_id : int = -1;
 var program_io : FileAccess;
+var program_stderr_io : FileAccess;
 
 # 线程相关
 var read_thread : Thread;
@@ -28,7 +30,8 @@ func execute_runner(_cmd : PackedStringArray) -> Dictionary:
 			OS.execute_with_pipe(runner_path.path_join(OS.get_name()), _cmd);
 	program_id = dict.get("pid", -1);
 	program_io = dict.get("stdio");
-	if (program_id != -1 && program_io != null):
+	program_stderr_io = dict.get("stderr");
+	if (program_id != -1 && (program_io != null || program_stderr_io != null)):
 		is_monitoring = true;
 		read_thread = Thread.new();
 		read_thread.start(_thread_read_loop);
@@ -47,6 +50,16 @@ func _thread_read_loop() -> void:
 						output_content.emit.call_deferred(text);
 				else:
 					break;
+		if (program_stderr_io != null && program_stderr_io.get_error() == OK):
+			while (program_stderr_io.get_position() < program_stderr_io.get_length()):
+				var available_stderr : int = program_stderr_io.get_length() - program_stderr_io.get_position();
+				if (available_stderr > 0):
+					var stderr_buffer : PackedByteArray = program_stderr_io.get_buffer(available_stderr);
+					var stderr_text : String = stderr_buffer.get_string_from_utf8();
+					if (stderr_text != ""):
+						stderr_content.emit.call_deferred(stderr_text);
+				else:
+					break;
 		if (!OS.is_process_running(program_id)):
 			is_monitoring = false;
 			break;
@@ -58,6 +71,7 @@ func _on_program_exited():
 	is_monitoring = false;
 	program_id = -1;
 	program_io = null;
+	program_stderr_io = null;
 	program_endded.emit();
 	if (read_thread != null):
 		if (read_thread.is_alive()):

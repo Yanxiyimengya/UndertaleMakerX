@@ -67,6 +67,8 @@ func save_project_config(project : UtmxProject) -> void:
 	config_file.set_value("application", "icon", project.icon);
 	config_file.set_value("application", "last_open_time", project.last_open_time);
 	config_file.set_value("application", "engine_version", project.engine_version);
+	config_file.set_value("editor", "file_tree_expanded_dirs", project.file_tree_expanded_dirs);
+	config_file.set_value("editor", "layout_state", project.get_editor_layout_state());
 	
 	config_file.save(cfg_full_path);
 
@@ -87,6 +89,13 @@ func load_project_config(dir_path : String) -> UtmxProject:
 	result.icon = config_file.get_value("application", "icon", "icon.svg");
 	result.last_open_time = config_file.get_value("application", "last_open_time", 0);
 	result.engine_version = config_file.get_value("application", "engine_version", "");
+	var expanded_dirs_var : Variant = config_file.get_value("editor", "file_tree_expanded_dirs", []);
+	if (expanded_dirs_var is Array):
+		for value in expanded_dirs_var:
+			result.file_tree_expanded_dirs.append(String(value));
+	var layout_state_var : Variant = config_file.get_value("editor", "layout_state", {});
+	if (layout_state_var is Dictionary):
+		result.set_editor_layout_state(layout_state_var);
 	
 	# 加载图标纹理
 	var icon_full_path = dir_path.path_join(result.icon.trim_prefix("/"));
@@ -213,6 +222,7 @@ func create_project_from_zip(project_name : String, zip_path : String, target_di
 # --- 场景切换 ---
 
 const EDITOR_SCENE : PackedScene = preload("uid://cp81di5w374d2");
+const PROJECT_MANAGER_SCENE : PackedScene = preload("uid://djn5y1cfoknas");
 
 func open_project(project: UtmxProject) -> void:
 	if (project == null): return;
@@ -220,3 +230,10 @@ func open_project(project: UtmxProject) -> void:
 	save_project_config(project);
 	opened_project = project;
 	get_tree().change_scene_to_packed(EDITOR_SCENE);
+
+func back_to_project_list() -> void:
+	get_tree().change_scene_to_packed(PROJECT_MANAGER_SCENE);
+	call_deferred("_clear_opened_project_reference");
+
+func _clear_opened_project_reference() -> void:
+	opened_project = null;

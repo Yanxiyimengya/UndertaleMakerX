@@ -126,14 +126,14 @@ func _update_progress_ui() -> void:
 	if progress_slider.max_value != duration:
 		progress_slider.max_value = duration
 
-	var position: float = audio_player.get_playback_position()
-	if position < 0.0:
-		position = 0.0
-	elif position > duration:
-		position = duration
+	var pos: float = audio_player.get_playback_position()
+	if pos < 0.0:
+		pos = 0.0
+	elif pos > duration:
+		pos = duration
 
-	_set_slider_value(position)
-	_update_time_label(position)
+	_set_slider_value(pos)
+	_update_time_label(pos)
 
 
 func _reset_progress_ui() -> void:
@@ -161,6 +161,7 @@ func _format_seconds(seconds_value: float) -> String:
 	if clamped_seconds < 0.0:
 		clamped_seconds = 0.0
 	var total_seconds: int = int(clamped_seconds)
+	@warning_ignore("integer_division")
 	var minutes: int = int(total_seconds / 60)
 	var seconds: int = total_seconds % 60
 	return "%02d:%02d" % [minutes, seconds]
