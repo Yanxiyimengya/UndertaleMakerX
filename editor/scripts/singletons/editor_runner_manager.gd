@@ -5,6 +5,7 @@ signal stderr_content(content: String);
 signal program_endded();
 
 const RUNNER_PATH : String = "runner/";
+const WINDOWS_EXECUTABLE_SUFFIX : String = ".exe";
 
 var runner_path : String;
 var program_id : int = -1;
@@ -23,11 +24,38 @@ func _ready() -> void:
 func _exit_tree() -> void:
 	kill_runner();
 
+func get_runner_executable_path() -> String : 
+	return get_runner_executable_path_for_platform(OS.get_name());
+
+func get_runner_executable_path_for_platform(platform_name : String) -> String:
+	var raw_platform : String = String(platform_name).strip_edges();
+	if (raw_platform.is_empty()):
+		raw_platform = String(OS.get_name());
+	var normalized_platform : String = raw_platform.to_lower();
+	var base_candidates : PackedStringArray = [
+		runner_path.path_join(raw_platform),
+		runner_path.path_join(normalized_platform),
+	];
+	match (normalized_platform):
+		"windows":
+			for base_path : String in base_candidates:
+				var windows_runner : String = base_path + WINDOWS_EXECUTABLE_SUFFIX;
+				if (FileAccess.file_exists(windows_runner)):
+					return windows_runner;
+				if (FileAccess.file_exists(base_path)):
+					return base_path;
+			return base_candidates[0] + WINDOWS_EXECUTABLE_SUFFIX;
+		_:
+			for base_path : String in base_candidates:
+				if (FileAccess.file_exists(base_path)):
+					return base_path;
+			return base_candidates[0];
+
 func execute_runner(_cmd : PackedStringArray) -> Dictionary:
 	if (program_id != -1):
 		kill_runner();
 	var dict : Dictionary = \
-			OS.execute_with_pipe(runner_path.path_join(OS.get_name()), _cmd);
+			OS.execute_with_pipe(get_runner_executable_path(), _cmd);
 	program_id = dict.get("pid", -1);
 	program_io = dict.get("stdio");
 	program_stderr_io = dict.get("stderr");

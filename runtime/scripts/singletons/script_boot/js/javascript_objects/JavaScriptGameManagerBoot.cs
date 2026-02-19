@@ -20,9 +20,14 @@ public partial class JavaScriptGameManagerBoot : Node
             UtmxGameManager.Instance.Connect(UtmxGameManager.SignalName.GameEnd, Callable.From(_OnGameEnd));
         UtmxGameManager.Instance.AddChild(new JavaScriptTweenManager());
     }
+
+    public override void _EnterTree()
+    {
+    }
+
     public void _OnGameStart()
     {
-         JavaScriptBridge.InvokeFunction(_mainScriptObject, "onGameStart", []);
+        JavaScriptBridge.InvokeFunction(_mainScriptObject, "onGameStart", []);
     }
     public void _OnGameEnd()
     {

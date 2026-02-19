@@ -221,21 +221,6 @@ createPolygonArenaCulling(position: Vector2, vertices: Array(Vector2)) -> Battle
 
 **Returns** `BattleArenaPolygon`
 
----
-
-# Camera 子模块
-
-Camera 为 Battle 的内置子模块，用于管理玩家在战斗中的 **摄像机**。
-通过 `UTMX.battle.camera` 访问。
-
-摄像机以屏幕中心为原点
-
-| Property          | Type    | Default   | Description                                      |
-| ----------------- | ------- | --------- | ------------------------------------------------ |
-| position  | Vector2 | (0, 0)      | 摄像机的位置（相对于世界原点） |
-| zoom  | Vector2 | (1, 1)      | 摄像机的视角缩放 |
-| rotation  | number | 0      | 摄像机的旋转角度（单位为角度） |
-
 # Soul 子模块
 
 Soul 为 Battle 的内置子模块，用于管理玩家在战斗中的 **灵魂**。

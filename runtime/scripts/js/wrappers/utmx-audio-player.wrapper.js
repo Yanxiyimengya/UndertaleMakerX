@@ -9,8 +9,20 @@ export class UtmxAudioPlayer {
 		__audio_player.PlayBgmFromPath(bgmId, bgmFilePath, loop);
 	}
 
+	static isBgmValid(bgmId) {
+		return __audio_player.IsBgmValid(bgmId);
+	}
+
 	static stopSound(soundId) {
 		return __audio_player.StopSound(soundId);
+	}
+
+	static setSoundVolume(soundId, volume) {
+		return __audio_player.SetSoundVolume(soundId, volume);
+	}
+
+	static setSoundPitch(soundId, pitch) {
+		return __audio_player.SetSoundPitch(soundId, pitch);
 	}
 
 	static stopBgm(bgmId) {

@@ -28,19 +28,19 @@ SplitContainer/constants/separation = 6
 [sub_resource type="Resource" id="Resource_tg17e"]
 resource_name = "Tabs"
 script = ExtResource("9_syr16")
-names = PackedStringArray("Inspector")
-
-[sub_resource type="Resource" id="Resource_hg2ka"]
-resource_name = "Tabs"
-script = ExtResource("9_syr16")
 names = PackedStringArray("FileSystem")
 
 [sub_resource type="Resource" id="Resource_svbvx"]
+resource_name = "Tabs"
+script = ExtResource("9_syr16")
+names = PackedStringArray("Inspector")
+
+[sub_resource type="Resource" id="Resource_lt3wf"]
 resource_name = "Split"
 script = ExtResource("10_syr16")
 direction = 1
 first = SubResource("Resource_tg17e")
-second = SubResource("Resource_hg2ka")
+second = SubResource("Resource_svbvx")
 
 [sub_resource type="Resource" id="Resource_oljq2"]
 resource_name = "Tabs"
@@ -64,7 +64,7 @@ second = SubResource("Resource_j530m")
 resource_name = "Split"
 script = ExtResource("10_syr16")
 percent = 0.18864097363083163
-first = SubResource("Resource_svbvx")
+first = SubResource("Resource_lt3wf")
 second = SubResource("Resource_ja8tm")
 
 [sub_resource type="Resource" id="Resource_r6jol"]

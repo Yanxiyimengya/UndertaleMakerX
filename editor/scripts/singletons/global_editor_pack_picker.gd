@@ -71,7 +71,6 @@ static func get_last_build_record() -> Dictionary:
 static func get_build_records() -> Array:
 	return _build_records.duplicate(true)
 
-
 static func destroy_temporary_resources(remove_pck: bool = false, only_pck_path: String = "") -> void:
 	var normalized_filter := _normalize_path(only_pck_path)
 	for i in range(_build_records.size() - 1, -1, -1):

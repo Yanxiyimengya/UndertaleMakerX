@@ -4,12 +4,28 @@ using Jint.Native;
 using Jint.Native.Object;
 using System;
 
-public partial class JavaScriptEnemyProxy : BaseEnemy, IJavaScriptObject
+public partial class JavaScriptEnemyProxy : BaseEnemy, IJavaScriptLifecyucle
 {
-	public ObjectInstance JsInstance { get; set; }
+	public ObjectInstance JsInstance
+	{
+		get => _jsInstance;
+		set
+		{
+			_jsInstance = value;
+			if (LifecycleProxy != null)
+				LifecycleProxy.JsInstance = value;
+		}
+	}
 	public string JsScriptPath { get; set; }
+    public JavaScriptLifecycleProxy LifecycleProxy { get; set; } = new();
+	private ObjectInstance _jsInstance = null;
+    public override void _Ready()
+    {
+        base._Ready();
+        AddChild(LifecycleProxy);
+    }
 
-	public override void _HandleAction(string action)
+    public override void _HandleAction(string action)
 	{
 		object result = ((IJavaScriptObject)this).Invoke("onHandleAction", [action]);
 		if (result != null)

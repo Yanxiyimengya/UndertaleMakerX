@@ -1,0 +1,1 @@
+class_name DirTools extends RefCounted;

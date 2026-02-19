@@ -1,5 +1,6 @@
 import { __scene_manager } from "__UTMX";
 import { UtmxGameObject } from "./types/utmx-game-object.wrapper.js"
+import { UtmxCamera } from "./types/utmx-camera.weapper.js"
 
 export class UtmxSceneManager
 {
@@ -20,5 +21,14 @@ export class UtmxSceneManager
     static getSingleton(name)
     {
         return __scene_manager.GetSingleton(name);
+    }
+
+    static #__camera = new UtmxCamera();
+    static getCamera()
+    {
+        let _ins = __scene_manager.GetCamera();
+        if (_ins == null) return null;
+        this.#__camera.__instance = _ins;
+        return this.#__camera;
     }
 }

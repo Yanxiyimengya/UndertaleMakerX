@@ -41,7 +41,8 @@ public partial class GameoverScene : Node
 
 	public override void _ExitTree()
 	{
-		UtmxGlobalStreamPlayer.StopBgm("GAME_OVER");
+		if (UtmxGlobalStreamPlayer.IsBgmValid("GAME_OVER"))
+			UtmxGlobalStreamPlayer.StopBgm("GAME_OVER");
 	}
 
 	private async void Play()

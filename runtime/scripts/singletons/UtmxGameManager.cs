@@ -19,13 +19,13 @@ public partial class UtmxGameManager : Node
 			return;
 		}
 		Instance = this;
-		Boot = new();
-		AddChild( Boot );
     }
 
     public override void _Ready()
     {
         base._Ready();
+        Boot = new();
+        AddChild(Boot);
     }
 
     public override void _ExitTree()
@@ -35,8 +35,8 @@ public partial class UtmxGameManager : Node
 	}
 
 	public void _GameStart()
-	{
-		EmitSignal(SignalName.GameStart, []);
+    {
+        EmitSignal(SignalName.GameStart, []);
 	}
 	public void _GameEnd()
 	{

@@ -131,7 +131,6 @@ func create_default_project(project_name : String, dir_path : String) -> UtmxPro
 	save_project_config(proj);
 	projects[dir_path] = proj;
 	
-	# 创建默认图标 (优化了资源释放)
 	var icon_src = "res://assets/icons/utmx-icon-256.svg";
 	if (FileAccess.file_exists(icon_src)):
 		var dir = DirAccess.open(dir_path);
@@ -177,7 +176,14 @@ func _create_default_runtime_project_config(project_dir_path: String) -> void:
 		return;
 	file.store_string(JSON.stringify(config, "\t"));
 	file.close();
-
+	file = null;
+	
+	var script_path: String = project_dir_path.path_join(config["application"]["main_script"]);
+	file = FileAccess.open(script_path, FileAccess.WRITE);
+	if (file == null): return;
+	file.store_string(ProjectFileTemplates.MAIN_JS_SCRIPT_TEMPLATE);
+	file.close();
+	
 ## 从 ZIP 加载项目
 func create_project_from_zip(project_name : String, zip_path : String, target_dir : String) -> UtmxProject:
 	if (!FileAccess.file_exists(zip_path)): return null;

@@ -168,15 +168,18 @@ getSlot() -> number
 ### appendDialogue
 
 ```javascript
-appendDialogue(...dialogues) -> void
+appendDialogue(dialogue, offset) -> void
 ```
 
 将一段文本追加到该怪物的对话列表中，当战斗进入怪物对话状态时就会读取列表中的对话显示。
+
+对话框基于 `centerPosition` 显示。
 
 **Returns** `void`
 
 | Parameter | Type  | Description      |
 | --------- | ----- | ---------------- |
-| dialogues   | ...any | 要显示的对话内容 |
+| dialogue   | any | 要显示的对话内容 |
+| offset   | Vector2 | 对话的偏移位置 |
 
 ---

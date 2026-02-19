@@ -32,26 +32,12 @@ enum MenuID {
 	NEW_SUBMENU = 99
 };
 
-const JS_SCRIPT_TEMPLATE : String = """import * as UTMX from "utmx";
-
-// TODO: write your game logic with UTMX.
-"""
-
-const GDSHADER_TEMPLATE : String = """shader_type canvas_item;
-
-void vertex() {
-}
-
-void fragment() {
-}
-"""
-
 const FILE_TEMPLATES : Dictionary = {
 	MenuID.CREATE_FOLDER: {"name": "new folder", "is_dir": true},
-	MenuID.CREATE_SCRIPT: {"name": "new_script.js", "is_dir": false, "template": JS_SCRIPT_TEMPLATE},
+	MenuID.CREATE_SCRIPT: {"name": "new_script.js", "is_dir": false, "template": ProjectFileTemplates.JS_SCRIPT_TEMPLATE},
 	MenuID.CREATE_TSCN: {"name": "new_scene.tscn", "is_dir": false},
 	MenuID.CREATE_TEXT: {"name": "new_text.txt", "is_dir": false},
-	MenuID.CREATE_SHADER: {"name": "new_shader.gdshader", "is_dir": false, "template": GDSHADER_TEMPLATE},
+	MenuID.CREATE_SHADER: {"name": "new_shader.gdshader", "is_dir": false, "template": ProjectFileTemplates.GDSHADER_TEMPLATE},
 };
 
 const HIDDEN_ROOT_FILES : Dictionary = {

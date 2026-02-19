@@ -12,6 +12,8 @@ var _open_order: Array[String] = []
 var _current_path := ""
 var _tree_root: TreeItem = null
 var _is_switching_document := false
+var _is_restoring_document_state := false
+var _document_restore_version := 0
 
 
 func _ready() -> void:
@@ -36,7 +38,7 @@ func _exit_tree() -> void:
 
 
 func open_script(path: String) -> void:
-	var target_path := path.strip_edges()
+	var target_path := _normalize_path(path.strip_edges())
 	if target_path.is_empty():
 		return
 
@@ -49,17 +51,22 @@ func open_script(path: String) -> void:
 			"saved_text": loaded_text,
 			"dirty": false,
 			"missing_on_disk": false,
+			"cursor_line": 0,
+			"cursor_column": 0,
 			"item": item,
 		}
 		_open_order.append(target_path)
 	else:
 		var cached: Dictionary = _file_cache[target_path]
+		if not cached.has("cursor_line"):
+			cached["cursor_line"] = 0
+		if not cached.has("cursor_column"):
+			cached["cursor_column"] = 0
 		if not cached.has("item") or not is_instance_valid(cached["item"]):
 			cached["item"] = _create_file_tree_item(target_path)
-			_file_cache[target_path] = cached
+		_file_cache[target_path] = cached
 
 	_switch_to_script(target_path)
-	java_script_code_edit.grab_focus()
 
 
 func sync_file_from_disk(path: String, force: bool = true) -> bool:
@@ -85,11 +92,12 @@ func sync_file_from_disk(path: String, force: bool = true) -> bool:
 		_is_switching_document = true
 		java_script_code_edit.text = latest_text
 		_is_switching_document = false
+		_schedule_document_state_restore(target_path)
 	_update_file_tree_item(target_path)
 	return true
 
 
-func save_all_open_scripts() -> void:
+func save_all_open_scripts(skip_deleted: bool = false) -> void:
 	_flush_current_document_state()
 	var refresh_targets: Dictionary = {}
 	var saved_paths: Array[String] = []
@@ -98,6 +106,9 @@ func save_all_open_scripts() -> void:
 			continue
 		var cached: Dictionary = _file_cache[path]
 		if bool(cached.get("dirty", false)):
+			if skip_deleted and bool(cached.get("missing_on_disk", false)):
+				_update_file_tree_item(path)
+				continue
 			var target_text := str(cached.get("text", ""))
 			if _write_script_file(path, target_text):
 				cached["saved_text"] = target_text
@@ -134,7 +145,7 @@ func _on_code_edit_gui_input(event: InputEvent) -> void:
 
 
 func _on_code_edit_text_changed() -> void:
-	if _is_switching_document:
+	if _is_switching_document or _is_restoring_document_state:
 		return
 	if _current_path.is_empty() or not _file_cache.has(_current_path):
 		return
@@ -186,19 +197,25 @@ func _on_file_list_tree_gui_input(event: InputEvent) -> void:
 
 
 func _switch_to_script(path: String) -> void:
-	if not _file_cache.has(path):
+	var target_path := _normalize_path(path)
+	if not _file_cache.has(target_path):
+		return
+	if target_path == _current_path:
+		_select_file_tree_item(target_path)
+		_update_file_tree_item(target_path)
+		java_script_code_edit.grab_focus()
 		return
 	_flush_current_document_state()
-	_current_path = path
+	_current_path = target_path
 
-	var cached: Dictionary = _file_cache[path]
+	var cached: Dictionary = _file_cache[target_path]
 	_is_switching_document = true
 	java_script_code_edit.text = str(cached.get("text", ""))
 	_is_switching_document = false
 
-	_select_file_tree_item(path)
-	_update_file_tree_item(path)
-	java_script_code_edit.call_deferred("grab_focus")
+	_select_file_tree_item(target_path)
+	_update_file_tree_item(target_path)
+	_schedule_document_state_restore(target_path)
 
 
 func _request_close_script(path: String) -> void:
@@ -275,6 +292,8 @@ func _flush_current_document_state() -> void:
 	var current_text := java_script_code_edit.text
 	cached["text"] = current_text
 	cached["dirty"] = _compute_dirty_state(cached, current_text)
+	cached["cursor_line"] = java_script_code_edit.get_caret_line()
+	cached["cursor_column"] = java_script_code_edit.get_caret_column()
 	_file_cache[_current_path] = cached
 	_update_file_tree_item(_current_path)
 
@@ -335,17 +354,36 @@ func _on_filesystem_entry_removed(removed_path: String) -> void:
 		return
 	for open_path in _open_order:
 		if _is_path_affected_by_removed_entry(open_path, target):
+			if _path_exists(open_path):
+				_clear_missing_state(open_path)
+				continue
 			_mark_script_missing(open_path)
 
 
 func _mark_script_missing(path: String) -> void:
 	if not _file_cache.has(path):
 		return
+	if _path_exists(path):
+		_clear_missing_state(path)
+		return
 	var cached: Dictionary = _file_cache[path]
 	if bool(cached.get("missing_on_disk", false)):
 		return
 	cached["missing_on_disk"] = true
 	cached["dirty"] = true
+	_file_cache[path] = cached
+	_update_file_tree_item(path)
+
+
+func _clear_missing_state(path: String) -> void:
+	if not _file_cache.has(path):
+		return
+	var cached: Dictionary = _file_cache[path]
+	if not bool(cached.get("missing_on_disk", false)):
+		return
+	cached["missing_on_disk"] = false
+	var current_text := str(cached.get("text", ""))
+	cached["dirty"] = _compute_dirty_state(cached, current_text)
 	_file_cache[path] = cached
 	_update_file_tree_item(path)
 
@@ -359,10 +397,79 @@ func _is_path_affected_by_removed_entry(open_path: String, removed_path: String)
 
 
 func _normalize_path(path: String) -> String:
-	var normalized := path.replace("\\", "/")
+	var normalized := String(path).replace("\\", "/").simplify_path()
 	if normalized.ends_with("/"):
 		normalized = normalized.trim_suffix("/")
 	return normalized
+
+
+func _path_exists(path: String) -> bool:
+	var normalized_path := _normalize_path(path)
+	return FileAccess.file_exists(normalized_path) or DirAccess.dir_exists_absolute(normalized_path)
+
+
+func _restore_caret_for_path(cached: Dictionary) -> void:
+	var line_count: int = maxi(java_script_code_edit.get_line_count(), 1)
+	var line: int = clampi(int(cached.get("cursor_line", 0)), 0, line_count - 1)
+	java_script_code_edit.set_caret_line(line)
+	var line_text: String = java_script_code_edit.get_line(line)
+	var column: int = clampi(int(cached.get("cursor_column", 0)), 0, line_text.length())
+	java_script_code_edit.set_caret_column(column)
+
+
+func _schedule_document_state_restore(path: String) -> void:
+	var target_path := _normalize_path(path)
+	if target_path.is_empty():
+		return
+	_document_restore_version += 1
+	var restore_version: int = _document_restore_version
+	call_deferred("_restore_document_state_for_path", target_path, restore_version)
+
+
+func _restore_document_state_for_path(path: String, restore_version: int) -> void:
+	var target_path := _normalize_path(path)
+	if not is_inside_tree():
+		return
+	await get_tree().process_frame
+	if restore_version != _document_restore_version:
+		return
+	if target_path != _current_path:
+		return
+	if not _file_cache.has(target_path):
+		return
+
+	_is_restoring_document_state = true
+	_apply_cached_cursor_and_scroll(target_path)
+
+	await get_tree().process_frame
+	if restore_version == _document_restore_version:
+		if target_path == _current_path and _file_cache.has(target_path):
+			_apply_cached_cursor_and_scroll(target_path)
+			java_script_code_edit.grab_focus()
+	_is_restoring_document_state = false
+
+
+func _apply_cached_cursor_and_scroll(path: String) -> void:
+	if not _file_cache.has(path):
+		return
+	var cached: Dictionary = _file_cache[path]
+	_restore_caret_for_path(cached)
+	var caret_line: int = java_script_code_edit.get_caret_line()
+	_scroll_code_edit_to_caret(caret_line)
+
+
+func _scroll_code_edit_to_caret(target_line: int) -> void:
+	if java_script_code_edit == null:
+		return
+	if java_script_code_edit.has_method("center_viewport_to_caret"):
+		java_script_code_edit.call("center_viewport_to_caret")
+		return
+	if java_script_code_edit.has_method("adjust_viewport_to_caret"):
+		java_script_code_edit.call("adjust_viewport_to_caret")
+		return
+	if java_script_code_edit.has_method("set_line_as_first_visible"):
+		var first_visible_line: int = maxi(target_line - 3, 0)
+		java_script_code_edit.call("set_line_as_first_visible", first_visible_line)
 
 
 func _compute_dirty_state(cached: Dictionary, current_text: String) -> bool:
@@ -405,6 +512,7 @@ func _write_script_file(path: String, content: String) -> bool:
 		push_warning("Failed to open script for write: %s" % path)
 		return false
 	file.store_string(content)
+	file.close()
 	return true
 
 

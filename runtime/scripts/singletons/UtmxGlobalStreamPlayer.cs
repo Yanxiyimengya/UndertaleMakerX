@@ -39,7 +39,7 @@ public partial class UtmxGlobalStreamPlayer : Node
 	{
 		soundPlayer = new AudioStreamPlayer();
 		soundPlayer.Bus = "Sound";
-        soundPlayer.Stream = new AudioStreamPolyphonic();
+		soundPlayer.Stream = new AudioStreamPolyphonic();
 	}
 	public override void _EnterTree()
 	{
@@ -113,7 +113,22 @@ public partial class UtmxGlobalStreamPlayer : Node
 		}
 		throw new ArgumentException($"Sound with id '{id}' not found.");
 	}
-
+	public static void SetSoundVolume(long id, float volume)
+	{
+		if (!soundPlayer.Playing) soundPlayer.Play();
+		if (soundPlayer.GetStreamPlayback() is AudioStreamPlaybackPolyphonic playback)
+		{
+			playback.SetStreamVolume(id, volume);
+		}
+	}
+	public static void SetSoundPitch(long id, float pitch)
+	{
+		if (!soundPlayer.Playing) soundPlayer.Play();
+		if (soundPlayer.GetStreamPlayback() is AudioStreamPlaybackPolyphonic playback)
+		{
+			playback.SetStreamPitchScale(id, pitch);
+		}
+	}
 
 	public static void PlayBgmFromStream(string bgmId, AudioStream stream, bool loop = false)
 	{
@@ -161,8 +176,8 @@ public partial class UtmxGlobalStreamPlayer : Node
 			Instance.AddChild(player);
 		}
 		player.Stream = stream;
-        player.Bus = "Bgm";
-        player.Play(0);
+		player.Bus = "Bgm";
+		player.Play(0);
 		player.SetMeta("loop", loop);
 	}
 
@@ -197,6 +212,10 @@ public partial class UtmxGlobalStreamPlayer : Node
 		}
 	}
 
+	public static bool IsBgmValid(string bgmId)
+	{
+		return bgmPlayers.ContainsKey(bgmId);
+	}
 	public static void SetBgmPaused(string bgmId, bool paused)
 	{
 		if (bgmPlayers.TryGetValue(bgmId, out AudioStreamPlayer player))
@@ -213,8 +232,8 @@ public partial class UtmxGlobalStreamPlayer : Node
 			return player.StreamPaused;
 		}
 		UtmxLogger.Error($"Bgm player with id '{bgmId}' not found.");
-        return false;
-    }
+		return false;
+	}
 
 	public double GetBgmVolume(string bgmId)
 	{
@@ -223,8 +242,8 @@ public partial class UtmxGlobalStreamPlayer : Node
 			return player.VolumeDb;
 		}
 		UtmxLogger.Error($"Bgm player with id '{bgmId}' not found.");
-        return 0;
-    }
+		return 0;
+	}
 
 	public static void SetBgmVolume(string bgmId, double volumeDb, double duration = 0)
 	{
@@ -284,8 +303,8 @@ public partial class UtmxGlobalStreamPlayer : Node
 			return;
 		}
 		UtmxLogger.Error($"Bgm player with id '{bgmId}' not found.");
-    }
-    public static double GetBgmPosition(string bgmId)
+	}
+	public static double GetBgmPosition(string bgmId)
 	{
 		if (bgmPlayers.TryGetValue(bgmId, out AudioStreamPlayer player))
 		{
@@ -295,13 +314,13 @@ public partial class UtmxGlobalStreamPlayer : Node
 		return 0;
 	}
 
-    public static void SetBgmPosition(string bgmId, double position)
-    {
-        if (bgmPlayers.TryGetValue(bgmId, out AudioStreamPlayer player))
-        {
-            player.Play((float)position);
-        }
-    }
+	public static void SetBgmPosition(string bgmId, double position)
+	{
+		if (bgmPlayers.TryGetValue(bgmId, out AudioStreamPlayer player))
+		{
+			player.Play((float)position);
+		}
+	}
 	public static void AppendStreamToLibrary(string id, AudioStream stream)
 	{
 		if (stream == null) return;

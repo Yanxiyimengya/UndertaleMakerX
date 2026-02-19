@@ -10,8 +10,8 @@ export class UtmxBaseEnemy extends __UtmxEnemy
 		this.#__sprite = new UtmxGameSprite();
 		this.#__sprite .__instance = this;
 	}
-    get sprite() { return this.#__sprite ; }
-    set sprite(value) { }
+	get sprite() { return this.#__sprite ; }
+	set sprite(value) { }
 
 	set displayName(value) {
 		this.DisplayName = value;
@@ -49,43 +49,43 @@ export class UtmxBaseEnemy extends __UtmxEnemy
 	set allowSpare(value) {	
 		this.AllowSpare = value;
 	}
-    get canSpare() {
-        return this.CanSpare;
-    }
-    set canSpare(value) {
-        this.CanSpare = value;
-    }
-    get missText() {
-        return this.MissText;
-    }
-    set missText(value) {
-        this.MissText = value;
-    }
-    get actions() {
-        return this.Actions;
-    }
-    set actions(value) {
-        this.Actions = value;
-    }
-    get position() {
-        return this.Position;
-    }
-    set position(value) {
-        this.Position = value;
-    }
-    get centerPosition() {
-        return this.CenterPosition;
-    }
-    set centerPosition(value) {
-        this.CenterPosition = value;
-    }
+	get canSpare() {
+		return this.CanSpare;
+	}
+	set canSpare(value) {
+		this.CanSpare = value;
+	}
+	get missText() {
+		return this.MissText;
+	}
+	set missText(value) {
+		this.MissText = value;
+	}
+	get actions() {
+		return this.Actions;
+	}
+	set actions(value) {
+		this.Actions = value;
+	}
+	get position() {
+		return this.Position;
+	}
+	set position(value) {
+		this.Position = value;
+	}
+	get centerPosition() {
+		return this.CenterPosition;
+	}
+	set centerPosition(value) {
+		this.CenterPosition = value;
+	}
 
-    onHandleAction(action) {}
+	onHandleAction(action) {}
 	onHandleAttack(status) {}
 	onGetNextTurn() {}
-    onDialogueStarting() {}
-    onTurnStarting() {}
-    onSpare() {}
+	onDialogueStarting() {}
+	onTurnStarting() {}
+	onSpare() {}
 	onDead() {}
 
 	hurt(damage) {
@@ -97,7 +97,7 @@ export class UtmxBaseEnemy extends __UtmxEnemy
 	getSlot() {
 		return this.EnemySlot;
 	}
-    appendDialogue(...dialogues) {
-        this.AppendEnemyDialogue(...dialogues);
-    }
+	appendDialogue(dialogue, offset) {
+		this.AppendEnemyDialogue(dialogue, offset);
+	}
 }

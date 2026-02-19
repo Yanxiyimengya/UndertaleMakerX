@@ -6,6 +6,8 @@ BattleProjectile 表示战斗中的射弹对象，在战斗中检测与玩家灵
 
 通过 `UTMX.BattleProjectile` 访问
 
+> BattleProjectile 对象默认创建在一个 `z` 为 `200` 的弹幕管理器对象中，因此，如果没有重设父节点对象，默认的 BattleProjectile 的 `z` 索引会比其他的对象（如 Sprite、DrawableObject）高 `200`。
+
 ## 常量（Constants）
 
 ### ProjectileCollisionMode

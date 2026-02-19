@@ -30,4 +30,9 @@ export class UtmxBattleTurn extends __BattleTurn {
     onTurnStart() { }
     onTurnEnd() { }
     onTurnUpdate(delta) { }
+
+    
+    end() { 
+        this.Ending = true;
+    }
 }

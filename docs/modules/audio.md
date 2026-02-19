@@ -52,6 +52,38 @@ stopSound(soundId: number) -> void
 
 ---
 
+### setSoundVolume
+
+```javascript
+setSoundVolume(soundId: number, volume: number) -> void
+```
+
+设置指定 id 音效的音量
+
+**Returns** `void`
+
+| Parameter | Type   | Description |
+| --------- | ------ | ----------- |
+| soundId   | number | 音效实例 ID     |
+| volume   | number | 音效音量     |
+
+---
+
+### setSoundPitch
+
+```javascript
+setSoundPitch(soundId: number, pitch: number) -> void
+```
+
+设置指定 id 音效的音量
+
+**Returns** `void`
+
+| Parameter | Type   | Description |
+| --------- | ------ | ----------- |
+| soundId   | number | 音效实例 ID     |
+| pitch   | number | 音效音调     |
+
 ## BGM
 
 用于管理可持续播放的背景音乐。
@@ -89,6 +121,22 @@ stopBgm(bgmId: string) -> void
 | Parameter | Type   | Description |
 | --------- | ------ | ----------- |
 | bgmId     | string | 背景音乐 ID     |
+
+---
+
+### isBgmValid
+
+```javascript
+isBgmValid(bgmId: string) -> boolean
+```
+
+检查指定 Bgm 是否有效。
+
+**Returns** `boolean`
+
+| Parameter     | Type   | Description |
+| ------------- | ------ | ----------- |
+| bgmId       | string  | —       | 背景音乐唯一 ID   |
 
 ---
 

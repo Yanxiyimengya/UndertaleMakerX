@@ -3,7 +3,6 @@ extends UtmxEditorWindow
 signal create_project_requset(project_name: String, project_dir: String, template: UtmxProjectTemplate);
 @export var template_item_scene: PackedScene;
 
-@onready var create_project_window_content: PanelContainer = %CreateProjectWindowContent;
 @onready var template_grid_container: GridContainer = %TemplateGridContainer;
 @onready var create_button: Button = %CreateButton;
 @onready var project_dir_edit: LineEdit = %ProjectDirEdit;
@@ -42,7 +41,7 @@ func _open() -> void:
 	default_tamplate_item.pressed_button(true);
 	project_name_edit.text = tr("New Project");
 	project_dir_edit.text = project_path;
-	self.min_size = create_project_window_content.get_combined_minimum_size();
+	self.min_size = get_child(0).get_combined_minimum_size();
 	check_is_can_create();
 
 # 添加模板项目逻辑

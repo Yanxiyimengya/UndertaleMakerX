@@ -60,7 +60,6 @@ public partial class BootSplash : Control
 	{
 		if (!string.IsNullOrEmpty(FirstScene))
 			UtmxSceneManager.ChangeSceneToFile(FirstScene);
-		//await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 		UtmxGameManager.Instance._GameStart();
 	}
 }

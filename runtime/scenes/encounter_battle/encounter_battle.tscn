@@ -137,10 +137,11 @@ TextMenu = NodePath("../../UILayer/BattleMenuManager/EncounterTextMenu")
 BattleButtonManager = NodePath("../../UILayer/BattleScreenButtonManager")
 metadata/_custom_type_script = "uid://cyeycuyt68h4a"
 
-[node name="BattleEnemyDialogueState" type="Node" parent="BattleStateMachine" unique_id=2147387611 node_paths=PackedStringArray("MenuManager")]
+[node name="BattleEnemyDialogueState" type="Node" parent="BattleStateMachine" unique_id=2147387611 node_paths=PackedStringArray("MenuManager", "BattleButtonManager")]
 script = ExtResource("15_mdx4q")
 DialogueSpeechBubblePackedScene = ExtResource("39_1x56u")
 MenuManager = NodePath("../../UILayer/BattleMenuManager")
+BattleButtonManager = NodePath("../../UILayer/BattleScreenButtonManager")
 metadata/_custom_type_script = "uid://3iy182u0a5o5"
 
 [node name="BattleEnemyState" type="Node" parent="BattleStateMachine" unique_id=17090832]
@@ -227,6 +228,7 @@ fit_content = true
 scroll_active = false
 autowrap_mode = 1
 script = ExtResource("19_taqgn")
+TyperSize = 24
 
 [node name="EncounterChoiceEnemyMenu" parent="UILayer/BattleMenuManager" unique_id=1194380642 instance=ExtResource("24_noyau")]
 visible = false

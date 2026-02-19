@@ -4,7 +4,6 @@ using System.Text;
 
 public class DatapackLoaderWindows : DatapackLoader
 {
-
     public override bool LoadPack()
     {
         string execPath = OS.GetExecutablePath();
@@ -12,38 +11,48 @@ public class DatapackLoaderWindows : DatapackLoader
         string execFileName = execPath.GetFile();
         string execBaseName = execFileName.GetBaseName();
 
-        // 搜索可执行文件目录下的独立资源包
-        bool found = LoadResourcePack(execBaseDir.PathJoin(execBaseName) + $".{EngineProperties.DATAPACK_EXTENSION}") ||
-                LoadResourcePack(execBaseDir.PathJoin(execFileName) + $".{EngineProperties.DATAPACK_EXTENSION}");
-        if (!found)
+        string[] searchPaths = {
+            execBaseDir.PathJoin(execBaseName + "." + "utmx"),
+            execBaseDir.PathJoin(execFileName + "." + "utmx")
+        };
+        foreach (var path in searchPaths)
         {
-            found = LoadResourcePack(execBaseDir + execBaseName + $".{EngineProperties.DATAPACK_EXTENSION}") ||
-                LoadResourcePack(execBaseDir + execFileName + $".{EngineProperties.DATAPACK_EXTENSION}");
-        }
-
-        // 搜索内嵌资源包
-        if (!found)
-        {
-            using FileAccess file = FileAccess.Open(execPath, FileAccess.ModeFlags.Read);
-            if (file == null) return false;
-            ulong fileSize = file.GetLength();
-
-            file.Seek(fileSize - 4);
-            uint magic = file.Get32();
-            if (magic == GODOT_PACK_HEADER_MAGIC)
+            if (FileAccess.FileExists(path))
             {
-                file.Seek(fileSize - 16);
-                magic = file.Get32();
-                if (magic == UTMX_PACK_HEADER_MAGIC)
+                if (LoadResourcePack(path, 0))
                 {
-                    file.Seek(fileSize - 24);
-                    ulong utmxPckSize = file.Get64();
-                    ulong utmxPckOffset = fileSize - utmxPckSize - 24;
-                    found = LoadResourcePack(execPath, (int)utmxPckOffset);
+                    return true;
                 }
             }
         }
-        return found;
+        using var file = FileAccess.Open(execPath, FileAccess.ModeFlags.Read);
+        if (file == null) return false;
+
+        ulong fileSize = file.GetLength();
+        if (fileSize < 24) return false;
+
+        file.Seek(fileSize - 4);
+        uint godotMagic = file.Get32();
+
+        if (godotMagic == GODOT_PACK_HEADER_MAGIC)
+        {
+            file.Seek(fileSize - 16);
+            uint utmxMagic = file.Get32();
+
+            if (utmxMagic == UTMX_PACK_HEADER_MAGIC)
+            {
+                file.Seek(fileSize - 24);
+                ulong utmxPckSize = file.Get64();
+                long utmxPckOffset = (long)(fileSize - utmxPckSize - 24);
+
+                if (LoadResourcePack(execPath, (int)utmxPckOffset))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private ulong GetCustomSectionOffset(FileAccess fileAccess, string sectionName)

@@ -9,8 +9,10 @@ public partial class BattleEnemyDialogueState : StateNode
 	public PackedScene DialogueSpeechBubblePackedScene;
 	[Export]
 	public BattleMenuManager MenuManager;
+    [Export]
+    BattleScreenButtonManager BattleButtonManager;
 
-	private List<SpeechBubble> _speechBubbleList = new();
+    private List<SpeechBubble> _speechBubbleList = new();
 	public override void _Process(double delta)
     {
         if (Input.IsActionJustPressed("confirm"))
@@ -32,6 +34,7 @@ public partial class BattleEnemyDialogueState : StateNode
 
 	public async override void _EnterState()
     {
+        BattleButtonManager.ResetAllBattleButton();
         SetProcess(false);
         MenuManager.CloseAllMenu();
 		UtmxBattleManager.GetBattleTurnController().TurnInitialize();
@@ -39,8 +42,11 @@ public partial class BattleEnemyDialogueState : StateNode
 		soul.GlobalPosition = UtmxBattleManager.GetBattleTurnController().GetTurnSoulInitializePosition();
 		soul.Movable = false;
 		soul.Visible = true;
+
         BattleMainArenaExpand _battleMainArena = UtmxBattleManager.GetBattleArenaController().MainArena;
-        await _battleMainArena.Resize(UtmxBattleManager.GetBattleTurnController().GetTurnarenaInitSize(), 0.4);
+		Vector2 initSize = UtmxBattleManager.GetBattleTurnController().GetTurnarenaInitSize();
+		if (_battleMainArena.Size != initSize)
+			await _battleMainArena.Resize(UtmxBattleManager.GetBattleTurnController().GetTurnarenaInitSize(), 0.4);
         foreach (BaseEnemy enemy in UtmxBattleManager.GetBattleEnemyController().EnemiesList)
         {
             enemy._OnDialogueStarting();

@@ -47,7 +47,7 @@ func _get_project_popup_menu() -> PopupMenu:
 func _on_project_menu_id_pressed(id : int) -> void:
 	match (id):
 		ProjectMenuId.PACK:
-			push_warning("Project menu pack action is not implemented yet.");
+			WindowManager.open_export_window();
 		ProjectMenuId.EXIT_TO_PROJECT_LIST:
 			EditorProjectManager.back_to_project_list();
 

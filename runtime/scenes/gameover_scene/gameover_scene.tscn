@@ -80,3 +80,6 @@ TyperSpeed = 0.1
 TyperSize = 24
 TyperFont = ExtResource("4_llsh4")
 Voice = ExtResource("5_ffyyg")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=118142136]
+position = Vector2(320, 240)

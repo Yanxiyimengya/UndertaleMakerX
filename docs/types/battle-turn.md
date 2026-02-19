@@ -28,6 +28,15 @@ BattleTurn 表示一场遭遇战斗中的怪物回合，你可以编写一个脚
 | soulInitPosition | Vector2 | (320, 320) | 回合初始化时玩家灵魂的全局位置 |
 | turnTime | number | 0.0 | 回合时长（单位/秒） |
 
+## 方法（Methods）
+
+### end
+
+```javascript
+end() -> void
+```
+
+调用 `end` 后，会结束回合自身。
 
 ---
 
@@ -41,7 +50,7 @@ onTurnInitialize() -> void
 
 ---
 
-### onTurnStart
+### onTurnUpdate
 
 ```javascript
 onTurnStart() -> void

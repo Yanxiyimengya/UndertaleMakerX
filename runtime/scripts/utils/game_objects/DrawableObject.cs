@@ -40,20 +40,17 @@ public partial class DrawableObject : Node2D, IObjectPoolObject
         RenderingServer.CanvasItemClear(canvasItemRid);
     }
 
-    public void DrawCircle(Vector2 pos, double radius, string color = default)
+    public void DrawCircle(Vector2 pos, double radius, Color color = default)
     {
-        RenderingServer.CanvasItemAddCircle(canvasItemRid, pos, (float)radius, 
-            Color.FromString(color, Colors.White));
+        RenderingServer.CanvasItemAddCircle(canvasItemRid, pos, (float)radius, color);
     }
-    public void DrawRect(Vector2 pos, Vector2 size, string color = default)
+    public void DrawRect(Vector2 pos, Vector2 size, Color color = default)
     {
-        RenderingServer.CanvasItemAddRect(canvasItemRid, new Rect2(pos, size), 
-            Color.FromString(color, Colors.White));
+        RenderingServer.CanvasItemAddRect(canvasItemRid, new Rect2(pos, size), color);
     }
-    public void DrawLine(Vector2 from, Vector2 to, string color = default, double width = -1)
+    public void DrawLine(Vector2 from, Vector2 to, Color color = default, double width = -1)
     {
-        RenderingServer.CanvasItemAddLine(canvasItemRid, from, to, 
-            Color.FromString(color, Colors.White), (float)width);
+        RenderingServer.CanvasItemAddLine(canvasItemRid, from, to, color, (float)width);
     }
     public void DrawPolygon(Vector2[] vertices, Color[] colors = default, Vector2[] uvs = default, string path = "")
     {

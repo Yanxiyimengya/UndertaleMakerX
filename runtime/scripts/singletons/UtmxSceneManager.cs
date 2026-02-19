@@ -117,10 +117,16 @@ public partial class UtmxSceneManager : CanvasLayer
 		return _prevScene;
 	}
 
+    public static Camera2D GetCamera()
+    {
+		Camera2D camera = GetCamera();
+        return camera;
+    }
 
-	#region 渲染对象管理
 
-	private static ObjectPool<DrawableObject> _drawableObjectPool = new();
+    #region 渲染对象管理
+
+    private static ObjectPool<DrawableObject> _drawableObjectPool = new();
 	public static DrawableObject CreateDrawableObject()
 	{
 		return CreateDrawableObject<DrawableObject>();
@@ -130,7 +136,7 @@ public partial class UtmxSceneManager : CanvasLayer
 		T node = _drawableObjectPool.GetObject<T>();
 		Node parent = node.GetParent();
 		Node targetParent = Instance.GetTree().CurrentScene;
-		if (parent == null) targetParent.AddChild(node);
+        if (parent == null) targetParent.AddChild(node);
 		else if (parent != targetParent) node.Reparent(targetParent, false);
 
 		return node;

@@ -102,6 +102,7 @@ internal static class UtmxResourceLoader
 	{
 		FontFile font = new();
 		Error err = font.LoadDynamicFont(path);
+		font.Antialiasing = TextServer.FontAntialiasing.None;
 		if (err != Error.Ok)
 		{
 			font.Dispose();
@@ -114,6 +115,7 @@ internal static class UtmxResourceLoader
 	{
 		FontFile font = new();
 		Error err = font.LoadBitmapFont(path);
+		font.Antialiasing = TextServer.FontAntialiasing.None;
 		if (err != Error.Ok)
 		{
 			font.Dispose();

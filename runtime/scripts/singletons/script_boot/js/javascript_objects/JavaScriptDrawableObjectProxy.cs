@@ -5,9 +5,19 @@ using System;
 
 public partial class JavaScriptDrawableObjectProxy : DrawableObject, IObjectPoolObject, IJavaScriptLifecyucle
 {
-	public ObjectInstance JsInstance { get; set; }
+	public ObjectInstance JsInstance
+	{
+		get => _jsInstance;
+		set
+		{
+			_jsInstance = value;
+			if (LifecycleProxy != null)
+				LifecycleProxy.JsInstance = value;
+		}
+	}
 	public string JsScriptPath { get; set; }
     public JavaScriptLifecycleProxy LifecycleProxy { get; set; } = new();
+	private ObjectInstance _jsInstance = null;
     public override void _Ready()
     {
         base._Ready();

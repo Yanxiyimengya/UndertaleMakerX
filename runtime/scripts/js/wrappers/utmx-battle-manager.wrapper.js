@@ -7,36 +7,6 @@ import {
 	BattleArenaPolygon,
 } from "./types/utmx-battle-arena.wrapper.js";
 
-class BattleCamera extends UtmxGameObject
-{
-	static get position() {
-		let battleCamera = __battle_manager.GetBattleController().Camera;
-		return battleCamera.Position;
-	}
-	static set position(value) {
-		let battleCamera = __battle_manager.GetBattleController().Camera;
-		battleCamera.Position = value;
-	}
-	static get zoom() {
-		let battleCamera = __battle_manager.GetBattleController().Camera;
-		return battleCamera.Zoom;
-	}
-	static set zoom(value) {
-		let battleCamera = __battle_manager.GetBattleController().Camera;
-		battleCamera.Zoom = value;
-	}
-
-	static get rotation() {
-		let battleCamera = __battle_manager.GetBattleController().Camera;
-		if (battleCamera != null) {
-			return battleCamera.RotationDegrees;
-		}
-	}
-	static set rotation(value) {
-		let battleCamera = __battle_manager.GetBattleController().Camera;
-		battleCamera.RotationDegrees = value;
-	}
-}
 class BattleSoul extends UtmxGameObject
 {
 	static get enabledCollision() {
@@ -195,7 +165,6 @@ export class UtmxBattleManager {
 	});
 
 	static soul = BattleSoul;
-	static camera = BattleCamera;
 	static arena = BattleArenaAccess;
 	static ui = BattleUiAccess;
 

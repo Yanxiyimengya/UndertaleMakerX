@@ -22,7 +22,12 @@ public partial class BattleEnemyState : StateNode
         }
 	}
 
-	public override void _ExitState() { }
+	public override void _ExitState() {
+		if (started)
+		{
+			UtmxBattleManager.GetBattleTurnController().TurnEnd();
+        }
+    }
 
 	public override void _Process(double delta)
 	{
@@ -36,7 +41,6 @@ public partial class BattleEnemyState : StateNode
 	private async void EndEnemyTurn()
 	{
 		started = false;
-        UtmxBattleManager.GetBattleProjectileController().DestroyProjectilesOnTurnEnd();
         BattlePlayerSoul soul = UtmxBattleManager.GetBattlePlayerController().PlayerSoul;
 		soul.Visible = false;
 		soul.Movable = false;

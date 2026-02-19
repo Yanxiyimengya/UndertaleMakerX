@@ -53,8 +53,12 @@ func _load_audio_stream(path: String) -> AudioStream:
 	if stream != null:
 		return stream
 
-	if path.get_extension().to_lower() == "ogg":
-		return AudioStreamOggVorbis.load_from_file(path)
+	var extension: String = path.get_extension().to_lower()
+	match extension:
+		"ogg":
+			return AudioStreamOggVorbis.load_from_file(path)
+		"wav":
+			return AudioStreamWAV.load_from_file(path)
 	return null
 
 

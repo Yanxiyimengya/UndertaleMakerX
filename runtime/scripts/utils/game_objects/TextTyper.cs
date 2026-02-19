@@ -156,8 +156,8 @@ public partial class TextTyper : Godot.RichTextLabel, IObjectPoolObject
 
 			while (c == '\r' || c == '\n')
 			{
-				_typerProgress += 1;
 				c = TyperText[_typerProgress];
+				_typerProgress += 1;
 				Newline();
 			}
 

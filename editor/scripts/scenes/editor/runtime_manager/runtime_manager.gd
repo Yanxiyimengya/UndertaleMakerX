@@ -36,6 +36,7 @@ func _exit_tree() -> void:
 func _on_play_project_button_pressed() -> void : 
 	if (!is_running) :
 		is_running = true;
+		_save_open_scripts_before_run();
 		console.clear();
 		var pck_name : String = EditorProjectManager.opened_project.project_name + ".pck";
 		var output_dir = EditorConfigureManager.get_data_path().path_join(".build_cache");
@@ -44,6 +45,16 @@ func _on_play_project_button_pressed() -> void :
 			DirAccess.make_dir_recursive_absolute(output_dir);
 		UtmxPackPicker.pick_pack(editor.root_path, output);
 		GlobalEditorRunnerManager.execute_runner(["--pack="+output]);
+
+func _save_open_scripts_before_run() -> void:
+	if (editor == null):
+		return;
+	var script_editor_node: Node = editor.get_node_or_null("VBoxContainer/MarginContainer/MainDockable/Script");
+	if (script_editor_node == null):
+		return;
+	if (script_editor_node.has_method("save_all_open_scripts")):
+		# skip_deleted = true: don't restore files already deleted on disk.
+		script_editor_node.call("save_all_open_scripts", true);
 
 func _on_runner_output(msg : String) : 
 	console.push_message(msg);

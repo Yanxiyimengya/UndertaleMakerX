@@ -1,7 +1,6 @@
 using Godot;
 using Jint.Native;
 using Jint.Native.Object;
-using System.Runtime.InteropServices.JavaScript;
 
 [GlobalClass]
 public partial class JavaScriptLifecycleProxy : Node
@@ -10,13 +9,26 @@ public partial class JavaScriptLifecycleProxy : Node
 		get => _jsInstance;
 		set
 		{
+			if (ReferenceEquals(_jsInstance, value))
+				return;
+
 			_jsInstance = value;
-			SetProcess(JsInstance?.HasProperty(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK) ?? false);
-			Invoke(EngineProperties.JAVASCRIPT_ON_LOAD_CALLBACK);
-			Invoke(EngineProperties.JAVASCRIPT_START_CALLBACK);
+			if (_jsInstance == null)
+			{
+				_startedInstance = null;
+				_startInvokeScheduled = false;
+				SetProcess(false);
+				return;
+			}
+
+			SetProcess(_jsInstance.HasProperty(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK));
+			if (IsInsideTree())
+				ScheduleStartInvoke();
 		}
 	}
 	private ObjectInstance _jsInstance = null;
+	private ObjectInstance _startedInstance = null;
+	private bool _startInvokeScheduled = false;
 
 	public override void _EnterTree()
 	{
@@ -46,9 +58,32 @@ public partial class JavaScriptLifecycleProxy : Node
 	private void OnEnterTree()
 	{
 		Node parent = GetParent();
-		if (parent is IJavaScriptLifecyucle lc)
+		if (parent is IJavaScriptLifecyucle lc && !ReferenceEquals(JsInstance, lc.JsInstance))
 		{
 			JsInstance = lc.JsInstance;
 		}
+		ScheduleStartInvoke();
+	}
+
+	private void ScheduleStartInvoke()
+	{
+		if (JsInstance == null || ReferenceEquals(_startedInstance, JsInstance) || _startInvokeScheduled)
+			return;
+
+		_startInvokeScheduled = true;
+		CallDeferred(nameof(InvokeStartIfNeeded));
+	}
+
+	private void InvokeStartIfNeeded()
+	{
+		_startInvokeScheduled = false;
+		if (!IsInsideTree())
+			return;
+
+		if (JsInstance == null || ReferenceEquals(_startedInstance, JsInstance))
+			return;
+
+		_startedInstance = JsInstance;
+		Invoke(EngineProperties.JAVASCRIPT_START_CALLBACK);
 	}
 }

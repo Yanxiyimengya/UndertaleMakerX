@@ -1,0 +1,136 @@
+[gd_scene format=3 uid="uid://cc8g0lrwisk1d"]
+
+[ext_resource type="Script" uid="uid://c43hijmc6xiq8" path="res://scripts/windows/ExportWindow.gd" id="1_66ut1"]
+[ext_resource type="StyleBox" uid="uid://dy6xysdb2nfaf" path="res://assets/themes/style_box_background.tres" id="2_8nhw5"]
+[ext_resource type="Texture2D" uid="uid://cpnx3vfinyi0i" path="res://assets/icons/folder/folder_normal.svg" id="3_6ybr5"]
+[ext_resource type="Texture2D" uid="uid://batdmyf735ts8" path="res://assets/icons/folder/folder_hover.svg" id="4_g1xpw"]
+[ext_resource type="StyleBox" uid="uid://ly6v5w6s4o2y" path="res://assets/themes/buttons/button/button_normal.tres" id="5_typw8"]
+[ext_resource type="StyleBox" uid="uid://b71eph0xk3o6" path="res://assets/themes/buttons/button/button_pressed.tres" id="6_4axwg"]
+[ext_resource type="StyleBox" uid="uid://bevcb7gt65cgf" path="res://assets/themes/buttons/button/button_hover.tres" id="7_dry25"]
+[ext_resource type="StyleBox" uid="uid://cggclb0lav4x7" path="res://assets/themes/buttons/main_button/main_button_normal.tres" id="8_kol02"]
+[ext_resource type="StyleBox" uid="uid://c4jc6bmwoy68s" path="res://assets/themes/buttons/main_button/main_button_pressed.tres" id="9_kvpxo"]
+[ext_resource type="StyleBox" uid="uid://cfdcd087aiuc3" path="res://assets/themes/buttons/main_button/main_button_hoverl.tres" id="10_vvuhj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gfu62"]
+bg_color = Color(0.17641911, 0.17641908, 0.17641908, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+expand_margin_top = 53.0
+shadow_color = Color(0, 0, 0, 0.3137255)
+shadow_size = 5
+shadow_offset = Vector2(5, 5)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_idmcu"]
+
+[node name="ExportWindow" type="Window" unique_id=821259881]
+oversampling_override = 1.0
+title = "Export"
+initial_position = 1
+size = Vector2i(800, 200)
+transient = true
+exclusive = true
+popup_window = true
+minimize_disabled = true
+maximize_disabled = true
+theme_override_colors/title_color = Color(0.8891468, 0.8891468, 0.88914675, 1)
+theme_override_constants/title_height = 50
+theme_override_constants/close_h_offset = 27
+theme_override_constants/close_v_offset = 27
+theme_override_font_sizes/title_font_size = 20
+theme_override_styles/embedded_border = SubResource("StyleBoxFlat_gfu62")
+script = ExtResource("1_66ut1")
+
+[node name="ExportWindowContent" type="PanelContainer" parent="." unique_id=1929171755]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = ExtResource("2_8nhw5")
+
+[node name="MarginContainer" type="MarginContainer" parent="ExportWindowContent" unique_id=1869062495]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ExportWindowContent/MarginContainer" unique_id=350661901]
+layout_mode = 2
+
+[node name="ProjectdirBar" type="VBoxContainer" parent="ExportWindowContent/MarginContainer/VBoxContainer" unique_id=1673068560]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="ExportWindowContent/MarginContainer/VBoxContainer/ProjectdirBar" unique_id=2095568270]
+layout_mode = 2
+
+[node name="ProjectDirLabel" type="Label" parent="ExportWindowContent/MarginContainer/VBoxContainer/ProjectdirBar/HBoxContainer2" unique_id=565593081]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Location"
+
+[node name="InfoLabel" type="RichTextLabel" parent="ExportWindowContent/MarginContainer/VBoxContainer/ProjectdirBar/HBoxContainer2" unique_id=562275239]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxEmpty_idmcu")
+bbcode_enabled = true
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ExportWindowContent/MarginContainer/VBoxContainer/ProjectdirBar" unique_id=2102313084]
+layout_mode = 2
+
+[node name="ProjectDirEdit" type="LineEdit" parent="ExportWindowContent/MarginContainer/VBoxContainer/ProjectdirBar/HBoxContainer" unique_id=1351067638]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+caret_blink = true
+
+[node name="DirTextureButton" type="TextureButton" parent="ExportWindowContent/MarginContainer/VBoxContainer/ProjectdirBar/HBoxContainer" unique_id=1534048663]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture_normal = ExtResource("3_6ybr5")
+texture_pressed = ExtResource("4_g1xpw")
+texture_hover = ExtResource("4_g1xpw")
+stretch_mode = 5
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="ExportWindowContent/MarginContainer/VBoxContainer" unique_id=710448778]
+layout_mode = 2
+size_flags_vertical = 10
+
+[node name="PanelContainer2" type="PanelContainer" parent="ExportWindowContent/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1960160650]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ExportWindowContent/MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2" unique_id=1639655012]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="CancelButton" type="Button" parent="ExportWindowContent/MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer" unique_id=912541224]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = ExtResource("5_typw8")
+theme_override_styles/pressed = ExtResource("6_4axwg")
+theme_override_styles/hover = ExtResource("7_dry25")
+text = "Cancel"
+
+[node name="ExportButton" type="Button" parent="ExportWindowContent/MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer" unique_id=149254487]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95304054, 0.9530404, 0.95304054, 1)
+theme_override_styles/normal = ExtResource("8_kol02")
+theme_override_styles/pressed = ExtResource("9_kvpxo")
+theme_override_styles/hover = ExtResource("10_vvuhj")
+text = "Export"
+
+[connection signal="pressed" from="ExportWindowContent/MarginContainer/VBoxContainer/ProjectdirBar/HBoxContainer/DirTextureButton" to="." method="_on_dir_texture_button_pressed"]
+[connection signal="pressed" from="ExportWindowContent/MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
+[connection signal="pressed" from="ExportWindowContent/MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer/ExportButton" to="." method="_on_export_button_pressed"]
