@@ -44,7 +44,6 @@
 [ext_resource type="Script" uid="uid://chldlchltn3yg" path="res://scripts/scenes/encounter_battle/arena/BattleArenaMask.cs" id="26_r2q8g"]
 [ext_resource type="Script" uid="uid://dwg2ab3ixqu8g" path="res://scripts/scenes/encounter_battle/ui/button/BattleScreenActionButton.cs" id="33_q4xod"]
 [ext_resource type="PackedScene" uid="uid://3dmh7idg5rqu" path="res://scenes/encounter_battle/ui/speech_bubble/speech_bubble.tscn" id="39_1x56u"]
-[ext_resource type="Script" uid="uid://bs3racnhnplhk" path="res://scripts/scenes/encounter_battle/battle_camera/BattleCamera.cs" id="43_knxdc"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3wf68"]
 
@@ -53,7 +52,7 @@
 [node name="BattleController" type="Node" parent="." unique_id=1909813863 node_paths=PackedStringArray("BattleStateMachine", "Camera", "EnemyController", "PlayerController", "ArenaController", "TurnController", "UiController", "ProjectileController")]
 script = ExtResource("2_mdx4q")
 BattleStateMachine = NodePath("../BattleStateMachine")
-Camera = NodePath("../BattleCamera")
+Camera = NodePath("")
 EnemyController = NodePath("BattleEnemyController")
 PlayerController = NodePath("BattlePlayerController")
 ArenaController = NodePath("BattleArenaController")
@@ -300,10 +299,3 @@ position = Vector2(320, 240)
 
 [node name="Projectiles" type="Node2D" parent="." unique_id=1993100029]
 z_index = 200
-
-[node name="BattleCamera" type="Camera2D" parent="." unique_id=1305980599]
-z_index = 300
-position = Vector2(320, 240)
-ignore_rotation = false
-script = ExtResource("43_knxdc")
-metadata/_custom_type_script = "uid://bs3racnhnplhk"

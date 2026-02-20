@@ -10,12 +10,24 @@ var _resource_cache: Dictionary = {};
 
 var root_path: String;
 var _last_disk_fingerprint: int = 0;
-var trash_path: String = EditorConfigureManager.get_data_path().path_join(".undo_trash/");
+var trash_path: String = "";
 
 # 状态锁
 var _is_logic_processing: bool = false;
 
 func _init() -> void:
+	_refresh_trash_path();
+
+func _enter_tree() -> void:
+	_refresh_trash_path();
+
+func _refresh_trash_path() -> void:
+	var data_path: String = EditorConfigureManager.get_data_path();
+	if (data_path.is_empty()):
+		data_path = OS.get_executable_path().get_base_dir().path_join("editor_data");
+	if (!DirAccess.dir_exists_absolute(data_path)):
+		DirAccess.make_dir_recursive_absolute(data_path);
+	trash_path = data_path.path_join(".undo_trash");
 	if (!DirAccess.dir_exists_absolute(trash_path)):
 		DirAccess.make_dir_recursive_absolute(trash_path);
 

@@ -15,7 +15,8 @@ public partial class UtmxMainLoop : SceneTree
         UtmxLogger.Log($"UndertaleMakerX {EngineProperties.ENGINE_VERSION} - Yanxiyimeng");
 		// 加载资源包
 		var datapackLoader = DatapackLoader.GetDatapackLoader(OS.GetName());
-		datapackLoader.LoadPack();
+		if (datapackLoader != null )
+			datapackLoader.LoadPack();
 	}
 	public override void _Initialize()
 	{

@@ -49,15 +49,19 @@ public class JavaScriptBridge
 		Dictionary<string, string> exportModuleScripts = JavaScriptCoreInterface._GetInterfaceExportScripts();
 		foreach (KeyValuePair<string, string> kvp in exportModuleScripts)
 		{
-			if (Godot.FileAccess.FileExists(kvp.Value))
+			string scriptPath = kvp.Value;
+			if (!Godot.FileAccess.FileExists(scriptPath))
 			{
-				Godot.FileAccess access = Godot.FileAccess.Open(kvp.Value, Godot.FileAccess.ModeFlags.Read);
-				if (access != null)
-				{
-					string fileContent = access.GetBuffer((long)access.GetLength()).GetStringFromUtf8();
-					MainEngine.Modules.Add(kvp.Key, fileContent);
-					access.Close();
-				}
+				UtmxLogger.Error($"[JS Bridge] Interface module script not found: {kvp.Key} => {scriptPath}");
+				continue;
+			}
+
+			Godot.FileAccess access = Godot.FileAccess.Open(scriptPath, Godot.FileAccess.ModeFlags.Read);
+			if (access != null)
+			{
+				string fileContent = access.GetBuffer((long)access.GetLength()).GetStringFromUtf8();
+				MainEngine.Modules.Add(kvp.Key, fileContent);
+				access.Close();
 			}
 		}
 	}

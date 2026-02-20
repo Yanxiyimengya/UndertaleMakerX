@@ -11,7 +11,7 @@ public partial class BattleTurnController : Node
 	private List<BaseBattleTurn> _currentTurnList = new();
 	public Queue<BaseBattleTurn> _turnDeleteQueue = new();
 
-    public override void _Process(double delta)
+	public override void _Process(double delta)
 	{
 		if (_turnStart)
 		{
@@ -69,14 +69,14 @@ public partial class BattleTurnController : Node
 			{
 				if (turn.Ending)
 				{
-                    _turnDeleteQueue.Enqueue(turn);
-                    continue;
+					_turnDeleteQueue.Enqueue(turn);
+					continue;
 				}
 				turn._OnTurnUpdate(delta);
 			}
 			while (_turnDeleteQueue.Count > 0) _currentTurnList.Remove(_turnDeleteQueue.Dequeue());
 
-            return true;
+			return true;
 		}
 		return false;
 	}
@@ -85,19 +85,19 @@ public partial class BattleTurnController : Node
 		if (_turnStart)
 		{
 
-            _turnStart = false;
-            if (_currentTurnList.Count > 0)
-            {
-                foreach (BaseBattleTurn turn in _currentTurnList)
-                {
-                    turn._OnTurnEnd();
-                }
-            }
-            _currentTurnList.Clear();
-            UtmxBattleManager.GetBattleProjectileController().DestroyProjectilesOnTurnEnd();
-        }
-        return false;
-    }
+			_turnStart = false;
+			if (_currentTurnList.Count > 0)
+			{
+				foreach (BaseBattleTurn turn in _currentTurnList)
+				{
+					turn._OnTurnEnd();
+				}
+			}
+			_currentTurnList.Clear();
+			UtmxBattleManager.GetBattleProjectileController().DestroyProjectilesOnTurnEnd();
+		}
+		return false;
+	}
 	public int GetTurnCount()
 	{
 		return _currentTurnList.Count;

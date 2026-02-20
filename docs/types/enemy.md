@@ -168,7 +168,7 @@ getSlot() -> number
 ### appendDialogue
 
 ```javascript
-appendDialogue(dialogue, offset) -> void
+appendDialogue(dialogueMessage, offset = null, hideSpike = false, dir = 2) -> void
 ```
 
 将一段文本追加到该怪物的对话列表中，当战斗进入怪物对话状态时就会读取列表中的对话显示。
@@ -177,9 +177,11 @@ appendDialogue(dialogue, offset) -> void
 
 **Returns** `void`
 
-| Parameter | Type  | Description      |
-| --------- | ----- | ---------------- |
-| dialogue   | any | 要显示的对话内容 |
-| offset   | Vector2 | 对话的偏移位置 |
+| Parameter | Type  | Default | Description      |
+| --------- | ----- | ------- | ---------------- |
+| dialogueMessage   | any | - | 要显示的对话内容，支持字符串或字符串数组 |
+| offset   | Vector2 | (30, 0) | 对话框相对 `centerPosition` 的偏移位置 |
+| hideSpike   | boolean | false | 是否隐藏对话框尖角 |
+| dir   | number | 2 | 对话框尖角方向：`0=Top`、`1=Bottom`、`2=Left`、`3=Right` |
 
 ---

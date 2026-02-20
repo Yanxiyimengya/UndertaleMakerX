@@ -10,8 +10,12 @@ public partial class UtmxSceneManager : CanvasLayer
 	public string EncounterBattleScenePath = "";
 	[Export(PropertyHint.File, "*.tscn")]
 	public string GameoverScenePath = "";
+    [Export(PropertyHint.File, "*.tscn")]
+    public string SpeechBubbleScenePath = "";
+	[Export]
+	public GameCamera MainCamera;
 
-	private static string _prevScene = "";
+    private static string _prevScene = "";
 	private static string _currentScene = ProjectSettings.GetSetting("application/run/main_scene", "").ToString();
 	private static string _mainScene = "";
 	private static Dictionary<string , Node> singletons = new();
@@ -117,15 +121,45 @@ public partial class UtmxSceneManager : CanvasLayer
 		return _prevScene;
 	}
 
-    public static Camera2D GetCamera()
+    public static GameCamera GetCamera()
     {
-		Camera2D camera = GetCamera();
-        return camera;
+        if (IsInstanceValid(Instance?.MainCamera))
+            return Instance.MainCamera;
+        if (Instance?.GetViewport()?.GetCamera2D() is GameCamera camera)
+            return camera;
+        return null;
     }
 
 
-    #region 渲染对象管理
+    #region 对话气泡管理
+    public static SpeechBubble CreateSpeechBubble()
+    {
+        if (!IsInstanceValid(Instance))
+            return null;
 
+        Resource res = ResourceLoader.Load(Instance.SpeechBubbleScenePath);
+		if (res is PackedScene sc)
+		{
+            SpeechBubble speechBubble = (SpeechBubble)sc.Instantiate();
+            Node targetParent = Instance.GetTree()?.CurrentScene;
+            if (IsInstanceValid(targetParent))
+                targetParent.AddChild(speechBubble);
+			return speechBubble;
+        }
+		return null;
+    }
+    public static void DeleteSpeechBubble(SpeechBubble obj)
+    {
+        if (obj == null) return;
+        obj.QueueFree();
+    }
+    public static void DeleteDrawableObject(SpeechBubble obj)
+    {
+        DeleteSpeechBubble(obj);
+    }
+    #endregion
+
+    #region 渲染对象管理
     private static ObjectPool<DrawableObject> _drawableObjectPool = new();
 	public static DrawableObject CreateDrawableObject()
 	{
@@ -134,14 +168,20 @@ public partial class UtmxSceneManager : CanvasLayer
 	public static T CreateDrawableObject<T>() where T : DrawableObject, new()
 	{
 		T node = _drawableObjectPool.GetObject<T>();
-		Node parent = node.GetParent();
-		Node targetParent = Instance.GetTree().CurrentScene;
+		if (!IsInstanceValid(Instance))
+			return node;
+
+		Node parent = IsInstanceValid(node) ? node.GetParent() : null;
+		Node targetParent = Instance.GetTree()?.CurrentScene;
+        if (!IsInstanceValid(targetParent))
+            return node;
+
         if (parent == null) targetParent.AddChild(node);
-		else if (parent != targetParent) node.Reparent(targetParent, false);
+		else if (parent != targetParent && IsInstanceValid(parent)) node.Reparent(targetParent, false);
+        else if (parent != targetParent) targetParent.AddChild(node);
 
 		return node;
 	}
-
 	public static void DeleteDrawableObject(DrawableObject obj)
 	{
 		if (obj == null) return;
@@ -159,10 +199,17 @@ public partial class UtmxSceneManager : CanvasLayer
 	public static T CreateSprite<T>() where T : GameSprite2D, new()
 	{
 		T node = _spritePool.GetObject<T>();
-		Node parent = node.GetParent();
-		Node targetParent = Instance.GetTree().CurrentScene;
+		if (!IsInstanceValid(Instance))
+			return node;
+
+		Node parent = IsInstanceValid(node) ? node.GetParent() : null;
+		Node targetParent = Instance.GetTree()?.CurrentScene;
+		if (!IsInstanceValid(targetParent))
+			return node;
+
 		if (parent == null) targetParent.AddChild(node);
-		else if (parent != targetParent) node.Reparent(targetParent, false);
+		else if (parent != targetParent && IsInstanceValid(parent)) node.Reparent(targetParent, false);
+		else if (parent != targetParent) targetParent.AddChild(node);
 		return node;
 	}
 	public static void DeleteSprite(GameSprite2D sprite)
@@ -182,10 +229,17 @@ public partial class UtmxSceneManager : CanvasLayer
 	public static T CreateTextTyper<T>() where T : TextTyper, new()
 	{
 		T node = _textTyperPool.GetObject<T>();
-		Node parent = node.GetParent();
-		Node targetParent = Instance.GetTree().CurrentScene;
+		if (!IsInstanceValid(Instance))
+			return node;
+
+		Node parent = IsInstanceValid(node) ? node.GetParent() : null;
+		Node targetParent = Instance.GetTree()?.CurrentScene;
+		if (!IsInstanceValid(targetParent))
+			return node;
+
 		if (parent == null) targetParent.AddChild(node);
-		else if (parent != targetParent) node.Reparent(targetParent, false);
+		else if (parent != targetParent && IsInstanceValid(parent)) node.Reparent(targetParent, false);
+		else if (parent != targetParent) targetParent.AddChild(node);
 		return node;
 	}
 

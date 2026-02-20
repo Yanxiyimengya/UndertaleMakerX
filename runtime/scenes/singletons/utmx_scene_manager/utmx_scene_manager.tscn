@@ -1,9 +1,17 @@
 [gd_scene format=3 uid="uid://cfilp3paq1pth"]
 
 [ext_resource type="Script" uid="uid://0sdlv16sg7gj" path="res://scripts/singletons/UtmxSceneManager.cs" id="1_si8st"]
+[ext_resource type="Script" uid="uid://chp12qujufox1" path="res://scripts/utils/game_objects/game_camera/GameCamera.cs" id="2_xjhwl"]
 
-[node name="_UtmxSceneManager" type="CanvasLayer" unique_id=888438971]
+[node name="_UtmxSceneManager" type="CanvasLayer" unique_id=888438971 node_paths=PackedStringArray("MainCamera")]
 script = ExtResource("1_si8st")
 EncounterBattleScenePath = "uid://o3ubysucd5hn"
 GameoverScenePath = "uid://bhklw8angg12w"
+SpeechBubbleScenePath = "uid://3dmh7idg5rqu"
+MainCamera = NodePath("GameCamera")
 metadata/_custom_type_script = "uid://0sdlv16sg7gj"
+
+[node name="GameCamera" type="Camera2D" parent="." unique_id=106790183]
+position = Vector2(320, 240)
+script = ExtResource("2_xjhwl")
+metadata/_custom_type_script = "uid://chp12qujufox1"

@@ -46,7 +46,6 @@ TyperSize = 14
 TyperColor = Color(0, 0, 0, 1)
 TyperFont = ExtResource("3_wr8x2")
 Voice = ExtResource("4_tdp7k")
-metadata/_custom_type_script = "uid://dmq4qew4auuss"
 
 [node name="SpeechBubbleSpikeTexture" type="TextureRect" parent="." unique_id=53323621]
 anchors_preset = 3

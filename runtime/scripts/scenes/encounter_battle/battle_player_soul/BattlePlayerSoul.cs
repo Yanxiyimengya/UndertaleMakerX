@@ -228,8 +228,8 @@ public partial class BattlePlayerSoul : CharacterBody2D
 			{
 				_invincibleTimer = UtmxPlayerDataManager.PlayerInvincibleTime;
 			}
-			if (GetViewport().GetCamera2D() is BattleCamera camera)
-				camera.StartShake(0.1f, Vector2.One, new Vector2(30, 30));
+			if (GetViewport().GetCamera2D() is GameCamera camera)
+				camera.StartShake(0.12f, new Vector2(2, 2), new Vector2(30, 30));
 			UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("HURT"));
 		}
 	}

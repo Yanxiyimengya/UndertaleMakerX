@@ -6,7 +6,6 @@ import {
 	BattleArenaCircle,
 	BattleArenaPolygon,
 } from "./types/utmx-battle-arena.wrapper.js";
-
 class BattleSoul extends UtmxGameObject
 {
 	static get enabledCollision() {

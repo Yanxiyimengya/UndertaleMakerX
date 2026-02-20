@@ -17,7 +17,6 @@ enum CaseMode {
 
 var _case_mode: int = CaseMode.ORIGINAL
 
-
 func _ready() -> void:
 	_setup_case_option_button()
 	preview_update_timer.wait_time = PREVIEW_UPDATE_DELAY_SEC

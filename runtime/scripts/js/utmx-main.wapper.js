@@ -21,6 +21,8 @@ import { UtmxBaseEncounter } from "res://scripts/js/wrappers/types/utmx-encounte
 import { UtmxBattleTurn } from "res://scripts/js/wrappers/types/utmx-battle-turn.wrapper.js";
 import { UtmxTextTyper } from "res://scripts/js/wrappers/types/utmx-text-typer.wrapper.js";
 import { UtmxShader } from "res://scripts/js/wrappers/types/utmx-shader.wrapper.js";
+import { UtmxCamera } from "res://scripts/js/wrappers/types/utmx-camera.weapper.js";
+import { UtmxSpeechBubble } from "res://scripts/js/wrappers/types/utmx-speeth-bubble.weapper.js";
 
 import { __tween_manager } from "__UTMX";
 
@@ -42,9 +44,11 @@ class UTMX {
 	static Encounter = UtmxBaseEncounter;
 	static BattleTurn = UtmxBattleTurn;
 	static BattleProjectile = UtmxBattleProjectile;
+	static Camera = UtmxCamera;
 	static Sprite = UtmxGameSprite;
 	static DrawableObject = UtmxDrawableObject;
 	static TextTyper = UtmxTextTyper;
+	static SpeechBubble = UtmxSpeechBubble;
 	static Shader = UtmxShader;
 }
 

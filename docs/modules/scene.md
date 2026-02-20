@@ -96,23 +96,13 @@ getSingleton(name) -> GameObject
 ### getCamera
 
 ```javascript
-getCamera() -> UTMX.Camera
+getCamera() -> Camera
 ```
 
 获取当前场景有效的 Camera，注意，某些场景不存在 Camera，因此这个函数将返回 `null`。
 
-**Returns** `UTMX.Camera`
+**Returns** `Camera`
 
 ---
-# Camera 子模块
 
-Camera 为 Battle 的内置子模块，用于管理玩家在战斗中的 **摄像机**。
-通过 `UTMX.battle.camera` 访问。
-
-摄像机以屏幕中心为原点
-
-| Property          | Type    | Default   | Description                                      |
-| ----------------- | ------- | --------- | ------------------------------------------------ |
-| position  | Vector2 | (0, 0)      | 摄像机的位置（相对于世界原点） |
-| zoom  | Vector2 | (1, 1)      | 摄像机的视角缩放 |
-| rotation  | number | 0      | 摄像机的旋转角度（单位为角度） 
+Camera 类型的属性与方法（如 `startShake`）请参考 [Camera](types/game-object/camera.md)。

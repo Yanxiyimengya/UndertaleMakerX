@@ -24,6 +24,21 @@ func get_opened_project_path() -> String:
 		return opened_project.project_path;
 	return "";
 
+## 兼容入口：支持传入项目目录或 utmx.cfg 文件路径
+func load_project(path: String) -> UtmxProject:
+	if (path.is_empty()):
+		return null;
+
+	if (DirAccess.dir_exists_absolute(path)):
+		return load_project_config(path);
+
+	if (FileAccess.file_exists(path)):
+		var file_name: String = path.get_file();
+		if (file_name == PROJECT_CONFIG_FILE_NAME):
+			return load_project_config(path.get_base_dir());
+
+	return null;
+
 # --- 核心：加载与保存项目清单 (编辑器全局) ---
 
 ## 从编辑器的项目清单文件加载所有已知项目

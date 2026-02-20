@@ -17,10 +17,10 @@ public partial class JavaScriptTextTyperProxy : TextTyper, IObjectPoolObject , I
 	}
     public override bool _ProcessCmd(string cmd, Dictionary<string, string> args)
 	{
-		if (JsInstance.HasProperty("processCmd"))
+		if (JsInstance != null && JsInstance.HasProperty("processCmd"))
 		{
-            JsValue result = JavaScriptBridge.InvokeFunction(JsInstance, "processCmd", [cmd, args]).AsBoolean();
-			if (!result.IsUndefined() && !result.IsNull()) 
+            JsValue result = JavaScriptBridge.InvokeFunction(JsInstance, "processCmd", [cmd, args]);
+			if (!result.IsUndefined() && !result.IsNull())
 				if (result.AsBoolean() == true) return true;
 		}
 		return base._ProcessCmd(cmd, args);

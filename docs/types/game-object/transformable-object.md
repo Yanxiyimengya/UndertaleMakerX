@@ -7,6 +7,7 @@
 2D 场景实例通常包括：
 
 - [DrawableObject](/types/game-object/drawable-object.md)
+- [Camera](/types/game-object/camera.md)
 - [Sprite](/types/game-object/sprite.md)
 - [TextTyper](/types/game-object/text-typer.md)
 

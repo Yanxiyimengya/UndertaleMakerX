@@ -51,24 +51,25 @@ public partial class TextTyper : Godot.RichTextLabel, IObjectPoolObject
 
 	[Export]
 	public AudioStream Voice = null;
-    public GameShader ShaderInstance
-    {
-        get => _shaderInstance;
-        set
-        {
-            _shaderInstance = value;
-            Material = value.GetShaderMaterial();
-        }
-    }
+	public Func<string, Dictionary<string, string>, bool> ProcessCmdCallback { get; set; } = null;
+	public GameShader ShaderInstance
+	{
+		get => _shaderInstance;
+		set
+		{
+			_shaderInstance = value;
+			Material = value.GetShaderMaterial();
+		}
+	}
 
-    private double _typerTimer = 0.0;
+	private double _typerTimer = 0.0;
 	private int _typerSize = 16;
 	private double _typerWattingTimer = 0.0;
 	private int _typerProgress = 0;
 	private Font _typerFont = ThemeDB.FallbackFont;
 	private Color _typerColor = Colors.White;
 	private object _waitForKeyAction = null;
-    protected GameShader _shaderInstance;
+	protected GameShader _shaderInstance;
 
 	public TextTyper()
 	{
@@ -84,8 +85,9 @@ public partial class TextTyper : Godot.RichTextLabel, IObjectPoolObject
 		{
 			if (_waitForKeyAction != null)
 			{
-				if (_waitForKeyAction is string actString && Input.IsActionPressed(actString) ||
-					_waitForKeyAction is Key actKey && Input.IsKeyPressed(actKey))
+				if (_waitForKeyAction is string actString && Input.IsActionPressed(actString))
+					_waitForKeyAction = null;
+				else if (_waitForKeyAction is Key actKey && Input.IsKeyPressed(actKey))
 					_waitForKeyAction = null;
 			}
 		}
@@ -262,6 +264,19 @@ public partial class TextTyper : Godot.RichTextLabel, IObjectPoolObject
 
 	public virtual bool _ProcessCmd(string cmd, Dictionary<string, string> args)
 	{
+		if (ProcessCmdCallback != null)
+		{
+			try
+			{
+				if (ProcessCmdCallback(cmd, args))
+					return true;
+			}
+			catch (Exception e)
+			{
+				UtmxLogger.Error(e.Message);
+			}
+		}
+
 		switch (cmd)
 		{
 			case "waitfor":
@@ -400,20 +415,20 @@ public partial class TextTyper : Godot.RichTextLabel, IObjectPoolObject
 					}
 				}
 				break;
-                }
-            case "shader":
-                {
-                    if (args.TryGetValue("value", out string shaderPath) && !string.IsNullOrEmpty(shaderPath))
-                    {
+				}
+			case "shader":
+				{
+					if (args.TryGetValue("value", out string shaderPath) && !string.IsNullOrEmpty(shaderPath))
+					{
 						ShaderInstance = new GameShader();
 						ShaderInstance.LoadFromFile(shaderPath);
-                    }
-                    break;
-                }
+					}
+					break;
+				}
 
 
-            // INLINE COMMANDS
-            case "voice":
+			// INLINE COMMANDS
+			case "voice":
 				if (Instant) return true;
 				if (args.TryGetValue("value", out string voicePath) && !string.IsNullOrEmpty(voicePath))
 				{
@@ -464,9 +479,9 @@ public partial class TextTyper : Godot.RichTextLabel, IObjectPoolObject
 						UtmxGlobalStreamPlayer.SetBgmPitch(bgmId, bgmPitch);
 					if (args.TryGetValue("volume", out string bgmVolumeStr) && double.TryParse(bgmPitchStr, out double bgmVolume))
 						UtmxGlobalStreamPlayer.SetBgmVolume(bgmId, bgmVolume);
-                    if (args.TryGetValue("position", out string bgmPositionStr) && double.TryParse(bgmPositionStr, out double bgmPosition))
-                            UtmxGlobalStreamPlayer.SetBgmPosition(bgmId, bgmPosition);
-                    }
+					if (args.TryGetValue("position", out string bgmPositionStr) && double.TryParse(bgmPositionStr, out double bgmPosition))
+							UtmxGlobalStreamPlayer.SetBgmPosition(bgmId, bgmPosition);
+					}
 				break;
 			}
 
@@ -509,13 +524,13 @@ public partial class TextTyper : Godot.RichTextLabel, IObjectPoolObject
 	public new bool IsFinished()
 	{
 		return _typerProgress >= TyperText.Length;
-    }
-    public int GetProgress()
-    {
-        return _typerProgress;
-    }
+	}
+	public int GetProgress()
+	{
+		return _typerProgress;
+	}
 
-    public void ResetData()
+	public void ResetData()
 	{
 		_typerProgress = 0;
 		_typerTimer = 0.0;

@@ -97,7 +97,7 @@ public partial class JavaScriptEnemyProxy : BaseEnemy, IJavaScriptLifecyucle
 	{
 		if (offset == null)
 			offset = new Vector2(30, 0);
-		UtmxDialogueQueueManager.AppendBattleEnemyDialogue(EnemySlot, dialogueMessage.ToString(), (Vector2)offset, hideSpike);
+		UtmxDialogueQueueManager.AppendBattleEnemyDialogue(EnemySlot, dialogueMessage.ToString(), (Vector2)offset, hideSpike, dir);
 	}
 	public void AppendEnemyDialogue(object[] dialogueMessages, Vector2? offset = null, bool hideSpike = false, int dir = 2)
 	{
@@ -105,7 +105,7 @@ public partial class JavaScriptEnemyProxy : BaseEnemy, IJavaScriptLifecyucle
 			offset = new Vector2(30, 0);
 		foreach (string message in dialogueMessages)
 		{
-			UtmxDialogueQueueManager.AppendBattleEnemyDialogue(EnemySlot, message, (Vector2)offset, hideSpike);
+			UtmxDialogueQueueManager.AppendBattleEnemyDialogue(EnemySlot, message, (Vector2)offset, hideSpike, dir);
 		}
 	}
 }

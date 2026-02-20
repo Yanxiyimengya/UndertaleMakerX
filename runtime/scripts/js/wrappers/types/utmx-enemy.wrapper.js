@@ -1,5 +1,6 @@
 import { __UtmxEnemy } from "__UTMX";
-import { UtmxGameSprite } from "./utmx-game-sprite.wrapper";
+import { UtmxGameSprite } from "./utmx-game-sprite.wrapper.js";
+
 
 export class UtmxBaseEnemy extends __UtmxEnemy  
 {
@@ -97,7 +98,7 @@ export class UtmxBaseEnemy extends __UtmxEnemy
 	getSlot() {
 		return this.EnemySlot;
 	}
-	appendDialogue(dialogue, offset) {
-		this.AppendEnemyDialogue(dialogue, offset);
+	appendDialogue(dialogueMessage, offset = null, hideSpike = false, dir = 2) {
+		this.AppendEnemyDialogue(dialogueMessage, offset, hideSpike, dir);
 	}
 }

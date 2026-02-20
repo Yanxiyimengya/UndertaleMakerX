@@ -6,7 +6,7 @@ public partial class BattleController : Node
 	[Export]
 	public StateMachine BattleStateMachine;
 	[Export]
-	public BattleCamera Camera;
+	public GameCamera Camera;
 	[Export]
 	public BattleEnemyController EnemyController;
 	[Export]

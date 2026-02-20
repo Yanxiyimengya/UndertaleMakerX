@@ -33,14 +33,14 @@ public partial class BattleProjectileController : Node
 		List<BaseBattleProjectile> destroyList = new();
 		foreach (Node child in ProjectilesNode.GetChildren())
 		{
-			if (child is BaseBattleProjectile projectile && projectile.DestroyOnTurnEnd)
+			if (child is BaseBattleProjectile projectile && projectile.DestroyOnTurnEnd && projectile.Enabled)
 			{
 				destroyList.Add(projectile);
 			}
 		}
 		foreach (Node child in ArenaMask.GetChildren())
 		{
-			if (child is BaseBattleProjectile projectile && projectile.DestroyOnTurnEnd)
+			if (child is BaseBattleProjectile projectile && projectile.DestroyOnTurnEnd && projectile.Enabled)
 			{
 				destroyList.Add(projectile);
 			}
