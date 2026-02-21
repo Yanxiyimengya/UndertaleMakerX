@@ -98,7 +98,7 @@ export class UtmxBaseEnemy extends __UtmxEnemy
 	getSlot() {
 		return this.EnemySlot;
 	}
-	appendDialogue(dialogueMessage, offset = null, hideSpike = false, dir = 2) {
-		this.AppendEnemyDialogue(dialogueMessage, offset, hideSpike, dir);
+	appendDialogue(dialogueMessage, offset = null, size = null, processCmd = null) {
+		this.AppendEnemyDialogue(dialogueMessage, offset, size, processCmd);
 	}
 }

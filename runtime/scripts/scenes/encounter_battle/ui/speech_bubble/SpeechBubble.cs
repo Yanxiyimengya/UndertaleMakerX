@@ -11,7 +11,8 @@ public partial class SpeechBubble : Node2D
 		set
 		{
 			_text = value;
-			SpeechBubbleTextTyper.Start(value);
+			if (IsInstanceValid(SpeechBubbleTextTyper))
+				SpeechBubbleTextTyper.Start(value);
 		}
 	}
 	[Export]
@@ -25,15 +26,21 @@ public partial class SpeechBubble : Node2D
 	[Export]
 	public bool InSpike = true;
 	[Export]
-	public TextTyper SpeechBubbleTextTyper;
+	public SpeechBubbleTextTyper SpeechBubbleTextTyper;
 	[Export]
 	public TextureRect SpeechBubbleSpikeTexture;
 
 	private Vector2 _minimumSize = new Vector2(45, 45);
 	private string _text;
+	private bool _destroyed = false;
 
 	public override void _Ready()
 	{
+		if (!IsInstanceValid(SpeechBubbleTextTyper))
+		{
+			Destroy();
+			return;
+		}
 		UpdateBubble();
 		SpeechBubbleTextTyper.TyperColor = Colors.Black;
 		SpeechBubbleTextTyper.Start(Text);
@@ -41,6 +48,12 @@ public partial class SpeechBubble : Node2D
 
 	public override void _Process(double delta)
 	{
+		if (!IsInstanceValid(SpeechBubbleTextTyper) ||
+			SpeechBubbleTextTyper.ProcessMode == ProcessModeEnum.Disabled)
+		{
+			Destroy();
+			return;
+		}
 		UpdateBubble();
 	}
 
@@ -145,6 +158,19 @@ public partial class SpeechBubble : Node2D
 
 	public bool IsTextTyperFinished()
 	{
-		return SpeechBubbleTextTyper.IsFinished();
+		return !IsInstanceValid(SpeechBubbleTextTyper) || SpeechBubbleTextTyper.IsFinished();
+	}
+
+	public void Destroy()
+	{
+		if (_destroyed)
+			return;
+
+		_destroyed = true;
+		if (IsInstanceValid(SpeechBubbleTextTyper))
+		{
+			SpeechBubbleTextTyper.ProcessCmdCallback = null;
+		}
+		UtmxSceneManager.DeleteSpeechBubble(this);
 	}
 }

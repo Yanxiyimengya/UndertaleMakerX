@@ -1,5 +1,6 @@
 export class UtmxGameObject {
     __instance = null;
+    #destroyed = false;
 
     constructor() {
     }
@@ -11,6 +12,8 @@ export class UtmxGameObject {
 
     destroy()
     {
+        if (this.#destroyed) return;
         this.__instance.Destroy();
+        this.#destroyed = true;
     }
 }

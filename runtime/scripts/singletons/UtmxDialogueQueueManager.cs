@@ -6,6 +6,7 @@ public partial class UtmxDialogueData : RefCounted
 {
 	public string Message = "";
 	public Dictionary<string, Variant> MetaData;
+	public Func<string, Dictionary<string, string>, bool> ProcessCmdCallback = null;
 	public UtmxDialogueData(string msg)
 	{
 		Message = msg;
@@ -22,13 +23,19 @@ public partial class UtmxDialogueQueueManager
 	private static Queue<UtmxDialogueData> _dialogueQueue = new Queue<UtmxDialogueData>();
 	private static Dictionary<int, Queue<UtmxDialogueData>> _enemysDialogueQueues = new Dictionary<int, Queue<UtmxDialogueData>>();
 
-	public static void AppendBattleEnemyDialogue(int enemyIndex, string dialogueMessage, Vector2 pos, bool hideSpike = false, int dir = 2)
+	public static void AppendBattleEnemyDialogue(
+		int enemyIndex,
+		string dialogueMessage,
+		Vector2 pos,
+		Vector2 size,
+		Func<string, Dictionary<string, string>, bool> processCmdCallback = null
+	)
 	{
 		UtmxDialogueData dialogue = new UtmxDialogueData(dialogueMessage);
+		dialogue.ProcessCmdCallback = processCmdCallback;
 		dialogue.MetaData = new Dictionary<string, Variant> {
 			{"Poisition" , pos },
-			{"Dir" , dir },
-			{"HideSpike" , hideSpike },
+            {"Size" , size }
 		};
 		if (!_enemysDialogueQueues.ContainsKey(enemyIndex))
 			_enemysDialogueQueues.Add(enemyIndex, new Queue<UtmxDialogueData>());

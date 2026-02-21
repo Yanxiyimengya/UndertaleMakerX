@@ -22,6 +22,7 @@ public partial class JavaScriptLifecycleProxy : Node
 			}
 
 			SetProcess(_jsInstance.HasProperty(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK));
+			SetPhysicsProcess(_jsInstance.HasProperty(EngineProperties.JAVASCRIPT_PHYSICS_UPDATE_CALLBACK));
 			if (IsInsideTree())
 				ScheduleStartInvoke();
 		}
@@ -39,13 +40,15 @@ public partial class JavaScriptLifecycleProxy : Node
 	{
 		Invoke(EngineProperties.JAVASCRIPT_UPDATE_CALLBACK, delta);
 	}
-
+	public override void _PhysicsProcess(double delta)
+	{
+		Invoke(EngineProperties.JAVASCRIPT_PHYSICS_UPDATE_CALLBACK, delta);
+	}
 	public override void _Notification(int what)
 	{
 		if (what == NotificationPredelete)
-			Invoke(EngineProperties.JAVASCRIPT_DESTROY_CALLBACK);
+			Destroy();
 	}
-
 	public JsValue Invoke(string method, params object[] args)
 	{
 		if (JsInstance == null || string.IsNullOrEmpty(method))
@@ -85,5 +88,9 @@ public partial class JavaScriptLifecycleProxy : Node
 
 		_startedInstance = JsInstance;
 		Invoke(EngineProperties.JAVASCRIPT_START_CALLBACK);
+	}
+	public void Destroy()
+	{
+		Invoke(EngineProperties.JAVASCRIPT_DESTROY_CALLBACK);
 	}
 }

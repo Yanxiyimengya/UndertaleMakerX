@@ -61,8 +61,6 @@ static func pick_pack(path: String, output: String) -> void:
 		push_error("PickPack: flush failed (%d)." % flush_err)
 		return
 
-	print("PickPack: packed -> %s" % output_path)
-
 
 static func get_last_build_record() -> Dictionary:
 	return _last_build_record.duplicate(true)
@@ -142,7 +140,6 @@ static func _pack_file_once(target_res_path: String, source_abs_path: String, pa
 		return
 
 	packed_targets[normalized_target] = true
-	print("PickPack: [File] -> %s" % normalized_target)
 
 
 static func _record_build(

@@ -162,6 +162,11 @@ export class UtmxBattleManager {
 		ENEMY : 3,
 		END : 4,
 	});
+	static AttackStatus = Object.freeze({
+		SELECTED : 0,
+		HIT : 1,
+		MISSED : 2,
+	});
 
 	static soul = BattleSoul;
 	static arena = BattleArenaAccess;

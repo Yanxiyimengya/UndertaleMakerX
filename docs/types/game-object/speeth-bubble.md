@@ -1,39 +1,32 @@
-# SpeechBubble
+﻿# SpeechBubble
 
 继承 [TextTyper](types/game-object/text-typer.md)
 
-SpeechBubble 表示一个带尖角的对话气泡对象，内部使用 TextTyper 逐字打印文本。
-
-通过 `UTMX.SpeechBubble` 访问。
-
----
+SpeechBubble 是带尖角的对话气泡对象，内部使用 TextTyper 逐字打印文本。通过 `UTMX.SpeechBubble` 访问。
 
 ## 常量（Constants）
 
 ### Direction
 
-用于设置 `dir` 属性的方向枚举。
+用于设置 `dir` 属性。
 
-| Property | Type   | Default | Description |
-| -------- | ------ | ------- | ----------- |
-| Top   | number | 0       | 尖角朝上 |
-| Bottom   | number | 1       | 尖角朝下 |
-| Left   | number | 2       | 尖角朝左 |
-| Right   | number | 3       | 尖角朝右 |
+| Property | Type | Value | Description |
+| --- | --- | --- | --- |
+| Top | number | 0 | 尖角朝上 |
+| Bottom | number | 1 | 尖角朝下 |
+| Left | number | 2 | 尖角朝左 |
+| Right | number | 3 | 尖角朝右 |
 
 ## 核心属性（Properties）
 
-| Property | Type   | Default | Description |
-| -------- | ------ | ------- | ----------- |
-| text     | string | ""      | 气泡中的文本，修改后会重新开始逐字打印 |
-| size     | Vector2 | (180, 90)      | 气泡主体尺寸，最小值会被限制为 `(45, 45)` |
-| dir   | UTMX.SpeechBubble.Direction | Left     | 气泡尖角方向 |
-| Dir   | UTMX.SpeechBubble.Direction | Left     | `dir` 的别名，行为与 `dir` 完全一致 |
-| spikeOffset   | number | 0       | 气泡尖角沿边缘的偏移量，超出范围会被自动裁剪 |
-| hideSpike   | boolean | false       | 若为 `true` 则隐藏尖角 |
-| inSpike   | boolean | true       | 若为 `true` 则尖角布局在气泡内侧，否则布局在外侧 |
-
----
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| text | string | "" | 气泡文本，修改后会重新开始逐字打印 |
+| size | Vector2 | (180, 90) | 气泡尺寸（最小 `(45, 45)`） |
+| dir | UTMX.SpeechBubble.Direction | Left | 尖角方向 |
+| spikeOffset | number | 0 | 尖角沿边缘偏移 |
+| hideSpike | boolean | false | 是否隐藏尖角 |
+| inSpike | boolean | true | 尖角是否在气泡内侧布局 |
 
 ## 方法（Methods）
 
@@ -43,27 +36,30 @@ SpeechBubble 表示一个带尖角的对话气泡对象，内部使用 TextTyper
 new(text: string) -> SpeechBubble | null
 ```
 
-静态方法，实例化该 SpeechBubble，并以 `text` 作为初始文本。
+创建气泡并以 `text` 作为初始文本。
 
-**Returns** `SpeechBubble | null`
+> SpeechBubble 继承 TextTyper，可继续使用 `start`、`isFinished`、`getProgress`。
 
-| Parameter | Type   | Description |
-| --------- | ------ | ----------- |
-| text   | string | 初始文本 |
+## SpeechBubble 扩展文本命令
 
-> SpeechBubble 继承自 TextTyper，因此可继续使用 `start`、`isFinished`、`getProgress` 等 TextTyper 方法。
+以下命令是 **SpeechBubbleTextTyper** 增加的扩展命令（普通 TextTyper 不支持）：
 
----
+| 命令 | 语法 | 说明 |
+| --- | --- | --- |
+| spikeVisible | `[spikeVisible=true]` / `[spikeVisible=false]` / `[spikeVisible]` | 控制尖角可见性；不传参数时切换当前状态 |
+| dir | `[dir=top]` / `[dir=bottom]` / `[dir=left]` / `[dir=right]` / `[dir=0..3]` / `[dir]` | 设置尖角方向；不传参数时按 `Top -> Bottom -> Left -> Right` 循环 |
 
-#### 使用示例
+## 示例
 
 ```javascript
 import { UTMX, Vector2 } from "UTMX";
 
-let bubble = UTMX.SpeechBubble.new("你好，我是[color=yellow]小花[/color]。[waitfor=confirm][end]");
+let bubble = UTMX.SpeechBubble.new(
+  "[spikeVisible=true][dir=left]Hello[wait=0.2][dir=top] World[end]"
+);
+
 bubble.position = new Vector2(300, 180);
 bubble.size = new Vector2(220, 96);
-bubble.dir = UTMX.SpeechBubble.Direction.Left;
 bubble.spikeOffset = 24;
 bubble.inSpike = false;
 ```

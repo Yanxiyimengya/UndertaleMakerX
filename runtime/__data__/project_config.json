@@ -5,7 +5,7 @@
 		"max_fps" : 60,
 		"vsync" : false,
 		"main_scene" : "",
-		"main_script" : "main.js",
+		"main_script" : "",
 	},
 	"window" : {
 		"width": 640,

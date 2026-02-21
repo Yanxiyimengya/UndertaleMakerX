@@ -1,26 +1,40 @@
 [gd_scene format=3 uid="uid://d0q7av0w3c7gt"]
 
-[ext_resource type="FontFile" uid="uid://dks40d20ernd2" path="res://__data__/built-in-resources/fonts/DamageText.ttf" id="1_ewr1v"]
+[ext_resource type="FontFile" uid="uid://dks40d20ernd2" path="res://__data__/built-in-resources/fonts/DamageTextFore.ttf" id="1_ewr1v"]
 [ext_resource type="Script" uid="uid://c70yccichye13" path="res://scripts/scenes/encounter_battle/ui/menu/ui_elements/battle_damage_text/BattleDamageText.cs" id="1_mvfbq"]
-[ext_resource type="Script" uid="uid://cjyho7by408k4" path="res://scripts/utils/game_objects/TextTyper.cs" id="2_pxun5"]
+[ext_resource type="FontFile" uid="uid://cxdipaakx57px" path="res://__data__/built-in-resources/fonts/DamageTextBack.ttf" id="3_hu47k"]
 
-[node name="BattleDamageText" type="Node2D" node_paths=PackedStringArray("DamageTextTyper")]
+[node name="BattleDamageText" type="Node2D" unique_id=917425442 node_paths=PackedStringArray("DamageTextLabelBack", "DamageTextLabelFore")]
 script = ExtResource("1_mvfbq")
-DamageTextTyper = NodePath("RichTextLabel")
+DamageTextLabelBack = NodePath("RichTextLabelBack")
+DamageTextLabelFore = NodePath("RichTextLabelFore")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="."]
+[node name="RichTextLabelBack" type="RichTextLabel" parent="." unique_id=195261194]
+modulate = Color(0, 0, 0, 1)
 offset_left = -211.0
 offset_top = -119.0
 offset_right = 211.0
 offset_bottom = -1.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("3_hu47k")
+theme_override_font_sizes/normal_font_size = 32
 bbcode_enabled = true
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 2
-script = ExtResource("2_pxun5")
-TyperText = "MISS"
-TyperSize = 32
-TyperFont = ExtResource("1_ewr1v")
-metadata/_custom_type_script = "uid://dmq4qew4auuss"
+
+[node name="RichTextLabelFore" type="RichTextLabel" parent="." unique_id=478409]
+offset_left = -211.0
+offset_top = -119.0
+offset_right = 211.0
+offset_bottom = -1.0
+theme_override_fonts/normal_font = ExtResource("1_ewr1v")
+theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 2

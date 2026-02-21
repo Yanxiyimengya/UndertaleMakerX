@@ -21,6 +21,12 @@ public static class UtmxPlayerDataManager
 	public static BaseWeapon Weapon = new BaseWeapon();
 	public static BaseArmor Armor = new BaseArmor();
 
+	public static void ResetPlayerState()
+	{
+		PlayerHp = PlayerMaxHp;
+	}
+
+
 	public static void AddItem(string itemId)
 	{
 		if (GetItemCount() < MaxInventoryCount)
@@ -74,25 +80,25 @@ public static class UtmxPlayerDataManager
 		{
 			UtmxDialogueQueueManager.AppendDialogue(item.UsedText);
 		}
-    }
-    public static void SetWeapon(string itemId)
-    {
-        if (UtmxGameRegisterDB.TryGetItem(itemId, out BaseItem item))
-        {
+	}
+	public static void SetWeapon(string itemId)
+	{
+		if (UtmxGameRegisterDB.TryGetItem(itemId, out BaseItem item))
+		{
 			if (item is BaseWeapon weapon)
 				Weapon = weapon;
-        }
-    }
-    public static void SetArmor(string itemId)
-    {
-        if (UtmxGameRegisterDB.TryGetItem(itemId, out BaseItem item))
-        {
-            if (item is BaseArmor armor)
-                Armor = armor;
-        }
-    }
+		}
+	}
+	public static void SetArmor(string itemId)
+	{
+		if (UtmxGameRegisterDB.TryGetItem(itemId, out BaseItem item))
+		{
+			if (item is BaseArmor armor)
+				Armor = armor;
+		}
+	}
 
-    public static void RemoveItem(int slot)
+	public static void RemoveItem(int slot)
 	{
 		if (slot < 0 || slot >= Items.Count) return;
 		if (slot > -1 && slot < Items.Count)
@@ -103,7 +109,7 @@ public static class UtmxPlayerDataManager
 
 	public static void Hurt(double value, double invtime = -1)
 	{
-        value = Armor == null ? value : Armor.onDefend(value);
+		value = Armor == null ? value : Armor.onDefend(value);
 		if (UtmxBattleManager.IsInBattle())
 		{
 			UtmxBattleManager.GetBattlePlayerController()?.PlayerSoul?.Hurt(value, invtime);

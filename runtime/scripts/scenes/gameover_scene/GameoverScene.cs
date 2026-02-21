@@ -41,8 +41,8 @@ public partial class GameoverScene : Node
 
 	public override void _ExitTree()
 	{
-		if (UtmxGlobalStreamPlayer.IsBgmValid("GAME_OVER"))
-			UtmxGlobalStreamPlayer.StopBgm("GAME_OVER");
+		if (UtmxGlobalStreamPlayer.IsBgmValid("_GAME_OVER"))
+			UtmxGlobalStreamPlayer.StopBgm("_GAME_OVER");
 	}
 
 	private async void Play()
@@ -71,7 +71,7 @@ public partial class GameoverScene : Node
 
 		Tween _tween = CreateTween();
 		_tween.TweenProperty(GameoverBg, "modulate:a", 1.0, 1.0).From(0.0);
-		UtmxGlobalStreamPlayer.PlayBgmFromStream("GAME_OVER", UtmxGlobalStreamPlayer.GetStreamFormLibrary("GAME_OVER"), true);
+		UtmxGlobalStreamPlayer.PlayBgmFromStream("_GAME_OVER", UtmxGlobalStreamPlayer.GetStreamFormLibrary("GAME_OVER"), true);
 		await ToSignal(_tween, Tween.SignalName.Finished);
 
 		GameoverTextTyper.Visible = true;
@@ -81,7 +81,8 @@ public partial class GameoverScene : Node
 
 	private async void End()
 	{
-		UtmxGlobalStreamPlayer.SetBgmVolume("GAME_OVER", -72, 2.0F);
+		UtmxPlayerDataManager.ResetPlayerState();
+		UtmxGlobalStreamPlayer.SetBgmVolume("_GAME_OVER", -72, 2.0F);
 		_inputAcceptable = false;
 		GameoverTextTyper.Visible = false;
 		Tween _tween = CreateTween();

@@ -1,29 +1,25 @@
-# Enemy
+﻿# Enemy
 
-Enemy 表示一个活跃在战斗场景中的怪物对象。通过 [GameRegisterDB](modules/game-register-db.md) 将 Enemy 的脚本路径注册到数据库，然后在 `Encounter` 的 `enemies` 列表中添加这个注册 ID ，当战斗开始时，此怪物就会被引擎自动创建在战斗场景中。
+Enemy 表示战斗中的怪物对象。通过 `UTMX.Enemy` 访问。
 
-通过 `UTMX.Enemy` 访问。
-
-> 若 Enemy 需要被引擎加载，必须继承 `UTMX.Enemy`，且必须以 `default` 关键字默认导出。
-
-<br>
+> 若要被引擎加载，脚本必须 `extends UTMX.Enemy` 并使用 `export default` 导出。
 
 ## 核心属性（Properties）
 
-| Property | Type   | Default | Description |
-| -------- | ------ | ------- | ----------- |
-| displayName | string | "" | 怪物在菜单中显示的名字 |
-| attack | number | 0 | 该怪物的攻击力 |
-| defence | number | 0 | 该怪物的防御力 |
-| hp | number | 10 | 该怪物当前的生命值，当 hp 归零时，怪物会从战斗中移除 |
-| maxHp | number | 10 | 该怪物的最大生命值 |
-| allowSpare | boolean | true | 该怪物在战斗中是否允许玩家饶恕，如果战斗中有怪物允许被饶恕，在 `Mercy` 菜单中就会出现 `Spare` 选项 |
-| canSpare | boolean | false | 该怪物是可以被真正饶恕，当值为 `true` 时，该怪物在战斗菜单中显示的名字会变为黄色 |
-| missText | string | "MISS" | 当攻击造成 `Miss` 时，显示的文字 |
-| actions | string[] | ["CHECK"] | 该怪物的行动列表 |
-| position | Vector2 | (0, 0) | 该怪物的位置 |
-| centerPosition | Vector2 | (0, 0) | 该怪物的中心位置，基于 Enemy.position ，这会影响攻击动画、伤害文字等显示的位置 |
-| sprite | UTMX.Sprite | - | 该怪物使用的精灵图，以中下为原点，操作精灵图的属性会直接影响到 Enemy 本身（实际上，Enemy 在 UTMX 内部本身就是一个 Sprite） |
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| displayName | string | "" | 怪物显示名称 |
+| attack | number | 0 | 攻击力 |
+| defence | number | 0 | 防御力 |
+| hp | number | 10 | 当前生命值 |
+| maxHp | number | 10 | 最大生命值 |
+| allowSpare | boolean | true | 是否允许在 Mercy 菜单出现 Spare |
+| canSpare | boolean | false | 是否可被真正 Spare（战斗菜单中名称会高亮） |
+| missText | string | "MISS" | Miss 时显示文本 |
+| actions | string[] | ["CHECK"] | 可选 Action 列表 |
+| position | Vector2 | (0, 0) | 怪物位置 |
+| centerPosition | Vector2 | (0, 0) | 怪物中心点（用于伤害文本、对话气泡等定位） |
+| sprite | UTMX.Sprite | - | 绑定的精灵对象 |
 
 ## 方法（Methods）
 
@@ -33,7 +29,7 @@ Enemy 表示一个活跃在战斗场景中的怪物对象。通过 [GameRegister
 onHandleAction(action: string) -> void
 ```
 
-当玩家选择指定的 Action 时触发的回调函数。action 为行动选项名称
+玩家选择 Action 时触发。
 
 ---
 
@@ -43,7 +39,7 @@ onHandleAction(action: string) -> void
 onHandleAttack(attackState: UTMX.battle.AttackStatus) -> void
 ```
 
-当玩家选择 FIGHT 指定此怪物为目标时，会根据不同时机触发对应回调函数。attackState 为状态名称。详细请看 [Battle AttackStatus](modules/battle.md#AttackStatus)。
+玩家攻击该怪物时触发，`attackState` 见 `Battle AttackStatus`。
 
 ---
 
@@ -53,35 +49,9 @@ onHandleAttack(attackState: UTMX.battle.AttackStatus) -> void
 onGetNextTurn() -> string | BattleTurn
 ```
 
-当进入怪物对话阶段时，会调用此方法获取一个指定的回合。
-
-- 若返回字符串，该字符串必须是一个文件系统中的绝对路径，且需要指向一个有效的 Turn JavaScript 脚本类。
-
-- 若返回对象，该对象必须是一个有效的 BattleTurn 实例。
-
-#### 使用示例
-
-下面展示了通过两种方式指定两个不同的目标回合。
-
-```javascript
-import { UTMX } from "UTMX";
-import MyCustomTurn2 from "js/turn/my-custom-turn-2.js";
-
-export default class MyCustomEnemy : extends UTMX.Enemy
-{
-    turnCounter = 0; // 回合计数器
-
-    onGetNextTurn()
-    {
-        this.turnCounter += 1;
-        switch(this.turnCounter)
-        {
-            case 1: return "js/turns/my-custom-turn-1.js";
-            case 2: return new MyCustomTurn2();
-        }
-    }
-}
-```
+返回下一回合对象：
+- 返回 `string`：回合脚本路径。
+- 返回 `BattleTurn`：回合实例。
 
 ---
 
@@ -91,7 +61,7 @@ export default class MyCustomEnemy : extends UTMX.Enemy
 onDialogueStarting() -> void
 ```
 
-当怪物即将触发对话时触发，可以在此调用 [appendDialogue](#appendDialogue) 添加对话。
+进入怪物对话阶段前触发，通常在这里调用 `appendDialogue`。
 
 ---
 
@@ -101,7 +71,7 @@ onDialogueStarting() -> void
 onTurnStarting() -> void
 ```
 
-当怪物回合开始时触发。
+怪物回合开始时触发。
 
 ---
 
@@ -111,7 +81,7 @@ onTurnStarting() -> void
 onSpare() -> void
 ```
 
-当怪物被成功饶恕时触发。
+怪物被 Spare 时触发。
 
 ---
 
@@ -121,7 +91,7 @@ onSpare() -> void
 onDead() -> void
 ```
 
-当怪物被击败时触发。
+怪物死亡时触发。
 
 ---
 
@@ -131,13 +101,7 @@ onDead() -> void
 hurt(damage: number) -> void
 ```
 
-对怪物造成 `damage` 点伤害。
-
-**Returns** `void`
-
-| Parameter | Type  | Description      |
-| --------- | ----- | ---------------- |
-| damage   | number| 造成的伤害点数 |
+对怪物造成伤害。
 
 ---
 
@@ -147,9 +111,7 @@ hurt(damage: number) -> void
 kill() -> void
 ```
 
-立即杀死怪物，并从战斗中的怪物列表中移除它。
-
-**Returns** `void`
+立即杀死怪物并移出战斗。
 
 ---
 
@@ -159,29 +121,44 @@ kill() -> void
 getSlot() -> number
 ```
 
-返回该怪物被分配在在战斗中的怪物列表中的槽位。
-
-**Returns** `number`
+返回怪物在战斗中的槽位索引。
 
 ---
 
 ### appendDialogue
 
 ```javascript
-appendDialogue(dialogueMessage, offset = null, hideSpike = false, dir = 2) -> void
+appendDialogue(dialogueMessage, offset = null, size = null, processCmd = null) -> void
 ```
 
-将一段文本追加到该怪物的对话列表中，当战斗进入怪物对话状态时就会读取列表中的对话显示。
+将文本加入该怪物的对话队列，在怪物对话阶段创建对话气泡并播放。
 
-对话框基于 `centerPosition` 显示。
+| Parameter | Type | Default | Description |
+| --- | --- | --- | --- |
+| dialogueMessage | string \| string[] | - | 对话内容，支持单条或数组 |
+| offset | Vector2 | (30, 0) | 相对 `centerPosition` 的偏移 |
+| size | Vector2 | (180, 90) | 气泡尺寸 |
+| processCmd | function \| null | null | 自定义文本命令回调，签名为 `(cmdName, args) => boolean` |
 
-**Returns** `void`
+> 说明：如果要在对话里控制尖角显示/方向，可在文本中使用 `SpeechBubble` 扩展命令：`[spikeVisible]`、`[spikeVisible=true/false]`、`[dir=top|bottom|left|right|0..3]`。
 
-| Parameter | Type  | Default | Description      |
-| --------- | ----- | ------- | ---------------- |
-| dialogueMessage   | any | - | 要显示的对话内容，支持字符串或字符串数组 |
-| offset   | Vector2 | (30, 0) | 对话框相对 `centerPosition` 的偏移位置 |
-| hideSpike   | boolean | false | 是否隐藏对话框尖角 |
-| dir   | number | 2 | 对话框尖角方向：`0=Top`、`1=Bottom`、`2=Left`、`3=Right` |
+#### 示例
 
----
+```javascript
+onDialogueStarting() {
+  this.appendDialogue("[dir=top][spikeVisible=true]Hello!");
+
+  // 直接传入箭头函数处理自定义命令
+  this.appendDialogue(
+    "[mycmd foo=1]Custom",
+    null,
+    null,
+    (cmdName, args) => {
+      if (cmdName === "mycmd") {
+        return true;
+      }
+      return false;
+    }
+  );
+}
+```

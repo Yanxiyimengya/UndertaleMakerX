@@ -44,7 +44,7 @@ func _on_play_project_button_pressed() -> void :
 		if (!DirAccess.dir_exists_absolute(output_dir)) :
 			DirAccess.make_dir_recursive_absolute(output_dir);
 		UtmxPackPicker.pick_pack(editor.root_path, output);
-		GlobalEditorRunnerManager.execute_runner(["--pack="+output]);
+		GlobalEditorRunnerManager.execute_runner(["--pack="+output,"--debug-collisions=true"]);
 
 func _save_open_scripts_before_run() -> void:
 	if (editor == null):

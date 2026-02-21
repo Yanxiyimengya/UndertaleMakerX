@@ -47,9 +47,11 @@ internal static class UtmxResourceLoader
 		if (string.IsNullOrEmpty(resNewPath)) return null;
 		if (resourceCache.TryGetValue(resNewPath, out Resource res) && res != null)
 			return res;
-		Resource utmxRes = LoadByExtensionFallback(resNewPath);
-		if (utmxRes != null) 
-			resourceCache.Add(resNewPath, utmxRes);
+		Resource utmxRes = null;
+		if (ResourceLoader.Exists(resNewPath))
+			utmxRes = ResourceLoader.Load(resNewPath);
+		if (utmxRes == null) utmxRes = LoadByExtensionFallback(resNewPath);
+		if (utmxRes != null) resourceCache.Add(resNewPath, utmxRes);
 		return utmxRes;
 	}
 

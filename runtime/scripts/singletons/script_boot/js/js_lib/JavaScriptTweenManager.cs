@@ -131,6 +131,16 @@ public partial class JavaScriptTweenerProperty : JavaScriptTweener
         propertyTweener.SetEase((Tween.EaseType)ease);
         return this;
     }
+    public JavaScriptTweenerProperty delay(double delayTime)
+    {
+        propertyTweener.SetDelay((float)delayTime);
+        return this;
+    }
+    public JavaScriptTweenerProperty relative()
+    {
+        propertyTweener.AsRelative();
+        return this;
+    }
     public JavaScriptTweenerProperty callback(Action func)
     {
         propertyTweener.Finished += func;

@@ -35,12 +35,98 @@ public partial class UtmxGlobalStreamPlayer : Node
 	private static Queue<AudioStreamPlayer> bgmPlayersPool = new Queue<AudioStreamPlayer>();
 	private static Dictionary<string, AudioStream> _streamLibrary = new Dictionary<string, AudioStream>();
 
-	static UtmxGlobalStreamPlayer()
+	private static void EnsureSoundPlayer()
 	{
-		soundPlayer = new AudioStreamPlayer();
-		soundPlayer.Bus = "Sound";
-		soundPlayer.Stream = new AudioStreamPolyphonic();
+		if (soundPlayer != null && IsInstanceValid(soundPlayer))
+			return;
+
+		soundPlayer = new AudioStreamPlayer
+		{
+			Bus = "Sound",
+			Stream = new AudioStreamPolyphonic()
+		};
 	}
+
+	private static void CleanupPlayer(AudioStreamPlayer player, bool keepForPool)
+	{
+		if (player == null || !IsInstanceValid(player))
+			return;
+
+		if (player.HasMeta("volume_tween"))
+		{
+			Tween tween = (Tween)player.GetMeta("volume_tween");
+			if (tween != null && tween.IsValid()) tween.Kill();
+			player.RemoveMeta("volume_tween");
+		}
+		if (player.HasMeta("pitch_tween"))
+		{
+			Tween tween = (Tween)player.GetMeta("pitch_tween");
+			if (tween != null && tween.IsValid()) tween.Kill();
+			player.RemoveMeta("pitch_tween");
+		}
+
+		player.StreamPaused = false;
+		player.Stop();
+		player.Stream = null;
+		player.ProcessMode = keepForPool ? ProcessModeEnum.Disabled : ProcessModeEnum.Inherit;
+	}
+
+	private static void ReleasePlayer(AudioStreamPlayer player)
+	{
+		CleanupPlayer(player, keepForPool: false);
+		if (player == null || !IsInstanceValid(player))
+			return;
+
+		if (player.GetParent() != null)
+			player.GetParent().RemoveChild(player);
+		player.QueueFree();
+	}
+
+	private void ClearExportedStreams()
+	{
+		SelectSoundStream = null;
+		SqueakSoundStream = null;
+		EscapedSoundStream = null;
+		TextTyperSoundStream = null;
+		EnemyDialogueSoundStream = null;
+		HurtSoundStream = null;
+		HealSoundStream = null;
+		LazSoundStream = null;
+		HeartBeatBreakSoundStream = null;
+		HeartPlosionSoundStream = null;
+		GameOverMusicSoundStream = null;
+	}
+
+	private void CleanupOnExit()
+	{
+		StopAll();
+
+		var activePlayers = new List<AudioStreamPlayer>(bgmPlayers.Values);
+		bgmPlayers.Clear();
+		foreach (AudioStreamPlayer player in activePlayers)
+		{
+			ReleasePlayer(player);
+		}
+
+		while (bgmPlayersPool.Count > 0)
+		{
+			ReleasePlayer(bgmPlayersPool.Dequeue());
+		}
+
+		if (soundPlayer != null && IsInstanceValid(soundPlayer))
+		{
+			CleanupPlayer(soundPlayer, keepForPool: false);
+			if (soundPlayer.GetParent() != null)
+				soundPlayer.GetParent().RemoveChild(soundPlayer);
+			soundPlayer.QueueFree();
+		}
+		soundPlayer = null;
+
+		_streamLibrary.Clear();
+		ClearExportedStreams();
+		Instance = null;
+	}
+
 	public override void _EnterTree()
 	{
 		if (Instance != null && Instance != this)
@@ -49,7 +135,13 @@ public partial class UtmxGlobalStreamPlayer : Node
 			return;
 		}
 		Instance = this;
-		AddChild(soundPlayer);
+		EnsureSoundPlayer();
+		if (soundPlayer.GetParent() != this)
+		{
+			if (soundPlayer.GetParent() != null)
+				soundPlayer.GetParent().RemoveChild(soundPlayer);
+			AddChild(soundPlayer);
+		}
 
 		AppendStreamToLibrary("SELECT", SelectSoundStream);
 		AppendStreamToLibrary("SQUEAK", SqueakSoundStream);
@@ -66,20 +158,21 @@ public partial class UtmxGlobalStreamPlayer : Node
 
 	public override void _ExitTree()
 	{
-		Instance = null;
-		soundPlayer = null;
-		bgmPlayers.Clear();
-		_streamLibrary.Clear();
-		foreach (AudioStreamPlayer player in bgmPlayersPool)
+		CleanupOnExit();
+	}
+
+	public override void _Notification(int what)
+	{
+		if (what == NotificationPredelete)
 		{
-			player.QueueFree();
+			CleanupOnExit();
 		}
-		bgmPlayersPool.Clear();
 	}
 
 	public static long PlaySoundFromStream(AudioStream stream)
 	{
 		if (stream == null) return -1;
+		EnsureSoundPlayer();
 		if (!soundPlayer.Playing) soundPlayer.Play();
 		if (soundPlayer.GetStreamPlayback() is AudioStreamPlaybackPolyphonic playback)
 		{
@@ -104,17 +197,19 @@ public partial class UtmxGlobalStreamPlayer : Node
 
 	public static void StopSound(long id)
 	{
-		if (soundPlayer.Playing)
+		if (soundPlayer != null && IsInstanceValid(soundPlayer) && soundPlayer.Playing)
 		{
 			if (soundPlayer.GetStreamPlayback() is AudioStreamPlaybackPolyphonic playback)
 			{
 				playback.StopStream(id);
+				return;
 			}
 		}
 		throw new ArgumentException($"Sound with id '{id}' not found.");
 	}
 	public static void SetSoundVolume(long id, float volume)
 	{
+		EnsureSoundPlayer();
 		if (!soundPlayer.Playing) soundPlayer.Play();
 		if (soundPlayer.GetStreamPlayback() is AudioStreamPlaybackPolyphonic playback)
 		{
@@ -123,6 +218,7 @@ public partial class UtmxGlobalStreamPlayer : Node
 	}
 	public static void SetSoundPitch(long id, float pitch)
 	{
+		EnsureSoundPlayer();
 		if (!soundPlayer.Playing) soundPlayer.Play();
 		if (soundPlayer.GetStreamPlayback() is AudioStreamPlaybackPolyphonic playback)
 		{
@@ -136,18 +232,7 @@ public partial class UtmxGlobalStreamPlayer : Node
 		AudioStreamPlayer player;
 		if (bgmPlayers.TryGetValue(bgmId, out player))
 		{
-			player.Stop();
-			if (player.HasMeta("volume_tween"))
-			{
-				Tween _tween = (Tween)player.GetMeta("volume_tween");
-				if (_tween != null && _tween.IsValid()) _tween.Kill();
-			}
-			if (player.HasMeta("pitch_tween"))
-			{
-				Tween _tween = (Tween)player.GetMeta("pitch_tween");
-				if (_tween != null && _tween.IsValid()) _tween.Kill();
-			}
-
+			StopBgm(bgmId);
 			player.VolumeDb = 0.0F;
 			player.PitchScale = 1.0F;
 		}
@@ -155,6 +240,8 @@ public partial class UtmxGlobalStreamPlayer : Node
 		{
 			player = bgmPlayersPool.Dequeue();
 			player.ProcessMode = Node.ProcessModeEnum.Inherit;
+			player.VolumeDb = 0.0F;
+			player.PitchScale = 1.0F;
 			bgmPlayers.Add(bgmId, player);
 		}
 		else
@@ -196,17 +283,21 @@ public partial class UtmxGlobalStreamPlayer : Node
 		if (bgmPlayers.TryGetValue(bgmId, out AudioStreamPlayer player))
 		{
 			bgmPlayers.Remove(bgmId);
+			CleanupPlayer(player, keepForPool: true);
 			bgmPlayersPool.Enqueue(player);
-			player.ProcessMode = ProcessModeEnum.Disabled;
-			player.Stop();
 			return;
 		}
 		UtmxLogger.Error($"Bgm player with id '{bgmId}' not found.");
 	}
 	public static void StopAll()
 	{
-		soundPlayer.Stop();
-		foreach (string playerId in bgmPlayers.Keys)
+		if (soundPlayer != null && IsInstanceValid(soundPlayer))
+		{
+			soundPlayer.Stop();
+		}
+
+		var ids = new List<string>(bgmPlayers.Keys);
+		foreach (string playerId in ids)
 		{
 			StopBgm(playerId);
 		}

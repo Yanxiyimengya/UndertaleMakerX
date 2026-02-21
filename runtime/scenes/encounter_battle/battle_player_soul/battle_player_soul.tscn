@@ -92,7 +92,6 @@ HitBox = NodePath("HitBox")
 [node name="GameSprite2D" type="AnimatedSprite2D" parent="." unique_id=558478810]
 modulate = Color(1, 0, 0, 1)
 sprite_frames = SubResource("SpriteFrames_00thf")
-animation = &"free"
 autoplay = "default"
 script = ExtResource("4_4h8dk")
 

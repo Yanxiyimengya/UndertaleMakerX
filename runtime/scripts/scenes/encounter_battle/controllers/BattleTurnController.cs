@@ -74,7 +74,12 @@ public partial class BattleTurnController : Node
 				}
 				turn._OnTurnUpdate(delta);
 			}
-			while (_turnDeleteQueue.Count > 0) _currentTurnList.Remove(_turnDeleteQueue.Dequeue());
+			while (_turnDeleteQueue.Count > 0)
+			{
+				BaseBattleTurn turn = _turnDeleteQueue.Dequeue();
+                turn._OnTurnEnd();
+                _currentTurnList.Remove(turn);
+			}
 
 			return true;
 		}

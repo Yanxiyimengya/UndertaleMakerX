@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://dks40d20ernd2"
-path="res://.godot/imported/DamageText.ttf-c4838e807527eca0249745f52f6c487a.fontdata"
+uid="uid://cxdipaakx57px"
+path="res://.godot/imported/DamageTextBack.ttf-e4946b9e5a0565ba08aa82cb75cfe995.fontdata"
 
 [deps]
 
-source_file="res://__data__/built-in-resources/fonts/DamageText.ttf"
-dest_files=["res://.godot/imported/DamageText.ttf-c4838e807527eca0249745f52f6c487a.fontdata"]
+source_file="res://__data__/built-in-resources/fonts/DamageTextBack.ttf"
+dest_files=["res://.godot/imported/DamageTextBack.ttf-e4946b9e5a0565ba08aa82cb75cfe995.fontdata"]
 
 [params]
 
@@ -34,8 +34,7 @@ preload=[{
 "chars": [],
 "glyphs": [],
 "name": "新建配置",
-"size": Vector2i(16, 0),
-&"variation_embolden": 0.0
+"size": Vector2i(16, 0)
 }]
 language_support={}
 script_support={}

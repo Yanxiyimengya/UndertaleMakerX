@@ -47,7 +47,7 @@ public partial class BattleProjectileController : Node
 		}
 		foreach (BaseBattleProjectile projectile in destroyList)
 		{
-			DeleteProjectile(projectile);
-		}
+            projectile.Destroy();
+        }
 	}
 }

@@ -54,6 +54,7 @@ func get_runner_executable_path_for_platform(platform_name : String) -> String:
 func execute_runner(_cmd : PackedStringArray) -> Dictionary:
 	if (program_id != -1):
 		kill_runner();
+	#_cmd.append("--verbose");
 	var dict : Dictionary = \
 			OS.execute_with_pipe(get_runner_executable_path(), _cmd);
 	program_id = dict.get("pid", -1);

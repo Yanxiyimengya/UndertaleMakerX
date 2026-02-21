@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 // 全局类标记保持不变
@@ -54,19 +55,24 @@ public partial class BattlePlayerFightMenuState : StateNode
 			if (_damage <= 0)
 			{
 				_isTargetMiss = true;
-                _damage = 0;
-            }
+				_damage = 0;
+			}
 		}
 		if (_attackAnimation == null)
 		{
 			ShowDamageText(targetEnemy);
 		}
-		targetEnemy._HandleAttack(_isTargetMiss ? UtmxBattleManager.AttackStatus.Missed : UtmxBattleManager.AttackStatus.Hit);
+		targetEnemy._HandleAttack(missed ? UtmxBattleManager.AttackStatus.Missed : UtmxBattleManager.AttackStatus.Hit);
 	}
 
 	private void ShowDamageText(BaseEnemy targetEnemy)
 	{
 		_attackDamageText = (BattleDamageText)DamageTextPackedScene?.Instantiate();
+		if (_attackDamageText == null)
+		{
+			_NextState();
+			return;
+		}
 		UtmxBattleManager.GetBattleEnemyController().EnemiesNode.AddChild(_attackDamageText);
 		_attackDamageText.Start(targetEnemy.Position + targetEnemy.CenterPosition);
 		if (_damage > 0) targetEnemy.hurt(_damage);
@@ -95,7 +101,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 	private void SpawnAttackAnimation(BaseEnemy targetEnemy)
 	{
 		BaseWeapon currentWeapon = UtmxPlayerDataManager.Weapon;
-		if (currentWeapon?.AttackAnimation == null) return;
+		if (currentWeapon?.AttackAnimation == null || currentWeapon.AttackAnimation.Length == 0) return;
 		_attackAnimation = new BattleAttackAnimationFrame();
 		_attackAnimation.TexturesPath = currentWeapon.AttackAnimation;
 		_attackAnimation.Play();
@@ -192,7 +198,7 @@ public partial class BattlePlayerFightMenuState : StateNode
 	{
 		UtmxBattleManager.GetBattlePlayerController().PlayerSoul.Visible = false;
 		await MenuManager.OpenMenu("EncounterAttackGaugeBarMenu");
-		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+		//await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 		BattleButtonManager.ResetAllBattleButton();
 	}
 

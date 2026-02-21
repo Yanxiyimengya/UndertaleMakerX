@@ -14,25 +14,7 @@ export class UtmxDrawableObject extends UtmxTransformableObject {
 		return this.__instance.Modulate;
 	}
 	set color(value) {
-		if (value instanceof __Color || typeof value == 'object')
-		{
-			this.__instance.Modulate = value;
-		}
-		else if (value instanceof Array)
-		{
-			if (value.length == 3)
-			{
-				this.__instance.Modulate = __Color.Color8(value[0], value[1], value[2], 255);
-			}
-			else if (value.length == 4)
-			{
-				this.__instance.Modulate = __Color.Color8(value[0], value[1], value[2], value[3]);
-			}
-		}
-		else if (value instanceof String || typeof value == 'string')
-		{
-			this.__instance.Modulate = __Color.FromString(value, this.__instance.Modulate);
-		}
+		this.__instance.Modulate = value;
 	}
 	get shader() { return this.__instance.ShaderInstance; }
 	set shader(value) { this.__instance.ShaderInstance = value; }

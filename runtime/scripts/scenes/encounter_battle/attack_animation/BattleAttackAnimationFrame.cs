@@ -5,23 +5,19 @@ public partial class BattleAttackAnimationFrame : BattleAttackAnimation
 {
 	static AudioStream attackSound = null;
 
-    public BattleAttackAnimationFrame()
+	public override void _Ready()
     {
         Loop = false;
         SpeedScale = (float)UtmxPlayerDataManager.Weapon.AttackAnimationSpeed * 2.0F;
 		Resource res = UtmxResourceLoader.Load(UtmxPlayerDataManager.Weapon.AttackSound);
         if (res is AudioStream)
             attackSound = res as AudioStream;
-    }
-
-	public override void _Ready()
-	{
         UtmxGlobalStreamPlayer.PlaySoundFromStream(attackSound);
 		Play();
-		Connect(AnimatedSprite2D.SignalName.AnimationFinished,
+        Connect(AnimatedSprite2D.SignalName.AnimationFinished,
 			Callable.From(() =>
-			{
-				EmitSignal(SignalName.Finished, []);
+            {
+                EmitSignal(SignalName.Finished, []);
 				QueueFree();
 			}
 		));

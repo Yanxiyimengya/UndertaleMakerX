@@ -49,10 +49,9 @@
 
 [node name="EncounterBattle" type="Node" unique_id=1037590223]
 
-[node name="BattleController" type="Node" parent="." unique_id=1909813863 node_paths=PackedStringArray("BattleStateMachine", "Camera", "EnemyController", "PlayerController", "ArenaController", "TurnController", "UiController", "ProjectileController")]
+[node name="BattleController" type="Node" parent="." unique_id=1909813863 node_paths=PackedStringArray("BattleStateMachine", "EnemyController", "PlayerController", "ArenaController", "TurnController", "UiController", "ProjectileController")]
 script = ExtResource("2_mdx4q")
 BattleStateMachine = NodePath("../BattleStateMachine")
-Camera = NodePath("")
 EnemyController = NodePath("BattleEnemyController")
 PlayerController = NodePath("BattlePlayerController")
 ArenaController = NodePath("BattleArenaController")

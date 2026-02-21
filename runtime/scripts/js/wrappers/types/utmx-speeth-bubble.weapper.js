@@ -146,11 +146,13 @@ export class UtmxSpeechBubble extends UtmxTextTyper
     }
 
     destroy() {
-        if (this.__bubble != null) {
+        if (this.__instance != null) {
+            this.__instance.Destroy();
+        } else if (this.__bubble != null) {
             __scene_manager.DeleteSpeechBubble(this.__bubble);
-            this.__bubble = null;
-            this.__instance = null;
         }
+        this.__bubble = null;
+        this.__instance = null;
     }
 
 }

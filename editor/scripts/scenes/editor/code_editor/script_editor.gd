@@ -30,11 +30,15 @@ func _ready() -> void:
 		file_list_tree.gui_input.connect(_on_file_list_tree_gui_input)
 	if not GlobalEditorFileSystem.entry_removed.is_connected(_on_filesystem_entry_removed):
 		GlobalEditorFileSystem.entry_removed.connect(_on_filesystem_entry_removed)
+	if not GlobalEditorFileSystem.filesystem_changed.is_connected(_on_filesystem_changed):
+		GlobalEditorFileSystem.filesystem_changed.connect(_on_filesystem_changed)
 
 
 func _exit_tree() -> void:
 	if GlobalEditorFileSystem.entry_removed.is_connected(_on_filesystem_entry_removed):
 		GlobalEditorFileSystem.entry_removed.disconnect(_on_filesystem_entry_removed)
+	if GlobalEditorFileSystem.filesystem_changed.is_connected(_on_filesystem_changed):
+		GlobalEditorFileSystem.filesystem_changed.disconnect(_on_filesystem_changed)
 
 
 func open_script(path: String) -> void:
@@ -360,6 +364,30 @@ func _on_filesystem_entry_removed(removed_path: String) -> void:
 			_mark_script_missing(open_path)
 
 
+func _on_filesystem_changed(changed_path: String) -> void:
+	var normalized_changed := _normalize_path(changed_path.strip_edges())
+	var open_paths: Array[String] = _open_order.duplicate()
+	for open_path in open_paths:
+		if not _file_cache.has(open_path):
+			continue
+
+		if not _is_path_in_change_scope(open_path, normalized_changed):
+			continue
+
+		if _path_exists(open_path):
+			_clear_missing_state(open_path)
+			continue
+
+		var cached: Dictionary = _file_cache[open_path]
+		if not bool(cached.get("missing_on_disk", false)):
+			continue
+
+		var remapped_path := _try_resolve_renamed_path(open_path, normalized_changed)
+		if remapped_path.is_empty():
+			continue
+		_remap_open_script_path(open_path, remapped_path)
+
+
 func _mark_script_missing(path: String) -> void:
 	if not _file_cache.has(path):
 		return
@@ -394,6 +422,86 @@ func _is_path_affected_by_removed_entry(open_path: String, removed_path: String)
 	if normalized_open == normalized_removed:
 		return true
 	return normalized_open.begins_with(normalized_removed + "/")
+
+
+func _is_path_in_change_scope(path: String, changed_root: String) -> bool:
+	if changed_root.is_empty():
+		return true
+	var normalized_path := _normalize_path(path)
+	if normalized_path == changed_root:
+		return true
+	if normalized_path.begins_with(changed_root + "/"):
+		return true
+	var normalized_parent := _normalize_path(path.get_base_dir())
+	return normalized_parent == changed_root
+
+
+func _try_resolve_renamed_path(old_path: String, changed_root: String) -> String:
+	if not _file_cache.has(old_path):
+		return ""
+	var normalized_old_path := _normalize_path(old_path)
+	var parent_dir := _normalize_path(old_path.get_base_dir())
+	if parent_dir.is_empty() or not DirAccess.dir_exists_absolute(parent_dir):
+		return ""
+	if not changed_root.is_empty() and not _is_path_in_change_scope(old_path, changed_root):
+		return ""
+
+	var cached: Dictionary = _file_cache[old_path]
+	var expected_saved_text := str(cached.get("saved_text", ""))
+	var old_ext := normalized_old_path.get_extension().to_lower()
+
+	var candidates: Array[String] = []
+	var dir := DirAccess.open(parent_dir)
+	if dir == null:
+		return ""
+
+	dir.list_dir_begin()
+	var entry_name := dir.get_next()
+	while entry_name != "":
+		if entry_name != "." and entry_name != ".." and not dir.current_is_dir():
+			var candidate_path := _normalize_path(parent_dir.path_join(entry_name))
+			if candidate_path != normalized_old_path and not _file_cache.has(candidate_path):
+				if old_ext.is_empty() or candidate_path.get_extension().to_lower() == old_ext:
+					var candidate_text := _read_script_file(candidate_path)
+					if candidate_text == expected_saved_text:
+						candidates.append(candidate_path)
+		entry_name = dir.get_next()
+	dir.list_dir_end()
+
+	if candidates.size() == 1:
+		return candidates[0]
+	return ""
+
+
+func _remap_open_script_path(old_path: String, new_path: String) -> void:
+	var normalized_old := _normalize_path(old_path)
+	var normalized_new := _normalize_path(new_path)
+	if normalized_old.is_empty() or normalized_new.is_empty():
+		return
+	if normalized_old == normalized_new:
+		_clear_missing_state(normalized_old)
+		return
+	if not _file_cache.has(normalized_old):
+		return
+	if _file_cache.has(normalized_new):
+		return
+
+	var cached: Dictionary = _file_cache[normalized_old]
+	_file_cache.erase(normalized_old)
+
+	cached["path"] = normalized_new
+	cached["missing_on_disk"] = false
+	cached["dirty"] = _compute_dirty_state(cached, str(cached.get("text", "")))
+	_file_cache[normalized_new] = cached
+
+	var open_idx := _open_order.find(normalized_old)
+	if open_idx != -1:
+		_open_order[open_idx] = normalized_new
+
+	if _current_path == normalized_old:
+		_current_path = normalized_new
+
+	_update_file_tree_item(normalized_new)
 
 
 func _normalize_path(path: String) -> String:

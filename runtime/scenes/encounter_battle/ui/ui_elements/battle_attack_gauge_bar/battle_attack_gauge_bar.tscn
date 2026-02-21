@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://dtiq2nxayrrbj"]
+[gd_scene format=3 uid="uid://dtiq2nxayrrbj"]
 
 [ext_resource type="Script" uid="uid://cntl7iwsigu0l" path="res://scripts/scenes/encounter_battle/ui/menu/ui_elements/EncounterAttackGaugeBarMenu.cs" id="1_e7ue4"]
 [ext_resource type="Texture2D" uid="uid://mf2nicdg8lxb" path="res://__data__/built-in-resources/textures/ui/battle_screen/target.png" id="2_3fq5m"]
@@ -19,7 +19,7 @@ animations = [{
 "speed": 12.0
 }]
 
-[node name="EncounterAttackGaugeBarMenu" type="Control" node_paths=PackedStringArray("TargetSprite2D", "TargetChoiceBar")]
+[node name="EncounterAttackGaugeBarMenu" type="Control" unique_id=21824965 node_paths=PackedStringArray("TargetSprite2D", "TargetChoiceBar")]
 clip_contents = true
 layout_mode = 3
 anchors_preset = 15
@@ -33,11 +33,13 @@ script = ExtResource("1_e7ue4")
 TargetSprite2D = NodePath("TargetSprite2D")
 TargetChoiceBar = NodePath("TargetChoiceBar")
 
-[node name="TargetSprite2D" type="Sprite2D" parent="."]
+[node name="TargetSprite2D" type="Sprite2D" parent="." unique_id=899038813]
+visible = false
 position = Vector2(282.5, 65)
 texture = ExtResource("2_3fq5m")
 
-[node name="TargetChoiceBar" type="AnimatedSprite2D" parent="."]
+[node name="TargetChoiceBar" type="AnimatedSprite2D" parent="." unique_id=428358269]
+visible = false
 position = Vector2(8, 64)
 sprite_frames = SubResource("SpriteFrames_oiyx4")
 frame_progress = 0.16184284

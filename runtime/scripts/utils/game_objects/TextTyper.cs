@@ -121,52 +121,62 @@ public partial class TextTyper : Godot.RichTextLabel, IObjectPoolObject
 		{
 			char c = TyperText[_typerProgress];
 			_typerProgress += 1;
-			while (c == '[')
+			while (c == '[' || c == '\r' || c == '\n')
 			{
-				int locate = TyperText.FindN("]", _typerProgress);
-				if (locate != -1)
+				while (c == '[')
 				{
-					string content = TyperText.Substring(_typerProgress, locate - _typerProgress);
-					if (!string.IsNullOrEmpty(content))
+					int locate = TyperText.FindN("]", _typerProgress);
+					if (locate != -1)
 					{
-						if (_ParseBBCodeTag(content, out string cmdName, out Dictionary<string, string> directParameters))
+						string content = TyperText.Substring(_typerProgress, locate - _typerProgress);
+						if (!string.IsNullOrEmpty(content))
 						{
-							try
+							if (_ParseBBCodeTag(content, out string cmdName, out Dictionary<string, string> directParameters))
 							{
-								if (!_ProcessCmd(cmdName, directParameters))
+								try
 								{
-									AppendText($"[{content}]");
+									if (!_ProcessCmd(cmdName, directParameters))
+									{
+										AppendText($"[{content}]");
+									}
+								}
+								catch (Exception e) {
+									UtmxLogger.Error(e.Message);
 								}
 							}
-							catch (Exception e) {
-								UtmxLogger.Error(e.Message);
-							}
 						}
+						_typerProgress = locate + 1;
 					}
-					_typerProgress = locate + 1;
+					if (!_CanRunning() || _typerProgress >= TyperText.Length)
+					{
+						return;
+					}
+					else
+					{
+						c = TyperText[_typerProgress];
+						_typerProgress += 1;
+					}
 				}
-				if (!_CanRunning())
+
+				while (c == '\r' || c == '\n')
 				{
-					return;
-				}
-				else
-				{
+					Newline();
+					if (!_CanRunning() || _typerProgress >= TyperText.Length)
+					{
+						return;
+					}
 					c = TyperText[_typerProgress];
 					_typerProgress += 1;
 				}
 			}
 
-			while (c == '\r' || c == '\n')
+			if (_typerWattingTimer > 0.0)
 			{
-				c = TyperText[_typerProgress];
-				_typerProgress += 1;
-				Newline();
+				_typerProgress = Math.Max(0, _typerProgress - 1);
+				return;
 			}
 
-			if (_typerWattingTimer <= 0.0)
-			{
-				AddText(c.ToString());
-			}
+			AddText(c.ToString());
 			if (!Instant)
 			{
 				if (Voice != null && !Engine.IsEditorHint())
@@ -425,7 +435,6 @@ public partial class TextTyper : Godot.RichTextLabel, IObjectPoolObject
 					}
 					break;
 				}
-
 
 			// INLINE COMMANDS
 			case "voice":

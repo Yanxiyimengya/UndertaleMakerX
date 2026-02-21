@@ -59,4 +59,9 @@ public partial class JavaScriptBattleProjectileProxy : BaseBattleProjectile, IOb
         //else base.OnHitProjectile(projectile);
     }
 
+    public override void Destroy()
+    {
+        base.Destroy();
+        LifecycleProxy.Destroy();
+    }
 }

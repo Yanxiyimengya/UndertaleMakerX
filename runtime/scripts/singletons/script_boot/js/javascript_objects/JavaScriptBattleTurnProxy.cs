@@ -14,18 +14,22 @@ public partial class JavaScriptBattleTurnProxy : BaseBattleTurn, IJavaScriptObje
 
 	public override void _OnTurnInit()
 	{
-		((IJavaScriptObject)this).Invoke("onTurnInit", []);
+		if (JsInstance?.HasProperty("onTurnInit") == true)
+			((IJavaScriptObject)this).Invoke("onTurnInit", []);
 	}
 	public override void _OnTurnStart()
 	{
-		((IJavaScriptObject)this).Invoke("onTurnStart", []);
+		if (JsInstance?.HasProperty("onTurnStart") == true)
+			((IJavaScriptObject)this).Invoke("onTurnStart", []);
 	}
 	public override void _OnTurnEnd()
 	{
-		((IJavaScriptObject)this).Invoke("onTurnEnd", []);
+		if (JsInstance?.HasProperty("onTurnEnd") == true)
+			((IJavaScriptObject)this).Invoke("onTurnEnd", []);
 	}
 	public override void _OnTurnUpdate(double delta)
 	{
-		((IJavaScriptObject)this).Invoke("onTurnUpdate", [delta]);
+		if (JsInstance?.HasProperty("onTurnUpdate") == true)
+			((IJavaScriptObject)this).Invoke("onTurnUpdate", [delta]);
 	}
 }

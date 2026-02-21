@@ -3,6 +3,8 @@ using Jint;
 using Jint.Native;
 using Jint.Native.Object;
 using System;
+using System.Collections.Generic;
+using System.Drawing;
 
 public partial class JavaScriptEnemyProxy : BaseEnemy, IJavaScriptLifecyucle
 {
@@ -26,21 +28,24 @@ public partial class JavaScriptEnemyProxy : BaseEnemy, IJavaScriptLifecyucle
     }
 
     public override void _HandleAction(string action)
-	{
-		object result = ((IJavaScriptObject)this).Invoke("onHandleAction", [action]);
-		if (result != null)
-		{ 
-			if (result is string dialog && !string.IsNullOrEmpty(dialog))
+    {
+		if (JsInstance?.HasProperty("onGetNextTurn") == true)
+		{
+			object result = ((IJavaScriptObject)this).Invoke("onHandleAction", [action]);
+			if (result != null)
 			{
-				UtmxDialogueQueueManager.AppendDialogue(dialog);
-			}
-			else if (result is object[] dialogArray)
-			{
-				foreach (object elements in dialogArray)
+				if (result is string dialog && !string.IsNullOrEmpty(dialog))
 				{
-					if (elements is string dialogText && !string.IsNullOrEmpty(dialogText))
+					UtmxDialogueQueueManager.AppendDialogue(dialog);
+				}
+				else if (result is object[] dialogArray)
+				{
+					foreach (object elements in dialogArray)
 					{
-						UtmxDialogueQueueManager.AppendDialogue(dialogText);
+						if (elements is string dialogText && !string.IsNullOrEmpty(dialogText))
+						{
+							UtmxDialogueQueueManager.AppendDialogue(dialogText);
+						}
 					}
 				}
 			}
@@ -53,59 +58,113 @@ public partial class JavaScriptEnemyProxy : BaseEnemy, IJavaScriptLifecyucle
 			JavaScriptBridge.InvokeFunction(JsInstance, EngineProperties.JAVASCRIPT_UPDATE_CALLBACK, [delta]);
 	}
 	public override void _OnSpare()
-	{
-		((IJavaScriptObject)this).Invoke("onSpare", []);
+    {
+        if (JsInstance?.HasProperty("onSpare") == true)
+            ((IJavaScriptObject)this).Invoke("onSpare", []);
     }
     public override void _OnDead()
     {
-        ((IJavaScriptObject)this).Invoke("onDead", []);
+        if (JsInstance?.HasProperty("onDead") == true)
+            ((IJavaScriptObject)this).Invoke("onDead", []);
     }
     public override void _OnDialogueStarting()
-	{
-		((IJavaScriptObject)this).Invoke("onDialogueStarting", []);
+    {
+        if (JsInstance?.HasProperty("onDialogueStarting") == true)
+            ((IJavaScriptObject)this).Invoke("onDialogueStarting", []);
 	}
 	public override void _OnTurnStarting()
-	{
-		((IJavaScriptObject)this).Invoke("onTurnStarting", []);
+    {
+        if (JsInstance?.HasProperty("onTurnStarting") == true)
+            ((IJavaScriptObject)this).Invoke("onTurnStarting", []);
 	}
 	public override void _HandleAttack(UtmxBattleManager.AttackStatus status)
-	{
-		((IJavaScriptObject)this).Invoke("onHandleAttack", [status]);
+    {
+        if (JsInstance?.HasProperty("onHandleAttack") == true)
+            ((IJavaScriptObject)this).Invoke("onHandleAttack", [status]);
 	}
 	public override BaseBattleTurn _GetNextTurn()
 	{
-		JsValue result = ((IJavaScriptObject)this).Invoke("onGetNextTurn", []);
-		if (result != null)
+		if (JsInstance?.HasProperty("onGetNextTurn") == true)
 		{
-			object JsObj = result.ToObject();
-			if (JsObj is string)
+			JsValue result = ((IJavaScriptObject)this).Invoke("onGetNextTurn", []);
+			if (result != null)
 			{
-				string path = JavaScriptModuleResolver.ResolvePath(JsScriptPath, result.ToString());
-				JavaScriptBattleTurnProxy battleTurn = IJavaScriptObject.New<JavaScriptBattleTurnProxy>(path);
-				if (battleTurn != null)
-					return battleTurn;
-			}
-			else if (JsObj is BaseBattleTurn)
-			{
-				return IJavaScriptObject.Wrapper<JavaScriptBattleTurnProxy>(result);
+				object JsObj = result.ToObject();
+				if (JsObj is string)
+				{
+					string path = JavaScriptModuleResolver.ResolvePath(JsScriptPath, result.ToString());
+					JavaScriptBattleTurnProxy battleTurn = IJavaScriptObject.New<JavaScriptBattleTurnProxy>(path);
+					if (battleTurn != null)
+						return battleTurn;
+				}
+				else if (JsObj is BaseBattleTurn)
+				{
+					return IJavaScriptObject.Wrapper<JavaScriptBattleTurnProxy>(result);
+				}
 			}
 		}
 		return new BaseBattleTurn();
 	}
 
-	public void AppendEnemyDialogue(object dialogueMessage, Vector2? offset = null, bool hideSpike = false, int dir = 2)
+	private Func<string, Dictionary<string, string>, bool> _CreateSpeechBubbleCmdCallback(JsValue processCmdCallback)
 	{
-		if (offset == null)
-			offset = new Vector2(30, 0);
-		UtmxDialogueQueueManager.AppendBattleEnemyDialogue(EnemySlot, dialogueMessage.ToString(), (Vector2)offset, hideSpike, dir);
-	}
-	public void AppendEnemyDialogue(object[] dialogueMessages, Vector2? offset = null, bool hideSpike = false, int dir = 2)
-	{
-		if (offset == null)
-			offset = new Vector2(30, 0);
-		foreach (string message in dialogueMessages)
+		if (processCmdCallback == null || processCmdCallback.IsNull() || processCmdCallback.IsUndefined())
+			return null;
+
+		if (!processCmdCallback.IsObject())
+			return null;
+
+		JsValue callback = processCmdCallback;
+		return (cmd, args) =>
 		{
-			UtmxDialogueQueueManager.AppendBattleEnemyDialogue(EnemySlot, message, (Vector2)offset, hideSpike, dir);
+			try
+			{
+				JsValue result = JavaScriptBridge.MainEngine.Invoke(
+					callback,
+					JsValue.Undefined,
+					[
+						JsValue.FromObject(JavaScriptBridge.MainEngine, cmd ?? string.Empty),
+						JsValue.FromObject(JavaScriptBridge.MainEngine, args ?? new Dictionary<string, string>()),
+					]
+				);
+				if (result == null || result.IsNull() || result.IsUndefined())
+					return false;
+				return result.AsBoolean();
+			}
+			catch (Exception ex)
+			{
+				UtmxLogger.Error($"[SpeechBubbleCmd] {ex.Message}");
+				return false;
+			}
+		};
+	}
+
+	public void AppendEnemyDialogue(object dialogueMessage, Vector2? offset = null, Vector2? size = null, JsValue processCmdCallback = null)
+	{
+		if (offset == null) offset = new Vector2(30, 0);
+		if (size == null) size = new Vector2(180, 90);
+		UtmxDialogueQueueManager.AppendBattleEnemyDialogue(
+			EnemySlot,
+			dialogueMessage.ToString(),
+			(Vector2)offset,
+			(Vector2)size,
+			_CreateSpeechBubbleCmdCallback(processCmdCallback)
+		);
+	}
+	public void AppendEnemyDialogue(object[] dialogueMessages, Vector2? offset = null, Vector2? size = null, JsValue processCmdCallback = null)
+	{
+		if (offset == null) offset = new Vector2(30, 0);
+        if (size == null) size = new Vector2(180, 90);
+		Func<string, Dictionary<string, string>, bool> callback = _CreateSpeechBubbleCmdCallback(processCmdCallback);
+        foreach (string message in dialogueMessages)
+        {
+			UtmxDialogueQueueManager.AppendBattleEnemyDialogue(
+				EnemySlot,
+				message,
+				(Vector2)offset,
+				(Vector2)size,
+				callback
+			);
 		}
 	}
 }

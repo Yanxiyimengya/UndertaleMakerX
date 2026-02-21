@@ -64,7 +64,8 @@ public partial class BattleEnemyDialogueState : StateNode
 	{
 		foreach (SpeechBubble bubble in _speechBubbleList)
 		{
-			bubble.QueueFree();
+			if (GodotObject.IsInstanceValid(bubble))
+				bubble.Destroy();
 		}
 		_speechBubbleList.Clear();
 
@@ -83,14 +84,21 @@ public partial class BattleEnemyDialogueState : StateNode
 						if (inst is SpeechBubble bubble)
 						{
 							if (!enemy.IsInsideTree()) continue;
-							enemy.AddChild(bubble);
-							bubble.Text = pair.Value.Message;
 							pair.Value.TryGetMetaData("Poisition", out Variant offset);
-							pair.Value.TryGetMetaData("HideSpike", out Variant hideSpike);
-							pair.Value.TryGetMetaData("Dir", out Variant dir);
 							bubble.Position = enemy.CenterPosition + offset.AsVector2();
-							bubble.Dir = dir.AsInt32();
-							bubble.HideSpike = hideSpike.AsBool();
+							if (pair.Value.TryGetMetaData("Dir", out Variant dir))
+								bubble.Dir = dir.AsInt32();
+							if (pair.Value.TryGetMetaData("HideSpike", out Variant hideSpike))
+								bubble.HideSpike = hideSpike.AsBool();
+							if (pair.Value.TryGetMetaData("Size", out Variant size))
+								bubble.Size = size.AsVector2();
+
+							enemy.AddChild(bubble);
+							if (GodotObject.IsInstanceValid(bubble.SpeechBubbleTextTyper))
+							{
+								bubble.SpeechBubbleTextTyper.ProcessCmdCallback = pair.Value.ProcessCmdCallback;
+							}
+							bubble.Text = pair.Value.Message;
 							_speechBubbleList.Add(bubble);
 						}
 						else

@@ -47,16 +47,11 @@ export class UtmxGameSprite extends UtmxTransformableObject {
         this.__instance.Loop = value;
     }
     
-	get color() { return this.__instance.Modulate; }
+	get color() {
+		return this.__instance.Modulate;
+	}
 	set color(value) {
-		if (value instanceof __Color || typeof value == 'object')
-		{
-			this.__instance.Modulate = value;
-		}
-		else if (value instanceof String || typeof value == 'string')
-		{
-			this.__instance.Modulate = __Color.FromString(value, this.__instance.Modulate);
-		}
+		this.__instance.Modulate = value;
 	}
     
 	get shader() { return this.__instance.ShaderInstance; }
