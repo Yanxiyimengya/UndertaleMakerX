@@ -33,6 +33,16 @@ onHandleAction(action: string) -> void
 
 ---
 
+### onPlayerUsedItem
+
+```javascript
+onPlayerUsedItem() -> void
+```
+
+玩家在战斗中使用 Item 时触发。
+
+---
+
 ### onHandleAttack
 
 ```javascript

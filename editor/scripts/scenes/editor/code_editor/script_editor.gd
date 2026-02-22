@@ -96,6 +96,7 @@ func sync_file_from_disk(path: String, force: bool = true) -> bool:
 		_is_switching_document = true
 		java_script_code_edit.text = latest_text
 		_is_switching_document = false
+		_reset_code_edit_undo_history()
 		_schedule_document_state_restore(target_path)
 	_update_file_tree_item(target_path)
 	return true
@@ -216,6 +217,7 @@ func _switch_to_script(path: String) -> void:
 	_is_switching_document = true
 	java_script_code_edit.text = str(cached.get("text", ""))
 	_is_switching_document = false
+	_reset_code_edit_undo_history()
 
 	_select_file_tree_item(target_path)
 	_update_file_tree_item(target_path)
@@ -265,6 +267,7 @@ func _close_script_internal(path: String) -> void:
 			_is_switching_document = true
 			java_script_code_edit.text = ""
 			_is_switching_document = false
+			_reset_code_edit_undo_history()
 		else:
 			_switch_to_script(_open_order.back())
 
@@ -622,6 +625,13 @@ func _write_script_file(path: String, content: String) -> bool:
 	file.store_string(content)
 	file.close()
 	return true
+
+
+func _reset_code_edit_undo_history() -> void:
+	if java_script_code_edit == null:
+		return
+	if java_script_code_edit.has_method("clear_undo_history"):
+		java_script_code_edit.call("clear_undo_history")
 
 
 func _select_file_tree_item(path: String) -> void:

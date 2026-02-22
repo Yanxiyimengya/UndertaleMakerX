@@ -65,4 +65,16 @@ public partial class BattleEnemyController : Node
 			enemy.QueueFree();
 		}
 	}
+
+	public void TriggerEnemiesUsedItemCallback()
+	{
+		BaseEnemy[] enemiesSnapshot = _enemiesList.ToArray();
+		foreach (BaseEnemy enemy in enemiesSnapshot)
+		{
+			if (IsInstanceValid(enemy))
+			{
+				enemy._UsedItem();
+			}
+		}
+	}
 }

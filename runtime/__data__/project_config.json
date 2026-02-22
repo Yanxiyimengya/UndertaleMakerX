@@ -1,28 +1,28 @@
 {
-	"application" : {
-		"name" : "UNDERTALE MAKER X - By 烟汐忆梦",
-		"author" : "烟汐忆梦_YM",
-		"max_fps" : 60,
-		"vsync" : false,
-		"main_scene" : "",
-		"main_script" : "",
+	"application": {
+		"author": "",
+		"main_scene": "",
+		"main_script": "main.js",
+		"max_fps": 60.0,
+		"name": "UNDERTALE MAKER X",
+		"vsync": false
 	},
-	"window" : {
-		"width": 640,
-		"height": 480,
-		"resizable": true,
+	"boot_splash": {
+		"background_color": "#101020",
+		"display_text": "UNDERTALE MAKER\nX",
+		"enabled": false,
+		"speed_scale": 1.0
+	},
+	"virtual_input": {
+		"dead_zone": 0.1,
+		"enabled": false
+	},
+	"window": {
+		"boderless": false,
+		"clear_color": "#000000",
 		"fullscreen": false,
-		"boderless" : false,
-		"clear_color" : "#000000"
-	},
-	"boot_splash" : {
-		"enabled" : false,
-		"display_text" : "UNDERTALE MAKER\nX",
-		"speed_scale" : 1.0,
-		"background_color" : "#101020",
-	},
-	"virtual_input" : {
-		"enabled" : false,
-		"dead_zone" : 0.1,
+		"height": 480.0,
+		"resizable": false,
+		"width": 640.0
 	}
 }

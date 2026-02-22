@@ -170,12 +170,6 @@ public partial class TextTyper : Godot.RichTextLabel, IObjectPoolObject
 				}
 			}
 
-			if (_typerWattingTimer > 0.0)
-			{
-				_typerProgress = Math.Max(0, _typerProgress - 1);
-				return;
-			}
-
 			AddText(c.ToString());
 			if (!Instant)
 			{

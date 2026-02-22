@@ -33,9 +33,12 @@ public partial class BaseEnemy : GameSprite2D
 	}
 	public virtual void _OnDead()
 	{
-	}
+    }
+    public virtual void _UsedItem()
+    {
+    }
 
-	public override void _Ready() => _UpdateOffset();
+    public override void _Ready() => _UpdateOffset();
 	public override void _Process(double delta) => _UpdateOffset();
 
 

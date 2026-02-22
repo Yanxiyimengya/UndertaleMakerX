@@ -122,7 +122,7 @@ public partial class BattlePlayerSoul : CharacterBody2D
 	private Vector2 _prevPosition = Vector2.Zero;
 	private List<Vector2> _checkPoints = new List<Vector2>();
 
-	public const float MOVE_SPEED = 130.0f;
+	public const float MOVE_SPEED = 120.0f;
 	public BattlePlayerSoul()
 	{
 		_collisionLayer = (int)UtmxBattleManager.BattleCollisionLayers.Player;

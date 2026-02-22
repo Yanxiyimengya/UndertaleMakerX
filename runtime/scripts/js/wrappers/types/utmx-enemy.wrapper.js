@@ -83,6 +83,7 @@ export class UtmxBaseEnemy extends __UtmxEnemy
 
 	onHandleAction(action) {}
 	onHandleAttack(status) {}
+	onPlayerUsedItem() {}
 	onGetNextTurn() {}
 	onDialogueStarting() {}
 	onTurnStarting() {}

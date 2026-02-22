@@ -48,6 +48,7 @@ public partial class BattlePlayerItemMenuState : StateNode
 		{
 			int itemselected = (int)ItemChoiceMenu.GetselectedItemId();
 			UtmxPlayerDataManager.UseItem(itemselected);
+			UtmxBattleManager.GetBattleEnemyController()?.TriggerEnemiesUsedItemCallback();
 			_NextState();
 		}
 	}

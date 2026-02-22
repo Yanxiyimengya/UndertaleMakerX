@@ -34,9 +34,12 @@ public partial class GameSprite2D : AnimatedSprite2D, IObjectPoolObject
 	{
 		get => _textures;
 		set
-		{
-			_textures = value;
-			EmitSignal(SignalName.TextureChanged, []);
+        {
+			if (_textures != value)
+			{
+				_textures = value;
+				EmitSignal(SignalName.TextureChanged, []);
+			}
 		}
 	}
 
@@ -106,7 +109,8 @@ public partial class GameSprite2D : AnimatedSprite2D, IObjectPoolObject
 		Material = null;
 		Offset = Vector2.Zero;
 		TexturesPath = [];
-		Loop = true;
+		Textures = [];
+        Loop = true;
 	}
 
 	public virtual void Disabled()

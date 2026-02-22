@@ -62,6 +62,11 @@ public partial class JavaScriptEnemyProxy : BaseEnemy, IJavaScriptLifecyucle
         if (JsInstance?.HasProperty("onSpare") == true)
             ((IJavaScriptObject)this).Invoke("onSpare", []);
     }
+	public override void _UsedItem()
+	{
+		if (JsInstance?.HasProperty("onPlayerUsedItem") == true)
+			((IJavaScriptObject)this).Invoke("onPlayerUsedItem", []);
+	}
     public override void _OnDead()
     {
         if (JsInstance?.HasProperty("onDead") == true)

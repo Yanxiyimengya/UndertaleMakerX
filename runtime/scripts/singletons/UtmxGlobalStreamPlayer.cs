@@ -287,7 +287,6 @@ public partial class UtmxGlobalStreamPlayer : Node
 			bgmPlayersPool.Enqueue(player);
 			return;
 		}
-		UtmxLogger.Error($"Bgm player with id '{bgmId}' not found.");
 	}
 	public static void StopAll()
 	{

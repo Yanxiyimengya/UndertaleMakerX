@@ -171,7 +171,10 @@ public partial class BaseBattleProjectile : GameSprite2D, IObjectPoolObject
 	{
 		base.Awake();
 		Enabled = true;
-	}
+		CanCollideWithSoul = true;
+		CanCollideWithProjectile = false;
+		CollisionMode = PrecisionCollisionMode.UsedRect;
+    }
 
 	public override void Disabled()
 	{
@@ -202,6 +205,7 @@ public partial class BaseBattleProjectile : GameSprite2D, IObjectPoolObject
 		if (UtmxBattleManager.IsInBattle())
 		{
 			UtmxBattleManager.GetBattleProjectileController().DeleteProjectile(this);
+			Enabled = false;
 		}
 		else
 		{
