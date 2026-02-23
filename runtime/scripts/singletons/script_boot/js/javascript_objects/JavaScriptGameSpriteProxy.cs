@@ -31,4 +31,9 @@ public partial class JavaScriptGameSpriteProxy : GameSprite2D, IJavaScriptLifecy
             ((IJavaScriptObject)sprite).Invoke(EngineProperties.JAVASCRIPT_ON_LOAD_CALLBACK, []);
         return sprite;
     }
+    public override void Destroy()
+    {
+        base.Destroy();
+        LifecycleProxy.Destroy();
+    }
 }

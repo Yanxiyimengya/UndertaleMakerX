@@ -8,11 +8,18 @@ import {
 } from "./types/utmx-battle-arena.wrapper.js";
 class BattleSoul extends UtmxGameObject
 {
-	static get enabledCollision() {
-		return __battle_manager.GetBattlePlayerController().PlayerSoul.EnabledCollision;
+	static get enabledCollisionWithArena() {
+		return __battle_manager.GetBattlePlayerController().PlayerSoul.EnabledCollisionWithArena;
 	}
-	static set enabledCollision(value) {
-		__battle_manager.GetBattlePlayerController().PlayerSoul.EnabledCollision = value;
+	static set enabledCollisionWithArena(value) {
+		__battle_manager.GetBattlePlayerController().PlayerSoul.EnabledCollisionWithArena = value;
+	}
+
+	static get enabledCollisionWithProjectile() {
+		return __battle_manager.GetBattlePlayerController().PlayerSoul.EnabledCollisionWithProjectile;
+	}
+	static set enabledCollisionWithProjectile(value) {
+		__battle_manager.GetBattlePlayerController().PlayerSoul.EnabledCollisionWithProjectile = value;
 	}
 	
 	static get movable() {

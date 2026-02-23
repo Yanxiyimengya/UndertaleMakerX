@@ -154,7 +154,6 @@ MenuManager = NodePath("../../UILayer/BattleMenuManager")
 metadata/_custom_type_script = "uid://dxmt2vmf5f8bi"
 
 [node name="BattleArenaGroup" type="Node2D" parent="." unique_id=185318783]
-process_priority = 1
 z_index = -200
 script = ExtResource("18_3wf68")
 metadata/_custom_type_script = "uid://vrolycbhr1jt"

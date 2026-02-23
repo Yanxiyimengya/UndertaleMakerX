@@ -30,13 +30,16 @@ public partial class BattlePlayerDialogueState : StateNode
 
     public override void _ExitState()
     {
-        UtmxBattleManager.GetBattlePlayerController().PlayerSoul.Visible = true;
+        BattlePlayerSoul soul = UtmxBattleManager.GetBattlePlayerController().PlayerSoul;
+        soul.Visible = true;
+        soul.EnabledCollisionWithProjectile = true;
     }
 
     private void NextStep()
     {
         BattlePlayerSoul soul = UtmxBattleManager.GetBattlePlayerController().PlayerSoul;
         soul.Visible = false;
+        soul.EnabledCollisionWithProjectile = false;
         if (UtmxDialogueQueueManager.DialogueCount() > 0)
         {
             string dialogueText = UtmxDialogueQueueManager.GetNextDialogueAsText();

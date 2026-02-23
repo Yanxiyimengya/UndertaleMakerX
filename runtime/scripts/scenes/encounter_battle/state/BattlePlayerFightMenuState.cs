@@ -196,9 +196,10 @@ public partial class BattlePlayerFightMenuState : StateNode
 
     private async Task OpenAttackGaugeMenu()
     {
-        UtmxBattleManager.GetBattlePlayerController().PlayerSoul.Visible = false;
+        BattlePlayerSoul soul = UtmxBattleManager.GetBattlePlayerController().PlayerSoul;
+        soul.Visible = false;
+        soul.EnabledCollisionWithProjectile = false;
         await MenuManager.OpenMenu("EncounterAttackGaugeBarMenu");
-        //await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
         BattleButtonManager.ResetAllBattleButton();
     }
 
@@ -214,8 +215,9 @@ public partial class BattlePlayerFightMenuState : StateNode
 
     public override void _ExitState()
     {
-        UtmxBattleManager.GetBattlePlayerController().PlayerSoul.Visible = true;
-
+        BattlePlayerSoul soul = UtmxBattleManager.GetBattlePlayerController().PlayerSoul;
+        soul.Visible = true;
+        soul.EnabledCollisionWithProjectile = true;
     }
     public override bool _CanEnterState()
     {

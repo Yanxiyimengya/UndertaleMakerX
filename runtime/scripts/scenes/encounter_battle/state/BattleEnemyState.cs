@@ -14,7 +14,7 @@ public partial class BattleEnemyState : StateNode
         _battleMainArena = UtmxBattleManager.GetBattleArenaController().MainArena;
         BattlePlayerSoul soul = UtmxBattleManager.GetBattlePlayerController().PlayerSoul;
         soul.Movable = true;
-        soul.EnabledCollision = true;
+        soul.EnabledCollisionWithArena = true;
         started = UtmxBattleManager.GetBattleTurnController().TurnStart();
         foreach (BaseEnemy enemy in UtmxBattleManager.GetBattleEnemyController().EnemiesList)
         {
@@ -53,6 +53,6 @@ public partial class BattleEnemyState : StateNode
         await _battleMainArena.Resize(new Vector2(565, 130), 0.4);
         UtmxBattleManager.GetBattleController().ChangeToPlayerTurnState();
         soul.Movable = false;
-        soul.EnabledCollision = false;
+        soul.EnabledCollisionWithArena = false;
     }
 }

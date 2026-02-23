@@ -87,6 +87,16 @@ onTurnStarting() -> void
 
 ---
 
+### onTurnEnd
+
+```javascript
+onTurnEnd() -> void
+```
+
+怪物回合结束时触发。
+
+---
+
 ### onSpare
 
 ```javascript

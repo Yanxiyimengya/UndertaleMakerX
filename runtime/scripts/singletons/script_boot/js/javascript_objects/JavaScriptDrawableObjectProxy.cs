@@ -32,4 +32,9 @@ public partial class JavaScriptDrawableObjectProxy : DrawableObject, IObjectPool
             ((IJavaScriptObject)obj).Invoke(EngineProperties.JAVASCRIPT_ON_LOAD_CALLBACK, []);
         return obj;
     }
+    public override void Destroy()
+    {
+        base.Destroy();
+        LifecycleProxy.Destroy();
+    }
 }

@@ -114,6 +114,11 @@ public partial class JavaScriptEnemyProxy : BaseEnemy, IJavaScriptLifecyucle
         if (JsInstance?.HasProperty("onTurnStarting") == true)
             ((IJavaScriptObject)this).Invoke("onTurnStarting", []);
     }
+    public override void _OnTurnEnd()
+    {
+        if (JsInstance?.HasProperty("onTurnEnd") == true)
+            ((IJavaScriptObject)this).Invoke("onTurnEnd", []);
+    }
     public override void _HandleAttack(UtmxBattleManager.AttackStatus status)
     {
         if (JsInstance?.HasProperty("onHandleAttack") == true)

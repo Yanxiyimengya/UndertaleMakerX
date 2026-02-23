@@ -234,7 +234,8 @@ Soul 为 Battle 的内置子模块，用于管理玩家在战斗中的 **灵魂*
 | rotation  | number | 0      | 玩家灵魂的旋转角度（单位为角度） |
 | scale  | Vector2 | (1, 1) | 玩家灵魂的缩放     |
 | skew  | number | 0 | 玩家灵魂的倾斜（单位为弧度）     |
-| enabledCollision  | boolean | true      | 是否启用碰撞，这会影响与 Arena 和 Projectile 的碰撞。 |
+| enabledCollisionWithArena  | boolean | true      | 是否启用碰撞，这会影响与 Arena 的碰撞。 |
+| enabledCollisionWithProjectile  | boolean | true      | 是否启用碰撞，这会影响与 Projectile 的碰撞。 |
 | movable | boolean | true | 是否停用移动，如果停用移动，引擎就不会代理灵魂的移动，这对自定义灵魂行为很有帮助。|
 | sprite | Sprite | null | （只读）玩灵魂对应的 Sprite 访问对象。 |
 

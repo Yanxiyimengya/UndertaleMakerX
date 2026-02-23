@@ -25,12 +25,12 @@ public partial class BattlePlayerSoul : CharacterBody2D
         }
     }
     [Export]
-    public bool EnabledCollision
+    public bool EnabledCollisionWithArena
     {
-        get => _enabledCollision;
+        get => _enabledCollisionWithArena;
         set
         {
-            _enabledCollision = value;
+            _enabledCollisionWithArena = value;
             if (value)
             {
                 PhysicsServer2D.BodySetMode(GetRid(), PhysicsServer2D.BodyMode.Static);
@@ -48,16 +48,16 @@ public partial class BattlePlayerSoul : CharacterBody2D
         }
     }
     [Export]
-    public bool EnabledHitBoxCollision
+    public bool EnabledCollisionWithProjectile
     {
-        get => _enabledHitBoxCollision;
+        get => _enabledCollisionWithProjectile;
         set
         {
-            _enabledHitBoxCollision = value;
+            _enabledCollisionWithProjectile = value;
             if (value)
             {
-                HitBox.CollisionLayer = _collisionLayer;
-                HitBox.CollisionMask = _collisionMask;
+                HitBox.CollisionLayer = _hitboxCollisionLayer;
+                HitBox.CollisionMask = _hitboxCollisionMask;
             }
             else
             {
@@ -85,7 +85,7 @@ public partial class BattlePlayerSoul : CharacterBody2D
             _freed = value;
             if (_freed)
             {
-                EnabledCollision = false;
+                EnabledCollisionWithArena = false;
                 Movable = false;
                 Sprite.Play("free");
             }
@@ -112,9 +112,12 @@ public partial class BattlePlayerSoul : CharacterBody2D
 
     private uint _collisionLayer = 0;
     private uint _collisionMask = 0;
+    private uint _hitboxCollisionLayer = 0;
+    private uint _hitboxCollisionMask = 0;
+
     private double _collisionRadius = 0;
-    private bool _enabledCollision = false;
-    private bool _enabledHitBoxCollision = true;
+    private bool _enabledCollisionWithArena = false;
+    private bool _enabledCollisionWithProjectile = true;
     private bool _movable = true;
     private bool _freed = false;
     private double _invincibleTimer = 0.0F;
@@ -122,18 +125,16 @@ public partial class BattlePlayerSoul : CharacterBody2D
     private Vector2 _prevPosition = Vector2.Zero;
     private List<Vector2> _checkPoints = new List<Vector2>();
 
-    public const float MOVE_SPEED = 120.0f;
-    public BattlePlayerSoul()
-    {
-        _collisionLayer = (int)UtmxBattleManager.BattleCollisionLayers.Player;
-        _collisionMask = (int)UtmxBattleManager.BattleCollisionLayers.Player;
-        CollisionLayer = (int)UtmxBattleManager.BattleCollisionLayers.Player;
-        CollisionMask = (int)UtmxBattleManager.BattleCollisionLayers.Player;
-    }
-
+    public const float MOVE_SPEED = 130.0f;
     public override void _Ready()
     {
         _prevPosition = Position;
+        _collisionLayer = (int)UtmxBattleManager.BattleCollisionLayers.Player;
+        _collisionMask = (int)UtmxBattleManager.BattleCollisionLayers.Player;
+        _hitboxCollisionLayer = HitBox.CollisionLayer;
+        _hitboxCollisionMask = HitBox.CollisionMask;
+        EnabledCollisionWithArena = true;
+        EnabledCollisionWithProjectile = true;
     }
     public override void _Process(double delta)
     {
@@ -177,7 +178,7 @@ public partial class BattlePlayerSoul : CharacterBody2D
 
     private bool IsInsideArena(Vector2 center)
     {
-        if (!_enabledCollision) return true;
+        if (!_enabledCollisionWithArena) return true;
         foreach (Vector2 offset in _checkPoints)
         {
             Vector2 worldPoint = center + offset;
@@ -190,7 +191,7 @@ public partial class BattlePlayerSoul : CharacterBody2D
     }
     public bool IsOnArenaFloor()
     {
-        if (!_enabledCollision) return true;
+        if (!_enabledCollisionWithArena) return true;
         float radius = (float)_collisionRadius + 2F;
         return (!ArenaGroup.IsPointInArenas(GlobalPosition + new Vector2(-0.8F, 1).Normalized().Rotated(Rotation) * radius)) ||
                 (!ArenaGroup.IsPointInArenas(GlobalPosition + new Vector2(0.8F, 1).Normalized().Rotated(Rotation) * radius)) ||
@@ -199,7 +200,7 @@ public partial class BattlePlayerSoul : CharacterBody2D
     }
     public bool IsOnArenaCeiling()
     {
-        if (!_enabledCollision) return true;
+        if (!_enabledCollisionWithArena) return true;
         float radius = (float)_collisionRadius + 1.5F;
         return !ArenaGroup.IsPointInArenas(
             GlobalPosition + Vector2.Up.Rotated(Rotation) * radius)

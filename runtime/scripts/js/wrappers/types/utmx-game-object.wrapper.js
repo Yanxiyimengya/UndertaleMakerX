@@ -15,5 +15,6 @@ export class UtmxGameObject {
         if (this.#destroyed) return;
         this.__instance.Destroy();
         this.#destroyed = true;
+        this.__instance = null;
     }
 }

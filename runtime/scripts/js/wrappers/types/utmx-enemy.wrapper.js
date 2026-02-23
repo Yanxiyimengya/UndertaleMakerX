@@ -87,6 +87,7 @@ export class UtmxBaseEnemy extends __UtmxEnemy
 	onGetNextTurn() {}
 	onDialogueStarting() {}
 	onTurnStarting() {}
+	onTurnEnd() {}
 	onSpare() {}
 	onDead() {}
 

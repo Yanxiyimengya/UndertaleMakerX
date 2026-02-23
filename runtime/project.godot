@@ -18,6 +18,7 @@ config/name="UTMX-Runtime"
 run/main_scene="uid://7kjp05svklmo"
 run/main_loop_type="UtmxMainLoop"
 config/features=PackedStringArray("4.6", "C#", "Mobile")
+run/max_fps=60
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
 boot_splash/stretch_mode=0
@@ -42,7 +43,6 @@ window/size/viewport_width=640
 window/size/viewport_height=480
 window/subwindows/embed_subwindows=false
 window/stretch/mode="viewport"
-window/stretch/aspect="expand"
 window/vsync/vsync_mode=0
 
 [dotnet]

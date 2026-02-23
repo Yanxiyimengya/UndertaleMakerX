@@ -100,6 +100,7 @@ public partial class BattleTurnController : Node
             }
             _currentTurnList.Clear();
             UtmxBattleManager.GetBattleProjectileController().DestroyProjectilesOnTurnEnd();
+            UtmxBattleManager.GetBattleEnemyController()?.TriggerEnemiesTurnEndCallback();
         }
         return false;
     }
