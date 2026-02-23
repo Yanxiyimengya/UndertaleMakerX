@@ -196,7 +196,9 @@ func _sync_play_pause_button() -> void:
 	var has_stream: bool = audio_player.stream != null
 	play_pause_button.disabled = not has_stream
 
-	var playing_active: bool = has_stream and audio_player.playing and not audio_player.stream_paused
+	var playing_active: bool = (
+		has_stream and audio_player.playing and not audio_player.stream_paused
+	)
 	var icon: Texture2D = PAUSE_ICON if playing_active else PLAY_ICON
 	play_pause_button.texture_normal = icon
 	play_pause_button.texture_pressed = icon

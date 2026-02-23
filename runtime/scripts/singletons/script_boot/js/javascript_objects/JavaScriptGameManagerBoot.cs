@@ -31,6 +31,6 @@ public partial class JavaScriptGameManagerBoot : Node
     }
     public void _OnGameEnd()
     {
-         JavaScriptBridge.InvokeFunction(_mainScriptObject, "onGameEnd", []);
+        JavaScriptBridge.InvokeFunction(_mainScriptObject, "onGameEnd", []);
     }
 }

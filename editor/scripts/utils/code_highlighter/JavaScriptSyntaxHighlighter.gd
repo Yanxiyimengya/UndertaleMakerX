@@ -5,29 +5,94 @@ extends CodeHighlighter
 
 class JavaScriptSyntaxDB:
 	const KEYWORDS: PackedStringArray = [
-		"break", "case", "catch", "class", "const", "continue",
-		"debugger", "default", "delete", "do", "else", "export",
-		"extends", "finally", "for", "function", "if", "import",
-		"in", "instanceof", "let", "new", "return", "super",
-		"switch", "this", "throw", "try", "typeof", "var",
-		"void", "while", "with", "yield", "async", "await",
-		"enum", "implements", "interface", "package", "private",
-		"protected", "public", "static"
+		"break",
+		"case",
+		"catch",
+		"class",
+		"const",
+		"continue",
+		"debugger",
+		"default",
+		"delete",
+		"do",
+		"else",
+		"export",
+		"extends",
+		"finally",
+		"for",
+		"function",
+		"if",
+		"import",
+		"in",
+		"instanceof",
+		"let",
+		"new",
+		"return",
+		"super",
+		"switch",
+		"this",
+		"throw",
+		"try",
+		"typeof",
+		"var",
+		"void",
+		"while",
+		"with",
+		"yield",
+		"async",
+		"await",
+		"enum",
+		"implements",
+		"interface",
+		"package",
+		"private",
+		"protected",
+		"public",
+		"static"
 	]
 
 	const CONTROL_FLOW_KEYWORDS: PackedStringArray = [
-		"if", "else", "for", "while", "do",
-		"switch", "case", "default", "break",
-		"continue", "return", "await",
-		"export", "import",
+		"if",
+		"else",
+		"for",
+		"while",
+		"do",
+		"switch",
+		"case",
+		"default",
+		"break",
+		"continue",
+		"return",
+		"await",
+		"export",
+		"import",
 	]
 
 	const NORMAL_KEYWORDS: PackedStringArray = [
-		"var", "let", "const",
-		"class", "extends", "super",
-		"try", "catch", "finally", "throw",
-		"debugger", "delete", "in", "instanceof", "new",
-		"this", "typeof", "void", "with", "yield", "async", "enum", "constructor", "function"
+		"var",
+		"let",
+		"const",
+		"class",
+		"extends",
+		"super",
+		"try",
+		"catch",
+		"finally",
+		"throw",
+		"debugger",
+		"delete",
+		"in",
+		"instanceof",
+		"new",
+		"this",
+		"typeof",
+		"void",
+		"with",
+		"yield",
+		"async",
+		"enum",
+		"constructor",
+		"function"
 	]
 
 
@@ -46,7 +111,7 @@ func _rebuild_highlight_rules() -> void:
 	clear_keyword_colors()
 
 	add_color_region("'", "'", string_color)
-	add_color_region("\"", "\"", string_color)
+	add_color_region('"', '"', string_color)
 	add_color_region("//", "", comment_color, true)
 	add_color_region("/*", "*/", comment_color)
 

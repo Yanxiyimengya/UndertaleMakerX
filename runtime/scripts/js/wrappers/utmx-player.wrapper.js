@@ -9,6 +9,9 @@ class PlayerInventory
     static addItem(itemId) {
         __player_data_manager.AddItem(itemId);
     }
+    static setItem(itemId, slot) {
+        __player_data_manager.SetItem(itemId, slot);
+    }
     static removeItem(slot) {
         __player_data_manager.RemoveItem(slot);
     }

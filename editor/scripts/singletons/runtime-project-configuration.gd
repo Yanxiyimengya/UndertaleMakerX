@@ -1,8 +1,9 @@
 ## 运行时的项目设置信息
-extends Node;
+extends Node
+
 
 func _init() -> void:
-	var arguments : Dictionary = {};
+	var arguments: Dictionary = {}
 	for argument in OS.get_cmdline_args():
 		if argument.contains("="):
 			var key_value = argument.split("=")

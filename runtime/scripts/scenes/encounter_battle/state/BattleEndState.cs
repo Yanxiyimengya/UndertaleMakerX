@@ -4,34 +4,34 @@ using System;
 [GlobalClass]
 public partial class BattleEndState : StateNode
 {
-	[Export]
-	BattleScreenButtonManager BattleButtonManager;
-	[Export]
-	EncounterTextMenu TextMenu;
-	[Export]
-	BattleMenuManager MenuManager;
+    [Export]
+    BattleScreenButtonManager BattleButtonManager;
+    [Export]
+    EncounterTextMenu TextMenu;
+    [Export]
+    BattleMenuManager MenuManager;
 
-	public override void _Process(double delta)
-	{
-		if (TextMenu.IsTextTyperFinished())
-		{
-			if (Input.IsActionJustPressed("confirm"))
-			{
-				UtmxBattleManager.EndEncounterBattle();
-			}
-		}
-	}
-	public override async void _EnterState()
+    public override void _Process(double delta)
+    {
+        if (TextMenu.IsTextTyperFinished())
+        {
+            if (Input.IsActionJustPressed("confirm"))
+            {
+                UtmxBattleManager.EndEncounterBattle();
+            }
+        }
+    }
+    public override async void _EnterState()
     {
         BattlePlayerSoul soul = UtmxBattleManager.GetBattlePlayerController().PlayerSoul;
         soul.Visible = false;
         await MenuManager.OpenMenu("EncounterTextMenu");
-		BattleButtonManager.ResetAllBattleButton();
-		TextMenu.ShowEncounterText(UtmxBattleManager.GetEncounterInstance()?.EndText);
-	}
+        BattleButtonManager.ResetAllBattleButton();
+        TextMenu.ShowEncounterText(UtmxBattleManager.GetEncounterInstance()?.EndText);
+    }
 
-	public override void _ExitState()
-	{
-		UtmxBattleManager.GetBattlePlayerController().PlayerSoul.Visible = true;
-	}
+    public override void _ExitState()
+    {
+        UtmxBattleManager.GetBattlePlayerController().PlayerSoul.Visible = true;
+    }
 }

@@ -147,7 +147,12 @@ func _load_json_file(path: String) -> bool:
 	var json := JSON.new()
 	var err := json.parse(content)
 	if err != OK:
-		push_warning("Failed to parse json file: %s (line=%d, msg=%s)" % [path, json.get_error_line(), json.get_error_message()])
+		push_warning(
+			(
+				"Failed to parse json file: %s (line=%d, msg=%s)"
+				% [path, json.get_error_line(), json.get_error_message()]
+			)
+		)
 		return false
 
 	_resource_data = json.data
@@ -211,17 +216,27 @@ func _rebuild_property_tree() -> void:
 	_apply_filter(filter_line_edit.text)
 
 
-func _build_property_item(parent: TreeItem, display_name: String, value: Variant, path: Array, depth: int) -> void:
+func _build_property_item(
+	parent: TreeItem, display_name: String, value: Variant, path: Array, depth: int
+) -> void:
 	var item := property_tree.create_item(parent)
-	var should_hide_json_subobject_name := _resource_kind == ResourceKind.JSON and value is Dictionary and depth > 0
+	var should_hide_json_subobject_name := (
+		_resource_kind == ResourceKind.JSON and value is Dictionary and depth > 0
+	)
 	item.set_text(COLUMN_NAME, "" if should_hide_json_subobject_name else display_name)
 	item.set_tooltip_text(COLUMN_NAME, _path_to_text(path))
 
 	var value_type := typeof(value)
-	item.set_metadata(COLUMN_NAME, {
-		"path": path,
-		"value_type": value_type,
-	})
+	(
+		item
+		. set_metadata(
+			COLUMN_NAME,
+			{
+				"path": path,
+				"value_type": value_type,
+			}
+		)
+	)
 
 	if value is Dictionary:
 		item.set_text(COLUMN_VALUE, "")

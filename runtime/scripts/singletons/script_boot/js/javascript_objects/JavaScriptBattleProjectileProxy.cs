@@ -8,21 +8,21 @@ using System.Text;
 using System.Threading.Tasks;
 
 [GlobalClass]
-public partial class JavaScriptBattleProjectileProxy : BaseBattleProjectile, IObjectPoolObject , IJavaScriptLifecyucle
+public partial class JavaScriptBattleProjectileProxy : BaseBattleProjectile, IObjectPoolObject, IJavaScriptLifecyucle
 {
-	public ObjectInstance JsInstance
-	{
-		get => _jsInstance;
-		set
-		{
-			_jsInstance = value;
-			if (LifecycleProxy != null)
-				LifecycleProxy.JsInstance = value;
-		}
-	}
-	public string JsScriptPath { get; set; }
+    public ObjectInstance JsInstance
+    {
+        get => _jsInstance;
+        set
+        {
+            _jsInstance = value;
+            if (LifecycleProxy != null)
+                LifecycleProxy.JsInstance = value;
+        }
+    }
+    public string JsScriptPath { get; set; }
     public JavaScriptLifecycleProxy LifecycleProxy { get; set; } = new();
-	private ObjectInstance _jsInstance = null;
+    private ObjectInstance _jsInstance = null;
     public override void _Ready()
     {
         base._Ready();
@@ -30,25 +30,25 @@ public partial class JavaScriptBattleProjectileProxy : BaseBattleProjectile, IOb
     }
 
     public static IJavaScriptObject New(ObjectInstance objInstance)
-	{
-		JavaScriptBattleProjectileProxy projectile =
-			UtmxBattleManager.GetBattleProjectileController().CreateProjectile<JavaScriptBattleProjectileProxy>();
-		projectile.JsInstance = objInstance;
+    {
+        JavaScriptBattleProjectileProxy projectile =
+            UtmxBattleManager.GetBattleProjectileController().CreateProjectile<JavaScriptBattleProjectileProxy>();
+        projectile.JsInstance = objInstance;
         if (((IJavaScriptObject)projectile).Has(EngineProperties.JAVASCRIPT_ON_LOAD_CALLBACK))
             ((IJavaScriptObject)projectile).Invoke(EngineProperties.JAVASCRIPT_ON_LOAD_CALLBACK, []);
         return projectile;
-	}
-	public override void OnHitPlayer(BattlePlayerSoul playerSoul)
-	{
-		if (JsInstance.HasProperty("onHit"))
+    }
+    public override void OnHitPlayer(BattlePlayerSoul playerSoul)
+    {
+        if (JsInstance.HasProperty("onHit"))
         {
             ((IJavaScriptObject)this).Invoke("onHit");
         }
-		else
-		{
-			base.OnHitPlayer(playerSoul);
-		}
-	}
+        else
+        {
+            base.OnHitPlayer(playerSoul);
+        }
+    }
 
     public override void OnHitProjectile(BaseBattleProjectile projectile)
     {

@@ -5,19 +5,19 @@ using System;
 
 public partial class JavaScriptDrawableObjectProxy : DrawableObject, IObjectPoolObject, IJavaScriptLifecyucle
 {
-	public ObjectInstance JsInstance
-	{
-		get => _jsInstance;
-		set
-		{
-			_jsInstance = value;
-			if (LifecycleProxy != null)
-				LifecycleProxy.JsInstance = value;
-		}
-	}
-	public string JsScriptPath { get; set; }
+    public ObjectInstance JsInstance
+    {
+        get => _jsInstance;
+        set
+        {
+            _jsInstance = value;
+            if (LifecycleProxy != null)
+                LifecycleProxy.JsInstance = value;
+        }
+    }
+    public string JsScriptPath { get; set; }
     public JavaScriptLifecycleProxy LifecycleProxy { get; set; } = new();
-	private ObjectInstance _jsInstance = null;
+    private ObjectInstance _jsInstance = null;
     public override void _Ready()
     {
         base._Ready();
@@ -25,11 +25,11 @@ public partial class JavaScriptDrawableObjectProxy : DrawableObject, IObjectPool
     }
 
     public static JavaScriptDrawableObjectProxy New(ObjectInstance objInstance)
-	{
-		JavaScriptDrawableObjectProxy obj = UtmxSceneManager.CreateDrawableObject<JavaScriptDrawableObjectProxy>();
-		obj.JsInstance = objInstance;
+    {
+        JavaScriptDrawableObjectProxy obj = UtmxSceneManager.CreateDrawableObject<JavaScriptDrawableObjectProxy>();
+        obj.JsInstance = objInstance;
         if (((IJavaScriptObject)obj).Has(EngineProperties.JAVASCRIPT_ON_LOAD_CALLBACK))
-			((IJavaScriptObject)obj).Invoke(EngineProperties.JAVASCRIPT_ON_LOAD_CALLBACK, []);
-		return obj;
-	}
+            ((IJavaScriptObject)obj).Invoke(EngineProperties.JAVASCRIPT_ON_LOAD_CALLBACK, []);
+        return obj;
+    }
 }

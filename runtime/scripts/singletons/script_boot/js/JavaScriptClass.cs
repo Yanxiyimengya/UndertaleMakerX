@@ -18,7 +18,7 @@ public partial class JavaScriptClass
         JsFilePath = path;
     }
 
-    public ObjectInstance New(params object[] arguments) 
+    public ObjectInstance New(params object[] arguments)
     {
         try
         {

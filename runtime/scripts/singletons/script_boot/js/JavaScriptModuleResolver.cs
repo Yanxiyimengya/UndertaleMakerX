@@ -17,7 +17,7 @@ public sealed class JavaScriptModuleResolver : IModuleLoader
         {
             return new ResolvedSpecifier(moduleRequest, specifier, null, SpecifierType.Bare);
         }
-        
+
         var resolvedPath = ResolvePathInternal(referencingModuleLocation, specifier);
 
         var uri = new Uri(resolvedPath, UriKind.RelativeOrAbsolute);
@@ -111,7 +111,7 @@ public sealed class JavaScriptModuleResolver : IModuleLoader
 
     private static string EnsureJsExtension(string path)
     {
-        if (! path.EndsWith(".js"))
+        if (!path.EndsWith(".js"))
             return path + ".js";
         return path;
     }

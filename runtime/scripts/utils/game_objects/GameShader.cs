@@ -78,7 +78,7 @@ public partial class GameShader : RefCounted
                 _shaderMaterial.SetShaderParameter(param, intVal);
                 break;
             case double:
-            case float: 
+            case float:
                 _shaderMaterial.SetShaderParameter(param, (float)value);
                 break;
             case Color colorVal:
@@ -107,16 +107,16 @@ public partial class GameShader : RefCounted
                     if (arr.Length == 4)
                     {
                         Transform2D mat2 = new Transform2D(
-                            arr[0], arr[1], 
-                            arr[2], arr[3], 
-                            0.0F,   0.0F
+                            arr[0], arr[1],
+                            arr[2], arr[3],
+                            0.0F, 0.0F
                             );
                         _shaderMaterial.SetShaderParameter(param, mat2);
                     }
                     else if (arr.Length == 9)
                     {
                         Basis mat3 = new Basis(
-                            arr[0], arr[1], arr[2], 
+                            arr[0], arr[1], arr[2],
                             arr[3], arr[4], arr[5],
                             arr[6], arr[7], arr[8]
                             );
@@ -125,7 +125,7 @@ public partial class GameShader : RefCounted
                     else if (arr.Length == 16)
                     {
                         Projection mat4 = new Projection(
-                            arr[0], arr[1], arr[2], arr[3], 
+                            arr[0], arr[1], arr[2], arr[3],
                             arr[4], arr[5], arr[6], arr[7],
                             arr[8], arr[9], arr[10], arr[11],
                             arr[12], arr[13], arr[14], arr[15]

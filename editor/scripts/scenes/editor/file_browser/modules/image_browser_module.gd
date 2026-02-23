@@ -148,7 +148,9 @@ func _setup_filter_options() -> void:
 	filter_mode_option_button.clear()
 	filter_mode_option_button.add_item(tr("Nearest"))
 	filter_mode_option_button.add_item(tr("Linear"))
-	filter_mode_option_button.select(clampi(selected_index, 0, filter_mode_option_button.item_count - 1))
+	filter_mode_option_button.select(
+		clampi(selected_index, 0, filter_mode_option_button.item_count - 1)
+	)
 
 
 func _setup_shader_path_line_edit() -> void:
@@ -174,17 +176,25 @@ func _setup_sequence_controls() -> void:
 			sequence_playback_timer.timeout.connect(_on_sequence_playback_timer_timeout)
 
 	if sequence_play_pause_button != null and is_instance_valid(sequence_play_pause_button):
-		if not sequence_play_pause_button.pressed.is_connected(_on_sequence_play_pause_button_pressed):
+		if not sequence_play_pause_button.pressed.is_connected(
+			_on_sequence_play_pause_button_pressed
+		):
 			sequence_play_pause_button.pressed.connect(_on_sequence_play_pause_button_pressed)
 
 	if sequence_progress_slider != null and is_instance_valid(sequence_progress_slider):
 		sequence_progress_slider.step = 1.0
-		if not sequence_progress_slider.value_changed.is_connected(_on_sequence_progress_slider_value_changed):
-			sequence_progress_slider.value_changed.connect(_on_sequence_progress_slider_value_changed)
+		if not sequence_progress_slider.value_changed.is_connected(
+			_on_sequence_progress_slider_value_changed
+		):
+			sequence_progress_slider.value_changed.connect(
+				_on_sequence_progress_slider_value_changed
+			)
 	if sequence_speed_spin_box != null and is_instance_valid(sequence_speed_spin_box):
 		sequence_speed_spin_box.step = 0.01
 		sequence_speed_spin_box.rounded = false
-		if not sequence_speed_spin_box.value_changed.is_connected(_on_sequence_speed_spin_box_value_changed):
+		if not sequence_speed_spin_box.value_changed.is_connected(
+			_on_sequence_speed_spin_box_value_changed
+		):
 			sequence_speed_spin_box.value_changed.connect(_on_sequence_speed_spin_box_value_changed)
 		_apply_sequence_speed(sequence_speed_spin_box.value)
 
@@ -450,8 +460,9 @@ func _normalize_image_paths(paths: Array[String]) -> Array[String]:
 		unique_path_map[normalized_path] = true
 		normalized_paths.append(normalized_path)
 
-	normalized_paths.sort_custom(func(a: String, b: String) -> bool:
-		return a.get_file().naturalnocasecmp_to(b.get_file()) < 0
+	normalized_paths.sort_custom(
+		func(a: String, b: String) -> bool:
+			return a.get_file().naturalnocasecmp_to(b.get_file()) < 0
 	)
 	return normalized_paths
 

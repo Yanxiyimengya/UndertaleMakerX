@@ -74,7 +74,7 @@ public partial class DrawableObject : Node2D, IObjectPoolObject
                 colors[i] = Colors.White;
         }
         RenderingServer.CanvasItemAddPolygon(canvasItemRid, vertices, colors, uvs,
-            (texture == null) ? default: texture.GetRid());
+            (texture == null) ? default : texture.GetRid());
     }
 
     public void DrawTextureRect(string path, Vector2 pos, Vector2 size, Color color = default)
@@ -86,12 +86,12 @@ public partial class DrawableObject : Node2D, IObjectPoolObject
                 color);
         }
     }
-    public void DrawTexturePos(string path, Vector2 posTopLeft, 
+    public void DrawTexturePos(string path, Vector2 posTopLeft,
             Vector2 posTopRight, Vector2 posBottomRight, Vector2 posBottomLeft, Color[] colors = default)
     {
         DrawPolygon(
             [posTopLeft, posTopRight, posBottomRight, posBottomLeft],
-            colors, 
+            colors,
             [Vector2.Zero, new Vector2(1, 0), Vector2.One, new Vector2(0, 1)], path);
     }
     public void DrawText(Vector2 pos, string text, Color color = default, double size = 16, string fontPath = "")

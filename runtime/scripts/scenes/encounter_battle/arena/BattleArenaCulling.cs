@@ -50,7 +50,7 @@ public abstract partial class BattleArenaCulling : BaseBattleArena
         if (what == NotificationPredelete)
         {
             if (_shape.IsValid) PhysicsServer2D.FreeRid(_shape);
-            if (_arenaPhysicBody.IsValid)  PhysicsServer2D.FreeRid(_arenaPhysicBody);
+            if (_arenaPhysicBody.IsValid) PhysicsServer2D.FreeRid(_arenaPhysicBody);
         }
     }
 

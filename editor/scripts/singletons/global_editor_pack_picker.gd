@@ -4,20 +4,11 @@ extends Node
 const PACK_ROOT_RES: String = "res://__data__"
 const BUILD_CACHE_DIR_NAME: String = ".build_cache"
 
-const IGNORE_DIRS: PackedStringArray = [
-	".git",
-	".godot",
-	".import"
-]
+const IGNORE_DIRS: PackedStringArray = [".git", ".godot", ".import"]
 
-const ignore_files: PackedStringArray = [
-	EditorProjectManager.PROJECT_CONFIG_FILE_NAME
-]
+const ignore_files: PackedStringArray = [EditorProjectManager.PROJECT_CONFIG_FILE_NAME]
 
-const ignore_ext: PackedStringArray = [
-	"import",
-	"uid"
-]
+const ignore_ext: PackedStringArray = ["import", "uid"]
 
 static var _build_records: Array = []
 static var _last_build_record: Dictionary = {}
@@ -38,7 +29,12 @@ static func pick_pack(path: String, output: String) -> void:
 	if !output_dir.is_empty() and !DirAccess.dir_exists_absolute(output_dir):
 		var mkdir_output_err: int = int(DirAccess.make_dir_recursive_absolute(output_dir))
 		if mkdir_output_err != OK:
-			push_error("PickPack: failed to create output directory -> %s (%d)" % [output_dir, mkdir_output_err])
+			push_error(
+				(
+					"PickPack: failed to create output directory -> %s (%d)"
+					% [output_dir, mkdir_output_err]
+				)
+			)
 			return
 
 	var build_cache_root := _build_cache_root()
@@ -69,7 +65,10 @@ static func get_last_build_record() -> Dictionary:
 static func get_build_records() -> Array:
 	return _build_records.duplicate(true)
 
-static func destroy_temporary_resources(remove_pck: bool = false, only_pck_path: String = "") -> void:
+
+static func destroy_temporary_resources(
+	remove_pck: bool = false, only_pck_path: String = ""
+) -> void:
 	var normalized_filter := _normalize_path(only_pck_path)
 	for i in range(_build_records.size() - 1, -1, -1):
 		var record: Dictionary = _build_records[i]
@@ -88,7 +87,9 @@ static func destroy_temporary_resources(remove_pck: bool = false, only_pck_path:
 		_last_build_record = {}
 
 
-static func _recursive_pack(root_path: String, current_path: String, packer: PCKPacker, packed_targets: Dictionary) -> void:
+static func _recursive_pack(
+	root_path: String, current_path: String, packer: PCKPacker, packed_targets: Dictionary
+) -> void:
 	var dir := DirAccess.open(current_path)
 	if dir == null:
 		push_warning("PickPack: cannot open directory -> %s" % current_path)
@@ -108,7 +109,9 @@ static func _recursive_pack(root_path: String, current_path: String, packer: PCK
 	dir.list_dir_end()
 
 
-static func _process_file(root_path: String, source_path: String, packer: PCKPacker, packed_targets: Dictionary) -> void:
+static func _process_file(
+	root_path: String, source_path: String, packer: PCKPacker, packed_targets: Dictionary
+) -> void:
 	var relative_path := _make_relative_path(root_path, source_path)
 	if relative_path.is_empty():
 		return
@@ -124,7 +127,9 @@ static func _process_file(root_path: String, source_path: String, packer: PCKPac
 	_pack_file_once(target_res_path, source_path, packer, packed_targets)
 
 
-static func _pack_file_once(target_res_path: String, source_abs_path: String, packer: PCKPacker, packed_targets: Dictionary) -> void:
+static func _pack_file_once(
+	target_res_path: String, source_abs_path: String, packer: PCKPacker, packed_targets: Dictionary
+) -> void:
 	var normalized_target := _normalize_path(target_res_path)
 	if packed_targets.has(normalized_target):
 		return
@@ -136,7 +141,9 @@ static func _pack_file_once(target_res_path: String, source_abs_path: String, pa
 
 	var err: int = int(packer.add_file(normalized_target, normalized_source))
 	if err != OK:
-		push_error("PickPack: add_file failed (%d): %s <- %s" % [err, normalized_target, normalized_source])
+		push_error(
+			"PickPack: add_file failed (%d): %s <- %s" % [err, normalized_target, normalized_source]
+		)
 		return
 
 	packed_targets[normalized_target] = true

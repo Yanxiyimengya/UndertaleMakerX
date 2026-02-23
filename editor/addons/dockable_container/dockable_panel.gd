@@ -41,6 +41,7 @@ func _exit_tree() -> void:
 	tab_selected.disconnect(_on_tab_selected)
 	tab_changed.disconnect(_on_tab_changed)
 
+
 func track_nodes(nodes: Array[Control], new_leaf: DockableLayoutPanel) -> void:
 	_leaf = null  # avoid using previous leaf in tab_changed signals
 	var min_size := mini(nodes.size(), get_child_count())

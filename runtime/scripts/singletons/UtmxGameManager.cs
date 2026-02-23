@@ -3,22 +3,22 @@ using Godot;
 [GlobalClass]
 public partial class UtmxGameManager : Node
 {
-	[Signal]
-	public delegate void GameStartEventHandler();
-	[Signal]
-	public delegate void GameEndEventHandler();
+    [Signal]
+    public delegate void GameStartEventHandler();
+    [Signal]
+    public delegate void GameEndEventHandler();
 
-	public static UtmxGameManager Instance;
-	public static JavaScriptGameManagerBoot Boot;
+    public static UtmxGameManager Instance;
+    public static JavaScriptGameManagerBoot Boot;
 
     public override void _EnterTree()
-	{
-		if (Instance != null && Instance != this)
-		{
-			QueueFree();
-			return;
-		}
-		Instance = this;
+    {
+        if (Instance != null && Instance != this)
+        {
+            QueueFree();
+            return;
+        }
+        Instance = this;
     }
 
     public override void _Ready()
@@ -29,21 +29,21 @@ public partial class UtmxGameManager : Node
     }
 
     public override void _ExitTree()
-	{
-		Instance = null;
-		_GameEnd();
-	}
+    {
+        Instance = null;
+        _GameEnd();
+    }
 
-	public void _GameStart()
+    public void _GameStart()
     {
         EmitSignal(SignalName.GameStart, []);
-	}
-	public void _GameEnd()
-	{
-		EmitSignal(SignalName.GameEnd, []);
-	}
-	public static void QuitGame() { Instance.GetTree().Quit(); }
-	public static double GetFpsReal() { return Engine.GetFramesPerSecond(); }
-	public static void SetMaxFps(int fps) { Engine.MaxFps = fps; }
+    }
+    public void _GameEnd()
+    {
+        EmitSignal(SignalName.GameEnd, []);
+    }
+    public static void QuitGame() { Instance.GetTree().Quit(); }
+    public static double GetFpsReal() { return Engine.GetFramesPerSecond(); }
+    public static void SetMaxFps(int fps) { Engine.MaxFps = fps; }
 
 }

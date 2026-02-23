@@ -90,11 +90,19 @@ func _ready() -> void:
 		if not file_system_panel.selected_file.is_connected(_on_file_system_selected_file):
 			file_system_panel.selected_file.connect(_on_file_system_selected_file)
 	if file_browser_panel and file_browser_panel.has_signal("preview_file_requested"):
-		if not file_browser_panel.preview_file_requested.is_connected(_on_file_browser_preview_file_requested):
-			file_browser_panel.preview_file_requested.connect(_on_file_browser_preview_file_requested)
+		if not file_browser_panel.preview_file_requested.is_connected(
+			_on_file_browser_preview_file_requested
+		):
+			file_browser_panel.preview_file_requested.connect(
+				_on_file_browser_preview_file_requested
+			)
 	if file_browser_panel and file_browser_panel.has_signal("preview_files_requested"):
-		if not file_browser_panel.preview_files_requested.is_connected(_on_file_browser_preview_files_requested):
-			file_browser_panel.preview_files_requested.connect(_on_file_browser_preview_files_requested)
+		if not file_browser_panel.preview_files_requested.is_connected(
+			_on_file_browser_preview_files_requested
+		):
+			file_browser_panel.preview_files_requested.connect(
+				_on_file_browser_preview_files_requested
+			)
 	if script_editor_panel and script_editor_panel.has_signal("script_saved"):
 		var script_saved_callable: Callable = Callable(self, "_on_script_editor_script_saved")
 		if not script_editor_panel.is_connected("script_saved", script_saved_callable):
@@ -207,20 +215,20 @@ func _on_inspector_resource_saved(path: String) -> void:
 
 
 func _load_editor_layout_from_project() -> void:
-	var project : UtmxProject = EditorProjectManager.opened_project
+	var project: UtmxProject = EditorProjectManager.opened_project
 	if not is_instance_valid(project):
 		return
-	var layout_state : Dictionary = project.get_editor_layout_state()
+	var layout_state: Dictionary = project.get_editor_layout_state()
 	if layout_state.is_empty():
 		return
-	var restored_layout : DockableLayout = _deserialize_dock_layout(layout_state)
+	var restored_layout: DockableLayout = _deserialize_dock_layout(layout_state)
 	if restored_layout == null:
 		return
 	main_dockable.set_layout(restored_layout)
 
 
 func _save_editor_layout_to_project() -> void:
-	var project : UtmxProject = EditorProjectManager.opened_project
+	var project: UtmxProject = EditorProjectManager.opened_project
 	if not is_instance_valid(project):
 		return
 	if main_dockable == null:
@@ -237,7 +245,7 @@ func _cleanup_editor_singletons() -> void:
 	UtmxPackPicker.destroy_temporary_resources(false)
 
 
-func _serialize_dock_layout(layout : DockableLayout) -> Dictionary:
+func _serialize_dock_layout(layout: DockableLayout) -> Dictionary:
 	if layout == null:
 		return {}
 	return {
@@ -247,11 +255,11 @@ func _serialize_dock_layout(layout : DockableLayout) -> Dictionary:
 	}
 
 
-func _serialize_dock_layout_node(node : DockableLayoutNode) -> Dictionary:
+func _serialize_dock_layout_node(node: DockableLayoutNode) -> Dictionary:
 	if node == null:
 		return {}
 	if node is DockableLayoutSplit:
-		var split : DockableLayoutSplit = node
+		var split: DockableLayoutSplit = node
 		return {
 			"type": "split",
 			"direction": int(split.direction),
@@ -260,7 +268,7 @@ func _serialize_dock_layout_node(node : DockableLayoutNode) -> Dictionary:
 			"second": _serialize_dock_layout_node(split.second),
 		}
 
-	var panel : DockableLayoutPanel = node as DockableLayoutPanel
+	var panel: DockableLayoutPanel = node as DockableLayoutPanel
 	if panel == null:
 		return {}
 	return {
@@ -270,19 +278,19 @@ func _serialize_dock_layout_node(node : DockableLayoutNode) -> Dictionary:
 	}
 
 
-func _deserialize_dock_layout(data : Dictionary) -> DockableLayout:
+func _deserialize_dock_layout(data: Dictionary) -> DockableLayout:
 	if data.is_empty():
 		return null
-	var root_var : Variant = data.get("root", {})
+	var root_var: Variant = data.get("root", {})
 	if not (root_var is Dictionary):
 		return null
 
-	var layout : DockableLayout = DockableLayout.new()
+	var layout: DockableLayout = DockableLayout.new()
 	layout.root = _deserialize_dock_layout_node(root_var as Dictionary)
 
-	var hidden_var : Variant = data.get("hidden_tabs", {})
+	var hidden_var: Variant = data.get("hidden_tabs", {})
 	if hidden_var is Dictionary:
-		var hidden_tabs : Dictionary = {}
+		var hidden_tabs: Dictionary = {}
 		for key in hidden_var.keys():
 			hidden_tabs[String(key)] = bool(hidden_var[key])
 		layout.hidden_tabs = hidden_tabs
@@ -290,22 +298,30 @@ func _deserialize_dock_layout(data : Dictionary) -> DockableLayout:
 	return layout
 
 
-func _deserialize_dock_layout_node(data : Dictionary) -> DockableLayoutNode:
-	var node_type : String = String(data.get("type", "panel"))
+func _deserialize_dock_layout_node(data: Dictionary) -> DockableLayoutNode:
+	var node_type: String = String(data.get("type", "panel"))
 	if node_type == "split":
-		var split : DockableLayoutSplit = DockableLayoutSplit.new()
+		var split: DockableLayoutSplit = DockableLayoutSplit.new()
 		split.direction = int(data.get("direction", DockableLayoutSplit.Direction.HORIZONTAL))
 		split.percent = float(data.get("percent", 0.5))
 
-		var first_var : Variant = data.get("first", {})
-		var second_var : Variant = data.get("second", {})
-		split.first = _deserialize_dock_layout_node(first_var as Dictionary) if (first_var is Dictionary) else DockableLayoutPanel.new()
-		split.second = _deserialize_dock_layout_node(second_var as Dictionary) if (second_var is Dictionary) else DockableLayoutPanel.new()
+		var first_var: Variant = data.get("first", {})
+		var second_var: Variant = data.get("second", {})
+		split.first = (
+			_deserialize_dock_layout_node(first_var as Dictionary)
+			if (first_var is Dictionary)
+			else DockableLayoutPanel.new()
+		)
+		split.second = (
+			_deserialize_dock_layout_node(second_var as Dictionary)
+			if (second_var is Dictionary)
+			else DockableLayoutPanel.new()
+		)
 		return split
 
-	var panel : DockableLayoutPanel = DockableLayoutPanel.new()
-	var names_var : Variant = data.get("names", [])
-	var names : PackedStringArray = PackedStringArray()
+	var panel: DockableLayoutPanel = DockableLayoutPanel.new()
+	var names_var: Variant = data.get("names", [])
+	var names: PackedStringArray = PackedStringArray()
 	if names_var is Array:
 		for name_value in names_var:
 			names.append(String(name_value))

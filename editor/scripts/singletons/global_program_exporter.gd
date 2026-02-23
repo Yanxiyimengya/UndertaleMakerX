@@ -7,19 +7,18 @@ const GODOT_TAIL_SIZE: int = 12
 const STREAM_CHUNK_SIZE: int = 1024 * 1024
 const WINDOWS_EXECUTABLE_SUFFIX: String = ".exe"
 
+
 ## Build an executable with embedded UTMX patch pack.
 ## Final layout:
 ## [raw_exe + original_pck_data][utmx_patch_pck][utmx_patch_size(8)][utmx_magic(4)]
 ## [original_pck_size + utmx_patch_size + 4 (8, little endian)][godot_magic(4)]
 static func export_windows_embedded(
-	project_root_path: String,
-	source_executable_path: String,
-	output_executable_path: String
+	project_root_path: String, source_executable_path: String, output_executable_path: String
 ) -> Dictionary:
 	var project_root := _trim_trailing_slash(_normalize_path(project_root_path))
 	var source_exe := _resolve_windows_source_executable_path(source_executable_path)
 	var output_exe := _resolve_output_executable_path(output_executable_path, project_root)
-	
+
 	if project_root.is_empty() or !DirAccess.dir_exists_absolute(project_root):
 		return _error_result("Project root is invalid: %s" % project_root)
 	if source_exe.is_empty() or !FileAccess.file_exists(source_exe):
@@ -33,7 +32,9 @@ static func export_windows_embedded(
 	if !output_dir.is_empty() and !DirAccess.dir_exists_absolute(output_dir):
 		var mkdir_err := DirAccess.make_dir_recursive_absolute(output_dir)
 		if mkdir_err != OK:
-			return _error_result("Failed to create output directory: %s (err=%d)" % [output_dir, mkdir_err])
+			return _error_result(
+				"Failed to create output directory: %s (err=%d)" % [output_dir, mkdir_err]
+			)
 
 	var source_meta := _read_source_tail_metadata(source_exe)
 	if !bool(source_meta.get("success", false)):
@@ -59,11 +60,7 @@ static func export_windows_embedded(
 		return _error_result("Relocated PCK size overflow.")
 
 	var write_result := _write_embedded_output(
-		source_exe,
-		temp_patch_pck_path,
-		output_exe,
-		patch_size,
-		relocated_pck_size
+		source_exe, temp_patch_pck_path, output_exe, patch_size, relocated_pck_size
 	)
 	_try_remove_file(temp_patch_pck_path)
 	if !bool(write_result.get("success", false)):
@@ -82,46 +79,52 @@ static func export_windows_embedded(
 
 
 static func _resolve_windows_source_executable_path(raw_source_path: String) -> String:
-	var source_path : String = _normalize_path(raw_source_path.strip_edges())
-	if (source_path.is_empty()):
+	var source_path: String = _normalize_path(raw_source_path.strip_edges())
+	if source_path.is_empty():
 		return ""
 
-	var candidates : PackedStringArray = []
-	if (source_path.get_extension().to_lower() == "exe"):
+	var candidates: PackedStringArray = []
+	if source_path.get_extension().to_lower() == "exe":
 		candidates.append(source_path)
 	else:
 		candidates.append(source_path + WINDOWS_EXECUTABLE_SUFFIX)
 		candidates.append(source_path)
 
-	if (DirAccess.dir_exists_absolute(source_path)):
-		candidates.append(_normalize_path(source_path.path_join("Windows" + WINDOWS_EXECUTABLE_SUFFIX)))
-		candidates.append(_normalize_path(source_path.path_join("windows" + WINDOWS_EXECUTABLE_SUFFIX)))
+	if DirAccess.dir_exists_absolute(source_path):
+		candidates.append(
+			_normalize_path(source_path.path_join("Windows" + WINDOWS_EXECUTABLE_SUFFIX))
+		)
+		candidates.append(
+			_normalize_path(source_path.path_join("windows" + WINDOWS_EXECUTABLE_SUFFIX))
+		)
 
-	for candidate : String in candidates:
-		if (FileAccess.file_exists(candidate)):
+	for candidate: String in candidates:
+		if FileAccess.file_exists(candidate):
 			return candidate
 
 	return candidates[0] if (!candidates.is_empty()) else source_path
 
 
-static func _resolve_output_executable_path(raw_output_path: String, project_root: String) -> String:
+static func _resolve_output_executable_path(
+	raw_output_path: String, project_root: String
+) -> String:
 	var output_path := _normalize_path(raw_output_path.strip_edges())
-	if (output_path.is_empty()):
+	if output_path.is_empty():
 		return ""
-	if (output_path.ends_with("/") || DirAccess.dir_exists_absolute(output_path)):
+	if output_path.ends_with("/") || DirAccess.dir_exists_absolute(output_path):
 		return _normalize_path(output_path.path_join(_build_default_output_name(project_root)))
-	if (output_path.get_extension().to_lower() != "exe"):
+	if output_path.get_extension().to_lower() != "exe":
 		output_path += ".exe"
 	return _normalize_path(output_path)
 
 
 static func _build_default_output_name(project_root: String) -> String:
-	var project_name : String = ""
-	if (is_instance_valid(EditorProjectManager.opened_project)):
+	var project_name: String = ""
+	if is_instance_valid(EditorProjectManager.opened_project):
 		project_name = String(EditorProjectManager.opened_project.project_name).strip_edges()
-	if (project_name.is_empty()):
+	if project_name.is_empty():
 		project_name = _trim_trailing_slash(_normalize_path(project_root)).get_file()
-	if (project_name.is_empty()):
+	if project_name.is_empty():
 		project_name = "game"
 	return project_name + ".exe"
 
@@ -131,15 +134,22 @@ static func _build_patch_pck(project_root: String, output_pck_path: String) -> D
 	if !output_dir.is_empty() and !DirAccess.dir_exists_absolute(output_dir):
 		var mkdir_err := DirAccess.make_dir_recursive_absolute(output_dir)
 		if mkdir_err != OK:
-			return _error_result("Failed to create patch directory: %s (err=%d)" % [output_dir, mkdir_err])
-	UtmxPackPicker.pick_pack(project_root, output_pck_path);
+			return _error_result(
+				"Failed to create patch directory: %s (err=%d)" % [output_dir, mkdir_err]
+			)
+	UtmxPackPicker.pick_pack(project_root, output_pck_path)
 	var build_record := _find_picker_record(output_pck_path)
 	if !build_record.is_empty():
 		var result_code: int = int(build_record.get("result_code", FAILED))
 		if result_code != OK:
 			return _error_result("Build patch pack failed with result code: %d" % result_code)
-		var record_root := _trim_trailing_slash(_normalize_path(str(build_record.get("root_path", ""))))
-		if !record_root.is_empty() and record_root != _trim_trailing_slash(_normalize_path(project_root)):
+		var record_root := _trim_trailing_slash(
+			_normalize_path(str(build_record.get("root_path", "")))
+		)
+		if (
+			!record_root.is_empty()
+			and record_root != _trim_trailing_slash(_normalize_path(project_root))
+		):
 			return _error_result("Build record root mismatch: %s" % record_root)
 
 	if !FileAccess.file_exists(output_pck_path):
@@ -185,6 +195,7 @@ static func _find_picker_record(output_pck_path: String) -> Dictionary:
 	if !last_record.is_empty() and last_pck_path == target:
 		return last_record.duplicate(true)
 	return {}
+
 
 static func _write_embedded_output(
 	source_exe: String,

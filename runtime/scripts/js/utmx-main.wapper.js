@@ -10,10 +10,12 @@ import { UtmxTweenManager } from "res://scripts/js/wrappers/utmx-tween-manager.w
 
 import { __Color } from "res://scripts/js/wrappers/types/utmx-color.wrapper.js";
 import { __Vector2, __Vector3, __Vector4 } from "res://scripts/js/wrappers/types/utmx-vector.wrapper.js";
+import { __UtmxItem } from "__UTMX";
+
 import { UtmxBattleProjectile } from "res://scripts/js/wrappers/types/utmx-battle-projectile.wrapper.js";
 import { UtmxGameSprite } from "res://scripts/js/wrappers/types/utmx-game-sprite.wrapper.js";
 import { UtmxDrawableObject } from "res://scripts/js/wrappers/types/utmx-drawable-object.wrapper.js";
-import { UtmxBaseItem } from "res://scripts/js/wrappers/types/utmx-item.wrapper.js";
+//import { UtmxBaseItem } from "res://scripts/js/wrappers/types/utmx-item.wrapper.js";
 import { UtmxBaseWeapon } from "res://scripts/js/wrappers/types/utmx-weapon.wrapper.js";
 import { UtmxBaseArmor } from "res://scripts/js/wrappers/types/utmx-armor.wrapper.js";
 import { UtmxBaseEnemy } from "res://scripts/js/wrappers/types/utmx-enemy.wrapper.js";
@@ -37,7 +39,7 @@ class UTMX {
 	static scene = UtmxSceneManager;
 	static tween = UtmxTweenManager;
 
-	static Item = UtmxBaseItem;
+	static Item = __UtmxItem;
 	static Weapon = UtmxBaseWeapon;
 	static Armor = UtmxBaseArmor;
 	static Enemy = UtmxBaseEnemy;

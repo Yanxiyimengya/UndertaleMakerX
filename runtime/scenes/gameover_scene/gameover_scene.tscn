@@ -61,15 +61,14 @@ position = Vector2(322, 124)
 texture = ExtResource("2_o25v4")
 
 [node name="TextTyper" type="RichTextLabel" parent="." unique_id=703384496]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -162.0
-offset_top = 84.0
-offset_right = 157.0
-offset_bottom = 198.0
+anchors_preset = -1
+anchor_left = 0.24700001
+anchor_top = 0.675
+anchor_right = 0.24700001
+anchor_bottom = 0.675
+offset_left = -0.08000183
+offset_right = 318.91998
+offset_bottom = 114.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/paragraph_separation = 12

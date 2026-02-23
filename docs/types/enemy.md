@@ -26,10 +26,12 @@ Enemy 表示战斗中的怪物对象。通过 `UTMX.Enemy` 访问。
 ### onHandleAction
 
 ```javascript
-onHandleAction(action: string) -> void
+onHandleAction(action: string) -> string
 ```
 
 玩家选择 Action 时触发。
+
+返回行动触发的对话文本。
 
 ---
 

@@ -1,1 +1,1 @@
-class_name DirTools extends RefCounted;
+class_name DirTools extends RefCounted

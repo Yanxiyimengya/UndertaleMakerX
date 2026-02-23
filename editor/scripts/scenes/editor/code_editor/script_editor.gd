@@ -1,4 +1,4 @@
-extends PanelContainer;
+extends PanelContainer
 
 const TREE_COLUMN := 0
 
@@ -232,7 +232,10 @@ func _request_close_script(path: String) -> void:
 		var file_name := path.get_file()
 		var close_message := tr("Script %s has unsaved changes. Save before closing?") % file_name
 		if bool(cached.get("missing_on_disk", false)):
-			close_message = tr("Script %s was deleted from disk. Save before closing to restore it?") % file_name
+			close_message = (
+				tr("Script %s was deleted from disk. Save before closing to restore it?")
+				% file_name
+			)
 		WindowManager.open_question_window(
 			tr("Close Script"),
 			close_message,
@@ -584,7 +587,10 @@ func _scroll_code_edit_to_caret(target_line: int) -> void:
 
 
 func _compute_dirty_state(cached: Dictionary, current_text: String) -> bool:
-	return bool(cached.get("missing_on_disk", false)) or current_text != str(cached.get("saved_text", ""))
+	return (
+		bool(cached.get("missing_on_disk", false))
+		or current_text != str(cached.get("saved_text", ""))
+	)
 
 
 func _get_refresh_target(path: String) -> String:

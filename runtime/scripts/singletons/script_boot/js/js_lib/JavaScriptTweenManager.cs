@@ -57,7 +57,7 @@ public partial class JavaScriptTween : RefCounted
             tween.BindNode(targetNode);
         object value = finalValue.ToObject();
         JavaScriptTweenerProperty javaScriptTweenerProperty = new JavaScriptTweenerProperty(ins);
-        PropertyTweener propertyTweener = value switch 
+        PropertyTweener propertyTweener = value switch
         {
             double v => tween.TweenProperty(javaScriptTweenerProperty, propName, v, duration),
             Vector2 v => tween.TweenProperty(javaScriptTweenerProperty, propName, v, duration),
@@ -116,7 +116,11 @@ public partial class JavaScriptTweenerProperty : JavaScriptTweener
     {
         propertyTweener.From(value switch
         {
-            double v => v, Vector2 v => v, Vector3 v => v, Vector4 v => v, Color v => v,
+            double v => v,
+            Vector2 v => v,
+            Vector3 v => v,
+            Vector4 v => v,
+            Color v => v,
             _ => new Variant(),
         });
         return this;
@@ -154,7 +158,7 @@ public partial class JavaScriptTweenerProperty : JavaScriptTweener
     public override bool _Set(StringName propName, Variant value)
     {
         if (instance == null) return false;
-        
+
         {
             if (instance != null)
             {

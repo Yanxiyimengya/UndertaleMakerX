@@ -68,7 +68,7 @@ public partial class ObjectPool<T> : RefCounted where T : Godot.Node, IObjectPoo
         if (!IsReusableNode(node)) return;
         node.ProcessMode = ProcessModeEnum.Inherit;
         node.Awake();
-        if (node is CanvasItem ci) 
+        if (node is CanvasItem ci)
             ci.Show();
     }
 

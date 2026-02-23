@@ -1,3 +1,3 @@
-extends Node;
+extends Node
 
-var templates : Array[UtmxProjectTemplate] = [];
+var templates: Array[UtmxProjectTemplate] = []

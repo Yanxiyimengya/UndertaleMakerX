@@ -8,16 +8,61 @@ const LINE_COMMENT_PATTERN := "//.*$"
 const IDENTIFIER_CHAR_PATTERN := "^[\\p{L}\\p{N}_$]$"
 const DROP_DEDUP_WINDOW_MS: int = 40
 
-const JS_KEYWORDS : PackedStringArray = [
-	"arguments", "as", "async", "await", "break", "case", "catch", "class",
-	"const", "continue", "debugger", "default", "delete", "do", "else",
-	"enum", "export", "extends", "false", "finally", "for", "from",
-	"function", "get", "if", "implements", "import", "in", "instanceof",
-	"interface", "let", "new", "null", "of", "package", "private",
-	"protected", "public", "return", "set", "static", "super", "switch",
-	"this", "throw", "true", "try", "typeof", "var", "void", "while",
-	"with", "yield"
-];
+const JS_KEYWORDS: PackedStringArray = [
+	"arguments",
+	"as",
+	"async",
+	"await",
+	"break",
+	"case",
+	"catch",
+	"class",
+	"const",
+	"continue",
+	"debugger",
+	"default",
+	"delete",
+	"do",
+	"else",
+	"enum",
+	"export",
+	"extends",
+	"false",
+	"finally",
+	"for",
+	"from",
+	"function",
+	"get",
+	"if",
+	"implements",
+	"import",
+	"in",
+	"instanceof",
+	"interface",
+	"let",
+	"new",
+	"null",
+	"of",
+	"package",
+	"private",
+	"protected",
+	"public",
+	"return",
+	"set",
+	"static",
+	"super",
+	"switch",
+	"this",
+	"throw",
+	"true",
+	"try",
+	"typeof",
+	"var",
+	"void",
+	"while",
+	"with",
+	"yield"
+]
 
 @export var field_auto_completion_icon: Texture2D
 @export var function_auto_completion_icon: Texture2D
@@ -49,7 +94,7 @@ func _init() -> void:
 	gutters_draw_fold_gutter = true
 	gutters_draw_line_numbers = true
 	code_completion_enabled = true
-	
+
 	indent_use_spaces = true
 	indent_automatic = true
 
@@ -80,14 +125,20 @@ func _enter_tree() -> void:
 		return
 	if not text_changed.is_connected(_on_text_changed):
 		text_changed.connect(_on_text_changed)
-	if code_complete_timer and not code_complete_timer.timeout.is_connected(_on_code_complete_timer_timeout):
+	if (
+		code_complete_timer
+		and not code_complete_timer.timeout.is_connected(_on_code_complete_timer_timeout)
+	):
 		code_complete_timer.timeout.connect(_on_code_complete_timer_timeout)
 
 
 func _exit_tree() -> void:
 	if text_changed.is_connected(_on_text_changed):
 		text_changed.disconnect(_on_text_changed)
-	if code_complete_timer and code_complete_timer.timeout.is_connected(_on_code_complete_timer_timeout):
+	if (
+		code_complete_timer
+		and code_complete_timer.timeout.is_connected(_on_code_complete_timer_timeout)
+	):
 		code_complete_timer.timeout.disconnect(_on_code_complete_timer_timeout)
 
 
@@ -124,12 +175,9 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 	if insertion_text.is_empty():
 		return
 	var signature_paths: String = "|".join(PackedStringArray(relative_paths))
-	var drop_signature: String = "%s|%s|%d|%d" % [
-		insertion_text,
-		signature_paths,
-		int(_at_position.x),
-		int(_at_position.y)
-	]
+	var drop_signature: String = (
+		"%s|%s|%d|%d" % [insertion_text, signature_paths, int(_at_position.x), int(_at_position.y)]
+	)
 	var now_msec: int = Time.get_ticks_msec()
 	if _last_drop_signature == drop_signature and _last_drop_tick_msec >= 0:
 		if now_msec - _last_drop_tick_msec <= DROP_DEDUP_WINDOW_MS:
@@ -148,7 +196,9 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 func _request_code_completion(force: bool) -> void:
 	var current_line := get_caret_line()
 	var current_text := text
-	var needs_reparse := force or current_text != _last_parsed_text or current_line > _last_parsed_line
+	var needs_reparse := (
+		force or current_text != _last_parsed_text or current_line > _last_parsed_line
+	)
 
 	if needs_reparse:
 		_cached_tokens = _extract_tokens(current_line)
@@ -181,12 +231,9 @@ func calculate_visible_column_capacity() -> int:
 	var font := get_theme_font("font")
 	if font == null:
 		return 0
-	var char_width := font.get_string_size(
-		"0",
-		HORIZONTAL_ALIGNMENT_LEFT,
-		-1,
-		get_theme_font_size("font_size")
-	).x
+	var char_width := (
+		font.get_string_size("0", HORIZONTAL_ALIGNMENT_LEFT, -1, get_theme_font_size("font_size")).x
+	)
 	if is_zero_approx(char_width):
 		return 0
 	return int(available_width / char_width)
@@ -248,20 +295,30 @@ func _build_and_show_completions(prefix: String) -> void:
 
 	for keyword in JS_KEYWORDS:
 		if prefix.is_empty() or keyword.begins_with(prefix):
-			_cached_completion_options.append({
-				"kind": CodeEdit.KIND_CONSTANT,
-				"display": keyword,
-				"insert_text": keyword,
-			})
+			(
+				_cached_completion_options
+				. append(
+					{
+						"kind": CodeEdit.KIND_CONSTANT,
+						"display": keyword,
+						"insert_text": keyword,
+					}
+				)
+			)
 
 	for token_name in _cached_tokens.keys():
 		var token_name_string := str(token_name)
 		if prefix.is_empty() or _starts_with_ignore_case(token_name_string, prefix):
-			_cached_completion_options.append({
-				"kind": int(_cached_tokens[token_name]),
-				"display": token_name_string,
-				"insert_text": token_name_string,
-			})
+			(
+				_cached_completion_options
+				. append(
+					{
+						"kind": int(_cached_tokens[token_name]),
+						"display": token_name_string,
+						"insert_text": token_name_string,
+					}
+				)
+			)
 
 	_filter_and_show_completions(prefix)
 
@@ -336,9 +393,7 @@ func _adjust_font_zoom(delta_steps: int) -> void:
 	if current_size <= 0:
 		return
 	var target_size := clampi(
-		current_size + delta_steps * zoom_font_step,
-		zoom_font_min_size,
-		zoom_font_max_size
+		current_size + delta_steps * zoom_font_step, zoom_font_min_size, zoom_font_max_size
 	)
 	if target_size == current_size:
 		return
@@ -412,7 +467,9 @@ func _extract_droppable_resource_paths(data: Variant) -> Array[String]:
 
 func _to_project_relative_path(path: String) -> String:
 	var normalized_path: String = String(path).replace("\\", "/").simplify_path()
-	var project_root: String = String(EditorProjectManager.get_opened_project_path()).replace("\\", "/").simplify_path()
+	var project_root: String = (
+		String(EditorProjectManager.get_opened_project_path()).replace("\\", "/").simplify_path()
+	)
 	if project_root.is_empty():
 		return normalized_path
 	if normalized_path == project_root:
@@ -435,5 +492,5 @@ func _build_resource_drop_text(relative_paths: Array[String]) -> String:
 
 
 func _quote_as_script_string(value: String) -> String:
-	var escaped: String = value.replace("\\", "\\\\").replace("\"", "\\\"")
-	return "\"" + escaped + "\""
+	var escaped: String = value.replace("\\", "\\\\").replace('"', '\\"')
+	return '"' + escaped + '"'

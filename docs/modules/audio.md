@@ -243,6 +243,39 @@ setBgmPosition(bgmId: string, position: number) -> void
 
 ---
 
+#### getBgmPaused
+
+```javascript
+getBgmPaused(bgmId: string) -> boolean
+```
+
+获取指定 BGM 是否为已暂停状态。
+
+**Returns** `boolean`
+
+| Parameter | Type   | Description |
+| --------- | ------ | ----------- |
+| bgmId     | string | 背景音乐 ID     |
+
+---
+
+#### setBgmPaused
+
+```javascript
+setBgmPaused(bgmId: string, paused: boolean) -> void
+```
+
+设置指定 BGM 是否暂停播放，`true` 为暂停，`false` 为继续播放。
+
+**Returns** `void`
+
+| Parameter | Type    | Description |
+| --------- | ------- | ----------- |
+| bgmId     | string  | 背景音乐 ID     |
+| paused    | boolean | 是否暂停播放      |
+
+---
+
 ## Control
 
 ---

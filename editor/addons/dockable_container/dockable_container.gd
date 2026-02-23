@@ -234,13 +234,16 @@ func get_tab_count() -> int:
 			count += 1
 	return count
 
+
 func _can_handle_drag_data(data) -> bool:
-	if not data is Dictionary: return false
+	if not data is Dictionary:
+		return false
 	var type = data.get("type", "")
 	var tab_type = data.get("tab_type", "")
-	var is_valid_type = \
-			type in ["tab", "tab_container_tab", "tabc_element"] or \
-			tab_type in ["tab_container_tab", "tabc_element"]
+	var is_valid_type = (
+		type in ["tab", "tab_container_tab", "tabc_element"]
+		or tab_type in ["tab_container_tab", "tabc_element"]
+	)
 	if is_valid_type:
 		var from_path = data.get("from_path")
 		if from_path:
@@ -248,6 +251,7 @@ func _can_handle_drag_data(data) -> bool:
 			if source_node and source_node.has_method("get_tabs_rearrange_group"):
 				return source_node.get_tabs_rearrange_group() == rearrange_group
 	return false
+
 
 func _is_managed_node(node: Node) -> bool:
 	return (

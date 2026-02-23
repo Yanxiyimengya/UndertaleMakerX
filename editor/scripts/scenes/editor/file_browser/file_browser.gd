@@ -37,7 +37,8 @@ const MODULE_SCENES := {
 	MODULE_IMAGE: preload("res://scenes/editor/file_browser/modules/image_browser_module.tscn"),
 	MODULE_AUDIO: preload("res://scenes/editor/file_browser/modules/audio_browser_module.tscn"),
 	MODULE_FONT: preload("res://scenes/editor/file_browser/modules/font_browser_module.tscn"),
-	MODULE_UNSUPPORTED: preload("res://scenes/editor/file_browser/modules/unsupported_browser_module.tscn"),
+	MODULE_UNSUPPORTED:
+	preload("res://scenes/editor/file_browser/modules/unsupported_browser_module.tscn"),
 }
 
 @onready var file_name_label: Label = %FileNameLabel

@@ -6,6 +6,6 @@
     <RootNamespace>UTMXRuntime</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Jint" Version="4.5.0" />
+    <PackageReference Include="Jint" Version="4.6.0" />
   </ItemGroup>
 </Project>
