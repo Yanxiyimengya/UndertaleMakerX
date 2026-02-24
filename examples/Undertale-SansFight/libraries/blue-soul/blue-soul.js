@@ -192,7 +192,7 @@ export default class BlueSoulController {
     constructor() {
         this._enabled = false;
         this.jumping = false;
-        this.moveSpeed = 120.0;
+        this.moveSpeed = 140.0;
         this.gravity = 300.0;
         this.jumpSpeed = 0.0;
         this.jumpStartSpeed = -200.0;

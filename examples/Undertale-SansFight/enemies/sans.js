@@ -34,8 +34,8 @@ export default class EnemySans extends UTMX.Enemy
     blueEyesStatus = false;
     
     anim = 1;
-    attackCount = 0;
-    turnIndex = 4;
+    attackCount = 9;
+    turnIndex = 9;
     attackCountPrev = -1;
     stage = 2;
     spared = false;
@@ -95,10 +95,15 @@ export default class EnemySans extends UTMX.Enemy
     {
         this.sweatSprite.offset = this.faceSprite.offset;
         updateSansIdle(this, delta);
-        
         processSansSlam(this);
         processSansBlueEyes(this);
         updateSansMenuBone(this);
+
+        UTMX.player.hp = 92;
+        if (UTMX.input.isActionPressed("menu"))
+        {
+            UTMX.player.heal(90);
+        }
     }
     
     onHandleAction(action)
@@ -279,9 +284,9 @@ export default class EnemySans extends UTMX.Enemy
                     if (UTMX.audio.isBgmValid("BGM")) {
                         UTMX.audio.setBgmPaused("BGM", true);
                     }
-                    this.sweatSprite.visible = true;
                     this.setFace(9);
                     this.setBody(0);
+                    this.setSweat(true);
                     this.appendDialogue(
                         [
                         SANS_DIALOG + "[setFace=9]呃...[wait=0.2]\n话说回来。",
@@ -315,7 +320,7 @@ export default class EnemySans extends UTMX.Enemy
                 }
                 case 2: {
                     this.appendDialogue([
-                        SANS_DIALOG+"[setFace=4]听上去很奇怪\n[wait=0.2]但在这之前\n我还暗想着\n我们能成为朋友。", 
+                        SANS_DIALOG+"[setFace=4]听上去很奇怪[wait=0.2]\n但在这之前\n我还暗想着\n我们能成为朋友。", 
                         SANS_DIALOG+"[setFace=3]我一直认为\n那个异常者\n做出这种事来\n是因为不幸福。",
                         SANS_DIALOG+"而当这家伙的愿望\n被满足时，[wait=0.2]\n就会浪子回头。"
                     ], new Vector2(56, -20), new Vector2(195, 105), customProcessCmd);
@@ -323,27 +328,64 @@ export default class EnemySans extends UTMX.Enemy
                 }
                 case 3: {
                     this.appendDialogue([
-                        SANS_DIALOG+"[setFace=3]或许那个家伙\n只是想要...\n我不理解。", 
+                        SANS_DIALOG+"[setFace=3]或许那个家伙\n只是想要...[wait=0.2]\n我不理解。", 
                         SANS_DIALOG+"[setFace=3][setBody=1]几份美食，\n几则烂笑话，\n还有一些朋友？"
                     ], new Vector2(56, -20), new Vector2(195, 105), customProcessCmd);
                     break;
                 }
                 case 4: {
                     this.appendDialogue([
-                        SANS_DIALOG+"[setFace=4]但那太荒谬了，\n不是吗？", 
-                        SANS_DIALOG+"[setFace=5]没错，你是\n那种永远都不会\n感到幸福的人。",
+                        SANS_DIALOG+"[setFace=4]但那太荒谬了，[wait=0.2]\n不是吗？", 
+                        SANS_DIALOG+"[setFace=5]没错，[wait=0.2]你是\n那种永远都不会\n感到幸福的人。",
                     ], new Vector2(56, -20), new Vector2(195, 105), customProcessCmd);
                     break;
                 }
                 case 5: {
                     this.appendDialogue([
-                        SANS_DIALOG+"[setFace=5]你总是会\n不停消耗着时间线，\n直到...", 
+                        SANS_DIALOG+"[setFace=5]你总是会\n不停消耗着\n时间线，[wait=0.2]\n直到...", 
                         SANS_DIALOG+"[setFace=4]算了。",
                         SANS_DIALOG+"[setBody=1]嘿。",
                         SANS_DIALOG+"[setFace=3]听听我的忠告吧，[wait=0.2]\n小子。",
                         SANS_DIALOG+"总有一天...",
                         SANS_DIALOG+"你得学会\n知难而退"
+                    ], new Vector2(56, -20), new Vector2(210, 105), customProcessCmd);
+                    break;
+                }
+                case 6: {
+                    this.appendDialogue([
+                        SANS_DIALOG+"[setFace=3]而我说的\n就是今天。"
                     ], new Vector2(56, -20), new Vector2(195, 105), customProcessCmd);
+                    break;
+                }
+                case 7: {
+                    this.appendDialogue([
+                        SANS_DIALOG+"[setFace=4]因为...[wait=0.2]\n你看...",
+                        SANS_DIALOG+"[setFace=1]这样的战斗\n对我来说\n真的很累。"
+                    ], new Vector2(56, -20), new Vector2(195, 105), customProcessCmd);
+                    break;
+                }
+                case 8: {
+                    this.appendDialogue([
+                        SANS_DIALOG+"[setFace=4]而你要是\n继续逼我...",
+                        SANS_DIALOG+"[setFace=1]那我就得\n被迫用我的\n[color=red]特殊攻击[/color]了。"
+                    ], new Vector2(56, -20), new Vector2(195, 105), customProcessCmd);
+                    break;
+                }
+                case 9: {
+                    this.appendDialogue([
+                        SANS_DIALOG+"[setFace=1]没错，[wait=0.2]\n我的[color=red]特殊攻击[/color]。[wait=0.2]\n听上去很熟悉？",
+                        SANS_DIALOG+"[setFace=3]好吧，[wait=0.2]做好准备。[wait=0.2]\n因为在下回合之后，[wait=0.2]\n我就要[color=red]用它[/color]了",
+                        SANS_DIALOG+"[setFace=1]所以说，[wait=0.2]\n如果你不想见识，\n那么现在就去死吧。"
+                    ], new Vector2(56, -20), new Vector2(210, 105), customProcessCmd);
+                    break;
+                }
+                case 10: {
+                    this.setSweat(false);
+                    this.appendDialogue([
+                        SANS_DIALOG+"[setFace=4]嗨，\n接下来就\n什么也没有了哦...",
+                        SANS_DIALOG+"[setFace=3]准备好了没？",
+                        SANS_DIALOG+"[setFace=5]活过这一轮 \n我就让你见识我的\n[color=red]特殊攻击[/color]。"
+                    ], new Vector2(56, -20), new Vector2(210, 105), customProcessCmd);
                     break;
                 }
             }
@@ -384,10 +426,12 @@ export default class EnemySans extends UTMX.Enemy
     menuBone = null;
     setFace(index)
     {
+        this.faceSprite.offset = Vector2.Zero;
         this.faceSprite.textures = this.faces[index];
     }
     setBody(index)
     {
+        this.bodySprite.offset = Vector2.Zero;
         this.bodySprite.textures = this.bodies[index];
     }
     setBlueEyes(enabled = true)
@@ -415,5 +459,11 @@ export default class EnemySans extends UTMX.Enemy
             new Vector2(posX - 100, this.legSprite.position.y), 0.5).trans(UTMX.tween.TransitionType.Sine).ease(UTMX.tween.EaseType.Out);
         missAnimTween.addTweenProperty(this.legSprite, "position", 
             new Vector2(posX, this.legSprite.position.y), 0.4).ease(UTMX.tween.TransitionType.Sine).ease(UTMX.tween.EaseType.Out).delay(0.6);
+    }
+
+    
+    setSweat(enabled)
+    {
+        this.sweatSprite.visible = enabled;
     }
 }

@@ -22,20 +22,14 @@ public partial class BattleEnemyState : StateNode
         }
     }
 
-    public override void _ExitState()
-    {
-        if (started)
-        {
-            UtmxBattleManager.GetBattleTurnController().TurnEnd();
-        }
-    }
+    public override void _ExitState(){}
 
     public override void _Process(double delta)
     {
         if (started && !UtmxBattleManager.GetBattleTurnController().IsTurnInProgress())
         {
+            UtmxBattleManager.GetBattleTurnController().TurnEnd();
             EndEnemyTurn();
-            started = false;
         }
     }
 
@@ -50,7 +44,7 @@ public partial class BattleEnemyState : StateNode
             _tween.Kill();
         }
         BattleMainArenaExpand _battleMainArena = UtmxBattleManager.GetBattleArenaController().MainArena;
-        await _battleMainArena.Resize(new Vector2(565, 130), 0.4);
+        if (_battleMainArena.Size != new Vector2(565, 130)) await _battleMainArena.Resize(new Vector2(565, 130), 0.4);
         UtmxBattleManager.GetBattleController().ChangeToPlayerTurnState();
         soul.Movable = false;
         soul.EnabledCollisionWithArena = false;

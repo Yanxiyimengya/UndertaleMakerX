@@ -21,6 +21,10 @@ const STAGE2_TURN_MAP = {
     2: "turns/stage2/sans-turn3.js",
     3: "turns/stage2/sans-turn4.js",
     4: "turns/stage2/sans-turn5.js",
+    5: "turns/stage2/sans-turn6.js",
+    6: "turns/stage2/sans-turn7.js",
+    7: "turns/stage2/sans-turn8.js",
+    8: "turns/stage2/sans-turn9.js",
 };
 
 const MENU_BONE_ANIM_TEMPLATE = {
@@ -39,6 +43,7 @@ const SLAM_DIR_MAP = {
     right: 2,
     left: 3
 };
+
 const SLAM_FRAMES = {
     0: {
         1: { texture: { kind: "slam", index: 0 }, bodyOffset: [2, -10], faceOffset: [0, -2] },
@@ -115,21 +120,33 @@ export function resolveSansNextTurn(enemy) {
             return "turns/spare/empty-turn.js";
         }
 
-        if (enemy.turnIndex > 12) {
-            const randomIndex = Math.floor(Math.random() * RANDOM_TURNS.length);
-            return STAGE1_TURN_MAP[randomIndex];
-        }
+        UTMX.debug.print(enemy.turnIndex);
 
-        UTMX.debug.log(`Resolving turn for stage 1, turnIndex=${enemy.turnIndex}, attackCount=${enemy.attackCount}`);
+        if (enemy.turnIndex > 12) {
+            const RANDOM_TURNS = [
+                1, 3, 8, 10
+            ]
+            const randomIndex = Math.floor(Math.random() * RANDOM_TURNS.length);
+            return STAGE1_TURN_MAP[RANDOM_TURNS[randomIndex]];
+        }
         if (enemy.turnIndex === 0) {
             return "turns/stage1/first-turn.js";
         }
-
         result = STAGE1_TURN_MAP[enemy.turnIndex];
     } else if (enemy.stage === 2) {
-        UTMX.debug.log(`Resolving turn for stage 2, turnIndex=${enemy.turnIndex}, attackCount=${enemy.attackCount}`);
         if (enemy.attackCount === 0) {
             result = null;
+        }
+
+        if (enemy.turnIndex >= 9) {
+            if (enemy.attackCount < 10)
+            {
+                return "turns/stage2/sans-turn11.js";
+            }
+            else
+            {
+                return "turns/stage2/sans-turn10.js"
+            }
         }
         const stage2Turn = STAGE2_TURN_MAP[enemy.turnIndex];
         if (stage2Turn != null) {
@@ -146,14 +163,26 @@ export function updateSansIdle(enemy, delta) {
     }
 
     // Preserve previous behavior: any non-zero value drifts back to anim=1.
-    enemy.anim = 1;
-    enemy.timer += delta * 2.5;
-    enemy.bodyOffset.x = Math.cos(enemy.timer);
-    enemy.bodyOffset.y = Math.sin(enemy.timer * 2) * 0.75;
-    enemy.bodySprite.position = new Vector2(enemy.bodyOffset.x - 1, -36 + enemy.bodyOffset.y);
-    enemy.faceSprite.position = new Vector2(0, -22).add(
-        new Vector2(0, enemy.bodyOffset.y).multiply(0.6)
-    );
+    if (enemy.anim == 1)
+    {
+        enemy.anim = 1;
+        enemy.timer += delta * 2.5;
+        enemy.bodyOffset.x = Math.cos(enemy.timer);
+        enemy.bodyOffset.y = Math.sin(enemy.timer * 2) * 0.75;
+        enemy.bodySprite.position = new Vector2(enemy.bodyOffset.x - 1, -36 + enemy.bodyOffset.y);
+        enemy.faceSprite.position = new Vector2(0, -22).add(
+            new Vector2(0, enemy.bodyOffset.y).multiply(0.6)
+        );
+    }
+    else if (enemy.anim == 2)
+    {
+        enemy.timer += delta * 1;
+        enemy.bodyOffset.y = Math.sin(enemy.timer) * 0.75;
+        enemy.bodySprite.position = new Vector2(0.0, -36 + enemy.bodyOffset.y);
+        enemy.faceSprite.position = new Vector2(0, -22).add(
+            new Vector2(0, enemy.bodyOffset.y).multiply(0.6)
+        );
+    }
 }
 
 export function enableSansMenuBone(enemy, enabled) {

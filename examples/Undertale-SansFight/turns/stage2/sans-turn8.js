@@ -1,7 +1,7 @@
 import { UTMX , Vector2 } from "UTMX";
 import EnemySans from "enemies/sans.js";
 import BlackScreen from "singalton/black-screen.js";
-import { WaveTurn , JumpTurn05 , GbTurn , JumpTurn06 } from "turns/stage2/sub-turns.js";
+import { WaveTurn , JumpTurn05 , GbTurn , JumpTurn06 , JumpTurn01 , JumpTurn02 , JumpTurn03 , JumpTurn04 } from "turns/stage2/sub-turns.js";
 
 const WAT_TIME = 20;
 const RANDOM_TRUNS = [
@@ -11,7 +11,7 @@ const RANDOM_TRUNS = [
     JumpTurn06,
 ];
 
-export default class RandomTurn2 extends UTMX.BattleTurn
+export default class RandomTurn3 extends UTMX.BattleTurn
 {
     timer = -1;
     subTurnList = [];
@@ -26,7 +26,7 @@ export default class RandomTurn2 extends UTMX.BattleTurn
         this.turnTime = 9999999;
         
         let lastIndex = -1; 
-        for (let i = 0; i < 5; i ++)
+        for (let i = 0; i < 6; i ++)
         {
             let randomIndex = 0;
             if (RANDOM_TRUNS.length > 1) {

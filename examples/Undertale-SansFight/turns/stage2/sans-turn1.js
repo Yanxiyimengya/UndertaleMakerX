@@ -8,7 +8,6 @@ const RANDOM_TRUNS = [
     JumpTurn01,
     JumpTurn02,
     JumpTurn03,
-    JumpTurn04,
     JumpTurn04
 ];
 
@@ -74,8 +73,7 @@ export default class RandomTurn1 extends UTMX.BattleTurn
                 }
                 else
                 {
-                    const arena = UTMX.battle.arena.getMainArena();
-                    arena.size = new Vector2(575, 130);
+                    UTMX.battle.arena.getMainArena().size = new Vector2(565, 130);
                     this.end();
                     EnemySans.instance.position = new Vector2(0, EnemySans.instance.position.y);
                     BlackScreen.instance.setVisible(false);

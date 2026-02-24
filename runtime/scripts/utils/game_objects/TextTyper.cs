@@ -147,6 +147,12 @@ public partial class TextTyper : Godot.RichTextLabel, IObjectPoolObject
                             }
                         }
                         _typerProgress = locate + 1;
+
+                        // Stop immediately when a timed wait is set by a command like [wait=1].
+                        if (_typerWattingTimer > 0.0)
+                        {
+                            return;
+                        }
                     }
                     if (!_CanRunning() || _typerProgress >= TyperText.Length)
                     {

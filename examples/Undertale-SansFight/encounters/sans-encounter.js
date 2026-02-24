@@ -32,7 +32,6 @@ export default class SansEncounter extends UTMX.Encounter
     }
 
     onPlayerTurn() {
-        //UTMX.player.heal(20);
         if (EnemySans.instance.canSpare)
         {
             this.encounterText = "[size=24]* Sans正在饶恕你。";
@@ -41,7 +40,22 @@ export default class SansEncounter extends UTMX.Encounter
         {
             if (EnemySans.instance.stage == 2)
             {
-                this.encounterText = "[size=24]* 好像逆转的时刻到来了。";
+                if (EnemySans.instance.attackCount > 8)
+                {
+                    this.encounterText = "[size=24]* Sans 正准备用它的特殊攻击。";
+                }
+                else if (EnemySans.instance.attackCount > 8)
+                {
+                    this.encounterText = "[size=24]* Sans 正在准备着什么。";
+                }
+                else if (EnemySans.instance.attackCount > 7)
+                {
+                    this.encounterText = "[size=24]* Sans 现在看上去真的\n  很疲惫了。";
+                }
+                else 
+                {
+                    this.encounterText = "[size=24]* 好像逆转的时刻到来了。";
+                }
             }
             else 
             {
