@@ -92,7 +92,9 @@ class JavaScriptSyntaxDB:
 		"async",
 		"enum",
 		"constructor",
-		"function"
+		"function",
+		"true",
+		"false",
 	]
 
 
@@ -112,6 +114,7 @@ func _rebuild_highlight_rules() -> void:
 
 	add_color_region("'", "'", string_color)
 	add_color_region('"', '"', string_color)
+	add_color_region('`', '`', string_color)
 	add_color_region("//", "", comment_color, true)
 	add_color_region("/*", "*/", comment_color)
 

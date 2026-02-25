@@ -111,6 +111,8 @@ func save_all_open_scripts(skip_deleted: bool = false) -> void:
 			continue
 		var cached: Dictionary = _file_cache[path]
 		if bool(cached.get("dirty", false)):
+			var was_missing_on_disk: bool = bool(cached.get("missing_on_disk", false))
+			var existed_before_write: bool = FileAccess.file_exists(path)
 			if skip_deleted and bool(cached.get("missing_on_disk", false)):
 				_update_file_tree_item(path)
 				continue
@@ -120,7 +122,10 @@ func save_all_open_scripts(skip_deleted: bool = false) -> void:
 				cached["missing_on_disk"] = false
 				cached["dirty"] = false
 				_file_cache[path] = cached
-				refresh_targets[_get_refresh_target(path)] = true
+				# Content-only save does not require filesystem tree rescan.
+				# Rescan only when the file had been missing (or did not exist) and was recreated.
+				if was_missing_on_disk or !existed_before_write:
+					refresh_targets[_get_refresh_target(path)] = true
 				saved_paths.append(path)
 		_update_file_tree_item(path)
 	for target in refresh_targets.keys():
@@ -282,6 +287,8 @@ func _save_script(path: String) -> bool:
 		_flush_current_document_state()
 
 	var cached: Dictionary = _file_cache[path]
+	var was_missing_on_disk: bool = bool(cached.get("missing_on_disk", false))
+	var existed_before_write: bool = FileAccess.file_exists(path)
 	var target_text := str(cached.get("text", ""))
 	if not _write_script_file(path, target_text):
 		return false
@@ -289,7 +296,8 @@ func _save_script(path: String) -> bool:
 	cached["missing_on_disk"] = false
 	cached["dirty"] = false
 	_file_cache[path] = cached
-	_refresh_filesystem_incremental(_get_refresh_target(path))
+	if was_missing_on_disk or !existed_before_write:
+		_refresh_filesystem_incremental(_get_refresh_target(path))
 	_update_file_tree_item(path)
 	script_saved.emit(path)
 	return true

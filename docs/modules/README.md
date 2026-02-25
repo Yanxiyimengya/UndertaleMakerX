@@ -39,7 +39,7 @@ UTMX.debug.log(mousePosition.add(Vector2.One));
 - [Audio 模块](modules/audio.md)
 - [Battle 模块](modules/battle.md)
 - [Debugger 模块](modules/debugger.md)
-- [GameRegisterDB 模块](modules/game-register-db.md)
+- [GameRegisterDb 模块](modules/game-register-db.md)
 - [Input 模块](modules/input.md)
 - [Player 模块](modules/player.md)
 - [Scene 模块](modules/scene.md)

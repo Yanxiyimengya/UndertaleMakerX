@@ -57,11 +57,10 @@ func open_export_window(callback: Callable = Callable()) -> void:
 func _on_export_project_requset(export_path: String) -> void:
 	if export_window != null && export_window.has_method("set_export_state"):
 		export_window.call("set_export_state", false)
-	var result: Dictionary = ProgramExporter.export_windows_embedded(
-		EditorProjectManager.get_opened_project_path(),
-		GlobalEditorRunnerManager.get_runner_executable_path_for_platform("windows"),
-		export_path
-	)
+	var selected_platform: String = "windows"
+	if export_window != null && export_window.has_method("get_selected_platform_id"):
+		selected_platform = String(export_window.call("get_selected_platform_id")).strip_edges()
+	var result: Dictionary = _export_project_by_platform(selected_platform, export_path)
 	if bool(result.get("success", false)):
 		var output_executable: String = String(result.get("output_executable", export_path))
 		print("Export succeeded: %s" % output_executable)
@@ -76,6 +75,21 @@ func _on_export_project_requset(export_path: String) -> void:
 			export_window.call("set_status", error_message, true)
 	if export_window != null && export_window.has_method("set_export_state"):
 		export_window.call("set_export_state", true)
+
+
+func _export_project_by_platform(platform_id: String, export_path: String) -> Dictionary:
+	match platform_id.to_lower():
+		"windows":
+			return ProgramExporter.export_windows_embedded(
+				EditorProjectManager.get_opened_project_path(),
+				GlobalEditorRunnerManager.get_runner_executable_path_for_platform("windows"),
+				export_path
+			)
+		_:
+			return {
+				"success": false,
+				"error": tr("Unsupported export platform: %s") % platform_id,
+			}
 
 
 func open_window(window: Window):

@@ -54,8 +54,8 @@ startEncounter(encounterId: string) -> void
 ```javascript
 import { UTMX } from "UTMX";
 
-if (!UTMX.registerDB.isEncounterRegistered("MyCustomEncounter"))
-    UTMX.registerDB.registerEncounter("MyCustomEncounter", "encounters/my-custom-encounter.js");
+if (!UTMX.registerDb.isEncounterRegistered("MyCustomEncounter"))
+    UTMX.registerDb.registerEncounter("MyCustomEncounter", "encounters/my-custom-encounter.js");
 
 UTMX.battle.startEncounter("MyCustomEncounter");
 ```

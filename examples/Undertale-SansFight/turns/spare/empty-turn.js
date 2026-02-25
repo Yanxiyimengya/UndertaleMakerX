@@ -1,7 +1,4 @@
 import { UTMX , Vector2 } from "UTMX";
-import BlueSoulController from "libraries/blue-soul/blue-soul.js";
-import EnemySans from "enemies/sans.js";
-import BlackScreen from "singalton/black-screen.js";
 
 export default class EmptyTurn extends UTMX.BattleTurn
 {

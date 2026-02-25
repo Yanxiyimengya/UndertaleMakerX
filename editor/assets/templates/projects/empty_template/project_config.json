@@ -1,0 +1,28 @@
+{
+	"application": {
+		"author": "",
+		"main_scene": "",
+		"main_script": "main.js",
+		"max_fps": 60.0,
+		"name": "UNDERTALE MAKER X",
+		"vsync": false
+	},
+	"boot_splash": {
+		"background_color": "#101020",
+		"display_text": "UNDERTALE MAKER\nX",
+		"enabled": false,
+		"speed_scale": 1.0
+	},
+	"virtual_input": {
+		"dead_zone": 0.1,
+		"enabled": false
+	},
+	"window": {
+		"boderless": false,
+		"clear_color": "#000000",
+		"fullscreen": false,
+		"height": 480.0,
+		"resizable": false,
+		"width": 640.0
+	}
+}

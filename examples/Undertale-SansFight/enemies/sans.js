@@ -34,10 +34,10 @@ export default class EnemySans extends UTMX.Enemy
     blueEyesStatus = false;
     
     anim = 1;
-    attackCount = 9;
-    turnIndex = 9;
+    attackCount = 0;
+    turnIndex = 0;
     attackCountPrev = -1;
-    stage = 2;
+    stage = 1;
     spared = false;
     menuBoneCanMoveIn = true;
     
@@ -99,7 +99,7 @@ export default class EnemySans extends UTMX.Enemy
         processSansBlueEyes(this);
         updateSansMenuBone(this);
 
-        UTMX.player.hp = 92;
+        //UTMX.player.hp = 92;
         if (UTMX.input.isActionPressed("menu"))
         {
             UTMX.player.heal(90);

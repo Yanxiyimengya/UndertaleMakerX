@@ -26,7 +26,7 @@ shadow_offset = Vector2(5, 5)
 oversampling_override = 1.0
 title = "Export"
 initial_position = 1
-size = Vector2i(800, 200)
+size = Vector2i(1000, 550)
 transient = true
 exclusive = true
 popup_window = true
@@ -53,44 +53,120 @@ theme_override_styles/panel = ExtResource("2_8nhw5")
 
 [node name="MarginContainer" type="MarginContainer" parent="ExportWindowContent" unique_id=1869062495]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ExportWindowContent/MarginContainer" unique_id=350661901]
-layout_mode = 2
-
-[node name="ProjectdirBar" type="VBoxContainer" parent="ExportWindowContent/MarginContainer/VBoxContainer" unique_id=1673068560]
+[node name="RootVBox" type="VBoxContainer" parent="ExportWindowContent/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 12
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="ExportWindowContent/MarginContainer/VBoxContainer/ProjectdirBar" unique_id=2095568270]
+[node name="MainContent" type="HSplitContainer" parent="ExportWindowContent/MarginContainer/RootVBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+split_offset = 260
+
+[node name="PlatformsPanel" type="PanelContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent"]
+custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 
-[node name="ProjectDirLabel" type="Label" parent="ExportWindowContent/MarginContainer/VBoxContainer/ProjectdirBar/HBoxContainer2" unique_id=565593081]
+[node name="PlatformsMargin" type="MarginContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/PlatformsPanel"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
-text = "Location"
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
-[node name="InfoLabel" type="RichTextLabel" parent="ExportWindowContent/MarginContainer/VBoxContainer/ProjectdirBar/HBoxContainer2" unique_id=562275239]
+[node name="PlatformsVBox" type="VBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/PlatformsPanel/PlatformsMargin"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="PlatformsTitleLabel" type="Label" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/PlatformsPanel/PlatformsMargin/PlatformsVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Platforms"
+
+[node name="ExportPlatformsTree" type="Tree" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/PlatformsPanel/PlatformsMargin/PlatformsVBox" unique_id=1526598003]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/normal = SubResource("StyleBoxEmpty_idmcu")
-bbcode_enabled = true
-vertical_alignment = 1
+size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ExportWindowContent/MarginContainer/VBoxContainer/ProjectdirBar" unique_id=2102313084]
+[node name="SettingsPanel" type="PanelContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="ProjectDirEdit" type="LineEdit" parent="ExportWindowContent/MarginContainer/VBoxContainer/ProjectdirBar/HBoxContainer" unique_id=1351067638]
+[node name="SettingsMargin" type="MarginContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="ExportPlatformTabs" type="TabContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+current_tab = 0
+tabs_visible = false
+
+[node name="WindowsExportPanel" type="VBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs" unique_id=1067951998]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+metadata/_tab_index = 0
+
+[node name="WindowsTitleLabel" type="Label" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Windows"
+
+[node name="AppNameGroup" type="VBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="AppNameLabel" type="Label" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/AppNameGroup"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Application Name"
+
+[node name="AppNameEdit" type="LineEdit" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/AppNameGroup"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 caret_blink = true
 
-[node name="DirTextureButton" type="TextureButton" parent="ExportWindowContent/MarginContainer/VBoxContainer/ProjectdirBar/HBoxContainer" unique_id=1534048663]
+[node name="ProjectDirGroup" type="VBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ProjectDirLabel" type="Label" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/ProjectDirGroup"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Location"
+
+[node name="OutputPathRow" type="HBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/ProjectDirGroup"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ProjectDirEdit" type="LineEdit" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/ProjectDirGroup/OutputPathRow" unique_id=1351067638]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+caret_blink = true
+
+[node name="DirTextureButton" type="TextureButton" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/ProjectDirGroup/OutputPathRow" unique_id=1534048663]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
@@ -99,38 +175,41 @@ texture_pressed = ExtResource("4_g1xpw")
 texture_hover = ExtResource("4_g1xpw")
 stretch_mode = 5
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="ExportWindowContent/MarginContainer/VBoxContainer" unique_id=710448778]
-layout_mode = 2
-size_flags_vertical = 10
-
-[node name="PanelContainer2" type="PanelContainer" parent="ExportWindowContent/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1960160650]
-layout_mode = 2
-size_flags_horizontal = 10
-
-[node name="HBoxContainer" type="HBoxContainer" parent="ExportWindowContent/MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2" unique_id=1639655012]
-custom_minimum_size = Vector2(500, 0)
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="CancelButton" type="Button" parent="ExportWindowContent/MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer" unique_id=912541224]
+[node name="InfoLabel" type="RichTextLabel" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxEmpty_idmcu")
+bbcode_enabled = true
+vertical_alignment = 1
+
+[node name="FooterBar" type="HBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="FooterSpacer" type="Control" parent="ExportWindowContent/MarginContainer/RootVBox/FooterBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CancelButton" type="Button" parent="ExportWindowContent/MarginContainer/RootVBox/FooterBar" unique_id=912541224]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 1
 theme_override_styles/normal = ExtResource("5_typw8")
 theme_override_styles/pressed = ExtResource("6_4axwg")
 theme_override_styles/hover = ExtResource("7_dry25")
 text = "Cancel"
 
-[node name="ExportButton" type="Button" parent="ExportWindowContent/MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer" unique_id=149254487]
+[node name="ExportButton" type="Button" parent="ExportWindowContent/MarginContainer/RootVBox/FooterBar" unique_id=149254487]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 1
 theme_override_colors/font_color = Color(0.95304054, 0.9530404, 0.95304054, 1)
 theme_override_styles/normal = ExtResource("8_kol02")
 theme_override_styles/pressed = ExtResource("9_kvpxo")
 theme_override_styles/hover = ExtResource("10_vvuhj")
 text = "Export"
 
-[connection signal="pressed" from="ExportWindowContent/MarginContainer/VBoxContainer/ProjectdirBar/HBoxContainer/DirTextureButton" to="." method="_on_dir_texture_button_pressed"]
-[connection signal="pressed" from="ExportWindowContent/MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
-[connection signal="pressed" from="ExportWindowContent/MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer/ExportButton" to="." method="_on_export_button_pressed"]
+[connection signal="pressed" from="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/ProjectDirGroup/OutputPathRow/DirTextureButton" to="." method="_on_dir_texture_button_pressed"]
+[connection signal="pressed" from="ExportWindowContent/MarginContainer/RootVBox/FooterBar/CancelButton" to="." method="_on_cancel_button_pressed"]
+[connection signal="pressed" from="ExportWindowContent/MarginContainer/RootVBox/FooterBar/ExportButton" to="." method="_on_export_button_pressed"]

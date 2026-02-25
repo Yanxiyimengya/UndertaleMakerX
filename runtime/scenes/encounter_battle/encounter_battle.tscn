@@ -225,6 +225,7 @@ fit_content = true
 scroll_active = false
 autowrap_mode = 1
 script = ExtResource("19_taqgn")
+TyperSpeed = 0.025
 TyperSize = 24
 
 [node name="EncounterChoiceEnemyMenu" parent="UILayer/BattleMenuManager" unique_id=1194380642 instance=ExtResource("24_noyau")]

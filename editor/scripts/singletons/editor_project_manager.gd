@@ -1,13 +1,10 @@
 extends Node
-# 单例名称: ProjectManager
 
 const PROJECT_CONFIG_FILE_NAME: String = "utmx.cfg"
-const RUNTIME_PROJECT_CONFIG_FILE_NAME: String = "project_config.json"
 const PROJECTS_LIST_FILE_NAME: String = "projects.cfg"
-const ENGINE_VERSION: String = "1.0.0-alpha"
+const ENGINE_VERSION: String = "1.0.0-beta"
 const DEFAULT_PROJECT_DIR_NAME: String = "UndertaleMakerProject"
 
-## 存储结构: { "项目目录路径": UtmxProject实例 }
 var projects: Dictionary[String, UtmxProject] = {}
 var opened_project: UtmxProject = null
 
@@ -28,69 +25,55 @@ func get_opened_project_path() -> String:
 	return ""
 
 
-## 兼容入口：支持传入项目目录或 utmx.cfg 文件路径
 func load_project(path: String) -> UtmxProject:
-	if path.is_empty():
+	var normalized_path: String = _normalize_path(path.strip_edges())
+	if normalized_path.is_empty():
 		return null
 
-	if DirAccess.dir_exists_absolute(path):
-		return load_project_config(path)
+	if DirAccess.dir_exists_absolute(normalized_path):
+		return load_project_config(normalized_path)
 
-	if FileAccess.file_exists(path):
-		var file_name: String = path.get_file()
-		if file_name == PROJECT_CONFIG_FILE_NAME:
-			return load_project_config(path.get_base_dir())
+	if FileAccess.file_exists(normalized_path):
+		if normalized_path.get_file() == PROJECT_CONFIG_FILE_NAME:
+			return load_project_config(normalized_path.get_base_dir())
 
 	return null
 
 
-# --- 核心：加载与保存项目清单 (编辑器全局) ---
-
-
-## 从编辑器的项目清单文件加载所有已知项目
 func load_editor_all_projects() -> void:
 	projects.clear()
-	var list_path: String = EditorConfigureManager.get_data_path().path_join(
-		PROJECTS_LIST_FILE_NAME
-	)
+	var list_path: String = EditorConfigureManager.get_data_path().path_join(PROJECTS_LIST_FILE_NAME)
 	if !FileAccess.file_exists(list_path):
 		return
 
 	var config_file: ConfigFile = ConfigFile.new()
-	config_file.load(list_path)
+	if config_file.load(list_path) != OK:
+		return
 
 	for project_dir in config_file.get_sections():
-		# 这里 project_dir 就是项目的文件夹路径
 		var proj: UtmxProject = load_project_config(project_dir)
 		if proj == null:
-			# 如果项目文件夹或配置文件不存在，可以考虑从清单中移除
 			continue
 		proj.favorite = config_file.get_value(project_dir, "favorite", false)
 
 
-## 保存当前项目列表到编辑器全局清单
 func save_editor_all_projects() -> void:
-	var list_path: String = EditorConfigureManager.get_data_path().path_join(
-		PROJECTS_LIST_FILE_NAME
-	)
+	var list_path: String = EditorConfigureManager.get_data_path().path_join(PROJECTS_LIST_FILE_NAME)
 	var config_file: ConfigFile = ConfigFile.new()
 
 	for project_dir in projects:
 		var proj: UtmxProject = projects[project_dir]
 		config_file.set_value(project_dir, "favorite", proj.favorite)
-		# 同步保存该项目的具体配置
 		save_project_config(proj)
 
 	config_file.save(list_path)
 
 
-# --- 核心：单个项目配置文件操作 (项目目录下) ---
-
-
-## 保存项目的 utmx.cfg
 func save_project_config(project: UtmxProject) -> void:
 	var config_file: ConfigFile = ConfigFile.new()
-	var cfg_full_path: String = project.project_path.path_join(PROJECT_CONFIG_FILE_NAME)
+	var cfg_full_path: String = _normalize_path(
+		project.project_path.path_join(PROJECT_CONFIG_FILE_NAME)
+	)
 
 	config_file.set_value("application", "name", project.project_name)
 	config_file.set_value("application", "icon", project.icon)
@@ -98,178 +81,194 @@ func save_project_config(project: UtmxProject) -> void:
 	config_file.set_value("application", "engine_version", project.engine_version)
 	config_file.set_value("editor", "file_tree_expanded_dirs", project.file_tree_expanded_dirs)
 	config_file.set_value("editor", "layout_state", project.get_editor_layout_state())
-
 	config_file.save(cfg_full_path)
 
 
-## 加载特定目录下的项目配置
 func load_project_config(dir_path: String) -> UtmxProject:
-	var cfg_full_path: String = dir_path.path_join(PROJECT_CONFIG_FILE_NAME)
-
+	var normalized_dir_path: String = _normalize_path(dir_path)
+	var cfg_full_path: String = normalized_dir_path.path_join(PROJECT_CONFIG_FILE_NAME)
 	if !FileAccess.file_exists(cfg_full_path):
 		return null
 
 	var config_file: ConfigFile = ConfigFile.new()
-	var err = config_file.load(cfg_full_path)
-	if err != OK:
+	if config_file.load(cfg_full_path) != OK:
 		return null
 
 	var result: UtmxProject = UtmxProject.new()
-	result.project_path = dir_path  # 存储目录路径
-
-	result.project_name = config_file.get_value("application", "name", "未命名项目")
+	result.project_path = normalized_dir_path
+	result.project_name = config_file.get_value("application", "name", "Unnamed Project")
 	result.icon = config_file.get_value("application", "icon", "icon.svg")
 	result.last_open_time = config_file.get_value("application", "last_open_time", 0)
 	result.engine_version = config_file.get_value("application", "engine_version", "")
+
 	var expanded_dirs_var: Variant = config_file.get_value("editor", "file_tree_expanded_dirs", [])
 	if expanded_dirs_var is Array:
 		for value in expanded_dirs_var:
 			result.file_tree_expanded_dirs.append(String(value))
+
 	var layout_state_var: Variant = config_file.get_value("editor", "layout_state", {})
 	if layout_state_var is Dictionary:
 		result.set_editor_layout_state(layout_state_var)
 
-	# 加载图标纹理
-	var icon_full_path = dir_path.path_join(result.icon.trim_prefix("/"))
+	var icon_full_path: String = normalized_dir_path.path_join(result.icon.trim_prefix("/"))
 	if FileAccess.file_exists(icon_full_path):
 		var icon_img: Image = Image.load_from_file(icon_full_path)
 		if icon_img:
 			result.icon_texture = ImageTexture.create_from_image(icon_img)
 
-	projects[dir_path] = result
+	projects[normalized_dir_path] = result
 	return result
 
 
-# --- 业务逻辑 ---
-
-
 func remove_project(dir_path: String) -> void:
-	projects.erase(dir_path)
+	projects.erase(_normalize_path(dir_path))
 
 
-## 创建默认的空项目
 func create_default_project(project_name: String, dir_path: String) -> UtmxProject:
-	if projects.has(dir_path):
-		return projects[dir_path]
-
-	if !DirAccess.dir_exists_absolute(dir_path):
-		DirAccess.make_dir_recursive_absolute(dir_path)
-
-	var proj: UtmxProject = UtmxProject.new()
-	proj.project_name = project_name
-	proj.project_path = dir_path
-	proj.icon = "icon.svg"
-	proj.favorite = false
-	proj.engine_version = ENGINE_VERSION
-	proj.last_open_time = int(Time.get_unix_time_from_system())
-
-	# 保存配置
-	save_project_config(proj)
-	projects[dir_path] = proj
-
-	var icon_src = "res://assets/icons/utmx-icon-256.svg"
-	if FileAccess.file_exists(icon_src):
-		var dir = DirAccess.open(dir_path)
-		dir.copy(icon_src, dir_path.path_join(proj.icon))
-
-	_create_default_runtime_project_config(dir_path)
-
-	return proj
+	return create_project_from_template(project_name, dir_path)
 
 
-func _create_default_runtime_project_config(project_dir_path: String) -> void:
-	var file_path: String = project_dir_path.path_join(RUNTIME_PROJECT_CONFIG_FILE_NAME)
-	var config: Dictionary = {
-		"application":
-		{
-			"author": "",
-			"main_scene": "",
-			"main_script": "main.js",
-			"max_fps": 60.0,
-			"name": "UNDERTALE MAKER X",
-			"vsync": false
-		},
-		"boot_splash":
-		{
-			"background_color": "#101020",
-			"display_text": "UNDERTALE MAKER\nX",
-			"enabled": false,
-			"speed_scale": 1.0
-		},
-		"virtual_input": {"dead_zone": 0.1, "enabled": false},
-		"window":
-		{
-			"boderless": false,
-			"clear_color": "#000000",
-			"fullscreen": false,
-			"height": 480.0,
-			"resizable": false,
-			"width": 640.0
-		}
-	}
-	var file: FileAccess = FileAccess.open(file_path, FileAccess.WRITE)
-	if file == null:
-		push_warning("Failed to create default project config: %s" % file_path)
-		return
-	file.store_string(JSON.stringify(config, "\t"))
-	file.close()
-	file = null
+func create_project_from_template(
+	project_name: String, target_dir: String, template: UtmxProjectTemplate = null
+) -> UtmxProject:
+	var normalized_target_dir: String = _normalize_path(target_dir)
+	if projects.has(normalized_target_dir):
+		return projects[normalized_target_dir]
 
-	var script_path: String = project_dir_path.path_join(config["application"]["main_script"])
-	file = FileAccess.open(script_path, FileAccess.WRITE)
-	if file == null:
-		return
-	file.store_string(ProjectFileTemplates.MAIN_JS_SCRIPT_TEMPLATE)
-	file.close()
+	var template_zip_path: String = _resolve_template_zip_path(template)
+	if template_zip_path.is_empty():
+		push_warning("Failed to create project: no valid template zip is available.")
+		return null
+
+	return create_project_from_zip(project_name, template_zip_path, normalized_target_dir)
 
 
-## 从 ZIP 加载项目
+func _resolve_template_zip_path(template: UtmxProjectTemplate) -> String:
+	if template != null:
+		var template_zip_path: String = _normalize_path(String(template.zip_path).strip_edges())
+		if !template_zip_path.is_empty() and FileAccess.file_exists(template_zip_path):
+			return template_zip_path
+
+	if EditorTemplateManager.templates.is_empty():
+		EditorTemplateManager.load_templates_from_directory(
+			EditorTemplateManager.get_default_template_directory()
+		)
+
+	var default_template: UtmxProjectTemplate = EditorTemplateManager.get_default_template()
+	if default_template != null:
+		var default_template_zip: String = _normalize_path(default_template.zip_path)
+		if !default_template_zip.is_empty() and FileAccess.file_exists(default_template_zip):
+			return default_template_zip
+
+	var default_empty_template_zip: String = _normalize_path(
+		EditorTemplateManager.get_default_empty_template_zip_path()
+	)
+	if !default_empty_template_zip.is_empty() and FileAccess.file_exists(default_empty_template_zip):
+		return default_empty_template_zip
+
+	return ""
+
+
 func create_project_from_zip(
 	project_name: String, zip_path: String, target_dir: String
 ) -> UtmxProject:
-	if !FileAccess.file_exists(zip_path):
+	var normalized_zip_path: String = _normalize_path(zip_path)
+	var normalized_target_dir: String = _normalize_path(target_dir)
+	if !FileAccess.file_exists(normalized_zip_path):
 		return null
 
 	var reader: ZIPReader = ZIPReader.new()
-	if reader.open(zip_path) != OK:
+	if reader.open(normalized_zip_path) != OK:
 		return null
 
 	var files: PackedStringArray = reader.get_files()
-
-	# 检查 ZIP 内是否存在配置文件
-	var valid_zip: bool = false
-	for f in files:
-		if f.get_file() == PROJECT_CONFIG_FILE_NAME:
-			valid_zip = true
+	var project_root_prefix: String = _resolve_zip_project_root_prefix(files)
+	var has_project_config: bool = false
+	for entry in files:
+		if entry.get_file() == PROJECT_CONFIG_FILE_NAME:
+			has_project_config = true
 			break
-
-	if !valid_zip:
+	if !has_project_config:
 		reader.close()
 		return null
 
-	# 解压过程
-	for file_path in files:
-		var dest_path: String = target_dir.path_join(file_path)
-		if file_path.ends_with("/"):
-			DirAccess.make_dir_recursive_absolute(dest_path)
-		else:
-			DirAccess.make_dir_recursive_absolute(dest_path.get_base_dir())
-			var buffer: PackedByteArray = reader.read_file(file_path)
-			var f: FileAccess = FileAccess.open(dest_path, FileAccess.WRITE)
-			if f:
-				f.store_buffer(buffer)
-				f.close()
+	if !DirAccess.dir_exists_absolute(normalized_target_dir):
+		DirAccess.make_dir_recursive_absolute(normalized_target_dir)
+
+	for zip_entry: String in files:
+		var relative_entry: String = _build_relative_zip_entry_path(zip_entry, project_root_prefix)
+		if relative_entry.is_empty():
+			continue
+		if relative_entry.get_extension().to_lower() == "import":
+			continue
+		var destination_path: String = _normalize_path(normalized_target_dir.path_join(relative_entry))
+		if zip_entry.ends_with("/"):
+			DirAccess.make_dir_recursive_absolute(destination_path)
+			continue
+
+		DirAccess.make_dir_recursive_absolute(destination_path.get_base_dir())
+		var buffer: PackedByteArray = reader.read_file(zip_entry)
+		var file: FileAccess = FileAccess.open(destination_path, FileAccess.WRITE)
+		if file == null:
+			reader.close()
+			return null
+		file.store_buffer(buffer)
+		file.close()
+
 	reader.close()
 
-	# 加载并更新名称
-	var proj: UtmxProject = load_project_config(target_dir)
-	if proj:
-		proj.project_name = project_name
-		save_project_config(proj)
-	return proj
+	var project: UtmxProject = load_project_config(normalized_target_dir)
+	if project == null:
+		return null
+
+	project.project_name = project_name
+	project.favorite = false
+	project.last_open_time = int(Time.get_unix_time_from_system())
+	if project.engine_version.is_empty():
+		project.engine_version = ENGINE_VERSION
+	save_project_config(project)
+	return project
 
 
-# --- 场景切换 ---
+func _resolve_zip_project_root_prefix(files: PackedStringArray) -> String:
+	var found_project_config: bool = false
+	var shortest_prefix: String = ""
+	for entry in files:
+		if entry.ends_with("/"):
+			continue
+		if entry.get_file() != PROJECT_CONFIG_FILE_NAME:
+			continue
+
+		var candidate_prefix: String = _normalize_path(entry.get_base_dir())
+		if candidate_prefix == ".":
+			candidate_prefix = ""
+		if !found_project_config or candidate_prefix.length() < shortest_prefix.length():
+			shortest_prefix = candidate_prefix
+			found_project_config = true
+
+	if !found_project_config:
+		return ""
+	if shortest_prefix.is_empty():
+		return ""
+	if !shortest_prefix.ends_with("/"):
+		shortest_prefix += "/"
+	return shortest_prefix
+
+
+func _build_relative_zip_entry_path(zip_entry: String, root_prefix: String) -> String:
+	var normalized_entry: String = _normalize_path(zip_entry)
+	if normalized_entry.is_empty() or normalized_entry == ".":
+		return ""
+
+	var relative_entry: String = normalized_entry
+	if !root_prefix.is_empty():
+		if !normalized_entry.begins_with(root_prefix):
+			return ""
+		relative_entry = normalized_entry.trim_prefix(root_prefix)
+
+	relative_entry = relative_entry.trim_prefix("/")
+	return relative_entry
+
 
 const EDITOR_SCENE: PackedScene = preload("uid://cp81di5w374d2")
 const PROJECT_MANAGER_SCENE: PackedScene = preload("uid://djn5y1cfoknas")
@@ -291,3 +290,34 @@ func back_to_project_list() -> void:
 
 func _clear_opened_project_reference() -> void:
 	opened_project = null
+
+
+func _normalize_path(path: String) -> String:
+	var raw_path: String = String(path).strip_edges().replace("\\", "/")
+	if raw_path.is_empty():
+		return ""
+	if raw_path.begins_with("res://"):
+		return "res://%s" % [_normalize_virtual_path_body(raw_path.trim_prefix("res://"))]
+	if raw_path.begins_with("user://"):
+		return "user://%s" % [_normalize_virtual_path_body(raw_path.trim_prefix("user://"))]
+	return raw_path.simplify_path()
+
+
+func _normalize_virtual_path_body(path_body: String) -> String:
+	var normalized_body: String = String(path_body).strip_edges().replace("\\", "/")
+	while normalized_body.begins_with("/"):
+		normalized_body = normalized_body.trim_prefix("/")
+	while normalized_body.contains("//"):
+		normalized_body = normalized_body.replace("//", "/")
+
+	var segments: Array[String] = []
+	for raw_segment: String in normalized_body.split("/", false):
+		var segment: String = raw_segment.strip_edges()
+		if segment.is_empty() || segment == ".":
+			continue
+		if segment == "..":
+			if !segments.is_empty():
+				segments.remove_at(segments.size() - 1)
+			continue
+		segments.append(segment)
+	return "/".join(segments)

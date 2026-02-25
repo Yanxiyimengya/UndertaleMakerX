@@ -1,6 +1,6 @@
-# GameRegisterDB 模块
+# GameRegisterDb 模块
 
-GameRegisterDB 是 **UTMX 框架的核心注册中心模块**，用于在 JavaScript 层统一管理游戏实体注册流程。
+GameRegisterDb 是 **UTMX 框架的核心注册中心模块**，用于在 JavaScript 层统一管理游戏实体注册流程。
 
 支持实体类型：
 
@@ -10,9 +10,9 @@ GameRegisterDB 是 **UTMX 框架的核心注册中心模块**，用于在 JavaSc
 
 注册完成后，对应实体才可被游戏系统识别并调用。
 
-通过全局对象 `UTMX.registerDB` 访问。
+通过全局对象 `UTMX.registerDb` 访问。
 
-?> GameRegisterDB 为全局模块，可在游戏任意生命周期阶段调用。
+?> GameRegisterDb 为全局模块，可在游戏任意生命周期阶段调用。
 
 ---
 
@@ -211,16 +211,16 @@ unregisterEncounter(encounterId: string) -> void
 import { UTMX } from "UTMX";
 
 // 注册物品
-UTMX.registerDB.registerItem("Bandage", "item/bandage.js");
+UTMX.registerDb.registerItem("Bandage", "item/bandage.js");
 
 // 检查物品是否注册
-if (UTMX.registerDB.isItemRegistered("Bandage")) {
+if (UTMX.registerDb.isItemRegistered("Bandage")) {
     UTMX.player.inventory.addItem("Bandage");
 }
 
 // 注册敌人
-UTMX.registerDB.registerEnemy("Slime", "enemy/slime.js");
+UTMX.registerDb.registerEnemy("Slime", "enemy/slime.js");
 
 // 注册遭遇
-UTMX.registerDB.registerEncounter("ForestBattle", "encounter/forest_battle.js");
+UTMX.registerDb.registerEncounter("ForestBattle", "encounter/forest_battle.js");
 ```

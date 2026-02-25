@@ -4,14 +4,14 @@ import BlackScreen from "singalton/black-screen.js";
 export default class Main
 {
 	constructor() {
-        UTMX.registerDB.registerItem("BUTTERSCOTCH", "items/item-pie.js");
-        UTMX.registerDB.registerItem("FACE_STEAK", "items/item-face-steak.js");
-        UTMX.registerDB.registerItem("LEGENDARY_HERO", "items/item-legendary-hero.js");
-        UTMX.registerDB.registerItem("INSTANT_NOODLES", "items/item-instant-noodles.js");
-        UTMX.registerDB.registerItem("SNOW_PIECE", "items/item-snow-piece.js");
+        UTMX.registerDb.registerItem("BUTTERSCOTCH", "items/item-pie.js");
+        UTMX.registerDb.registerItem("FACE_STEAK", "items/item-face-steak.js");
+        UTMX.registerDb.registerItem("LEGENDARY_HERO", "items/item-legendary-hero.js");
+        UTMX.registerDb.registerItem("INSTANT_NOODLES", "items/item-instant-noodles.js");
+        UTMX.registerDb.registerItem("SNOW_PIECE", "items/item-snow-piece.js");
         
-        UTMX.registerDB.registerEnemy("SANS", "enemies/sans.js");
-        UTMX.registerDB.registerEncounter("SANS_ENCOUNTER", "encounters/sans-encounter.js");
+        UTMX.registerDb.registerEnemy("SANS", "enemies/sans.js");
+        UTMX.registerDb.registerEncounter("SANS_ENCOUNTER", "encounters/sans-encounter.js");
 	} 
 	
 	onGameStart()

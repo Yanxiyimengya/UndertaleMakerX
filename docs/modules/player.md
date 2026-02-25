@@ -91,7 +91,7 @@ addItem(id: string) -> void
 
 向库存添加指定物品。
 
-> 物品必须先通过 `UTMX.registerDB` 注册，否则添加无效。
+> 物品必须先通过 `UTMX.registerDb` 注册，否则添加无效。
 
 **Returns** `void`
 
@@ -105,7 +105,7 @@ addItem(id: string) -> void
 ```javascript
 import { UTMX } from "UTMX";
 
-UTMX.registerDB.registerItem("Monster Candy", "item/monster-candy.js");
+UTMX.registerDb.registerItem("Monster Candy", "item/monster-candy.js");
 
 UTMX.player.inventory.addItem("Monster Candy"); // 为玩家添加 ID为"Monster Candy"的物品
 ```

@@ -1,4 +1,5 @@
 using Godot;
+using System.Threading.Tasks;
 
 [GlobalClass]
 public partial class BattleController : Node
@@ -20,10 +21,11 @@ public partial class BattleController : Node
 
 	private UtmxBattleManager.BattleStatus _battleStatus = UtmxBattleManager.BattleStatus.Player;
 
-	public override void _Ready()
+	public override async void _Ready()
 	{
-		UtmxBattleManager.InitializeBattle(this);
 		SwitchStatus((UtmxBattleManager.BattleStatus)UtmxBattleManager.GetEncounterInstance()?.EncounterBattleFirstState);
+		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+		UtmxBattleManager.InitializeBattle(this);
 	}
 
 	public void SwitchStatus(UtmxBattleManager.BattleStatus status)

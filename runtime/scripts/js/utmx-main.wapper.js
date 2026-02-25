@@ -34,7 +34,7 @@ class UTMX {
 	static input = UtmxInput;
 	static player = UtmxPlayerDataManager;
 	static battle = UtmxBattleManager;
-	static registerDB = UtmxGameRegisterDB;
+	static registerDb = UtmxGameRegisterDB;
 	static game = UtmxGameManager;
 	static scene = UtmxSceneManager;
 	static tween = UtmxTweenManager;

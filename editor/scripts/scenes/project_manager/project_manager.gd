@@ -107,13 +107,7 @@ func _on_create_project_window_content_create_project_requset(
 ) -> void:
 	var proj: UtmxProject = null
 	var proj_path: String = project_dir.path_join(project_name)
-
-	if template != null and FileAccess.file_exists(template.zip_path):
-		proj = EditorProjectManager.create_project_from_zip(
-			project_name, template.zip_path, proj_path
-		)
-	else:
-		proj = EditorProjectManager.create_default_project(project_name, proj_path)
+	proj = EditorProjectManager.create_project_from_template(project_name, proj_path, template)
 
 	if proj == null:
 		return
