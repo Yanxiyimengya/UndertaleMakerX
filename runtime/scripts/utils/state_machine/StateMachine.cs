@@ -60,13 +60,12 @@ public partial class StateMachine : Node
             );
         }
     }
-    public async void SwitchToState(string stateName)
+    public void SwitchToState(string stateName)
     {
         if (_stateNodes.TryGetValue(stateName, out StateNode nextStateNode) && nextStateNode != null)
         {
             if (nextStateNode._CanEnterState())
             {
-                await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
                 CurrentStateName = stateName;
             }
         }

@@ -49,44 +49,6 @@
 
 [node name="EncounterBattle" type="Node" unique_id=1037590223]
 
-[node name="BattleController" type="Node" parent="." unique_id=1909813863 node_paths=PackedStringArray("BattleStateMachine", "EnemyController", "PlayerController", "ArenaController", "TurnController", "UiController", "ProjectileController")]
-script = ExtResource("2_mdx4q")
-BattleStateMachine = NodePath("../BattleStateMachine")
-EnemyController = NodePath("BattleEnemyController")
-PlayerController = NodePath("BattlePlayerController")
-ArenaController = NodePath("BattleArenaController")
-TurnController = NodePath("BattleTurnController")
-UiController = NodePath("BattleUiController")
-ProjectileController = NodePath("BattleProjectileController")
-
-[node name="BattleProjectileController" type="Node" parent="BattleController" unique_id=1870263886 node_paths=PackedStringArray("ProjectilesNode", "ArenaMask")]
-script = ExtResource("2_3wf68")
-ProjectilesNode = NodePath("../../Projectiles")
-ArenaMask = NodePath("../../BattleArenaGroup/BattleArenaMask")
-
-[node name="BattleEnemyController" type="Node" parent="BattleController" unique_id=1106917610 node_paths=PackedStringArray("EnemiesNode", "MainArena")]
-script = ExtResource("3_u6j2e")
-EnemiesNode = NodePath("../../Enemies")
-MainArena = NodePath("../../BattleArenaGroup/MainArena")
-
-[node name="BattleTurnController" type="Node" parent="BattleController" unique_id=1363596801]
-script = ExtResource("4_knxdc")
-
-[node name="BattlePlayerController" type="Node" parent="BattleController" unique_id=1767836349 node_paths=PackedStringArray("PlayerSoul")]
-script = ExtResource("5_vjgqx")
-PlayerSoul = NodePath("../../Players/BattlePlayerSoul")
-
-[node name="BattleArenaController" type="Node" parent="BattleController" unique_id=2037974018 node_paths=PackedStringArray("ArenaGroup", "MainArena")]
-script = ExtResource("6_kyp32")
-ArenaGroup = NodePath("../../BattleArenaGroup")
-MainArena = NodePath("../../BattleArenaGroup/MainArena")
-
-[node name="BattleUiController" type="Node" parent="BattleController" unique_id=333836539 node_paths=PackedStringArray("ButtonManager", "UiLayer", "StatusBar")]
-script = ExtResource("7_kyp32")
-ButtonManager = NodePath("../../UILayer/BattleScreenButtonManager")
-UiLayer = NodePath("../../UILayer")
-StatusBar = NodePath("../../UILayer/BattleStatusBar")
-
 [node name="BattleStateMachine" type="Node" parent="." unique_id=261701519]
 script = ExtResource("2_62htl")
 metadata/_custom_type_script = "uid://cctn2p527r38"
@@ -152,6 +114,44 @@ BattleButtonManager = NodePath("../../UILayer/BattleScreenButtonManager")
 TextMenu = NodePath("../../UILayer/BattleMenuManager/EncounterTextMenu")
 MenuManager = NodePath("../../UILayer/BattleMenuManager")
 metadata/_custom_type_script = "uid://dxmt2vmf5f8bi"
+
+[node name="BattleController" type="Node" parent="." unique_id=1909813863 node_paths=PackedStringArray("BattleStateMachine", "EnemyController", "PlayerController", "ArenaController", "TurnController", "UiController", "ProjectileController")]
+script = ExtResource("2_mdx4q")
+BattleStateMachine = NodePath("../BattleStateMachine")
+EnemyController = NodePath("BattleEnemyController")
+PlayerController = NodePath("BattlePlayerController")
+ArenaController = NodePath("BattleArenaController")
+TurnController = NodePath("BattleTurnController")
+UiController = NodePath("BattleUiController")
+ProjectileController = NodePath("BattleProjectileController")
+
+[node name="BattleProjectileController" type="Node" parent="BattleController" unique_id=1870263886 node_paths=PackedStringArray("ProjectilesNode", "ArenaMask")]
+script = ExtResource("2_3wf68")
+ProjectilesNode = NodePath("../../Projectiles")
+ArenaMask = NodePath("../../BattleArenaGroup/BattleArenaMask")
+
+[node name="BattleEnemyController" type="Node" parent="BattleController" unique_id=1106917610 node_paths=PackedStringArray("EnemiesNode", "MainArena")]
+script = ExtResource("3_u6j2e")
+EnemiesNode = NodePath("../../Enemies")
+MainArena = NodePath("../../BattleArenaGroup/MainArena")
+
+[node name="BattleTurnController" type="Node" parent="BattleController" unique_id=1363596801]
+script = ExtResource("4_knxdc")
+
+[node name="BattlePlayerController" type="Node" parent="BattleController" unique_id=1767836349 node_paths=PackedStringArray("PlayerSoul")]
+script = ExtResource("5_vjgqx")
+PlayerSoul = NodePath("../../Players/BattlePlayerSoul")
+
+[node name="BattleArenaController" type="Node" parent="BattleController" unique_id=2037974018 node_paths=PackedStringArray("ArenaGroup", "MainArena")]
+script = ExtResource("6_kyp32")
+ArenaGroup = NodePath("../../BattleArenaGroup")
+MainArena = NodePath("../../BattleArenaGroup/MainArena")
+
+[node name="BattleUiController" type="Node" parent="BattleController" unique_id=333836539 node_paths=PackedStringArray("ButtonManager", "UiLayer", "StatusBar")]
+script = ExtResource("7_kyp32")
+ButtonManager = NodePath("../../UILayer/BattleScreenButtonManager")
+UiLayer = NodePath("../../UILayer")
+StatusBar = NodePath("../../UILayer/BattleStatusBar")
 
 [node name="BattleArenaGroup" type="Node2D" parent="." unique_id=185318783]
 z_index = -200

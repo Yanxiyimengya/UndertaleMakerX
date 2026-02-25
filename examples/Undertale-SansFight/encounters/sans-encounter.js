@@ -16,6 +16,10 @@ export default class SansEncounter extends UTMX.Encounter
         this.canFree = false;
     }
     
+    onBattleStart()
+    {
+    }
+    
     onGameover()
     {
         if (EnemySans.instance.canSpare)

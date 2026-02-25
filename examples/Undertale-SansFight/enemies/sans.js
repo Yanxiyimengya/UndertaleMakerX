@@ -85,8 +85,6 @@ export default class EnemySans extends UTMX.Enemy
         this.sweatSprite.position = new Vector2(0, -10);
         this.sweatSprite.textures = "textures/sans/faces/spr_sansb_sweat_1.png";
         this.sweatSprite.visible = false;
-        
-        UTMX.battle.switchStatus(UTMX.battle.BattleStatus.ENEMY_DIALOGUE);
     }
     
     timer = 0;

@@ -69,7 +69,6 @@ public partial class UtmxBattleManager
     {
         _battleController = battleController;
         _isInBattle = true;
-        GetEncounterInstance()?._OnBattleStart();
     }
 
     public static void GameOver()
