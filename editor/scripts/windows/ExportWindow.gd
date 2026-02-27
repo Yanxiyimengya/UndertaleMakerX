@@ -4,6 +4,8 @@ signal export_project_requset(export_dir: String)
 
 const TREE_COLUMN := 0
 const PLATFORM_WINDOWS := "windows"
+const PLATFORM_LINUX := "linux"
+const PLATFORM_ANDROID := "android"
 const EXPORT_PLATFORMS := [
 	{
 		"id": PLATFORM_WINDOWS,
@@ -12,9 +14,26 @@ const EXPORT_PLATFORMS := [
 		"runner_platform": "windows",
 		"default_extension": "exe",
 		"dialog_filters": ["*.exe ; Windows Executable"],
+	},
+	{
+		"id": PLATFORM_LINUX,
+		"display_name": "Linux",
+		"tab_panel": "WindowsExportPanel",
+		"runner_platform": "linux",
+		"default_extension": "",
+		"dialog_filters": ["* ; Linux Executable"],
+	},
+	{
+		"id": PLATFORM_ANDROID,
+		"display_name": "Android",
+		"tab_panel": "WindowsExportPanel",
+		"runner_platform": "android",
+		"default_extension": "apk",
+		"dialog_filters": ["*.apk ; Android Package"],
 	}
 ]
 const WINDOWS_INVALID_FILE_CHARS := ["<", ">", ":", "\"", "/", "\\", "|", "?", "*"]
+const LINUX_INVALID_FILE_CHARS := ["/"]
 const WINDOWS_RESERVED_FILE_NAMES := [
 	"con",
 	"prn",
@@ -42,13 +61,26 @@ const WINDOWS_RESERVED_FILE_NAMES := [
 
 @onready var app_name_edit: LineEdit = %AppNameEdit
 @onready var app_name_label: Label = %AppNameLabel
-@onready var windows_title_label: Label = %WindowsTitleLabel
+@onready var platform_title_label: Label = %WindowsTitleLabel
 @onready var platforms_title_label: Label = %PlatformsTitleLabel
 @onready var project_dir_edit: LineEdit = %ProjectDirEdit
 @onready var project_dir_label: Label = %ProjectDirLabel
 @onready var info_label: RichTextLabel = %InfoLabel
+@onready var android_signing_group: VBoxContainer = %AndroidSigningGroup
+@onready var android_signing_title_label: Label = %AndroidSigningTitleLabel
+@onready var android_jdk_path_label: Label = %AndroidJdkPathLabel
+@onready var android_jdk_path_edit: LineEdit = %AndroidJdkPathEdit
+@onready var android_keystore_path_label: Label = %AndroidKeystorePathLabel
+@onready var android_keystore_path_edit: LineEdit = %AndroidKeystorePathEdit
+@onready var android_keystore_alias_label: Label = %AndroidKeystoreAliasLabel
+@onready var android_keystore_alias_edit: LineEdit = %AndroidKeystoreAliasEdit
+@onready var android_keystore_password_label: Label = %AndroidKeystorePasswordLabel
+@onready var android_keystore_password_edit: LineEdit = %AndroidKeystorePasswordEdit
+@onready var android_key_password_label: Label = %AndroidKeyPasswordLabel
+@onready var android_key_password_edit: LineEdit = %AndroidKeyPasswordEdit
 @onready var cancel_button: Button = %CancelButton
 @onready var export_button: Button = %ExportButton
+@onready var status_label: Label = %StatusLabel
 @onready var export_platforms_tree: Tree = %ExportPlatformsTree
 @onready var export_platform_tabs: TabContainer = %ExportPlatformTabs
 
@@ -57,6 +89,8 @@ var _platform_tree_item_by_id: Dictionary = {}
 var _selected_platform_id: String = PLATFORM_WINDOWS
 var _is_syncing_output_path: bool = false
 var _is_output_path_customized: bool = false
+var _is_loading_android_signing_options: bool = false
+var _android_signing_loaded_project_path: String = ""
 
 var can_export: bool = true:
 	set(value):
@@ -72,8 +106,22 @@ func _ready() -> void:
 		project_dir_edit.text_changed.connect(_on_project_dir_edit_text_changed)
 	if !app_name_edit.text_changed.is_connected(_on_app_name_edit_text_changed):
 		app_name_edit.text_changed.connect(_on_app_name_edit_text_changed)
+	if !android_jdk_path_edit.text_changed.is_connected(_on_android_signing_field_changed):
+		android_jdk_path_edit.text_changed.connect(_on_android_signing_field_changed)
+	if !android_keystore_path_edit.text_changed.is_connected(_on_android_signing_field_changed):
+		android_keystore_path_edit.text_changed.connect(_on_android_signing_field_changed)
+	if !android_keystore_alias_edit.text_changed.is_connected(_on_android_signing_field_changed):
+		android_keystore_alias_edit.text_changed.connect(_on_android_signing_field_changed)
+	if !android_keystore_password_edit.text_changed.is_connected(_on_android_signing_field_changed):
+		android_keystore_password_edit.text_changed.connect(_on_android_signing_field_changed)
 	if !export_platforms_tree.item_selected.is_connected(_on_export_platform_tree_item_selected):
 		export_platforms_tree.item_selected.connect(_on_export_platform_tree_item_selected)
+	if !export_platform_tabs.tab_changed.is_connected(_on_export_platform_tabs_tab_changed):
+		export_platform_tabs.tab_changed.connect(_on_export_platform_tabs_tab_changed)
+	if !visibility_changed.is_connected(_on_visibility_changed):
+		visibility_changed.connect(_on_visibility_changed)
+	_configure_android_password_fields()
+	_ensure_android_signing_options_loaded()
 	_apply_translations()
 	check_is_can_create()
 
@@ -86,9 +134,12 @@ func _notification(what: int) -> void:
 func _open() -> void:
 	_is_output_path_customized = false
 	app_name_edit.text = _build_default_export_app_name()
+	_ensure_android_signing_options_loaded()
+	_sync_android_key_password_with_keystore()
 	_set_project_dir_text(_build_default_export_path())
 	_apply_platform_selection(_selected_platform_id, true)
 	check_is_can_create()
+	call_deferred("check_is_can_create")
 	app_name_edit.grab_focus()
 	app_name_edit.caret_column = app_name_edit.text.length()
 
@@ -129,6 +180,11 @@ func _on_cancel_button_pressed() -> void:
 func _on_export_button_pressed() -> void:
 	check_is_can_create()
 	if !can_export:
+		var status_text: String = _get_status_plain_text()
+		if !status_text.is_empty():
+			var output_manager: Node = get_node_or_null("/root/EditorOutputManager")
+			if output_manager != null && output_manager.has_method("push"):
+				output_manager.call("push", status_text, "error")
 		return
 	export_project_requset.emit(_resolve_export_output_path(project_dir_edit.text, _selected_platform_id))
 
@@ -156,6 +212,68 @@ func _on_export_platform_tree_item_selected() -> void:
 	_apply_platform_selection(selected_platform_id)
 
 
+func _on_export_platform_tabs_tab_changed(_tab: int) -> void:
+	check_is_can_create()
+
+
+func _on_visibility_changed() -> void:
+	if visible:
+		check_is_can_create()
+
+
+func _on_android_signing_field_changed(_new_text: String) -> void:
+	if _is_loading_android_signing_options:
+		return
+	_sync_android_key_password_with_keystore()
+	_save_android_signing_options_to_project()
+	check_is_can_create()
+
+
+func _on_android_jdk_path_button_pressed() -> void:
+	var current_dir: String = _normalize_path(android_jdk_path_edit.text.strip_edges())
+	if current_dir.is_empty():
+		current_dir = EditorProjectManager.get_opened_project_path()
+	DisplayServer.file_dialog_show(
+		tr("Select JDK Bin Directory"),
+		current_dir,
+		"",
+		false,
+		DisplayServer.FILE_DIALOG_MODE_OPEN_DIR,
+		PackedStringArray(),
+		func(status: bool, selected_paths: PackedStringArray, _idx: int):
+			if !status || selected_paths.is_empty():
+				return
+			android_jdk_path_edit.text = selected_paths[0]
+			check_is_can_create()
+	)
+
+
+func _on_android_keystore_path_button_pressed() -> void:
+	var current_path: String = _normalize_path(android_keystore_path_edit.text.strip_edges())
+	var current_dir: String = current_path.get_base_dir()
+	var current_file: String = current_path.get_file()
+	if current_dir.is_empty():
+		current_dir = EditorProjectManager.get_opened_project_path()
+	DisplayServer.file_dialog_show(
+		tr("Select Keystore"),
+		current_dir,
+		current_file,
+		false,
+		DisplayServer.FILE_DIALOG_MODE_OPEN_FILE,
+		PackedStringArray(
+			[
+				"*.jks,*.keystore,*.p12",
+				"*.* ; All Files",
+			]
+		),
+		func(status: bool, selected_paths: PackedStringArray, _idx: int):
+			if !status || selected_paths.is_empty():
+				return
+			android_keystore_path_edit.text = selected_paths[0]
+			check_is_can_create()
+	)
+
+
 func check_is_can_create() -> void:
 	can_export = false
 	set_status("", false)
@@ -173,6 +291,11 @@ func check_is_can_create() -> void:
 	if !app_name_error.is_empty():
 		set_status(app_name_error, true)
 		return
+	if resolved_platform_id == PLATFORM_ANDROID:
+		var android_error: String = _validate_android_signing_inputs()
+		if !android_error.is_empty():
+			set_status(android_error, true)
+			return
 
 	var output_path: String = _resolve_export_output_path(project_dir_edit.text, resolved_platform_id)
 	if output_path.is_empty():
@@ -195,6 +318,12 @@ func check_is_can_create() -> void:
 	var runner_executable: String = (
 		GlobalEditorRunnerManager.get_runner_executable_path_for_platform(runner_platform)
 	)
+	if runner_executable.is_empty() or !FileAccess.file_exists(runner_executable):
+		set_status(
+			tr("Runner executable not found for platform: %s") % runner_platform,
+			true
+		)
+		return
 	if _normalize_path(output_path) == _normalize_path(runner_executable):
 		set_status(tr("Export path cannot be runner executable"), true)
 		return
@@ -216,21 +345,39 @@ func set_export_state(enabled: bool) -> void:
 func set_status(message: String, is_error: bool = false) -> void:
 	if !is_node_ready():
 		await ready
+	var plain_message: String = String(message).strip_edges()
 	if message.is_empty():
 		info_label.text = ""
+		if status_label != null:
+			status_label.text = ""
 		return
 	var color: String = "red" if is_error else "#97f28f"
 	info_label.text = "[color=%s]%s[/color]" % [color, message]
+	if status_label != null:
+		status_label.text = plain_message
+		status_label.modulate = Color(1.0, 0.38, 0.38, 1.0) if is_error else Color(0.59, 0.95, 0.56, 1.0)
+
+
+func _get_status_plain_text() -> String:
+	if status_label != null:
+		return String(status_label.text).strip_edges()
+	return info_label.get_parsed_text().strip_edges()
 
 
 func _apply_translations() -> void:
 	title = tr("Export")
 	platforms_title_label.text = tr("Platforms")
-	windows_title_label.text = tr("Windows")
 	app_name_label.text = tr("Application Name")
 	project_dir_label.text = tr("Location")
+	android_signing_title_label.text = tr("Android Signing")
+	android_jdk_path_label.text = tr("JDK Bin Directory")
+	android_keystore_path_label.text = tr("Keystore Path")
+	android_keystore_alias_label.text = tr("Keystore Alias")
+	android_keystore_password_label.text = tr("Keystore Password")
+	android_key_password_label.text = tr("Key Password")
 	cancel_button.text = tr("Cancel")
 	export_button.text = tr("Export")
+	_refresh_platform_title()
 	_refresh_platform_tree_labels()
 
 
@@ -333,7 +480,11 @@ func _apply_platform_selection(platform_id: String, force_tree_selection: bool =
 	var resolved_platform_id: String = _resolve_platform_id(platform_id)
 	if resolved_platform_id.is_empty():
 		return
+	if resolved_platform_id == PLATFORM_ANDROID:
+		_ensure_android_signing_options_loaded()
 	_selected_platform_id = resolved_platform_id
+	_refresh_platform_title()
+	_refresh_platform_specific_sections()
 
 	var tab_index: int = int(_platform_tab_index_by_id.get(_selected_platform_id, -1))
 	if tab_index >= 0 && tab_index < export_platform_tabs.get_tab_count():
@@ -350,6 +501,18 @@ func _apply_platform_selection(platform_id: String, force_tree_selection: bool =
 	if !_is_output_path_customized:
 		_set_project_dir_text(_build_default_export_path())
 	check_is_can_create()
+
+
+func _refresh_platform_title() -> void:
+	var platform: Dictionary = _get_platform_config(_selected_platform_id)
+	if platform.is_empty():
+		platform_title_label.text = ""
+		return
+	platform_title_label.text = _get_platform_display_name(platform)
+
+
+func _refresh_platform_specific_sections() -> void:
+	android_signing_group.visible = (_selected_platform_id == PLATFORM_ANDROID)
 
 
 func _resolve_platform_id(platform_id: String) -> String:
@@ -435,6 +598,124 @@ func _validate_app_name_for_platform(app_name: String, platform_id: String) -> S
 			var base_name: String = normalized_name.get_basename().to_lower()
 			if WINDOWS_RESERVED_FILE_NAMES.has(base_name):
 				return tr("Application name is a reserved Windows filename")
+		PLATFORM_LINUX:
+			for invalid_char: String in LINUX_INVALID_FILE_CHARS:
+				if normalized_name.contains(invalid_char):
+					return tr("Application name contains invalid Linux filename characters")
+			if normalized_name == "." || normalized_name == "..":
+				return tr("Application name cannot be . or ..")
+	return ""
+
+
+func _validate_android_signing_inputs() -> String:
+	var jdk_path: String = _normalize_path(android_jdk_path_edit.text.strip_edges())
+	if jdk_path.is_empty():
+		return tr("JDK path cannot be empty")
+	if !jdk_path.is_absolute_path():
+		return tr("JDK path must be an absolute path")
+	if !DirAccess.dir_exists_absolute(jdk_path):
+		return tr("JDK path does not exist")
+
+	var keystore_path: String = _normalize_path(android_keystore_path_edit.text.strip_edges())
+	if keystore_path.is_empty():
+		return tr("Keystore path cannot be empty")
+	if !keystore_path.is_absolute_path():
+		return tr("Keystore path must be an absolute path")
+	if !FileAccess.file_exists(keystore_path):
+		return tr("Keystore file does not exist")
+
+	var alias: String = android_keystore_alias_edit.text.strip_edges()
+	if alias.is_empty():
+		return tr("Keystore alias cannot be empty")
+
+	if android_keystore_password_edit.text.is_empty():
+		return tr("Keystore password cannot be empty")
+
+	var jarsigner_path: String = _resolve_jarsigner_in_jdk_bin(jdk_path)
+	if jarsigner_path.is_empty():
+		return tr("Cannot find jarsigner in selected JDK directory")
+	_sync_android_key_password_with_keystore()
+
+	return ""
+
+
+func get_android_signing_options() -> Dictionary:
+	_sync_android_key_password_with_keystore()
+	return {
+		"jdk_bin_dir": _normalize_path(android_jdk_path_edit.text.strip_edges()),
+		"keystore_path": _normalize_path(android_keystore_path_edit.text.strip_edges()),
+		"keystore_alias": android_keystore_alias_edit.text.strip_edges(),
+		"keystore_password": android_keystore_password_edit.text,
+		"key_password": android_key_password_edit.text,
+	}
+
+
+func _load_android_signing_options_from_project() -> void:
+	var project_path: String = _normalize_path(EditorProjectManager.get_opened_project_path())
+	if project_path.is_empty():
+		return
+	var options: Dictionary = EditorProjectManager.get_project_android_export_options(project_path)
+	_is_loading_android_signing_options = true
+	android_jdk_path_edit.text = String(options.get("jdk_bin_dir", ""))
+	android_keystore_path_edit.text = String(options.get("keystore_path", ""))
+	android_keystore_alias_edit.text = String(options.get("keystore_alias", ""))
+	android_keystore_password_edit.text = String(options.get("keystore_password", ""))
+	android_key_password_edit.text = String(options.get("key_password", ""))
+	_is_loading_android_signing_options = false
+	_android_signing_loaded_project_path = project_path
+
+
+func _ensure_android_signing_options_loaded(force: bool = false) -> void:
+	var project_path: String = _normalize_path(EditorProjectManager.get_opened_project_path())
+	if project_path.is_empty():
+		return
+	if !force and _android_signing_loaded_project_path == project_path:
+		return
+	_load_android_signing_options_from_project()
+
+
+func _save_android_signing_options_to_project() -> void:
+	var opened_project_path: String = EditorProjectManager.get_opened_project_path()
+	if opened_project_path.is_empty():
+		return
+	EditorProjectManager.set_project_android_export_options(
+		get_android_signing_options(), opened_project_path
+	)
+
+
+func _configure_android_password_fields() -> void:
+	if android_key_password_edit != null:
+		var key_password_group: Control = android_key_password_edit.get_parent() as Control
+		if key_password_group != null:
+			key_password_group.visible = false
+	_sync_android_key_password_with_keystore()
+
+
+func _sync_android_key_password_with_keystore() -> void:
+	if android_key_password_edit == null or android_keystore_password_edit == null:
+		return
+	var keystore_password: String = android_keystore_password_edit.text
+	if android_key_password_edit.text == keystore_password:
+		return
+	android_key_password_edit.text = keystore_password
+
+
+func _resolve_jarsigner_in_jdk_bin(jdk_bin_dir: String) -> String:
+	var normalized_dir: String = _normalize_path(jdk_bin_dir.strip_edges())
+	if normalized_dir.is_empty():
+		return ""
+
+	var candidates: PackedStringArray = PackedStringArray()
+	if OS.get_name().to_lower() == "windows":
+		candidates.append(_normalize_path(normalized_dir.path_join("jarsigner.exe")))
+		candidates.append(_normalize_path(normalized_dir.path_join("bin/jarsigner.exe")))
+	else:
+		candidates.append(_normalize_path(normalized_dir.path_join("jarsigner")))
+		candidates.append(_normalize_path(normalized_dir.path_join("bin/jarsigner")))
+
+	for candidate_path: String in candidates:
+		if FileAccess.file_exists(candidate_path):
+			return candidate_path
 	return ""
 
 

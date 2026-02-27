@@ -1,7 +1,7 @@
 extends Node
 
 static var data_path: String = ""
-static var data_path_override: String = ""
+static var data_path_override: String = "C:/Users/guosh/Desktop/UndertaleMakerX"
 const EDITOR_CONFIG_FILE_NAME: String = "editor.cfg"
 
 var configs: Dictionary[String, Variant] = {}

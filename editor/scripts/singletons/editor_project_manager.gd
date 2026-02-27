@@ -4,6 +4,12 @@ const PROJECT_CONFIG_FILE_NAME: String = "utmx.cfg"
 const PROJECTS_LIST_FILE_NAME: String = "projects.cfg"
 const ENGINE_VERSION: String = "1.0.0-beta"
 const DEFAULT_PROJECT_DIR_NAME: String = "UndertaleMakerProject"
+const EXPORT_ANDROID_CONFIG_SECTION: String = "export_android"
+const EXPORT_ANDROID_KEY_JDK_BIN_DIR: String = "jdk_bin_dir"
+const EXPORT_ANDROID_KEY_KEYSTORE_PATH: String = "keystore_path"
+const EXPORT_ANDROID_KEY_KEYSTORE_ALIAS: String = "keystore_alias"
+const EXPORT_ANDROID_KEY_KEYSTORE_PASSWORD: String = "keystore_password"
+const EXPORT_ANDROID_KEY_KEY_PASSWORD: String = "key_password"
 
 var projects: Dictionary[String, UtmxProject] = {}
 var opened_project: UtmxProject = null
@@ -74,6 +80,8 @@ func save_project_config(project: UtmxProject) -> void:
 	var cfg_full_path: String = _normalize_path(
 		project.project_path.path_join(PROJECT_CONFIG_FILE_NAME)
 	)
+	if FileAccess.file_exists(cfg_full_path):
+		config_file.load(cfg_full_path)
 
 	config_file.set_value("application", "name", project.project_name)
 	config_file.set_value("application", "icon", project.icon)
@@ -82,6 +90,52 @@ func save_project_config(project: UtmxProject) -> void:
 	config_file.set_value("editor", "file_tree_expanded_dirs", project.file_tree_expanded_dirs)
 	config_file.set_value("editor", "layout_state", project.get_editor_layout_state())
 	config_file.save(cfg_full_path)
+
+
+func get_project_android_export_options(project_dir_path: String = "") -> Dictionary:
+	var defaults: Dictionary = _build_default_android_export_options()
+	var cfg_full_path: String = _resolve_project_config_file_path(project_dir_path)
+	if cfg_full_path.is_empty() or !FileAccess.file_exists(cfg_full_path):
+		return defaults
+
+	var config_file: ConfigFile = ConfigFile.new()
+	if config_file.load(cfg_full_path) != OK:
+		return defaults
+	return _read_android_export_options(config_file)
+
+
+func set_project_android_export_options(
+	options: Dictionary, project_dir_path: String = ""
+) -> bool:
+	var cfg_full_path: String = _resolve_project_config_file_path(project_dir_path)
+	if cfg_full_path.is_empty():
+		return false
+
+	var cfg_dir: String = cfg_full_path.get_base_dir()
+	if !cfg_dir.is_empty() and !DirAccess.dir_exists_absolute(cfg_dir):
+		var mkdir_err: int = DirAccess.make_dir_recursive_absolute(cfg_dir)
+		if mkdir_err != OK:
+			return false
+
+	var config_file: ConfigFile = ConfigFile.new()
+	if FileAccess.file_exists(cfg_full_path):
+		config_file.load(cfg_full_path)
+
+	var normalized_options: Dictionary = _build_default_android_export_options()
+	for key_variant in normalized_options.keys():
+		var key: String = String(key_variant)
+		normalized_options[key] = String(options.get(key, normalized_options[key]))
+
+	if String(normalized_options.get(EXPORT_ANDROID_KEY_KEY_PASSWORD, "")).is_empty():
+		normalized_options[EXPORT_ANDROID_KEY_KEY_PASSWORD] = String(
+			normalized_options.get(EXPORT_ANDROID_KEY_KEYSTORE_PASSWORD, "")
+		)
+
+	for key_variant in normalized_options.keys():
+		var key: String = String(key_variant)
+		config_file.set_value(EXPORT_ANDROID_CONFIG_SECTION, key, normalized_options[key])
+
+	return config_file.save(cfg_full_path) == OK
 
 
 func load_project_config(dir_path: String) -> UtmxProject:
@@ -117,6 +171,46 @@ func load_project_config(dir_path: String) -> UtmxProject:
 			result.icon_texture = ImageTexture.create_from_image(icon_img)
 
 	projects[normalized_dir_path] = result
+	return result
+
+
+func _resolve_project_config_file_path(project_dir_path: String = "") -> String:
+	var normalized: String = _normalize_path(String(project_dir_path).strip_edges())
+	if normalized.is_empty():
+		normalized = _normalize_path(get_opened_project_path())
+	if normalized.is_empty():
+		return ""
+
+	if (
+		FileAccess.file_exists(normalized)
+		and normalized.get_file().to_lower() == PROJECT_CONFIG_FILE_NAME
+	):
+		return normalized
+
+	return _normalize_path(normalized.path_join(PROJECT_CONFIG_FILE_NAME))
+
+
+func _build_default_android_export_options() -> Dictionary:
+	return {
+		EXPORT_ANDROID_KEY_JDK_BIN_DIR: "",
+		EXPORT_ANDROID_KEY_KEYSTORE_PATH: "",
+		EXPORT_ANDROID_KEY_KEYSTORE_ALIAS: "",
+		EXPORT_ANDROID_KEY_KEYSTORE_PASSWORD: "",
+		EXPORT_ANDROID_KEY_KEY_PASSWORD: "",
+	}
+
+
+func _read_android_export_options(config_file: ConfigFile) -> Dictionary:
+	var result: Dictionary = _build_default_android_export_options()
+	for key_variant in result.keys():
+		var key: String = String(key_variant)
+		result[key] = String(config_file.get_value(EXPORT_ANDROID_CONFIG_SECTION, key, result[key]))
+
+	if String(result.get(EXPORT_ANDROID_KEY_KEY_PASSWORD, "")).is_empty():
+		result[EXPORT_ANDROID_KEY_KEY_PASSWORD] = String(
+			result.get(EXPORT_ANDROID_KEY_KEYSTORE_PASSWORD, "")
+		)
+
 	return result
 
 

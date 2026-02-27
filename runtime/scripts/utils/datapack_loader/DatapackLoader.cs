@@ -20,6 +20,11 @@ public abstract class DatapackLoader
                     return new DatapackLoaderAndroid();
                 }
                 ;
+            case "Linux":
+                {
+                    return new DatapackLoaderLinux();
+                }
+                ;
             default:
                 return null;
         }

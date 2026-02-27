@@ -14,8 +14,9 @@
 		"speed_scale": 1.0
 	},
 	"virtual_input": {
-		"dead_zone": 0.1,
-		"enabled": false
+		"dead_zone": 0.0,
+		"enabled": true,
+        "joystick_mode": 1
 	},
 	"window": {
 		"boderless": false,

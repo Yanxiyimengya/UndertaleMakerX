@@ -58,36 +58,37 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="RootVBox" type="VBoxContainer" parent="ExportWindowContent/MarginContainer"]
+[node name="RootVBox" type="VBoxContainer" parent="ExportWindowContent/MarginContainer" unique_id=425666757]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 12
 
-[node name="MainContent" type="HSplitContainer" parent="ExportWindowContent/MarginContainer/RootVBox"]
+[node name="MainContent" type="HSplitContainer" parent="ExportWindowContent/MarginContainer/RootVBox" unique_id=863937239]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+split_offsets = PackedInt32Array(260)
 split_offset = 260
 
-[node name="PlatformsPanel" type="PanelContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent"]
+[node name="PlatformsPanel" type="PanelContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent" unique_id=348677421]
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 
-[node name="PlatformsMargin" type="MarginContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/PlatformsPanel"]
+[node name="PlatformsMargin" type="MarginContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/PlatformsPanel" unique_id=1627667473]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="PlatformsVBox" type="VBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/PlatformsPanel/PlatformsMargin"]
+[node name="PlatformsVBox" type="VBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/PlatformsPanel/PlatformsMargin" unique_id=2111451911]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 8
 
-[node name="PlatformsTitleLabel" type="Label" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/PlatformsPanel/PlatformsMargin/PlatformsVBox"]
+[node name="PlatformsTitleLabel" type="Label" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/PlatformsPanel/PlatformsMargin/PlatformsVBox" unique_id=1084149978]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Platforms"
@@ -98,19 +99,19 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="SettingsPanel" type="PanelContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent"]
+[node name="SettingsPanel" type="PanelContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent" unique_id=382998334]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="SettingsMargin" type="MarginContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel"]
+[node name="SettingsMargin" type="MarginContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel" unique_id=1038298736]
 layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
 
-[node name="ExportPlatformTabs" type="TabContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin"]
+[node name="ExportPlatformTabs" type="TabContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin" unique_id=123002629]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -118,55 +119,59 @@ size_flags_vertical = 3
 current_tab = 0
 tabs_visible = false
 
-[node name="WindowsExportPanel" type="VBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs" unique_id=1067951998]
+[node name="WindowsExportPanel" type="ScrollContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs" unique_id=1067951998]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/separation = 12
 metadata/_tab_index = 0
 
-[node name="WindowsTitleLabel" type="Label" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel"]
+[node name="WindowsExportVBox" type="VBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel" unique_id=493362660]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="WindowsTitleLabel" type="Label" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox" unique_id=1652742898]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
 text = "Windows"
 
-[node name="AppNameGroup" type="VBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel"]
+[node name="AppNameGroup" type="VBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox" unique_id=623591239]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="AppNameLabel" type="Label" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/AppNameGroup"]
+[node name="AppNameLabel" type="Label" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/AppNameGroup" unique_id=915825320]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Application Name"
 
-[node name="AppNameEdit" type="LineEdit" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/AppNameGroup"]
+[node name="AppNameEdit" type="LineEdit" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/AppNameGroup" unique_id=828668236]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 caret_blink = true
 
-[node name="ProjectDirGroup" type="VBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel"]
+[node name="ProjectDirGroup" type="VBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox" unique_id=1861732966]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="ProjectDirLabel" type="Label" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/ProjectDirGroup"]
+[node name="ProjectDirLabel" type="Label" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/ProjectDirGroup" unique_id=591419770]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Location"
 
-[node name="OutputPathRow" type="HBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/ProjectDirGroup"]
+[node name="OutputPathRow" type="HBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/ProjectDirGroup" unique_id=884806276]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="ProjectDirEdit" type="LineEdit" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/ProjectDirGroup/OutputPathRow" unique_id=1351067638]
+[node name="ProjectDirEdit" type="LineEdit" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/ProjectDirGroup/OutputPathRow" unique_id=1351067638]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 caret_blink = true
 
-[node name="DirTextureButton" type="TextureButton" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/ProjectDirGroup/OutputPathRow" unique_id=1534048663]
+[node name="DirTextureButton" type="TextureButton" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/ProjectDirGroup/OutputPathRow" unique_id=1534048663]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
@@ -175,7 +180,122 @@ texture_pressed = ExtResource("4_g1xpw")
 texture_hover = ExtResource("4_g1xpw")
 stretch_mode = 5
 
-[node name="InfoLabel" type="RichTextLabel" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel"]
+[node name="AndroidSigningGroup" type="VBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox" unique_id=1239862177]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="AndroidSigningTitleLabel" type="Label" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/AndroidSigningGroup" unique_id=547386409]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Android Signing"
+
+[node name="AndroidJdkPathGroup" type="VBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/AndroidSigningGroup" unique_id=213643626]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="AndroidJdkPathLabel" type="Label" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/AndroidSigningGroup/AndroidJdkPathGroup" unique_id=749934182]
+unique_name_in_owner = true
+layout_mode = 2
+text = "JDK Bin Directory"
+
+[node name="AndroidJdkPathRow" type="HBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/AndroidSigningGroup/AndroidJdkPathGroup" unique_id=309332138]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="AndroidJdkPathEdit" type="LineEdit" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/AndroidSigningGroup/AndroidJdkPathGroup/AndroidJdkPathRow" unique_id=1980979196]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+caret_blink = true
+
+[node name="AndroidJdkPathButton" type="TextureButton" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/AndroidSigningGroup/AndroidJdkPathGroup/AndroidJdkPathRow" unique_id=1972580531]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture_normal = ExtResource("3_6ybr5")
+texture_pressed = ExtResource("4_g1xpw")
+texture_hover = ExtResource("4_g1xpw")
+stretch_mode = 5
+
+[node name="AndroidKeystorePathGroup" type="VBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/AndroidSigningGroup" unique_id=2115230528]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="AndroidKeystorePathLabel" type="Label" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/AndroidSigningGroup/AndroidKeystorePathGroup" unique_id=994868658]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Keystore Path"
+
+[node name="AndroidKeystorePathRow" type="HBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/AndroidSigningGroup/AndroidKeystorePathGroup" unique_id=1294273419]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="AndroidKeystorePathEdit" type="LineEdit" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/AndroidSigningGroup/AndroidKeystorePathGroup/AndroidKeystorePathRow" unique_id=417561795]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+caret_blink = true
+
+[node name="AndroidKeystorePathButton" type="TextureButton" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/AndroidSigningGroup/AndroidKeystorePathGroup/AndroidKeystorePathRow" unique_id=748823843]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture_normal = ExtResource("3_6ybr5")
+texture_pressed = ExtResource("4_g1xpw")
+texture_hover = ExtResource("4_g1xpw")
+stretch_mode = 5
+
+[node name="AndroidKeystoreAliasGroup" type="VBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/AndroidSigningGroup" unique_id=725969174]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="AndroidKeystoreAliasLabel" type="Label" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/AndroidSigningGroup/AndroidKeystoreAliasGroup" unique_id=1337409618]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Keystore Alias"
+
+[node name="AndroidKeystoreAliasEdit" type="LineEdit" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/AndroidSigningGroup/AndroidKeystoreAliasGroup" unique_id=2096111744]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+caret_blink = true
+
+[node name="AndroidKeystorePasswordGroup" type="VBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/AndroidSigningGroup" unique_id=294865294]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="AndroidKeystorePasswordLabel" type="Label" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/AndroidSigningGroup/AndroidKeystorePasswordGroup" unique_id=1338278869]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Keystore Password"
+
+[node name="AndroidKeystorePasswordEdit" type="LineEdit" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/AndroidSigningGroup/AndroidKeystorePasswordGroup" unique_id=212930194]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+caret_blink = true
+secret = true
+
+[node name="AndroidKeyPasswordGroup" type="VBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/AndroidSigningGroup" unique_id=687958579]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="AndroidKeyPasswordLabel" type="Label" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/AndroidSigningGroup/AndroidKeyPasswordGroup" unique_id=1760752394]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Key Password"
+
+[node name="AndroidKeyPasswordEdit" type="LineEdit" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/AndroidSigningGroup/AndroidKeyPasswordGroup" unique_id=659176522]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+caret_blink = true
+secret = true
+
+[node name="InfoLabel" type="RichTextLabel" parent="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox" unique_id=1725003045]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -183,18 +303,19 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_idmcu")
 bbcode_enabled = true
 vertical_alignment = 1
 
-[node name="FooterBar" type="HBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox"]
+[node name="FooterBar" type="HBoxContainer" parent="ExportWindowContent/MarginContainer/RootVBox" unique_id=1150927188]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="FooterSpacer" type="Control" parent="ExportWindowContent/MarginContainer/RootVBox/FooterBar"]
+[node name="StatusLabel" type="Label" parent="ExportWindowContent/MarginContainer/RootVBox/FooterBar" unique_id=2063033128]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+clip_text = true
 
 [node name="CancelButton" type="Button" parent="ExportWindowContent/MarginContainer/RootVBox/FooterBar" unique_id=912541224]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 1
 theme_override_styles/normal = ExtResource("5_typw8")
 theme_override_styles/pressed = ExtResource("6_4axwg")
 theme_override_styles/hover = ExtResource("7_dry25")
@@ -203,13 +324,14 @@ text = "Cancel"
 [node name="ExportButton" type="Button" parent="ExportWindowContent/MarginContainer/RootVBox/FooterBar" unique_id=149254487]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 1
 theme_override_colors/font_color = Color(0.95304054, 0.9530404, 0.95304054, 1)
 theme_override_styles/normal = ExtResource("8_kol02")
 theme_override_styles/pressed = ExtResource("9_kvpxo")
 theme_override_styles/hover = ExtResource("10_vvuhj")
 text = "Export"
 
-[connection signal="pressed" from="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/ProjectDirGroup/OutputPathRow/DirTextureButton" to="." method="_on_dir_texture_button_pressed"]
+[connection signal="pressed" from="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/ProjectDirGroup/OutputPathRow/DirTextureButton" to="." method="_on_dir_texture_button_pressed"]
+[connection signal="pressed" from="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/AndroidSigningGroup/AndroidJdkPathGroup/AndroidJdkPathRow/AndroidJdkPathButton" to="." method="_on_android_jdk_path_button_pressed"]
+[connection signal="pressed" from="ExportWindowContent/MarginContainer/RootVBox/MainContent/SettingsPanel/SettingsMargin/ExportPlatformTabs/WindowsExportPanel/WindowsExportVBox/AndroidSigningGroup/AndroidKeystorePathGroup/AndroidKeystorePathRow/AndroidKeystorePathButton" to="." method="_on_android_keystore_path_button_pressed"]
 [connection signal="pressed" from="ExportWindowContent/MarginContainer/RootVBox/FooterBar/CancelButton" to="." method="_on_cancel_button_pressed"]
 [connection signal="pressed" from="ExportWindowContent/MarginContainer/RootVBox/FooterBar/ExportButton" to="." method="_on_export_button_pressed"]

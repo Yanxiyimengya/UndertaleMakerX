@@ -9,19 +9,70 @@ const IGNORE_DIRS: PackedStringArray = [".git", ".godot", ".import"]
 const ignore_files: PackedStringArray = [EditorProjectManager.PROJECT_CONFIG_FILE_NAME]
 
 const ignore_ext: PackedStringArray = ["import", "uid"]
+const PACKABLE_EXT: PackedStringArray = [
+	# Text / script / config
+	"txt",
+	"md",
+	"markdown",
+	"json",
+	"cfg",
+	"ini",
+	"toml",
+	"yaml",
+	"yml",
+	"xml",
+	"csv",
+	"tsv",
+	"js",
+	"ts",
+	"gd",
+	"cs",
+	"shader",
+	"gdshader",
+	"gdshaderinc",
+	"translation",
+	# Godot resources
+	"tscn",
+	"tres",
+	"res",
+	# Images
+	"png",
+	"jpg",
+	"jpeg",
+	"webp",
+	"svg",
+	"bmp",
+	"tga",
+	"exr",
+	"hdr",
+	"dds",
+	# Audio
+	"ogg",
+	"wav",
+	"mp3",
+	"flac",
+	"aac",
+	"m4a",
+	# Fonts
+	"ttf",
+	"otf",
+	"woff",
+	"woff2",
+	"fnt",
+]
 
 static var _build_records: Array = []
 static var _last_build_record: Dictionary = {}
 
 
-static func pick_pack(path: String, output: String) -> void:
+static func pick_pack(path: String, output: String, ignore_source_paths: Array = []) -> void:
 	if path.is_empty() or output.is_empty():
-		push_error("PickPack: path or output is empty.")
+		_report_error("PickPack: path or output is empty.")
 		return
 
 	var root_path := _trim_trailing_slash(_normalize_path(path))
 	if !DirAccess.dir_exists_absolute(root_path):
-		push_error("PickPack: root path not found -> %s" % root_path)
+		_report_error("PickPack: root path not found -> %s" % root_path)
 		return
 
 	var output_path := _normalize_path(output)
@@ -29,7 +80,7 @@ static func pick_pack(path: String, output: String) -> void:
 	if !output_dir.is_empty() and !DirAccess.dir_exists_absolute(output_dir):
 		var mkdir_output_err: int = int(DirAccess.make_dir_recursive_absolute(output_dir))
 		if mkdir_output_err != OK:
-			push_error(
+			_report_error(
 				(
 					"PickPack: failed to create output directory -> %s (%d)"
 					% [output_dir, mkdir_output_err]
@@ -44,17 +95,18 @@ static func pick_pack(path: String, output: String) -> void:
 	var packer := PCKPacker.new()
 	var start_err: int = int(packer.pck_start(output_path))
 	if start_err != OK:
-		push_error("PickPack: failed to start pack (%d)." % start_err)
+		_report_error("PickPack: failed to start pack (%d)." % start_err)
 		_record_build(root_path, output_path, [], [], start_err)
 		return
 
 	var packed_targets := {}
-	_recursive_pack(root_path, root_path, packer, packed_targets)
+	var ignored_sources: Dictionary = _build_ignored_sources(ignore_source_paths)
+	_recursive_pack(root_path, root_path, packer, packed_targets, ignored_sources)
 
 	var flush_err: int = int(packer.flush())
 	_record_build(root_path, output_path, [], packed_targets.keys(), flush_err)
 	if flush_err != OK:
-		push_error("PickPack: flush failed (%d)." % flush_err)
+		_report_error("PickPack: flush failed (%d)." % flush_err)
 		return
 
 
@@ -88,11 +140,15 @@ static func destroy_temporary_resources(
 
 
 static func _recursive_pack(
-	root_path: String, current_path: String, packer: PCKPacker, packed_targets: Dictionary
+	root_path: String,
+	current_path: String,
+	packer: PCKPacker,
+	packed_targets: Dictionary,
+	ignored_sources: Dictionary
 ) -> void:
 	var dir := DirAccess.open(current_path)
 	if dir == null:
-		push_warning("PickPack: cannot open directory -> %s" % current_path)
+		_report_warning("PickPack: cannot open directory -> %s" % current_path)
 		return
 
 	dir.list_dir_begin()
@@ -102,16 +158,24 @@ static func _recursive_pack(
 			var full_path := _normalize_path(current_path.path_join(f_name))
 			if dir.current_is_dir():
 				if !(f_name in IGNORE_DIRS):
-					_recursive_pack(root_path, full_path, packer, packed_targets)
+					_recursive_pack(root_path, full_path, packer, packed_targets, ignored_sources)
 			else:
-				_process_file(root_path, full_path, packer, packed_targets)
+				_process_file(root_path, full_path, packer, packed_targets, ignored_sources)
 		f_name = dir.get_next()
 	dir.list_dir_end()
 
 
 static func _process_file(
-	root_path: String, source_path: String, packer: PCKPacker, packed_targets: Dictionary
+	root_path: String,
+	source_path: String,
+	packer: PCKPacker,
+	packed_targets: Dictionary,
+	ignored_sources: Dictionary
 ) -> void:
+	var normalized_source_path: String = _to_compare_path(source_path)
+	if ignored_sources.has(normalized_source_path):
+		return
+
 	var relative_path := _make_relative_path(root_path, source_path)
 	if relative_path.is_empty():
 		return
@@ -121,6 +185,8 @@ static func _process_file(
 	if file_name in ignore_files:
 		return
 	if ext in ignore_ext:
+		return
+	if !_is_packable_extension(ext):
 		return
 
 	var target_res_path := _to_data_res_path(relative_path)
@@ -136,12 +202,12 @@ static func _pack_file_once(
 
 	var normalized_source := _normalize_path(source_abs_path)
 	if !FileAccess.file_exists(normalized_source):
-		push_warning("PickPack: missing source -> %s" % normalized_source)
+		_report_warning("PickPack: missing source -> %s" % normalized_source)
 		return
 
 	var err: int = int(packer.add_file(normalized_target, normalized_source))
 	if err != OK:
-		push_error(
+		_report_error(
 			"PickPack: add_file failed (%d): %s <- %s" % [err, normalized_target, normalized_source]
 		)
 		return
@@ -175,6 +241,22 @@ static func _build_cache_root() -> String:
 	return _normalize_path(base_data_path.path_join(BUILD_CACHE_DIR_NAME))
 
 
+static func _build_ignored_sources(ignore_source_paths: Array) -> Dictionary:
+	var ignored: Dictionary = {}
+	for source_path_variant in ignore_source_paths:
+		var normalized_source_path: String = _to_compare_path(String(source_path_variant))
+		if normalized_source_path.is_empty():
+			continue
+		ignored[normalized_source_path] = true
+	return ignored
+
+
+static func _is_packable_extension(ext: String) -> bool:
+	if ext.is_empty():
+		return false
+	return ext in PACKABLE_EXT
+
+
 static func _to_data_res_path(relative_path: String) -> String:
 	var clean := _normalize_path(relative_path).trim_prefix("/")
 	return _normalize_path(PACK_ROOT_RES.path_join(clean))
@@ -195,8 +277,35 @@ static func _normalize_path(path: String) -> String:
 	return path.replace("\\", "/")
 
 
+static func _to_compare_path(path: String) -> String:
+	var normalized: String = _normalize_path(String(path).strip_edges())
+	if OS.get_name().to_lower() == "windows":
+		return normalized.to_lower()
+	return normalized
+
+
 static func _trim_trailing_slash(path: String) -> String:
 	var out := _normalize_path(path)
 	while out.ends_with("/") and out.length() > 1:
 		out = out.substr(0, out.length() - 1)
 	return out
+
+
+static func _emit_output(message: String, level: String = "info") -> void:
+	var main_loop := Engine.get_main_loop()
+	if main_loop is SceneTree:
+		var tree := main_loop as SceneTree
+		if tree.root != null:
+			var output_manager: Node = tree.root.get_node_or_null("EditorOutputManager")
+			if output_manager != null and output_manager.has_method("push"):
+				output_manager.call("push", message, level)
+
+
+static func _report_error(message: String) -> void:
+	push_error(message)
+	_emit_output(message, "error")
+
+
+static func _report_warning(message: String) -> void:
+	push_warning(message)
+	_emit_output(message, "warning")

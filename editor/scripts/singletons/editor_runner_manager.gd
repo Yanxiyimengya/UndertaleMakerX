@@ -49,6 +49,21 @@ func get_runner_executable_path_for_platform(platform_name: String) -> String:
 				if FileAccess.file_exists(base_path):
 					return base_path
 			return base_candidates[0] + WINDOWS_EXECUTABLE_SUFFIX
+		"android":
+			for base_path: String in base_candidates:
+				var android_candidates: PackedStringArray = PackedStringArray(
+					[
+						base_path + ".apk",
+						_normalize_path(base_path.get_base_dir().path_join("Android.apk")),
+						_normalize_path(base_path.get_base_dir().path_join("android.apk")),
+					]
+				)
+				for android_runner: String in android_candidates:
+					if FileAccess.file_exists(android_runner):
+						return android_runner
+				if FileAccess.file_exists(base_path):
+					return base_path
+			return base_candidates[0] + ".apk"
 		_:
 			for base_path: String in base_candidates:
 				if FileAccess.file_exists(base_path):
@@ -127,3 +142,7 @@ func kill_runner():
 		read_thread.wait_to_finish()
 		read_thread = null
 	_on_program_exited()
+
+
+func _normalize_path(path: String) -> String:
+	return String(path).replace("\\", "/").simplify_path()

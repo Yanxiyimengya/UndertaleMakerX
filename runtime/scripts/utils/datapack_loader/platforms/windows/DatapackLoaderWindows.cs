@@ -12,8 +12,8 @@ public class DatapackLoaderWindows : DatapackLoader
         string execBaseName = execFileName.GetBaseName();
 
         string[] searchPaths = {
-            execBaseDir.PathJoin(execBaseName + "." + "utmx"),
-            execBaseDir.PathJoin(execFileName + "." + "utmx")
+            execBaseDir.PathJoin(execBaseName + "." + EngineProperties.DATAPACK_EXTENSION),
+            execBaseDir.PathJoin(execFileName + "." + EngineProperties.DATAPACK_EXTENSION)
         };
         foreach (var path in searchPaths)
         {

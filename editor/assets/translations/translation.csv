@@ -103,3 +103,41 @@ Preview,预览
 Filter,过滤
 Shader,Shader
 Export,导出
+Windows,Windows
+Linux,Linux
+Android,Android
+Platforms,平台
+Application Name,应用名称
+Android Signing,Android 签名
+JDK Bin Directory,JDK Bin 目录
+Keystore Path,密钥库路径
+Keystore Alias,密钥库别名
+Keystore Password,密钥库密码
+Key Password,密钥密码
+Select Export File,选择导出文件
+Select JDK Bin Directory,选择 JDK Bin 目录
+Select Keystore,选择密钥库
+No export platform is available,没有可用的导出平台
+Application name cannot be empty,应用名称不能为空
+Android export backend is not implemented yet,Android 导出后端尚未实现
+Export path cannot be empty,导出路径不能为空
+Export path must be an absolute path,导出路径必须是绝对路径
+Export directory is invalid,导出目录无效
+No project is currently open,当前没有打开的项目
+Export path cannot be runner executable,导出路径不能与运行器可执行文件相同
+Ready to export,可以导出
+Application name contains invalid Windows filename characters,应用名称包含无效的 Windows 文件名字符
+Application name cannot end with a dot or space,应用名称不能以点或空格结尾
+Application name is a reserved Windows filename,应用名称是 Windows 保留文件名
+Application name contains invalid Linux filename characters,应用名称包含无效的 Linux 文件名字符
+Application name cannot be . or ..,应用名称不能是 . 或 ..
+JDK path cannot be empty,JDK 路径不能为空
+JDK path must be an absolute path,JDK 路径必须是绝对路径
+Keystore path cannot be empty,密钥库路径不能为空
+Keystore path must be an absolute path,密钥库路径必须是绝对路径
+Keystore alias cannot be empty,密钥库别名不能为空
+Keystore password cannot be empty,密钥库密码不能为空
+Key password cannot be empty,密钥密码不能为空
+Export succeeded,导出成功
+Export failed,导出失败
+Unsupported export platform: %s,不支持的导出平台：%s

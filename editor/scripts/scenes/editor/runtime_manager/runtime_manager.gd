@@ -39,14 +39,49 @@ func _on_play_project_button_pressed() -> void:
 	if !is_running:
 		is_running = true
 		_save_open_scripts_before_run()
-		console.clear()
+		if console != null:
+			console.clear()
 		var pck_name: String = EditorProjectManager.opened_project.project_name + ".pck"
 		var output_dir = EditorConfigureManager.get_data_path().path_join(".build_cache")
 		var output: String = output_dir.path_join(pck_name)
 		if !DirAccess.dir_exists_absolute(output_dir):
-			DirAccess.make_dir_recursive_absolute(output_dir)
+			var make_output_dir_err: int = DirAccess.make_dir_recursive_absolute(output_dir)
+			if make_output_dir_err != OK:
+				is_running = false
+				_report_runtime_error(
+					"Runtime build cache directory create failed: %s (%d)"
+					% [output_dir, make_output_dir_err]
+				)
+				return
 		UtmxPackPicker.pick_pack(editor.root_path, output)
-		GlobalEditorRunnerManager.execute_runner(["--pack=" + output, "--debug-collisions=true"])
+		var build_record: Dictionary = UtmxPackPicker.get_last_build_record()
+		var build_result_code: int = int(build_record.get("result_code", FAILED))
+		if build_record.is_empty() or build_result_code != OK or !FileAccess.file_exists(output):
+			is_running = false
+			_report_runtime_error(
+				"Runtime pack build failed (code=%d): %s" % [build_result_code, output]
+			)
+			return
+
+		var execute_result: Dictionary = GlobalEditorRunnerManager.execute_runner(
+			["--pack=" + output, "--debug-collisions=true"]
+		)
+		var pid: int = int(execute_result.get("pid", -1))
+		if pid < 0:
+			is_running = false
+			var runner_error: String = String(execute_result.get("error", "")).strip_edges()
+			var runner_status: String = String(execute_result.get("status", "")).strip_edges()
+			var extra: String = ""
+			if !runner_error.is_empty():
+				extra = runner_error
+			elif !runner_status.is_empty():
+				extra = runner_status
+			if extra.is_empty():
+				_report_runtime_error("Runner failed to start.")
+			else:
+				_report_runtime_error("Runner failed to start: %s" % extra)
+			return
+		_push_output_message("Runner started: pid=%d" % pid, "info")
 
 
 func _save_open_scripts_before_run() -> void:
@@ -63,12 +98,25 @@ func _save_open_scripts_before_run() -> void:
 
 
 func _on_runner_output(msg: String):
-	console.push_message(msg)
+	_push_output_message(msg, "info")
 
 
 func _on_runner_stderr(msg: String):
-	console.push_message("[color=red]" + msg + "[/color]")
+	_push_output_message(msg, "error")
 
 
 func _on_runner_ended():
 	is_running = false
+
+
+func _push_output_message(message: String, level: String = "info") -> void:
+	var output_manager: Node = get_node_or_null("/root/EditorOutputManager")
+	if output_manager == null || !output_manager.has_method("push"):
+		return
+	output_manager.call("push", String(message), String(level))
+
+
+func _report_runtime_error(message: String) -> void:
+	var text: String = String(message)
+	push_error(text)
+	_push_output_message(text, "error")
