@@ -39,4 +39,5 @@
         * [创建遭遇](tutorials/getting-started/create-encounter.md)
         * [创建回合](tutorials/getting-started/create-turn.md)
         * [创建物品](tutorials/getting-started/create-item.md)
+    * [生命周期对象](tutorials/lifecycle-objects.md)
     * [编写着色器](tutorials/create-shader.md)
