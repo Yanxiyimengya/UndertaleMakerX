@@ -37,6 +37,15 @@ public partial class BattlePlayerMercyMenuState : StateNode
         }
         else
         {
+            int itemCount = MercyChoiceMenu.GetItemCount();
+            if (itemCount <= 0)
+            {
+                if (Input.IsActionJustPressed("confirm") || Input.IsActionJustPressed("cancel"))
+                {
+                    SwitchState("BattlePlayerChoiceActionState");
+                }
+                return;
+            }
 
             if (Input.IsActionJustPressed("up"))
             {
@@ -54,9 +63,9 @@ public partial class BattlePlayerMercyMenuState : StateNode
             else if (Input.IsActionJustPressed("down"))
             {
                 MercyChoice += 1;
-                if (MercyChoice >= MercyChoiceMenu.GetItemCount())
+                if (MercyChoice >= itemCount)
                 {
-                    MercyChoice = MercyChoiceMenu.GetItemCount() - 1;
+                    MercyChoice = itemCount - 1;
                 }
                 else
                 {
@@ -72,7 +81,11 @@ public partial class BattlePlayerMercyMenuState : StateNode
             else if (Input.IsActionJustPressed("confirm"))
             {
                 UtmxGlobalStreamPlayer.PlaySoundFromStream(UtmxGlobalStreamPlayer.GetStreamFormLibrary("SELECT"));
-                string selected = (string)MercyChoiceMenu.GetselectedItemId();
+                string selected = MercyChoiceMenu.GetselectedItemId() as string;
+                if (string.IsNullOrEmpty(selected))
+                {
+                    return;
+                }
                 if (selected == "SPARE")
                 {
                     foreach (BaseEnemy enemy in UtmxBattleManager.GetBattleEnemyController().EnemiesList)
@@ -97,7 +110,14 @@ public partial class BattlePlayerMercyMenuState : StateNode
         _freed = false;
         await MenuManager.OpenMenu("EncounterMercyMenu");
         await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
-        MercyChoice = Math.Clamp(MercyChoice, 0, MercyChoiceMenu.GetItemCount() - 1);
+        int itemCount = MercyChoiceMenu.GetItemCount();
+        if (itemCount <= 0)
+        {
+            SwitchState("BattlePlayerChoiceActionState");
+            return;
+        }
+
+        MercyChoice = Math.Clamp(MercyChoice, 0, itemCount - 1);
         MercyChoiceMenu.SetChoice(MercyChoice);
     }
     public override void _ExitState()

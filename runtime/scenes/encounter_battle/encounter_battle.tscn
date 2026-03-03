@@ -9,20 +9,14 @@
 [ext_resource type="Script" uid="uid://e0km3ro3qsg7" path="res://scripts/scenes/encounter_battle/controllers/BattleTurnController.cs" id="4_knxdc"]
 [ext_resource type="Script" uid="uid://bwg8g6ptoi8ke" path="res://scripts/scenes/encounter_battle/controllers/BattlePlayerController.cs" id="5_vjgqx"]
 [ext_resource type="PackedScene" uid="uid://cfmmgpj17a2fc" path="res://scenes/encounter_battle/ui/button/battle_screen_button.tscn" id="5_wxkx7"]
-[ext_resource type="Texture2D" uid="uid://7t5wbkpk50fu" path="res://__data__/built-in-resources/textures/ui/buttons/spr_actbt_center_0.png" id="6_53d75"]
 [ext_resource type="Script" uid="uid://flstyqid3vnp" path="res://scripts/scenes/encounter_battle/controllers/BattleArenaController.cs" id="6_kyp32"]
 [ext_resource type="Script" uid="uid://sekm2lap34uh" path="res://scripts/scenes/encounter_battle/state/BattlePlayerFightMenuState.cs" id="7_0mx1x"]
 [ext_resource type="Script" uid="uid://dc27u6sxv148b" path="res://scripts/scenes/encounter_battle/state/BattlePlayerItemMenuState.cs" id="7_3peba"]
-[ext_resource type="Texture2D" uid="uid://p8a3d1ppm0r" path="res://__data__/built-in-resources/textures/ui/buttons/spr_actbt_center_1.png" id="7_e7ctv"]
 [ext_resource type="Script" uid="uid://crqwghhnphiyd" path="res://scripts/scenes/encounter_battle/controllers/BattleUiController.cs" id="7_kyp32"]
 [ext_resource type="PackedScene" uid="uid://d0q7av0w3c7gt" path="res://scenes/encounter_battle/ui/ui_elements/battle_diamage_text/battle_damage_text.tscn" id="8_du4b0"]
 [ext_resource type="Script" uid="uid://dwcjax4y5ew3q" path="res://scripts/scenes/encounter_battle/state/BattlePlayerActMenuState.cs" id="8_q4xod"]
-[ext_resource type="Texture2D" uid="uid://dtxtjdaxf7g27" path="res://__data__/built-in-resources/textures/ui/buttons/spr_itembt_0.png" id="8_taqgn"]
 [ext_resource type="Script" uid="uid://bg88lu2onh1r2" path="res://scripts/scenes/encounter_battle/ui/button/BattleScreenButtonManager.cs" id="8_wxkx7"]
-[ext_resource type="Texture2D" uid="uid://dj7bbitqv4f76" path="res://__data__/built-in-resources/textures/ui/buttons/spr_itembt_1.png" id="9_oxe8y"]
-[ext_resource type="Texture2D" uid="uid://d37kqqs16srem" path="res://__data__/built-in-resources/textures/ui/buttons/spr_sparebt_0.png" id="10_66xs5"]
 [ext_resource type="Script" uid="uid://b2mvblo5kl3xc" path="res://scripts/scenes/encounter_battle/state/BattlePlayerMercyMenuState.cs" id="10_du4b0"]
-[ext_resource type="Texture2D" uid="uid://k11abgt7uggw" path="res://__data__/built-in-resources/textures/ui/buttons/spr_sparebt_1.png" id="11_17tmt"]
 [ext_resource type="Script" uid="uid://cyeycuyt68h4a" path="res://scripts/scenes/encounter_battle/state/BattlePlayerDialogueState.cs" id="11_noyau"]
 [ext_resource type="PackedScene" uid="uid://fg7a0q46v718" path="res://scenes/encounter_battle/battle_player_soul/battle_player_soul.tscn" id="12_2xdie"]
 [ext_resource type="Script" uid="uid://cce0p6lao4kpg" path="res://scripts/scenes/encounter_battle/BattleMenuManager.cs" id="13_13wr6"]
@@ -142,9 +136,10 @@ script = ExtResource("4_knxdc")
 script = ExtResource("5_vjgqx")
 PlayerSoul = NodePath("../../Players/BattlePlayerSoul")
 
-[node name="BattleArenaController" type="Node" parent="BattleController" unique_id=2037974018 node_paths=PackedStringArray("ArenaGroup", "MainArena")]
+[node name="BattleArenaController" type="Node" parent="BattleController" unique_id=2037974018 node_paths=PackedStringArray("ArenaGroup", "ArenaMask", "MainArena")]
 script = ExtResource("6_kyp32")
 ArenaGroup = NodePath("../../BattleArenaGroup")
+ArenaMask = NodePath("../../BattleArenaGroup/BattleArenaMask")
 MainArena = NodePath("../../BattleArenaGroup/MainArena")
 
 [node name="BattleUiController" type="Node" parent="BattleController" unique_id=333836539 node_paths=PackedStringArray("ButtonManager", "UiLayer", "StatusBar")]
@@ -156,10 +151,12 @@ StatusBar = NodePath("../../UILayer/BattleStatusBar")
 [node name="BattleArenaGroup" type="Node2D" parent="." unique_id=185318783]
 z_index = -200
 script = ExtResource("18_3wf68")
+MaskOpacity = 1.0
 metadata/_custom_type_script = "uid://vrolycbhr1jt"
 
 [node name="BattleArenaMask" type="Node2D" parent="BattleArenaGroup" unique_id=990448914]
 process_priority = 1
+top_level = true
 clip_children = 1
 script = ExtResource("26_r2q8g")
 metadata/_custom_type_script = "uid://chldlchltn3yg"
@@ -269,22 +266,19 @@ TargetState = "BattlePlayerFightMenuState"
 position = Vector2(240, 453)
 script = ExtResource("33_q4xod")
 TargetState = "BattlePlayerActMenuState"
-buttonTexture = ExtResource("6_53d75")
-buttonPressedTexture = ExtResource("7_e7ctv")
+TexturesPath = PackedStringArray("built-in-resources/textures/ui/buttons/spr_actbt_center_0.png", "built-in-resources/textures/ui/buttons/spr_actbt_center_1.png")
 
 [node name="ITEM" parent="UILayer/BattleScreenButtonManager" unique_id=891213374 instance=ExtResource("5_wxkx7")]
 position = Vector2(400, 453)
 script = ExtResource("33_q4xod")
 TargetState = "BattlePlayerItemMenuState"
-buttonTexture = ExtResource("8_taqgn")
-buttonPressedTexture = ExtResource("9_oxe8y")
+TexturesPath = PackedStringArray("built-in-resources/textures/ui/buttons/spr_itembt_0.png", "built-in-resources/textures/ui/buttons/spr_itembt_1.png")
 
 [node name="MERCY" parent="UILayer/BattleScreenButtonManager" unique_id=1780387998 instance=ExtResource("5_wxkx7")]
 position = Vector2(555, 453)
 script = ExtResource("33_q4xod")
 TargetState = "BattlePlayerMercyMenuState"
-buttonTexture = ExtResource("10_66xs5")
-buttonPressedTexture = ExtResource("11_17tmt")
+TexturesPath = PackedStringArray("built-in-resources/textures/ui/buttons/spr_sparebt_0.png", "built-in-resources/textures/ui/buttons/spr_sparebt_1.png")
 
 [node name="Players" type="Node2D" parent="." unique_id=900726232]
 

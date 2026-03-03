@@ -31,6 +31,10 @@ public partial class BattleRectangleArenaExpand : BattleArenaExpand
         _rect = new Rect2(-_size * 0.5F - borderSize, _size + borderSize * 2F);
         RenderingServer.CanvasItemAddRect(borderRenderingItem, _rect, BorderColor);
 
+        // Keep border as a hollow ring when mask texture is not composited to main canvas.
+        _rect = new Rect2(-_size * 0.5F, _size);
+        RenderingServer.CanvasItemAddRect(borderCullingCanvasItem, _rect, Colors.Black);
+
         _rect = new Rect2(-_size * 0.5F, _size);
         RenderingServer.CanvasItemAddRect(maskRenderingItem, _rect, ContentColor);
     }

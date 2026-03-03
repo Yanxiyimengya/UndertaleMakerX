@@ -56,7 +56,7 @@ public partial class BattlePlayerChoiceActionState : StateNode
 		{
 			if (BattleButtonManager.GetBattleButtonCount() > 0)
 			{
-				BattleButtonManager.GetBattleButtonId(0, out id);
+				BattleButtonManager.TryGetBattleButtonId(0, out id);
 				BattleButtonManager.SetButtonHover(id);
 			}
 		}

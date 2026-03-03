@@ -13,6 +13,7 @@ let col = Color.Red;
 
 ## 类型列表
 
+- [BattleButton](types/battle-button.md)
 - [BattleTurn](types/battle-turn.md)
 - [Color](types/color.md)
 - [Encounter](types/encounter.md)

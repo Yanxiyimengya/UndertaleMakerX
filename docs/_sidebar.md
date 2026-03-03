@@ -9,6 +9,7 @@
     * [Scene 模块](modules/scene.md)
     * [Tween 模块](modules/tween.md)
 * [类参考文档](types/)
+    * [BattleButton](types/battle-button.md)
     * [BattleTurn](types/battle-turn.md)
     * [Color](types/color.md)
     * [Encounter](types/encounter.md)

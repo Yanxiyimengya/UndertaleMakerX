@@ -105,7 +105,7 @@ public partial class BattleScreenButtonManager : Node2D
         return false;
     }
 
-    public bool GetBattleButtonId(int index, out string button)
+    public bool TryGetBattleButtonId(int index, out string button)
     {
         KeyValuePair<string, BattleScreenButton> pair = buttonList.ElementAtOrDefault(index);
         button = pair.Key;

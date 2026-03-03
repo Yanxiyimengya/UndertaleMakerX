@@ -37,4 +37,11 @@ public partial class JavaScriptDrawableObjectProxy : DrawableObject, IObjectPool
         base.Destroy();
         LifecycleProxy.Destroy();
     }
+
+    public override void _Draw()
+    {
+        base._Draw();
+        if (((IJavaScriptObject)this).Has("onDraw"))
+            ((IJavaScriptObject)this).Invoke("onDraw", []);
+    }
 }

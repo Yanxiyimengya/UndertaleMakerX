@@ -46,6 +46,18 @@ redraw() -> void
 
 ---
 
+### onDraw
+
+```javascript
+onDraw() -> void
+```
+
+DrawableObject 的绘制回调。当引擎进入该对象的绘制阶段时触发。通常在这里调用 `drawCircle`、`drawRect`、`drawLine`、`drawPolygon` 等绘图方法。
+
+**Returns** `void`
+
+---
+
 ### drawCircle
 
 ```javascript

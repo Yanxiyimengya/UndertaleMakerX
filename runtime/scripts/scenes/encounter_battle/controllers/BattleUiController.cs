@@ -19,4 +19,16 @@ public partial class BattleUiController : Node
         }
     }
 
+    public BattleScreenButton GetButtonById(string id)
+    {
+        ButtonManager.GetBattleButton(id, out BattleScreenButton result);
+        return result;
+    }
+    public BattleScreenButton GetButtonByIndex(int index)
+    {
+        ButtonManager.TryGetBattleButtonId(index, out string buttonId);
+        ButtonManager.GetBattleButton(buttonId, out BattleScreenButton result);
+        return result;
+    }
+
 }

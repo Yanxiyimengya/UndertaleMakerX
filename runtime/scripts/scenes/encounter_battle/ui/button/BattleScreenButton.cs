@@ -2,55 +2,58 @@ using Godot;
 using System;
 
 [GlobalClass]
-public partial class BattleScreenButton : Node2D
+public partial class BattleScreenButton : GameSprite2D
 {
-    [Signal]
-    delegate void ButtonPressedEventHandler();
+	[Signal]
+	delegate void ButtonPressedEventHandler();
 
-    [Export]
-    public bool Hover
+	[Export]
+	public bool Hover
+	{
+		get => _hover;
+		set
+		{
+			_hover = value;
+			Frame = value ? 1 : 0;
+		}
+	}
+
+	[Export]
+	public Marker2D soulMarker;
+
+	public string ButtonFocusNeighborLeftId = "";
+	public string ButtonFocusNeighborRightId = "";
+	public string ButtonFocusNeighborUpId = "";
+	public string ButtonFocusNeighborDownId = "";
+
+	private bool _hover;
+
+	public override void _Ready()
+	{
+		Hover = false;
+		Stop();
+	}
+
+
+    public override void SetTextures(string[] texturesPath)
     {
-        get => _hover;
-        set
-        {
-            _hover = value;
-            if (buttonSprite != null)
-            {
-                buttonSprite.Texture = value ? buttonPressedTexture : buttonTexture;
-            }
-        }
+		base.SetTextures(texturesPath);
+		Stop();
     }
-    [Export]
-    public Texture2D buttonTexture;
-    [Export]
-    public Texture2D buttonPressedTexture;
 
-    [Export]
-    public Sprite2D buttonSprite;
-
-    [Export]
-    public Marker2D soulMarker;
-
-    public string ButtonFocusNeighborLeftId = "";
-    public string ButtonFocusNeighborRightId = "";
-    public string ButtonFocusNeighborUpId = "";
-    public string ButtonFocusNeighborDownId = "";
-
-    private bool _hover;
-
-    public override void _Ready()
+    public void SetSoulPosition(Vector2 position)
     {
-        Hover = false;
+        soulMarker.Position = position;
     }
 
     public Transform2D GetSoulTransform()
-    {
-        return soulMarker.GlobalTransform;
-    }
+	{
+		return soulMarker.GlobalTransform;
+	}
 
-    public virtual void PressButton()
-    {
-        this.EmitSignal(BattleScreenButton.SignalName.ButtonPressed, []);
-    }
+	public virtual void PressButton()
+	{
+		this.EmitSignal(BattleScreenButton.SignalName.ButtonPressed, []);
+	}
 
 }

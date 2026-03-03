@@ -6,6 +6,8 @@ public partial class BattleArenaController : Node
     [Export]
     public BattleArenaGroup ArenaGroup;
     [Export]
+    public BattleArenaMask ArenaMask;
+    [Export]
     public BattleMainArenaExpand MainArena;
 
 

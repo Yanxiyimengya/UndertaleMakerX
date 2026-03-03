@@ -50,4 +50,6 @@ export class UtmxDrawableObject extends UtmxTransformableObject {
 	redraw() {
 		this.__instance.Redraw();
 	}
+
+	onDraw() {}
 }

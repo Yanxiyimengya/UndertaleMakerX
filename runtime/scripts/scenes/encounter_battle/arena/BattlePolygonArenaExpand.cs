@@ -21,9 +21,13 @@ public partial class BattlePolygonArenaExpand : BattleArenaExpand
                 for (int i = 0; i < _borderColors.Length; i++)
                     _borderColors[i] = BorderColor;
 
-                _borderColors = new Color[Vertices.Length];
-                for (int i = 0; i < _borderColors.Length; i++)
-                    _borderColors[i] = ContentColor;
+                _contentColors = new Color[Vertices.Length];
+                _borderCullingColors = new Color[Vertices.Length];
+                for (int i = 0; i < Vertices.Length; i++)
+                {
+                    _contentColors[i] = ContentColor;
+                    _borderCullingColors[i] = Colors.Black;
+                }
             }
         }
     }
@@ -33,12 +37,14 @@ public partial class BattlePolygonArenaExpand : BattleArenaExpand
     private Rect2 _bBox;
     private Color[] _borderColors;
     private Color[] _contentColors;
+    private Color[] _borderCullingColors;
 
     public override void DrawFrame(Rid borderRenderingItem, Rid maskRenderingItem,
         Rid borderCullingCanvasItem, Rid maskCullingCanvasItem)
     {
         if (Vertices.Length < 3) return;
         RenderingServer.CanvasItemAddPolygon(borderRenderingItem, _borderVertices, _borderColors);
+        RenderingServer.CanvasItemAddPolygon(borderCullingCanvasItem, Vertices, _borderCullingColors);
         RenderingServer.CanvasItemAddPolygon(maskRenderingItem, Vertices, _contentColors);
     }
 

@@ -107,6 +107,25 @@ switchStatus(status: BattleStatus) -> void
 Arena 为 Battle 的内置子模块，用于创建和管理玩家在战斗中的 **竞技场**。
 通过 `UTMX.battle.arena` 访问。
 
+## 属性（Properties）
+
+| Property | Type | Default | Description |
+| -------- | ---- | ------- | ----------- |
+| maskOpacity | number | 0.5 | Arena 遮罩层透明度，取值范围 `0.0 ~ 1.0`。`0` 为完全透明，`1` 为完全不透明。 |
+
+---
+
+### getMask
+
+```javascript
+getMask() -> TransformableObject
+```
+
+获取战斗竞技场的遮罩对象（Arena Mask）。  
+返回一个 `TransformableObject`，可用于调整遮罩的可见性、位置、旋转、缩放等变换属性。
+
+**Returns** `TransformableObject`
+
 ---
 
 ### getMainArena

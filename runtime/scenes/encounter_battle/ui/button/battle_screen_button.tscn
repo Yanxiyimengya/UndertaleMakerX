@@ -1,18 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://cfmmgpj17a2fc"]
+[gd_scene format=3 uid="uid://cfmmgpj17a2fc"]
 
 [ext_resource type="Script" uid="uid://cl3y7vfo5y3u2" path="res://scripts/scenes/encounter_battle/ui/button/BattleScreenButton.cs" id="1_1qig5"]
-[ext_resource type="Texture2D" uid="uid://bohbdo5br0crs" path="res://__data__/built-in-resources/textures/ui/buttons/spr_fightbt_0.png" id="2_qrya7"]
-[ext_resource type="Texture2D" uid="uid://bihb0g5igw6wn" path="res://__data__/built-in-resources/textures/ui/buttons/spr_fightbt_1.png" id="3_2vs1s"]
 
-[node name="BattleScreenButton" type="Node2D" node_paths=PackedStringArray("buttonSprite", "soulMarker")]
+[node name="ButtonSprite2D" type="AnimatedSprite2D" unique_id=1689088223 node_paths=PackedStringArray("soulMarker")]
 script = ExtResource("1_1qig5")
-buttonTexture = ExtResource("2_qrya7")
-buttonPressedTexture = ExtResource("3_2vs1s")
-buttonSprite = NodePath("ButtonSprite2D")
 soulMarker = NodePath("SoulMarker2D")
+TexturesPath = PackedStringArray("built-in-resources/textures/ui/buttons/spr_fightbt_0.png", "built-in-resources/textures/ui/buttons/spr_fightbt_1.png")
+metadata/_custom_type_script = "uid://cl3y7vfo5y3u2"
 
-[node name="ButtonSprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_qrya7")
-
-[node name="SoulMarker2D" type="Marker2D" parent="."]
+[node name="SoulMarker2D" type="Marker2D" parent="." unique_id=1195604155]
 position = Vector2(-39, 0)

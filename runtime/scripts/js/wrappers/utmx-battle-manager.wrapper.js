@@ -1,11 +1,14 @@
 import { __battle_manager, __BattleProjectile, __logger } from "__UTMX";
 import { UtmxGameSprite } from "./types/utmx-game-sprite.wrapper.js";
 import { UtmxGameObject } from "./types/utmx-game-object.wrapper.js";
+import { UtmxTransformableObject } from "./types/utmx-transformable-object.wrapper.js";
+import { UtmxBattleButton } from "./types/utmx-battle-button.wrapper.js";
 import {
 	BattleArenaRectangle,
 	BattleArenaCircle,
 	BattleArenaPolygon,
 } from "./types/utmx-battle-arena.wrapper.js";
+
 class BattleSoul extends UtmxGameObject
 {
 	static get enabledCollisionWithArena() {
@@ -87,6 +90,22 @@ class BattleSoul extends UtmxGameObject
 }
 class BattleArenaAccess
 {
+	static #__mask = new UtmxTransformableObject();
+	static getMask()
+	{
+		this.#__mask.__instance = __battle_manager.GetBattleArenaController().ArenaMask;
+		return this.#__mask;
+	}
+
+	static get maskOpacity()
+	{
+		return __battle_manager.GetBattleArenaController().ArenaGroup.MaskOpacity;
+	}
+	static set maskOpacity(value)
+	{
+		__battle_manager.GetBattleArenaController().ArenaGroup.MaskOpacity = value;
+	}
+
 	static #__mainArena = new BattleArenaRectangle();
 	static getMainArena()
 	{
@@ -156,6 +175,19 @@ class BattleUiAccess
 	}
 	static set visible(value) {
 		__battle_manager.GetBattleUiController().UiVisible = value;
+	}
+	
+	static getButtonById(id) {
+		let _buttonIns = __battle_manager.GetBattleUiController().GetButtonById(id);
+		let ins = new UtmxBattleButton();
+		ins.__instance = _buttonIns;
+		return ins;
+	}
+	static getButtonByIndex(index) {
+		let _buttonIns = __battle_manager.GetBattleUiController().GetButtonByIndex(index);
+		let ins = new UtmxBattleButton();
+		ins.__instance = _buttonIns;
+		return ins;
 	}
 }
 
