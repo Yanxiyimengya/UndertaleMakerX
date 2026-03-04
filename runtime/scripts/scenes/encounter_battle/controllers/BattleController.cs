@@ -24,11 +24,13 @@ public partial class BattleController : Node
 	public override async void _Ready()
 	{
 		UtmxBattleManager.InitializeBattle(this);
-		
-		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+		BattleStateMachine.ProcessMode = ProcessModeEnum.Disabled;
+
+        await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 		SwitchStatus((UtmxBattleManager.BattleStatus)UtmxBattleManager.GetEncounterInstance()?.EncounterBattleFirstState);
 		UtmxBattleManager.GetEncounterInstance()?._OnBattleStart();
-	}
+        BattleStateMachine.ProcessMode = ProcessModeEnum.Inherit;
+    }
 
 	public void SwitchStatus(UtmxBattleManager.BattleStatus status)
 	{

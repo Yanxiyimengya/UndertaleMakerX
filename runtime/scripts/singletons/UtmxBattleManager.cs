@@ -120,6 +120,57 @@ public partial class UtmxBattleManager
     {
         _battleController?.SwitchStatus(status);
     }
+    public static void SwitchStatus(int status)
+    {
+        if (!Enum.IsDefined(typeof(BattleStatus), status))
+        {
+            UtmxLogger.Error($"Failed to switch battle status: invalid status value {status}");
+            return;
+        }
+        SwitchStatus((BattleStatus)status);
+    }
+    public static void SwitchStatus(double status)
+    {
+        if (double.IsNaN(status) || double.IsInfinity(status))
+        {
+            UtmxLogger.Error($"Failed to switch battle status: invalid number {status}");
+            return;
+        }
+
+        int statusInt = (int)status;
+        if (Math.Abs(status - statusInt) > double.Epsilon)
+        {
+            UtmxLogger.Error($"Failed to switch battle status: status must be an integer, got {status}");
+            return;
+        }
+        SwitchStatus(statusInt);
+    }
+    public static void SwitchStatus(string status)
+    {
+        if (string.IsNullOrWhiteSpace(status))
+        {
+            UtmxLogger.Error("Failed to switch battle status: status is empty");
+            return;
+        }
+
+        if (Enum.TryParse<BattleStatus>(status, true, out BattleStatus parsed))
+        {
+            SwitchStatus(parsed);
+            return;
+        }
+
+        string normalized = status.Replace("_", string.Empty).Replace(" ", string.Empty);
+        foreach (BattleStatus value in Enum.GetValues(typeof(BattleStatus)))
+        {
+            if (string.Equals(value.ToString(), normalized, StringComparison.OrdinalIgnoreCase))
+            {
+                SwitchStatus(value);
+                return;
+            }
+        }
+
+        UtmxLogger.Error($"Failed to switch battle status: invalid status '{status}'");
+    }
 
     public static void ShowDialogueText(object texts)
     {

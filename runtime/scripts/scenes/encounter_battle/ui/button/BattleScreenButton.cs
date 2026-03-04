@@ -35,18 +35,18 @@ public partial class BattleScreenButton : GameSprite2D
 	}
 
 
-    public override void SetTextures(string[] texturesPath)
-    {
+	public override void SetTextures(string[] texturesPath)
+	{
 		base.SetTextures(texturesPath);
 		Stop();
-    }
+	}
 
-    public void SetSoulPosition(Vector2 position)
-    {
-        soulMarker.Position = position;
-    }
+	public void SetSoulPosition(Vector2 position)
+	{
+		soulMarker.Position = position;
+	}
 
-    public Transform2D GetSoulTransform()
+	public Transform2D GetSoulTransform()
 	{
 		return soulMarker.GlobalTransform;
 	}

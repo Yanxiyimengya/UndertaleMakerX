@@ -151,7 +151,6 @@ StatusBar = NodePath("../../UILayer/BattleStatusBar")
 [node name="BattleArenaGroup" type="Node2D" parent="." unique_id=185318783]
 z_index = -200
 script = ExtResource("18_3wf68")
-MaskOpacity = 1.0
 metadata/_custom_type_script = "uid://vrolycbhr1jt"
 
 [node name="BattleArenaMask" type="Node2D" parent="BattleArenaGroup" unique_id=990448914]
@@ -266,7 +265,7 @@ TargetState = "BattlePlayerFightMenuState"
 position = Vector2(240, 453)
 script = ExtResource("33_q4xod")
 TargetState = "BattlePlayerActMenuState"
-TexturesPath = PackedStringArray("built-in-resources/textures/ui/buttons/spr_actbt_center_0.png", "built-in-resources/textures/ui/buttons/spr_actbt_center_1.png")
+TexturesPath = PackedStringArray("built-in-resources/textures/ui/buttons/spr_actbt_0.png", "built-in-resources/textures/ui/buttons/spr_actbt_1.png")
 
 [node name="ITEM" parent="UILayer/BattleScreenButtonManager" unique_id=891213374 instance=ExtResource("5_wxkx7")]
 position = Vector2(400, 453)
