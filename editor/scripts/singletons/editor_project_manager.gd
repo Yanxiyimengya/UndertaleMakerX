@@ -2,7 +2,7 @@ extends Node
 
 const PROJECT_CONFIG_FILE_NAME: String = "utmx.cfg"
 const PROJECTS_LIST_FILE_NAME: String = "projects.cfg"
-const ENGINE_VERSION: String = "1.0.0-beta"
+const ENGINE_VERSION: String = "1.0.0-rc"
 const DEFAULT_PROJECT_DIR_NAME: String = "UndertaleMakerProject"
 const EXPORT_ANDROID_CONFIG_SECTION: String = "export_android"
 const EXPORT_ANDROID_KEY_JDK_BIN_DIR: String = "jdk_bin_dir"

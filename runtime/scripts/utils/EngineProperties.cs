@@ -3,7 +3,7 @@ using System;
 
 public class EngineProperties
 {
-	public const string ENGINE_VERSION = "1.0.0-beta";
+	public const string ENGINE_VERSION = "1.0.0-rc";
 
 	public const string DATAPACK_RESOURCE_PATH = "__data__";
 	public const String DATAPACK_EXTENSION = "pck";
