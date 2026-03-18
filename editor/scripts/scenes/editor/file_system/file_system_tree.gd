@@ -44,6 +44,12 @@ const HIDDEN_ROOT_FILES : Dictionary = {
 	"utmx.cfg": true,
 };
 
+func _normalize_path(path: String) -> String:
+	var normalized_path : String = String(path).replace("\\", "/").simplify_path();
+	if (normalized_path.ends_with("/") && normalized_path.length() > 1):
+		normalized_path = normalized_path.trim_suffix("/");
+	return normalized_path;
+
 # --- 初始化逻辑 ---
 
 func _ready() -> void:
@@ -83,7 +89,11 @@ func _exit_tree() -> void:
 func _load_project_file_tree_state() -> void:
 	var project : UtmxProject = EditorProjectManager.opened_project;
 	if (!is_instance_valid(project)): return;
-	_expanded_paths = project.get_file_tree_expanded_dirs_as_absolute();
+	_expanded_paths.clear();
+	for raw_path : String in project.get_file_tree_expanded_dirs_as_absolute():
+		var normalized_path : String = _normalize_path(raw_path);
+		if (!normalized_path.is_empty() && !_expanded_paths.has(normalized_path)):
+			_expanded_paths.append(normalized_path);
 
 func _save_project_file_tree_state() -> void:
 	var project : UtmxProject = EditorProjectManager.opened_project;
@@ -129,11 +139,13 @@ func _setup_menu(menu: PopupMenu, is_multi: bool) -> void:
 #region --- 状态维护与扫描 ---
 
 func _on_entry_removed_remotely(path: String) -> void:
-	if (_all_items_cache.has(path)):
-		var item = _all_items_cache[path];
+	var normalized_path : String = _normalize_path(path);
+	if (_all_items_cache.has(normalized_path)):
+		var item = _all_items_cache[normalized_path];
 		if (is_instance_valid(item)):
+			_erase_item_cache_recursive(item);
 			item.free();
-		_all_items_cache.erase(path);
+		_all_items_cache.erase(normalized_path);
 
 func _on_item_collapsed(item: TreeItem) -> void:
 	if (_is_refreshing_tree): return;
@@ -143,7 +155,8 @@ func _on_item_collapsed(item: TreeItem) -> void:
 func _sync_expanded_state_for_item(item: TreeItem) -> void:
 	var data : Dictionary = item.get_metadata(0);
 	if (data == null || !data.is_dir): return;
-	var path : String = data.path;
+	var path : String = _normalize_path(String(data.path));
+	if (path.is_empty()): return;
 	if (item.collapsed):
 		if (_expanded_paths.has(path)): _expanded_paths.erase(path);
 	else:
@@ -157,20 +170,52 @@ func _snapshot_expanded_paths_from_tree() -> void:
 
 func _queue_expand_path_and_parents(path: String) -> void:
 	if (path.is_empty()): return;
-	var curr : String = path;
+	var root_path : String = _normalize_path(GlobalEditorFileSystem.root_path);
+	var curr : String = _normalize_path(path);
 	while (!curr.is_empty()):
 		if (!_expanded_paths.has(curr)): _expanded_paths.append(curr);
 		if (!_pending_expand_paths.has(curr)): _pending_expand_paths.append(curr);
-		if (curr == GlobalEditorFileSystem.root_path): break;
-		var parent : String = curr.get_base_dir();
+		if (!root_path.is_empty() && curr == root_path): break;
+		var parent : String = _normalize_path(curr.get_base_dir());
 		if (parent == curr): break;
 		curr = parent;
 
 func ensure_directory_expanded(path: String) -> void:
 	if (path.is_empty()): return;
-	var normalized_path : String = String(path).replace("\\", "/").simplify_path();
+	var normalized_path : String = _normalize_path(path);
 	_queue_expand_path_and_parents(normalized_path);
 	_apply_pending_expand_paths();
+
+func _resolve_refresh_target_dir(target_path: String) -> String:
+	var normalized_target : String = _normalize_path(target_path);
+	if (normalized_target.is_empty()): return "";
+	if (_all_items_cache.has(normalized_target)):
+		var target_item : TreeItem = _all_items_cache[normalized_target];
+		if (is_instance_valid(target_item)):
+			var target_data : Dictionary = target_item.get_metadata(0);
+			if (target_data != null && target_data.is_dir):
+				return normalized_target;
+	var parent_dir : String = _normalize_path(normalized_target.get_base_dir());
+	if (!parent_dir.is_empty() && _all_items_cache.has(parent_dir)):
+		var parent_item : TreeItem = _all_items_cache[parent_dir];
+		if (is_instance_valid(parent_item)):
+			var parent_data : Dictionary = parent_item.get_metadata(0);
+			if (parent_data != null && parent_data.is_dir):
+				return parent_dir;
+	return "";
+
+func _erase_item_cache_recursive(item: TreeItem) -> void:
+	if (item == null || !is_instance_valid(item)): return;
+	var child : TreeItem = item.get_first_child();
+	while (child != null):
+		var next_child : TreeItem = child.get_next();
+		_erase_item_cache_recursive(child);
+		child = next_child;
+	var data : Dictionary = item.get_metadata(0);
+	if (data != null):
+		var path : String = _normalize_path(String(data.path));
+		if (!path.is_empty()):
+			_all_items_cache.erase(path);
 
 func _apply_pending_expand_paths() -> void:
 	if (_pending_expand_paths.is_empty()): return;
@@ -190,14 +235,13 @@ func _apply_pending_expand_paths() -> void:
 func refresh_tree(target_path: String = "") -> void:
 	_snapshot_expanded_paths_from_tree();
 	_is_refreshing_tree = true;
-	if (!target_path.is_empty() && _all_items_cache.has(target_path)):
-		var item : TreeItem = _all_items_cache[target_path];
-		var data : Dictionary = item.get_metadata(0);
-		if (data != null && data.is_dir):
-			_update_local_directory(target_path, item);
-			_apply_pending_expand_paths();
-			_is_refreshing_tree = false;
-			return;
+	var refresh_target_dir : String = _resolve_refresh_target_dir(target_path);
+	if (!refresh_target_dir.is_empty()):
+		var item : TreeItem = _all_items_cache[refresh_target_dir];
+		_update_local_directory(refresh_target_dir, item);
+		_apply_pending_expand_paths();
+		_is_refreshing_tree = false;
+		return;
 	_rebuild_full_tree();
 	_apply_pending_expand_paths();
 	_is_refreshing_tree = false;
@@ -214,7 +258,7 @@ func _rebuild_full_tree() -> void:
 	_all_items_cache.clear();
 	clear();
 	
-	var root_path : String = GlobalEditorFileSystem.root_path;
+	var root_path : String = _normalize_path(GlobalEditorFileSystem.root_path);
 	if (!DirAccess.dir_exists_absolute(root_path)): 
 		DirAccess.make_dir_recursive_absolute(root_path);
 		
@@ -233,14 +277,15 @@ func _rebuild_full_tree() -> void:
 	if (!_last_search_text.is_empty()): search(_last_search_text);
 
 func _update_local_directory(path: String, parent_item: TreeItem) -> void:
-	var should_expand_parent : bool = _expanded_paths.has(path) || !parent_item.collapsed;
+	var normalized_path : String = _normalize_path(path);
+	var should_expand_parent : bool = _expanded_paths.has(normalized_path) || !parent_item.collapsed;
 	var child : TreeItem = parent_item.get_first_child();
 	while (child != null):
-		var c_path : String = child.get_metadata(0).path;
-		_all_items_cache.erase(c_path);
+		var next_child : TreeItem = child.get_next();
+		_erase_item_cache_recursive(child);
 		child.free();
-		child = parent_item.get_first_child();
-	_scan_folder(path, parent_item);
+		child = next_child;
+	_scan_folder(normalized_path, parent_item);
 	parent_item.collapsed = !should_expand_parent;
 	_sync_expanded_state_for_item(parent_item);
 	if (!_last_search_text.is_empty()): search(_last_search_text);
@@ -248,14 +293,18 @@ func _update_local_directory(path: String, parent_item: TreeItem) -> void:
 func _save_expanded_state(item: TreeItem) -> void:
 	if (item == null): return;
 	var data : Dictionary = item.get_metadata(0);
-	if (data.is_dir && !item.collapsed): _expanded_paths.append(data.path);
+	if (data != null && data.is_dir && !item.collapsed):
+		var path : String = _normalize_path(String(data.path));
+		if (!path.is_empty() && !_expanded_paths.has(path)):
+			_expanded_paths.append(path);
 	var child : TreeItem = item.get_first_child();
 	while (child != null):
 		_save_expanded_state(child);
 		child = child.get_next();
 
 func _scan_folder(path: String, parent_item: TreeItem) -> void:
-	var dir : DirAccess = DirAccess.open(path);
+	var normalized_path : String = _normalize_path(path);
+	var dir : DirAccess = DirAccess.open(normalized_path);
 	if (dir != null):
 		dir.list_dir_begin();
 		var dirs : Array[String] = [];
@@ -264,14 +313,14 @@ func _scan_folder(path: String, parent_item: TreeItem) -> void:
 		while (fn != ""):
 			if (fn != "." && fn != ".."):
 				var is_current_dir : bool = dir.current_is_dir();
-				if (!_is_hidden_entry(path, fn, is_current_dir)):
+				if (!_is_hidden_entry(normalized_path, fn, is_current_dir)):
 					if (is_current_dir): dirs.append(fn);
 					else: files.append(fn);
 			fn = dir.get_next();
 		dirs.sort_custom(func(a, b): return a.naturalnocasecmp_to(b) < 0);
 		files.sort_custom(func(a, b): return a.naturalnocasecmp_to(b) < 0);
 		for d : String in dirs:
-			var fp : String = path.path_join(d);
+			var fp : String = _normalize_path(normalized_path.path_join(d));
 			var item : TreeItem = create_item(parent_item);
 			item.set_text(0, d);
 			item.set_metadata(0, {"path": fp, "is_dir": true});
@@ -280,7 +329,7 @@ func _scan_folder(path: String, parent_item: TreeItem) -> void:
 			_decorate_item(item);
 			_scan_folder(fp, item);
 		for f : String in files:
-			var fp : String = path.path_join(f);
+			var fp : String = _normalize_path(normalized_path.path_join(f));
 			var item : TreeItem = create_item(parent_item);
 			item.set_text(0, f);
 			item.set_metadata(0, {"path": fp, "is_dir": false});
@@ -462,9 +511,9 @@ func _on_item_mouse_selected(pos: Vector2, mouse_button_index: int) -> void:
 
 func _on_item_edited() -> void:
 	var item : TreeItem = get_edited();
-	var old_p : String = item.get_metadata(0).path;
+	var old_p : String = _normalize_path(String(item.get_metadata(0).path));
 	var new_name : String = item.get_text(0).strip_edges();
-	var new_p : String = old_p.get_base_dir().path_join(new_name);
+	var new_p : String = _normalize_path(old_p.get_base_dir().path_join(new_name));
 
 	if (new_name.is_empty() || old_p == new_p):
 		item.set_text(0, old_p.get_file()); 

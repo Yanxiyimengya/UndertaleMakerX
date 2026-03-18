@@ -1,19 +1,18 @@
 extends Node
 
 static var data_path: String = ""
-static var data_path_override: String = "C:/Users/guosh/Desktop/UndertaleMakerX"
+static var data_path_override: String = ""
 const EDITOR_CONFIG_FILE_NAME: String = "editor.cfg"
 
 var configs: Dictionary[String, Variant] = {}
 
 
 func _enter_tree() -> void:
-	if data_path_override.is_empty():
+	if data_path_override.is_empty() || DirAccess.dir_exists_absolute(data_path_override) :
 		data_path = OS.get_executable_path().get_base_dir().path_join("editor_data")
 	else:
-		if (DirAccess.dir_exists_absolute(data_path_override)):
-			DirAccess.make_dir_recursive_absolute(data_path_override)
-			data_path = data_path_override
+		DirAccess.make_dir_recursive_absolute(data_path_override)
+		data_path = data_path_override
 	load_config()
 
 
